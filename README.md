@@ -26,23 +26,21 @@ bun update @sniptide/ui
 
 ## Deploy
 
-Coolify builds the `Dockerfile` from `main` (port `3000`, health check `GET /`).
+Coolify builds the `Dockerfile` from `main` (port `3000`, health check `GET /`) and serves it at
+`https://sniptide.com`. The app runs separately at `https://app.sniptide.com`.
 
-sniptide.com is shared with the app. Route these paths to this container and everything else to the
-app:
+sniptide.com is shared with the app in two ways (`next.config.ts`):
 
-- `/` (exactly), the landing page
-- `/_site/*`, this site's scripts, styles, fonts and images (`assetPrefix` in `next.config.ts`)
+- **Share links stay on sniptide.com.** Any path without a page here (`/k7Qe2x`, `/k7Qe2x/raw`,
+  the app's `/_next/*` assets those pages load) is proxied to the app, so the address bar keeps
+  sniptide.com. This site's own assets live under `/_site` so they never collide with the app's.
+- **App pages redirect.** `/sign-in`, `/dashboard`, `/new`, `/settings`, … and `/api/auth/*` get a
+  308 to the same path on app.sniptide.com. Add new app sections to `appPages` there.
 
-The app keeps `/sign-in`, `/dashboard`, share links (`/<slug>`) and its own `/_next/*`.
+The app needs `SHARE_URL=https://sniptide.com` so its dashboard copies sniptide.com links.
 
-In Coolify that means giving this resource the domain `https://sniptide.com` with a Traefik rule
-limited to those paths and a higher priority than the app, for example:
-
-```
-traefik.http.routers.sniptide-web.rule=Host(`sniptide.com`) && (Path(`/`) || PathPrefix(`/_site`))
-traefik.http.routers.sniptide-web.priority=100
-```
+Build-time setting: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point. Defaults
+to `https://app.sniptide.com`.
 
 ## Checks
 
