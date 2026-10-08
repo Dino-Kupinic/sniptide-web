@@ -1,6 +1,6 @@
-// The app lives on the same domain in production (sniptide.com routes "/" here, everything else to
-// the app). In development set NEXT_PUBLIC_APP_URL=http://localhost:3000 to reach a local app.
-const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ""
+// The app runs on its own subdomain; sniptide.com is this site. For local development set
+// NEXT_PUBLIC_APP_URL=http://localhost:3000 to reach a local app.
+export const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sniptide.com"
 
 export function app(path: string) {
   return `${appUrl}${path}`

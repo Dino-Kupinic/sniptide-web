@@ -21,7 +21,6 @@ ENV NODE_ENV=production \
     HOSTNAME=0.0.0.0
 
 COPY --from=build --chown=node:node /app/.next/standalone ./
-# Static assets live under the asset prefix (/_site/_next/static), which the server maps back.
 COPY --from=build --chown=node:node /app/.next/static ./.next/static
 USER node
 

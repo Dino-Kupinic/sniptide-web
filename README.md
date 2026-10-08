@@ -26,23 +26,14 @@ bun update @sniptide/ui
 
 ## Deploy
 
-Coolify builds the `Dockerfile` from `main` (port `3000`, health check `GET /`).
+Coolify builds the `Dockerfile` from `main` (port `3000`, health check `GET /`) and serves it at
+`https://sniptide.com`. The app runs separately at `https://app.sniptide.com`.
 
-sniptide.com is shared with the app. Route these paths to this container and everything else to the
-app:
+Paths this site has no page for (old share links like `sniptide.com/k7Qe2x`, `/sign-in`, …) are
+redirected to the same path on the app (`app/[...path]/route.ts`).
 
-- `/` (exactly), the landing page
-- `/_site/*`, this site's scripts, styles, fonts and images (`assetPrefix` in `next.config.ts`)
-
-The app keeps `/sign-in`, `/dashboard`, share links (`/<slug>`) and its own `/_next/*`.
-
-In Coolify that means giving this resource the domain `https://sniptide.com` with a Traefik rule
-limited to those paths and a higher priority than the app, for example:
-
-```
-traefik.http.routers.sniptide-web.rule=Host(`sniptide.com`) && (Path(`/`) || PathPrefix(`/_site`))
-traefik.http.routers.sniptide-web.priority=100
-```
+Build-time setting: `NEXT_PUBLIC_APP_URL`, where the site's buttons and that redirect point.
+Defaults to `https://app.sniptide.com`.
 
 ## Checks
 
