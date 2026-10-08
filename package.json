@@ -13,7 +13,7 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@sniptide/ui": "^0.1.0",
+    "@sniptide/ui": "^0.1.1",
     "lucide-react": "^1.43.0",
     "next": "16.3.8",
     "react": "19.2.8",
