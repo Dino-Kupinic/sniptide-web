@@ -29,11 +29,18 @@ bun update @sniptide/ui
 Coolify builds the `Dockerfile` from `main` (port `3000`, health check `GET /`) and serves it at
 `https://sniptide.com`. The app runs separately at `https://app.sniptide.com`.
 
-Paths this site has no page for (old share links like `sniptide.com/k7Qe2x`, `/sign-in`, …) are
-redirected to the same path on the app (`app/[...path]/route.ts`).
+sniptide.com is shared with the app in two ways (`next.config.ts`):
 
-Build-time setting: `NEXT_PUBLIC_APP_URL`, where the site's buttons and that redirect point.
-Defaults to `https://app.sniptide.com`.
+- **Share links stay on sniptide.com.** Any path without a page here (`/k7Qe2x`, `/k7Qe2x/raw`,
+  the app's `/_next/*` assets those pages load) is proxied to the app, so the address bar keeps
+  sniptide.com. This site's own assets live under `/_site` so they never collide with the app's.
+- **App pages redirect.** `/sign-in`, `/dashboard`, `/new`, `/settings`, … and `/api/auth/*` get a
+  308 to the same path on app.sniptide.com. Add new app sections to `appPages` there.
+
+The app needs `SHARE_URL=https://sniptide.com` so its dashboard copies sniptide.com links.
+
+Build-time setting: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point. Defaults
+to `https://app.sniptide.com`.
 
 ## Checks
 
