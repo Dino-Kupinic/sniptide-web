@@ -50,6 +50,11 @@ bun run typecheck
 bun run build
 ```
 
+## Contributing
+
+Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
+`fix:`, `docs:`, …), enforced by a git hook and a CI check. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 [AGPL-3.0](LICENSE), like Sniptide itself.

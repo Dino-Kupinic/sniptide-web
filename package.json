@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
     "@sniptide/ui": "^0.1.1",
@@ -21,10 +22,13 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.12",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^26.5.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "husky": "^9.1.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
