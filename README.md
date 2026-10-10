@@ -32,21 +32,34 @@ Coolify builds the `Dockerfile` from `main` (port `3000`, health check `GET /`) 
 sniptide.com is shared with the app in two ways (`next.config.ts`):
 
 - **Share links stay on sniptide.com.** Any path without a page here (`/k7Qe2x`, `/k7Qe2x/raw`,
-  the app's `/_next/*` assets those pages load) is proxied to the app, so the address bar keeps
-  sniptide.com. This site's own assets live under `/_site` so they never collide with the app's.
+  `POST /k7Qe2x/reveal`, the app's `/_next/*` assets those pages load) is proxied to the app, so
+  the address bar keeps sniptide.com. This site's own assets live under `/_site` so they never
+  collide with the app's. A burn-after-read paste is consumed only by that POST. Every other
+  method on `/<slug>/reveal` is `405` with `Allow: POST`. Known preview bots, and posts whose
+  `Sec-Fetch-Site` is `cross-site`, are `403`. None of those are forwarded.
 - **App pages redirect.** `/sign-in`, `/dashboard`, `/new`, `/settings`, … and `/api/auth/*` get a
   308 to the same path on app.sniptide.com. Add new app sections to `appPages` there.
 
 The app needs `SHARE_URL=https://sniptide.com` so its dashboard copies sniptide.com links.
 
+On a proxied request the app would otherwise see this site's address. Set `SHARE_PROXY_SECRET` to
+the same value on both apps and each proxied request includes `X-Sniptide-Client-IP` and
+`X-Sniptide-Proxy-Secret`. The app checks the secret and trusts that address. When the secret is
+unset, or no visitor address is available, neither header is sent. A visitor cannot supply them.
+
+`CLIENT_IP_HEADER` names the incoming header the address is read from. Leave it unset to use the
+last hop of `X-Forwarded-For`, which is what a single reverse proxy appends, so a self-hosted site
+needs nothing else. If the chosen header is missing, no address is forwarded.
+
 Build-time setting: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point. Defaults
-to `https://app.sniptide.com`.
+to `https://app.sniptide.com`. `SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
 
 ## Checks
 
 ```bash
 bunx biome ci .
 bun run typecheck
+bun test
 bun run build
 ```
 
