@@ -37,8 +37,10 @@ const nextConfig: NextConfig = {
 
   async rewrites() {
     return {
-      // Everything without a page here is a share link (sniptide.com/k7Qe2x, /k7Qe2x/raw) or one
-      // of its assets: the app serves it, while the address bar keeps sniptide.com.
+      // Everything without a page here is a share link (sniptide.com/k7Qe2x, /k7Qe2x/raw,
+      // /k7Qe2x/reveal) or one of its assets: the app serves it, while the address bar keeps
+      // sniptide.com. proxy.ts answers non-POST, preview-bot, and cross-site requests on
+      // /<slug>/reveal before this rewrite runs.
       fallback: [{ source: "/:path*", destination: `${appUrl}/:path*` }],
     }
   },
