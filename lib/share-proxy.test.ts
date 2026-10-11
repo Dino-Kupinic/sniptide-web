@@ -1,7 +1,6 @@
 /// <reference types="bun-types" />
 import { describe, expect, test } from "bun:test"
 import { NextRequest } from "next/server"
-import { links } from "@/lib/links"
 import { headersForUpstream, isPreviewBot, revealBlock, visitorAddress } from "@/lib/share-proxy"
 import { proxy } from "@/proxy"
 
@@ -214,17 +213,15 @@ describe("reveal", () => {
 })
 
 describe("proxy", () => {
-  test("redirects a signed-in visitor from the landing page only", () => {
-    const home = proxy(request("/", "GET", { cookie: "better-auth.session_token=abc" }))
-    expect(home.status).toBe(307)
-    expect(home.headers.get("location")).toBe(links.dashboard)
-
-    const secure = proxy(request("/", "GET", { cookie: "__Secure-better-auth.session_token=abc" }))
-    expect(secure.status).toBe(307)
-
-    const share = proxy(request("/k7Qe2x", "GET", { cookie: "better-auth.session_token=abc" }))
-    expect(share.headers.get("location")).toBeNull()
-    expect(upstream(share).continued).toBe(true)
+  test("leaves session redirects to the root page and always passes marketing and shares through", () => {
+    for (const path of ["/", "/home", "/k7Qe2x"]) {
+      for (const name of ["better-auth.session_token", "__Secure-better-auth.session_token"]) {
+        const response = proxy(request(path, "GET", { cookie: `${name}=abc` }))
+        expect(response.status).toBe(200)
+        expect(response.headers.get("location")).toBeNull()
+        expect(upstream(response).continued).toBe(true)
+      }
+    }
   })
 
   test("answers reveal itself and proxies an allowed POST with the visitor address", () => {

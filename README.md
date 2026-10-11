@@ -42,6 +42,12 @@ sniptide.com is shared with the app in two ways (`next.config.ts`):
 
 The app needs `SHARE_URL=https://sniptide.com` so its dashboard copies sniptide.com links.
 
+The root page (`/`) sends visitors to the app dashboard only after the app validates their session.
+Logged-out visitors, stale cookies, and failed session checks show marketing instead. Session
+checks are uncached and time out after three seconds. `/home` always shows marketing, even when
+signed in, and never contacts the app. The marketing logo links there so browsing the site doesn't
+send signed-in visitors back to the dashboard.
+
 On a proxied request the app would otherwise see this site's address. Set `SHARE_PROXY_SECRET` to
 the same value on both apps and each proxied request includes `X-Sniptide-Client-IP` and
 `X-Sniptide-Proxy-Secret`. The app checks the secret and trusts that address. When the secret is
@@ -67,9 +73,14 @@ project; filter on the `surface` property (`marketing` or `app`). Without a key 
 ```bash
 bunx biome ci .
 bun run typecheck
-bun test
+bun run test
 bun run build
 ```
+
+## Contributing
+
+Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
+`fix:`, `docs:`, …), enforced by a git hook and a CI check. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
