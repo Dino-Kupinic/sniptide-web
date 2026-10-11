@@ -54,6 +54,14 @@ needs nothing else. If the chosen header is missing, no address is forwarded.
 Build-time setting: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point. Defaults
 to `https://app.sniptide.com`. `SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
 
+### Analytics
+
+Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST` for EU cloud) as build variables to
+send pageviews and button clicks to PostHog. It runs cookieless, so there is no consent banner,
+which needs **Cookieless server hash mode** turned on in the PostHog project settings. Requests go
+through `/_site/ph` on this site so ad blockers don't drop them. The app reports to the same
+project; filter on the `surface` property (`marketing` or `app`). Without a key nothing loads.
+
 ## Checks
 
 ```bash
