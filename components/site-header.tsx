@@ -24,7 +24,7 @@ export function SiteHeader() {
       </div>
 
       <div className="flex h-17 items-center justify-between px-4 sm:px-8 lg:px-30">
-        <a href="/" className="shrink-0 md:w-50">
+        <a href="/home" className="shrink-0 md:w-50">
           <Logo className="[&>span:last-child]:text-[22px]" />
         </a>
         <nav className="hidden items-center gap-9 text-sm md:flex">

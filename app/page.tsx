@@ -1,23 +1,11 @@
-import { Analytics } from "@/components/analytics"
-import { Cta } from "@/components/cta"
-import { Features } from "@/components/features"
-import { Hero } from "@/components/hero"
-import { RawLinks } from "@/components/raw-links"
-import { SiteFooter } from "@/components/site-footer"
-import { SiteHeader } from "@/components/site-header"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
+import { links } from "@/lib/links"
+import { hasAppSession } from "@/lib/session"
+import Home from "./home/page"
 
-export default function Home() {
-  return (
-    <>
-      <SiteHeader />
-      <main>
-        <Hero />
-        <Analytics />
-        <Features />
-        <RawLinks />
-        <Cta />
-      </main>
-      <SiteFooter />
-    </>
-  )
+export default async function Index() {
+  if (await hasAppSession((await cookies()).getAll())) redirect(links.dashboard)
+
+  return <Home />
 }
