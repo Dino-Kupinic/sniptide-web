@@ -51,7 +51,10 @@ const stripes: [number, number, number, number, number][] = [
 
 export function Cta() {
   return (
-    <section className="relative flex flex-col justify-center gap-4.5 overflow-clip bg-primary px-4 py-20 sm:px-8 md:h-90 md:py-0 lg:px-30">
+    <section
+      data-cta-location="cta"
+      className="relative flex flex-col justify-center gap-4.5 overflow-clip bg-primary px-4 py-20 sm:px-8 md:h-90 md:py-0 lg:px-30"
+    >
       <svg
         viewBox="0 0 620 360"
         aria-hidden="true"

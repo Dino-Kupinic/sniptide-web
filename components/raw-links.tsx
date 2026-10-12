@@ -17,6 +17,7 @@ export function RawLinks() {
   return (
     <section
       id="raw-links"
+      data-cta-location="raw-links"
       className="flex scroll-mt-4 flex-col gap-12 bg-[#121111] px-4 py-20 sm:px-8 lg:flex-row lg:items-center lg:gap-20 lg:p-30"
     >
       <div className="flex shrink-0 flex-col gap-5 lg:w-110">

@@ -118,6 +118,7 @@ export function Features() {
   return (
     <section
       id="features"
+      data-cta-location="features"
       className="flex scroll-mt-4 flex-col gap-10 border-t border-border bg-sidebar px-4 py-20 sm:px-8 lg:p-30"
     >
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

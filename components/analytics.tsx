@@ -58,6 +58,7 @@ export function Analytics() {
   return (
     <section
       id="analytics"
+      data-cta-location="analytics"
       className="flex scroll-mt-4 flex-col gap-12 border-t border-border px-4 py-20 sm:px-8 lg:flex-row lg:items-center lg:gap-20 lg:p-30"
     >
       <div className="flex shrink-0 flex-col gap-5 lg:w-110">
