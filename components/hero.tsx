@@ -8,7 +8,10 @@ import { links } from "@/lib/links"
 export function Hero() {
   return (
     <>
-      <section className="relative flex flex-col items-center gap-6.5 overflow-clip px-4 pt-20 pb-26 text-center md:h-130 md:justify-center md:pt-0 md:pb-6">
+      <section
+        data-cta-location="hero"
+        className="relative flex flex-col items-center gap-6.5 overflow-clip px-4 pt-20 pb-26 text-center md:h-130 md:justify-center md:pt-0 md:pb-6"
+      >
         {/* Barcode pixels drifting in from the edges; decoration only. */}
         <Image
           src={pixelsLeft}

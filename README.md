@@ -68,6 +68,11 @@ which needs **Cookieless server hash mode** turned on in the PostHog project set
 through `/_site/ph` on this site so ad blockers don't drop them. The app reports to the same
 project; filter on the `surface` property (`marketing` or `app`). Without a key nothing loads.
 
+Button and link clicks are also sent as `cta_clicked` with `location` (the section: `header`, `hero`,
+`features`, `analytics`, `raw-links`, `cta` or `footer`, set with `data-cta-location`) and `target`
+(`sign_up`, `sign_in`, `new_paste`, `dashboard`, `import_gist` or `anchor`). Funnels should use this
+event rather than autocapture selectors.
+
 ## Checks
 
 ```bash

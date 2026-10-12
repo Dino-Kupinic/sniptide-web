@@ -29,7 +29,10 @@ const columns = [
 
 export function SiteFooter() {
   return (
-    <footer className="flex flex-col gap-14 px-4 pt-18 pb-10 sm:px-8 lg:px-30">
+    <footer
+      data-cta-location="footer"
+      className="flex flex-col gap-14 px-4 pt-18 pb-10 sm:px-8 lg:px-30"
+    >
       <div className="flex flex-col gap-12 md:flex-row md:justify-between">
         <div className="flex w-80 flex-col gap-3.5">
           <p className="flex items-center gap-2 text-[13px] leading-4.5 font-medium text-primary">

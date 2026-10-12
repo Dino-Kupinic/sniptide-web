@@ -11,7 +11,7 @@ const nav = [
 
 export function SiteHeader() {
   return (
-    <header>
+    <header data-cta-location="header">
       <div className="flex h-9 items-center justify-center gap-2.5 border-b border-border px-4 text-[13px] leading-[18px]">
         <span className="text-[#3f3f3f]">Import any public GitHub gist in one click.</span>
         <a
