@@ -60,6 +60,14 @@ needs nothing else. If the chosen header is missing, no address is forwarded.
 Build-time setting: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point. Defaults
 to `https://app.sniptide.com`. `SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
 
+### For agents and search engines
+
+`/llms.txt` and `/llms-full.txt` ([llmstxt.org](https://llmstxt.org)) describe Sniptide for AI
+agents. Both are built from `lib/llms.ts`, so edit that file; they are real routes here, so the
+share-link fallback never proxies them to the app. The home page also carries JSON-LD
+(`Organization`, `WebSite`, `SoftwareApplication`) from `lib/structured-data.ts`. Wording comes from
+`docs/positioning.md` in the app repo: change claims there first, then here.
+
 ### Analytics
 
 Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST` for EU cloud) as build variables to
