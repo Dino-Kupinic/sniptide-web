@@ -61,7 +61,7 @@ export function SiteHeader() {
     <header
       ref={headerRef}
       data-cta-location="header"
-      className="relative z-30 border-b border-[#e8e8e8] bg-white text-[#0a0a0a] dark:border-[#222222] dark:bg-[#0a0a0a] dark:text-white"
+      className="sticky top-0 z-30 border-b border-[#e8e8e8] bg-white text-[#0a0a0a] dark:border-[#222222] dark:bg-[#0a0a0a] dark:text-white"
     >
       <div className="flex h-14 items-center justify-between px-5 md:h-18 md:px-10">
         <a href="/home" className={cn("shrink-0 lg:w-60", focusRing)}>

@@ -6,6 +6,14 @@
 
 html {
   scroll-behavior: smooth;
+  /* Section links land below the sticky header (h-14, md:h-18). */
+  scroll-padding-top: 56px;
+}
+
+@media (width >= 48rem) {
+  html {
+    scroll-padding-top: 72px;
+  }
 }
 
 /* The landing page grounds: pure white by day, near-black ink by night. */
