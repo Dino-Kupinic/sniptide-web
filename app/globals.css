@@ -1,5 +1,28 @@
 @import "@sniptide/ui/globals.css";
 
+@theme inline {
+  --font-notch: var(--font-notch);
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+/* The landing page grounds: pure white by day, near-black ink by night. */
+body {
+  background: #ffffff;
+}
+
+.dark body {
+  background: #0a0a0a;
+}
+
+/* The CTA fades from brand blue into the footer's night at the bottom of the dark page. */
+@utility cta-dusk {
+  background-image: linear-gradient(
+    in oklab 180deg,
+    oklab(52.9% -0.004 -0.242) 0%,
+    60.29%,
+    #000 100%
+  );
 }

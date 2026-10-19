@@ -1,73 +1,42 @@
-import { Button } from "@sniptide/ui/components/button"
-import Image from "next/image"
-import dashboard from "@/assets/dashboard.webp"
-import pixelsLeft from "@/assets/pixels-left.svg"
-import pixelsRight from "@/assets/pixels-right.svg"
+import { PixelCanvas } from "@/components/pixel-canvas"
 import { links } from "@/lib/links"
 
 export function Hero() {
   return (
-    <>
-      <section
-        data-cta-location="hero"
-        className="relative flex flex-col items-center gap-6.5 overflow-clip px-4 pt-20 pb-26 text-center md:h-130 md:justify-center md:pt-0 md:pb-6"
-      >
-        {/* Barcode pixels drifting in from the edges; decoration only. */}
-        <Image
-          src={pixelsLeft}
-          unoptimized
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute top-12.5 left-0 hidden h-110 w-70 xl:block"
-        />
-        <Image
-          src={pixelsRight}
-          unoptimized
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute top-17.5 right-0 hidden h-110 w-70 xl:block"
-        />
+    <section
+      data-cta-location="hero"
+      className="relative flex h-160 flex-col justify-end overflow-clip bg-white p-3 md:block md:h-200 md:p-0 dark:bg-[#0a0a0a]"
+    >
+      {/* Pixel horizon: a day seascape in light mode, a pink dusk in dark mode. Phones get a crop
+          of the desktop scene around the sun rather than a squeezed one. */}
+      <PixelCanvas
+        kind="horizon"
+        className="absolute bottom-0 left-[calc((100%-1178px)*0.8)] h-180 w-[1178px] md:top-[-80px] md:bottom-auto md:left-0 md:h-[calc(100%+80px)] md:w-full"
+      />
 
-        <h1 className="font-heading text-5xl leading-[1.03] font-medium tracking-[-0.035em] md:text-[76px] md:leading-[78px]">
-          Short links
-          <br />
-          for your code.
+      <div className="relative flex flex-col gap-4 bg-white p-6 md:absolute md:top-10 md:left-8 md:w-160 md:max-w-[calc(100%-64px)] md:gap-5.5 md:p-10 dark:bg-[#0a0a0a]">
+        <h1 className="font-heading text-[44px] leading-none tracking-[-1.5px] text-[#0a0a0a] md:text-7xl md:tracking-[-2.5px] dark:text-white">
+          The pastebin for modern teams.
         </h1>
-        <p className="max-w-140 text-lg leading-7 text-muted-foreground">
-          Paste code, choose when it expires, and share one link. Every paste shows how often it was
-          opened.
+        <p className="text-base leading-[1.5] text-[#6b6b6b] md:text-[19px] dark:text-[#a3a3a3]">
+          Beautiful by default, self-hostable by design, and open to all.
         </p>
-        <div className="flex items-center gap-2.5 pt-1.5">
-          <Button
-            className="h-11 gap-2 px-4.5 text-[15px]"
-            render={<a href={links.newPaste} />}
-            nativeButton={false}
+        <div className="flex flex-col gap-2 pt-1 md:flex-row md:gap-2.5 md:pt-1.5">
+          <a
+            href={links.newPaste}
+            className="flex h-12 items-center justify-center gap-2.5 bg-[#2a26ec] px-5.5 text-base leading-5 font-semibold text-white hover:bg-[#3a36ff]"
           >
-            <span className="size-2.5 bg-primary-foreground" />
+            <span className="size-2.5 bg-white" />
             Create a paste
-          </Button>
-          <Button
-            variant="secondary"
-            className="h-11 px-4.5 text-[15px]"
-            render={<a href="#features" />}
-            nativeButton={false}
+          </a>
+          <a
+            href={links.selfHost}
+            className="flex h-12 items-center justify-center bg-[#f2f2f2] px-5.5 text-base leading-5 font-semibold text-[#0a0a0a] hover:bg-[#e8e8e8] dark:bg-[#1c1c1c] dark:text-white dark:hover:bg-[#262626]"
           >
-            See features
-          </Button>
+            Self-host Sniptide
+          </a>
         </div>
-      </section>
-
-      <section className="flex justify-center px-4 pb-30 sm:px-8 lg:px-30">
-        <div className="w-full max-w-300 bg-sidebar shadow-[10px_10px_0_var(--foreground)]">
-          <Image
-            src={dashboard}
-            unoptimized
-            priority
-            alt="The Sniptide dashboard: paste stats, a quick paste editor and a chart of views."
-            className="block h-auto w-full"
-          />
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
