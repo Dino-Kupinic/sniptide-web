@@ -1,8 +1,20 @@
 import { links } from "@/lib/links"
 
 // Which button was clicked: the destination says what it does, the closest section marked with
-// data-cta-location says where it sits (header, hero, features, analytics, raw-links, cta, footer).
-export type CtaTarget = "sign_up" | "sign_in" | "new_paste" | "dashboard" | "import_gist" | "anchor"
+// data-cta-location says where it sits (header, hero, product, features, rules, analytics, raw-links,
+// self-host, cta, footer).
+export type CtaTarget =
+  | "sign_up"
+  | "sign_in"
+  | "new_paste"
+  | "dashboard"
+  | "import_gist"
+  | "collections"
+  | "api_docs"
+  | "github"
+  | "docs"
+  | "self_host"
+  | "anchor"
 
 const targets: Record<string, CtaTarget> = {
   [links.signUp]: "sign_up",
@@ -10,6 +22,11 @@ const targets: Record<string, CtaTarget> = {
   [links.newPaste]: "new_paste",
   [links.dashboard]: "dashboard",
   [links.importGist]: "import_gist",
+  [links.collections]: "collections",
+  [links.apiDocs]: "api_docs",
+  [links.github]: "github",
+  [links.docs]: "docs",
+  [links.selfHost]: "self_host",
 }
 
 // A bare "#" is a placeholder (Terms, Privacy) and is not reported.

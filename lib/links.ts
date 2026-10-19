@@ -1,3 +1,6 @@
+// Relative, because next.config.ts loads this file too.
+import { repoUrl } from "./site"
+
 // The app runs on its own subdomain; sniptide.com is this site. For local development set
 // NEXT_PUBLIC_APP_URL=http://localhost:3000 to reach a local app.
 export const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sniptide.com"
@@ -12,4 +15,9 @@ export const links = {
   newPaste: app("/new"),
   dashboard: app("/dashboard"),
   importGist: app("/pastes"),
+  collections: app("/collections"),
+  apiDocs: app("/docs/api"),
+  github: repoUrl,
+  docs: `${repoUrl}#readme`,
+  selfHost: `${repoUrl}#self-hosting`,
 }

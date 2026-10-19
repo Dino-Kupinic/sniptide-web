@@ -8,6 +8,10 @@ test("names the destination of each button", () => {
   expect(ctaTarget(links.newPaste)).toBe("new_paste")
   expect(ctaTarget(links.dashboard)).toBe("dashboard")
   expect(ctaTarget(links.importGist)).toBe("import_gist")
+  expect(ctaTarget(links.apiDocs)).toBe("api_docs")
+  expect(ctaTarget(links.github)).toBe("github")
+  expect(ctaTarget(links.docs)).toBe("docs")
+  expect(ctaTarget(links.selfHost)).toBe("self_host")
 })
 
 test("groups in-page links as anchors", () => {

@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!assets", "!.idea"]
+    "includes": ["**", "!assets", "!.idea", "!app/icon0.svg"]
   },
   "formatter": {
     "enabled": true,
