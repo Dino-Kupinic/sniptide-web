@@ -26,3 +26,9 @@ body {
     #000 100%
   );
 }
+
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}

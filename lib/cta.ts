@@ -9,6 +9,7 @@ export type CtaTarget =
   | "new_paste"
   | "dashboard"
   | "import_gist"
+  | "collections"
   | "api_docs"
   | "github"
   | "docs"
@@ -21,6 +22,7 @@ const targets: Record<string, CtaTarget> = {
   [links.newPaste]: "new_paste",
   [links.dashboard]: "dashboard",
   [links.importGist]: "import_gist",
+  [links.collections]: "collections",
   [links.apiDocs]: "api_docs",
   [links.github]: "github",
   [links.docs]: "docs",

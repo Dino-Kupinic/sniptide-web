@@ -15,6 +15,7 @@ export const links = {
   newPaste: app("/new"),
   dashboard: app("/dashboard"),
   importGist: app("/pastes"),
+  collections: app("/collections"),
   apiDocs: app("/docs/api"),
   github: repoUrl,
   docs: `${repoUrl}#readme`,

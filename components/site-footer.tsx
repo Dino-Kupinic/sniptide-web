@@ -17,7 +17,7 @@ const legal = [
   { label: "Privacy", href: "#" },
 ]
 
-// Moonlit in dark mode; light mode inverts the grid and sets the logo in black.
+// Moonlit in dark mode; light mode inverts the grid and sets the logo in blue and black.
 const markStops: [number, string][] = [
   [0, "#E4E3FF"],
   [0.5, "#8F8CFF"],
@@ -64,7 +64,7 @@ export function SiteFooter() {
       </nav>
 
       <div className="absolute right-5 bottom-21.5 left-5 flex max-w-348 items-center gap-4 md:right-6 md:bottom-18.5 md:left-6 md:gap-[4.67%]">
-        <LogoMark className="aspect-[243/234] w-[17.4%] text-black dark:hidden" />
+        <LogoMark className="aspect-[243/234] w-[17.4%] text-[#2a26ec] dark:hidden" />
         <LogoMark className="hidden aspect-[243/234] w-[17.4%] dark:block" stops={markStops} />
         <div className="flex-1 pt-[0.65%]">
           <Wordmark className="aspect-[4340/683] w-full text-black dark:hidden" />
