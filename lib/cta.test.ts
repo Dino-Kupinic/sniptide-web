@@ -12,6 +12,7 @@ test("names the destination of each button", () => {
   expect(ctaTarget(links.github)).toBe("github")
   expect(ctaTarget(links.docs)).toBe("docs")
   expect(ctaTarget(links.selfHost)).toBe("self_host")
+  expect(ctaTarget(links.demo)).toBe("demo")
 })
 
 test("groups in-page links as anchors", () => {

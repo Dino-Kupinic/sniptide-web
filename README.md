@@ -57,8 +57,10 @@ unset, or no visitor address is available, neither header is sent. A visitor can
 last hop of `X-Forwarded-For`, which is what a single reverse proxy appends, so a self-hosted site
 needs nothing else. If the chosen header is missing, no address is forwarded.
 
-Build-time setting: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point. Defaults
-to `https://app.sniptide.com`. `SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
+Build-time settings: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point, defaults
+to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" points, defaults to
+`https://demo.sniptide.com/demo` (an app instance running with `DEMO_MODE=true`).
+`SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
 
 ### For agents and search engines
 
