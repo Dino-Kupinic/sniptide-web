@@ -13,6 +13,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 # NEXT_PUBLIC_* values are baked in at build time; Coolify passes build variables as build args.
 ARG NEXT_PUBLIC_APP_URL
+ARG NEXT_PUBLIC_DEMO_URL
 ARG NEXT_PUBLIC_POSTHOG_KEY
 ARG NEXT_PUBLIC_POSTHOG_HOST
 RUN bun run build

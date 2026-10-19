@@ -5,6 +5,9 @@ import { repoUrl } from "./site"
 // NEXT_PUBLIC_APP_URL=http://localhost:3000 to reach a local app.
 export const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sniptide.com"
 
+// The public demo instance (DEMO_MODE in the app), where /demo signs visitors in as a guest.
+export const demoUrl = process.env.NEXT_PUBLIC_DEMO_URL ?? "https://demo.sniptide.com/demo"
+
 export function app(path: string) {
   return `${appUrl}${path}`
 }
@@ -20,4 +23,5 @@ export const links = {
   github: repoUrl,
   docs: `${repoUrl}#readme`,
   selfHost: `${repoUrl}#self-hosting`,
+  demo: demoUrl,
 }
