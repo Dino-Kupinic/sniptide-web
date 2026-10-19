@@ -1,10 +1,10 @@
 import { ChevronRightIcon } from "lucide-react"
 import Image from "next/image"
-import shotDark from "@/assets/landing/shot-dark.webp"
-import shotLight from "@/assets/landing/shot-light.webp"
+import demoPreview from "@/assets/landing/demo-preview.webp"
 import { links } from "@/lib/links"
 
-const alt = "The Sniptide app: pastes, collections and a chart of views for every link."
+const alt =
+  "The Sniptide demo dashboard: paste and view counts, a quick paste editor and a chart of views."
 
 export function ProductBand() {
   return (
@@ -23,17 +23,12 @@ export function ProductBand() {
 
       {/* On phones the app runs off the right edge, like a window that doesn't fit the screen. */}
       <div className="relative h-85 w-full self-start overflow-clip border-t border-l border-[#0a0a0a] bg-[#0a0a0a] md:aspect-[1360/640] md:h-auto md:w-full md:max-w-340 md:self-center md:border-r">
+        {/* The demo is dark-themed, so the same shot is used in both color schemes. */}
         <Image
-          src={shotLight}
+          src={demoPreview}
           alt={alt}
           unoptimized
-          className="block h-auto w-200 max-w-none md:w-full dark:hidden"
-        />
-        <Image
-          src={shotDark}
-          alt={alt}
-          unoptimized
-          className="hidden h-auto w-200 max-w-none md:w-full dark:block"
+          className="block h-auto w-200 max-w-none md:w-full"
         />
 
         {/* Dimmed so the button reads as the way in. */}
