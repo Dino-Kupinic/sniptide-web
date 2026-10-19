@@ -31,6 +31,8 @@ const fontMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Sniptide: the pastebin for modern teams",
   description: "Beautiful by default, self-hostable by design, and open to all.",
+  // Icons and the web manifest are the files in app/ and public/ from RealFaviconGenerator.
+  appleWebApp: { title: "Sniptide" },
 }
 
 // The page follows the visitor's color scheme. Set the class before first paint so dark visitors

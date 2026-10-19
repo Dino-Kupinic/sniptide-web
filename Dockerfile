@@ -26,6 +26,8 @@ ENV NODE_ENV=production \
 
 COPY --from=build --chown=node:node /app/.next/standalone ./
 COPY --from=build --chown=node:node /app/.next/static ./.next/static
+# Standalone output leaves public/ out; it holds the web app manifest icons.
+COPY --from=build --chown=node:node /app/public ./public
 USER node
 
 EXPOSE 3000
