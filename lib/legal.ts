@@ -10,7 +10,7 @@ export const operator = {
   street: "Pfeiffergasse 5",
   city: "1150 Vienna",
   country: "Austria",
-  email: "dinokupinic2006@gmail.com",
+  email: "office@sniptide.com",
   phone: undefined as string | undefined,
   // Sniptide is run by a private person, not a company. If that changes, fill in the legal form,
   // the Firmenbuch entry with its court, the VAT number, and the trade authority and chamber
