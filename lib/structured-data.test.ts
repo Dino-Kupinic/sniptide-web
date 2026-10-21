@@ -17,6 +17,13 @@ describe("structured data", () => {
     })
   })
 
+  test("gives the software the same image link previews show", () => {
+    expect(byType("SoftwareApplication")).toHaveProperty(
+      "image",
+      "https://sniptide.com/opengraph-image",
+    )
+  })
+
   test("references the organization by an id that exists", () => {
     const organizationId = "https://sniptide.com/#organization"
     expect(byType("Organization")?.["@id"]).toBe(organizationId)
