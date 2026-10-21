@@ -1,9 +1,5 @@
 @import "@sniptide/ui/globals.css";
 
-@theme inline {
-  --font-notch: var(--font-notch);
-}
-
 html {
   scroll-behavior: smooth;
   /* Section links land below the sticky header (h-14, md:h-18). */

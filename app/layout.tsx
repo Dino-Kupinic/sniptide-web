@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Archivo, JetBrains_Mono, Stack_Sans_Notch, Stack_Sans_Text } from "next/font/google"
+import { Archivo, Inter, JetBrains_Mono } from "next/font/google"
 
 import "./globals.css"
 import { cn } from "@sniptide/ui/lib/utils"
@@ -10,17 +10,10 @@ const fontHeading = Archivo({
   variable: "--font-heading",
 })
 
-const fontSans = Stack_Sans_Text({
+// Body text matches the app, so the site and the dashboard read the same.
+const fontSans = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
-})
-
-// Only the "works with" logo row uses it.
-const fontNotch = Stack_Sans_Notch({
-  subsets: ["latin"],
-  weight: ["700"],
-  variable: "--font-notch",
 })
 
 const fontMono = JetBrains_Mono({
@@ -55,7 +48,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         fontSans.variable,
         fontMono.variable,
         fontHeading.variable,
-        fontNotch.variable,
       )}
     >
       <head>
