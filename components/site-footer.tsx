@@ -1,6 +1,7 @@
 import Image from "next/image"
 import grid from "@/assets/landing/footer-grid.png"
 import { LogoMark, Wordmark } from "@/components/brand"
+import { legalLinks } from "@/lib/legal"
 import { links } from "@/lib/links"
 
 const nav = [
@@ -9,12 +10,6 @@ const nav = [
   { label: "Docs", href: links.docs },
   { label: "API", href: links.apiDocs },
   { label: "GitHub", href: links.github },
-]
-
-// TODO: no Terms or Privacy pages exist yet.
-const legal = [
-  { label: "Terms", href: "#" },
-  { label: "Privacy", href: "#" },
 ]
 
 // Moonlit in dark mode; light mode inverts the grid and sets the logo in blue and black.
@@ -75,8 +70,8 @@ export function SiteFooter() {
 
       <div className="absolute right-5 bottom-5 left-5 flex justify-between text-xs leading-4 md:right-6 md:left-6 dark:text-[#8a8a93]">
         <p>© 2026 Sniptide</p>
-        <div className="flex gap-6 font-mono uppercase">
-          {legal.map((item) => (
+        <div className="flex gap-4 font-mono uppercase md:gap-6">
+          {legalLinks.map((item) => (
             <a
               key={item.label}
               href={item.href}

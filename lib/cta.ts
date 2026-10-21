@@ -31,7 +31,8 @@ const targets: Record<string, CtaTarget> = {
   [links.demo]: "demo",
 }
 
-// A bare "#" is a placeholder (Terms, Privacy) and is not reported.
+// A bare "#" is a placeholder and is not reported. Links to other pages, like the legal pages, are
+// not tracked as calls to action.
 export function ctaTarget(href: string | null): CtaTarget | null {
   if (!href || href === "#") return null
   if (href.startsWith("#")) return "anchor"
