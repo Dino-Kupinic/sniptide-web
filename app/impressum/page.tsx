@@ -38,9 +38,9 @@ export default function Impressum() {
   return (
     <LegalPage title="Impressum" updated={false}>
       <p>
-        Sniptide is operated by the person or company below. This page gives the information
-        required of service providers by § 5 E-Commerce Act (ECG) and § 14 Business Code (UGB), and
-        the disclosure required of media owners by § 25 Media Act (MedienG).
+        Sniptide is operated by the person below. This page gives the information that § 5
+        E-Commerce Act (ECG) requires of service providers and the disclosure that § 25 Media Act
+        (MedienG) requires of media owners.
       </p>
 
       <dl className="grid gap-x-8 gap-y-4 md:grid-cols-[13rem_1fr]">

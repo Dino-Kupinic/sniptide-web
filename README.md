@@ -68,7 +68,7 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
 advice. The operator's name, address, register entries, hosting provider and similar details live
 in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
 the privacy policy says PostHog stores events in the EU or the US follows
-`NEXT_PUBLIC_POSTHOG_HOST`. These paths are real pages, so a paste with the custom link `terms`,
+`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
 `privacy` or `impressum` is shadowed here; the app should reserve them.
 
 ### For agents and search engines
@@ -81,7 +81,7 @@ share-link fallback never proxies them to the app. The home page also carries JS
 
 ### Analytics
 
-Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST` for EU cloud) as build variables to
+Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud) as build variables to
 send pageviews and button clicks to PostHog. It runs cookieless, so there is no consent banner,
 which needs **Cookieless server hash mode** turned on in the PostHog project settings. Requests go
 through `/_site/ph` on this site so ad blockers don't drop them. The app reports to the same

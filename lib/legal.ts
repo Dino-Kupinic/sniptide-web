@@ -1,35 +1,33 @@
 import { posthogHost } from "./posthog"
 
 // Details the Impressum, privacy policy and terms state about whoever runs sniptide.com.
-// [Bracketed text] is a placeholder: replace it before the pages go live, and set an optional
-// field to undefined to drop its row.
+// [Bracketed text] is a placeholder: replace it before the pages go live. An optional field set to
+// undefined drops its row.
 const todo = (what: string) => `[${what}]`
 
 export const operator = {
-  name: todo("Full legal name or company name"),
-  legalForm: todo("Legal form, such as sole proprietor or GmbH"),
-  street: todo("Street and number"),
-  city: todo("Postcode and city"),
+  name: "Dino Kupinic",
+  street: "Pfeiffergasse 5",
+  city: "1150 Vienna",
   country: "Austria",
-  email: todo("Contact email"),
+  email: "dinokupinic2006@gmail.com",
   phone: undefined as string | undefined,
-  // Entry in the Firmenbuch, with its court. Leave undefined when the business is not registered.
-  register: todo("Firmenbuch number and court, if registered") as string | undefined,
-  vatId: todo("VAT identification number, if any") as string | undefined,
-  // The trade licence behind the business (§ 63 GewO): the authority that issued it and the
-  // chamber the business belongs to.
-  tradeAuthority: todo("Trade authority, such as Magistrat or Bezirkshauptmannschaft") as
-    | string
-    | undefined,
-  chamber: todo("Chamber membership, such as Wirtschaftskammer Wien") as string | undefined,
-  // § 25 MedienG: who owns the business, and what the website is for.
-  ownership: todo("Owners and their shares"),
+  // Sniptide is run by a private person, not a company. If that changes, fill in the legal form,
+  // the Firmenbuch entry with its court, the VAT number, and the trade authority and chamber
+  // behind a trade licence (§ 63 GewO); each one adds a row to the Impressum.
+  legalForm: undefined as string | undefined,
+  register: undefined as string | undefined,
+  vatId: undefined as string | undefined,
+  tradeAuthority: undefined as string | undefined,
+  chamber: undefined as string | undefined,
+  // § 25 MedienG: who owns the service, and what the website is for.
+  ownership: "Dino Kupinic owns Sniptide in full.",
   purpose: "Operating the Sniptide pastebin service and publishing its open-source software.",
 }
 
 export const hosting = {
-  provider: todo("Hosting provider"),
-  country: todo("Country of the servers"),
+  provider: "netcup GmbH",
+  country: "Germany",
   // How long the web server keeps access logs.
   logDays: todo("number of days"),
 }
