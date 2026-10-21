@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Analytics } from "@/components/analytics"
 import { Cta } from "@/components/cta"
 import { Features } from "@/components/features"
@@ -10,6 +11,12 @@ import { SelfHost } from "@/components/self-host"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { WorksWith } from "@/components/works-with"
+
+// The same page as /, kept out of search results so the two never compete.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  robots: { index: false, follow: true },
+}
 
 export default function Home() {
   return (

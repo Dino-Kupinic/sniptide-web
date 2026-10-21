@@ -1,4 +1,13 @@
-import { appBase, features, logoUrl, repoUrl, siteDescription, siteName, siteUrl } from "@/lib/site"
+import {
+  appBase,
+  features,
+  logoUrl,
+  ogImageUrl,
+  repoUrl,
+  siteDescription,
+  siteName,
+  siteUrl,
+} from "@/lib/site"
 
 const organizationId = `${siteUrl}/#organization`
 
@@ -29,6 +38,7 @@ export const structuredData = {
       name: siteName,
       url: siteUrl,
       description: siteDescription,
+      image: ogImageUrl,
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Web, Linux (Docker)",
       license: "https://www.gnu.org/licenses/agpl-3.0.html",
