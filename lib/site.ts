@@ -33,4 +33,4 @@ export const logoUrl = `${appBase}/web-app-manifest-512x512.png`
 export const ogImageUrl = `${siteUrl}/opengraph-image`
 
 // Every page that belongs in sitemap.xml, as a path on siteUrl. Add a page here when it ships.
-export const sitemapPaths = ["/"]
+export const sitemapPaths = ["/", "/privacy", "/terms", "/impressum"]
