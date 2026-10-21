@@ -19,7 +19,16 @@ async function font(file: string) {
 // The 1200 by 630 card for links shared on X, Slack, Discord and the like: the logo, a headline
 // set in the heading font of the landing page, and one line under it. The images are rendered
 // once at build time.
-export async function renderOgImage({ title, summary }: { title: string; summary: string }) {
+export async function renderOgImage({
+  title,
+  summary,
+  titleSize = 104,
+}: {
+  title: string
+  summary: string
+  // Cards that sit side by side, like the comparison pages, share one size.
+  titleSize?: number
+}) {
   const [heading, body] = await Promise.all([
     font("Archivo-500.woff"),
     font("StackSansText-400.woff"),
@@ -57,7 +66,7 @@ export async function renderOgImage({ title, summary }: { title: string; summary
         <div
           style={{
             fontFamily: "Archivo",
-            fontSize: 104,
+            fontSize: titleSize,
             lineHeight: 1,
             letterSpacing: -4,
             maxWidth: 980,

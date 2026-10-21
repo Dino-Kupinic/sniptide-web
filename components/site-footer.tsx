@@ -3,6 +3,7 @@ import grid from "@/assets/landing/footer-grid.png"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { legalLinks } from "@/lib/legal"
 import { links } from "@/lib/links"
+import { navHref } from "@/lib/nav"
 
 const nav = [
   { label: "Features", href: "#features" },
@@ -25,7 +26,8 @@ const wordmarkStops: [number, string][] = [
   [1, "#8F8CFF"],
 ]
 
-export function SiteFooter() {
+// `home` is the address of the home page when the footer sits on another page.
+export function SiteFooter({ home }: { home?: string }) {
   return (
     <footer
       data-cta-location="footer"
@@ -50,7 +52,7 @@ export function SiteFooter() {
         {nav.map((item) => (
           <a
             key={item.label}
-            href={item.href}
+            href={navHref(item.href, home)}
             className="hover:text-[#2a26ec] dark:hover:text-white"
           >
             {item.label}
