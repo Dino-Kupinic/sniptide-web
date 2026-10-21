@@ -62,6 +62,15 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
 `https://demo.sniptide.com/demo` (an app instance running with `DEMO_MODE=true`).
 `SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
 
+### Legal pages
+
+`/impressum`, `/privacy` and `/terms` are linked from the footer. They are templates, not legal
+advice. The operator's name, address, register entries, hosting provider and similar details live
+in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
+the privacy policy says PostHog stores events in the EU or the US follows
+`NEXT_PUBLIC_POSTHOG_HOST`. These paths are real pages, so a paste with the custom link `terms`,
+`privacy` or `impressum` is shadowed here; the app should reserve them.
+
 ### For agents and search engines
 
 `/llms.txt` and `/llms-full.txt` ([llmstxt.org](https://llmstxt.org)) describe Sniptide for AI
@@ -77,6 +86,12 @@ send pageviews and button clicks to PostHog. It runs cookieless, so there is no 
 which needs **Cookieless server hash mode** turned on in the PostHog project settings. Requests go
 through `/_site/ph` on this site so ad blockers don't drop them. The app reports to the same
 project; filter on the `surface` property (`marketing` or `app`). Without a key nothing loads.
+
+The site stores nothing on the visitor's device and sets no cookies, so Austria's § 165(3) TKG
+(the ePrivacy rule on storing or reading data on a device) has no consent to ask for, and the
+legal basis is legitimate interest under Art. 6(1)(f) GDPR, stated in the privacy policy. That
+reasoning relies on cookieless mode staying on and on the site loading no other tracker, so
+re-check it before adding any cookie, local storage, session replay or `identify()` call.
 
 Button and link clicks are also sent as `cta_clicked` with `location` (the section: `header`, `hero`,
 `features`, `analytics`, `raw-links`, `cta` or `footer`, set with `data-cta-location`) and `target`
