@@ -14,7 +14,7 @@ export function Hero() {
         className="absolute bottom-0 left-[calc((100%-1178px)*0.8)] h-180 w-[1178px] md:top-[-80px] md:bottom-auto md:left-0 md:h-[calc(100%+80px)] md:w-full"
       />
 
-      <div className="relative flex flex-col gap-4 rounded-lg bg-white p-6 md:absolute md:top-10 md:left-8 md:w-160 md:max-w-[calc(100%-64px)] md:gap-5.5 md:p-10 dark:bg-[#0a0a0a]">
+      <div className="relative flex flex-col gap-4 bg-white p-6 md:absolute md:top-10 md:left-8 md:w-160 md:max-w-[calc(100%-64px)] md:gap-5.5 md:p-10 dark:bg-[#0a0a0a]">
         <h1 className="font-heading text-[44px] leading-none tracking-[-1.5px] text-[#0a0a0a] md:text-7xl md:tracking-[-2.5px] dark:text-white">
           The pastebin for modern teams.
         </h1>
