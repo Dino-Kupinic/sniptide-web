@@ -14,7 +14,7 @@ export function ProductBand() {
     >
       <a
         href={links.signUp}
-        className="flex h-8.5 shrink-0 items-center gap-2.5 self-start border border-white/35 px-3.5 text-sm leading-4.5 font-medium text-white hover:bg-white/10 md:self-auto"
+        className="raised-button flex h-8.5 shrink-0 items-center gap-2.5 self-start bg-[#2a26ec] [--button-focus:white] border border-white/35 px-3.5 text-sm leading-4.5 font-medium text-white hover:bg-white/10 md:self-auto"
       >
         <span className="md:hidden">Write, share and track every paste</span>
         <span className="hidden md:inline">Write, share and track every paste from one place</span>
@@ -22,7 +22,7 @@ export function ProductBand() {
       </a>
 
       {/* On phones the app runs off the right edge, like a window that doesn't fit the screen. */}
-      <div className="relative h-85 w-full self-start overflow-clip border-t border-l border-[#0a0a0a] bg-[#0a0a0a] md:aspect-[1360/640] md:h-auto md:w-full md:max-w-340 md:self-center md:border-r">
+      <div className="relative h-85 w-full self-start overflow-clip rounded-t-lg border-t border-l border-[#0a0a0a] bg-[#0a0a0a] md:aspect-[1360/640] md:h-auto md:w-full md:max-w-340 md:self-center md:border-r">
         {/* The demo is dark-themed, so the same shot is used in both color schemes. */}
         <Image
           src={demoPreview}
@@ -35,7 +35,7 @@ export function ProductBand() {
         <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/45">
           <a
             href={links.demo}
-            className="flex h-12 items-center gap-2.5 bg-white px-5.5 text-base leading-5 font-semibold text-[#2a26ec] shadow-[6px_6px_0_#0a0a0a] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+            className="raised-button flex h-12 items-center gap-2.5 bg-white [--button-depth:#b6b4ff] [--button-focus:white] px-5.5 text-base leading-5 font-semibold text-[#2a26ec]"
           >
             <span className="size-2.5 bg-[#2a26ec]" />
             Try the demo
