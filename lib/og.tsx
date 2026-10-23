@@ -7,10 +7,12 @@ import { siteName } from "@/lib/site"
 export const ogSize = { width: 1200, height: 630 }
 export const ogContentType = "image/png"
 
-// The brand colors from the landing page: ink, graphite and the Tide blue of the logo mark.
-const ink = "#0a0a0a"
-const graphite = "#6b6b6b"
+// The campaign cards from the Paper file (Brand, "Marketing headers"): the Tide blue field with the
+// white logo and a white headline.
 const blue = "#2a26ec"
+const white = "#ffffff"
+// White at 78% on the blue keeps the summary secondary and still clears 4.5:1.
+const muted = "rgba(255, 255, 255, 0.78)"
 
 async function font(file: string) {
   return readFile(join(process.cwd(), "assets/fonts", file))
@@ -22,7 +24,7 @@ async function font(file: string) {
 export async function renderOgImage({
   title,
   summary,
-  titleSize = 104,
+  titleSize = 96,
 }: {
   title: string
   summary: string
@@ -39,34 +41,34 @@ export async function renderOgImage({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: "72px 80px",
-        background: "#ffffff",
-        color: ink,
+        padding: 64,
+        background: blue,
+        color: white,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <svg width={54} height={52} viewBox="2 2 20 19.27" role="img" aria-label={siteName}>
-          <g fill={blue}>
+      <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+        <svg width={33} height={32} viewBox="2 2 20 19.27" role="img" aria-label={siteName}>
+          <g fill={white}>
             {bars.map((points) => (
               <polygon key={points} points={points} />
             ))}
           </g>
         </svg>
-        <svg width={176} height={28} viewBox="1341 238 4340 683" role="img" aria-label={siteName}>
-          <g transform="translate(0,1080) scale(0.1,-0.1)" fill={ink}>
+        <svg width={148} height={23} viewBox="1341 238 4340 683" role="img" aria-label={siteName}>
+          <g transform="translate(0,1080) scale(0.1,-0.1)" fill={white}>
             <path d={wordmark} />
           </g>
         </svg>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
         <div
           style={{
             fontFamily: "Archivo",
             fontSize: titleSize,
-            lineHeight: 1,
-            letterSpacing: -4,
-            maxWidth: 980,
+            lineHeight: 0.96,
+            letterSpacing: -3.5,
+            maxWidth: 1000,
           }}
         >
           {title}
@@ -74,19 +76,14 @@ export async function renderOgImage({
         <div
           style={{
             fontFamily: "Inter",
-            fontSize: 34,
+            fontSize: 32,
             lineHeight: 1.4,
-            color: graphite,
+            color: muted,
             maxWidth: 900,
           }}
         >
           {summary}
         </div>
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        <div style={{ width: 14, height: 14, background: blue }} />
-        <div style={{ fontFamily: "Inter", fontSize: 28, color: graphite }}>sniptide.com</div>
       </div>
     </div>,
     {
