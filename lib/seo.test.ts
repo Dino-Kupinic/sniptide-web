@@ -20,6 +20,9 @@ describe("search engine basics", () => {
   test("the sitemap lists absolute URLs on the site, each once", () => {
     const urls = sitemap().map((entry) => entry.url)
     expect(urls).toContain(siteUrl)
+    expect(urls).toEqual(
+      expect.arrayContaining([`${siteUrl}/privacy`, `${siteUrl}/terms`, `${siteUrl}/impressum`]),
+    )
     expect(new Set(urls).size).toBe(urls.length)
     for (const url of urls) expect(url.startsWith(siteUrl)).toBe(true)
   })

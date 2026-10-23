@@ -62,15 +62,6 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
 `https://demo.sniptide.com/demo` (an app instance running with `DEMO_MODE=true`).
 `SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
 
-### Legal pages
-
-`/impressum`, `/privacy` and `/terms` are linked from the footer. They are templates, not legal
-advice. The operator's name, address, register entries, hosting provider and similar details live
-in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
-the privacy policy says PostHog stores events in the EU or the US follows
-`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
-`privacy` or `impressum` is shadowed here; the app should reserve them.
-
 ### Search engines and link previews
 
 - **Metadata.** `app/layout.tsx` sets the base URL, the title template, the description and the
@@ -87,6 +78,15 @@ the privacy policy says PostHog stores events in the EU or the US follows
 A route here shadows a paste link with the same name, because this site answers first and only
 unknown paths go to the app. When you add a route whose name could be a paste link (such as
 `/opengraph-image`), add it to `RESERVED` in `apps/web/lib/pastes/store.ts` in the app repo too.
+
+### Legal pages
+
+`/impressum`, `/privacy` and `/terms` are linked from the footer. They are templates, not legal
+advice. The operator's name, address, register entries, hosting provider and similar details live
+in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
+the privacy policy says PostHog stores events in the EU or the US follows
+`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
+`privacy` or `impressum` is shadowed here; `RESERVED` in the app repo keeps those links from being taken.
 
 ### Comparison pages
 

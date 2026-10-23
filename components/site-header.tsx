@@ -10,7 +10,7 @@ import { navHref, navLinks } from "@/lib/nav"
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
 const navLink =
-  "flex h-9 items-center px-3 text-[15px] leading-4.5 font-medium hover:bg-[#f3f3fe] dark:hover:bg-[#1f1e2e]"
+  "flex h-9 items-center rounded-lg px-3 text-[15px] leading-4.5 font-medium hover:bg-[#f3f3fe] dark:hover:bg-[#1f1e2e]"
 
 // `home` is the address of the home page when the header sits on another page, so that section
 // links like "#features" still lead somewhere.
@@ -98,7 +98,7 @@ export function SiteHeader({ home }: { home?: string }) {
           <a
             href={links.signUp}
             className={cn(
-              "flex h-9 items-center gap-2 bg-[#2a26ec] px-3.5 text-[15px] leading-4.5 font-semibold text-white hover:bg-[#3a36ff] md:h-10 md:px-4",
+              "raised-button flex h-9 items-center gap-2 bg-[#2a26ec] px-3.5 text-[15px] leading-4.5 font-semibold text-white hover:bg-[#3a36ff] md:h-10 md:px-4",
               focusRing,
             )}
           >
@@ -112,7 +112,7 @@ export function SiteHeader({ home }: { home?: string }) {
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(!mobileOpen)}
             className={cn(
-              "flex size-9 items-center justify-center bg-[#f2f2f2] lg:hidden dark:bg-[#1c1c1c]",
+              "flex size-9 items-center justify-center rounded-lg bg-[#f2f2f2] lg:hidden dark:bg-[#1c1c1c]",
               focusRing,
             )}
           >

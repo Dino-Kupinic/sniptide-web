@@ -18,7 +18,7 @@ export function RawLinks() {
     <section
       id="raw-links"
       data-cta-location="raw-links"
-      className="flex scroll-mt-4 flex-col gap-8 bg-[#0a0a0a] px-5 py-16 md:p-10 xl:flex-row xl:items-center xl:gap-20 xl:p-30"
+      className="[--button-focus:#8f8cff] flex scroll-mt-4 flex-col gap-8 bg-[#0a0a0a] px-5 py-16 md:p-10 xl:flex-row xl:items-center xl:gap-20 xl:p-30"
     >
       <div className="flex shrink-0 flex-col gap-5 xl:w-110">
         <h2 className="font-heading text-[34px] leading-9.5 font-medium tracking-[-0.03em] text-white md:text-5xl md:leading-13">
@@ -31,21 +31,21 @@ export function RawLinks() {
         <div className="flex flex-wrap items-center gap-2.5 pt-2">
           <a
             href={links.newPaste}
-            className="flex h-10 items-center gap-2 bg-[#2a26ec] px-4 text-sm leading-5 font-medium text-white hover:bg-[#3a36ff]"
+            className="raised-button flex h-10 items-center gap-2 bg-[#2a26ec] px-4 text-sm leading-5 font-medium text-white hover:bg-[#3a36ff]"
           >
             <span className="size-2 bg-white" />
             Create a paste
           </a>
           <a
             href={links.apiDocs}
-            className="flex h-10 items-center border border-[#3a3737] px-4 text-sm leading-5 font-medium text-white hover:bg-white/5"
+            className="raised-button flex h-10 items-center border border-[#3a3737] bg-[#0a0a0a] [--button-depth:#3a3737] px-4 text-sm leading-5 font-medium text-white hover:bg-white/5"
           >
             Raw links explained
           </a>
         </div>
       </div>
 
-      <div className="min-w-0 grow border border-[#2c2a2a] bg-[#1b1919]">
+      <div className="min-w-0 grow overflow-hidden rounded-lg border border-[#2c2a2a] bg-[#1b1919]">
         <div className="flex h-10 items-center justify-between border-b border-[#2c2a2a] px-4">
           <div className="flex gap-1.5">
             <span className="size-2.25 border border-[#4a4747]" />

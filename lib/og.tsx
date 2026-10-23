@@ -29,10 +29,7 @@ export async function renderOgImage({
   // Cards that sit side by side, like the comparison pages, share one size.
   titleSize?: number
 }) {
-  const [heading, body] = await Promise.all([
-    font("Archivo-500.woff"),
-    font("StackSansText-400.woff"),
-  ])
+  const [heading, body] = await Promise.all([font("Archivo-500.woff"), font("Inter-400.woff")])
 
   return new ImageResponse(
     <div
@@ -76,7 +73,7 @@ export async function renderOgImage({
         </div>
         <div
           style={{
-            fontFamily: "Stack Sans Text",
+            fontFamily: "Inter",
             fontSize: 34,
             lineHeight: 1.4,
             color: graphite,
@@ -89,16 +86,14 @@ export async function renderOgImage({
 
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <div style={{ width: 14, height: 14, background: blue }} />
-        <div style={{ fontFamily: "Stack Sans Text", fontSize: 28, color: graphite }}>
-          sniptide.com
-        </div>
+        <div style={{ fontFamily: "Inter", fontSize: 28, color: graphite }}>sniptide.com</div>
       </div>
     </div>,
     {
       ...ogSize,
       fonts: [
         { name: "Archivo", data: heading, style: "normal", weight: 500 },
-        { name: "Stack Sans Text", data: body, style: "normal", weight: 400 },
+        { name: "Inter", data: body, style: "normal", weight: 400 },
       ],
     },
   )
