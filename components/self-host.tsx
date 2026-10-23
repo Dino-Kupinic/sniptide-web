@@ -64,7 +64,7 @@ export function SelfHost() {
       </div>
 
       <div className="flex flex-col items-start gap-3.5 rounded-lg border border-[#262626] p-5 md:flex-row md:items-center md:gap-4 md:px-6 md:py-5.5">
-        <span className="flex h-6 shrink-0 items-center rounded-sm border border-[#6aa3ff] px-2 font-mono text-[11px] leading-3.5 tracking-[0.08em] text-[#6aa3ff]">
+        <span className="flex h-6 shrink-0 items-center rounded-sm border border-[#8f8cff] px-2 font-mono text-[11px] leading-3.5 tracking-[0.08em] text-[#8f8cff]">
           COMING SOON
         </span>
         <p className="text-[17px] leading-5.5 font-medium">
