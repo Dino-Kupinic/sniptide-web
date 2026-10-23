@@ -23,7 +23,8 @@ const fontMono = JetBrains_Mono({
 })
 
 // Every page inherits these. Pages set their own title, description and canonical path in their
-// own metadata; the Open Graph and Twitter images are app/opengraph-image.tsx and
+// own metadata, and Next copies a page's title and description into its Open Graph and Twitter
+// tags, so those are left out here (a title set here would replace every page's). The images are app/opengraph-image.tsx and
 // app/twitter-image.tsx, which Next adds to every page's tags.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -34,10 +35,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName,
     locale: "en_US",
-    title: siteTitle,
-    description: siteDescription,
   },
-  twitter: { card: "summary_large_image", title: siteTitle, description: siteDescription },
+  twitter: { card: "summary_large_image" },
   // Icons and the web manifest are the files in app/ and public/ from RealFaviconGenerator.
   appleWebApp: { title: siteName },
 }
