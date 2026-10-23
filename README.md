@@ -62,6 +62,24 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
 `https://demo.sniptide.com/demo` (an app instance running with `DEMO_MODE=true`).
 `SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
 
+### Search engines and link previews
+
+- **Metadata.** `app/layout.tsx` sets the base URL, the title template, the description and the
+  Open Graph and Twitter tags that every page inherits. A page sets its own `title`, `description`
+  and `alternates.canonical` in its `metadata` export, and its link previews reuse them. `/home`
+  repeats `/`, so its canonical link points at `/`.
+- **Images.** `app/opengraph-image.tsx` and `app/twitter-image.tsx` render the 1200 by 630 card
+  with the logo, the headline and a pink pixel sun on the Tide blue (`lib/og.tsx`, with the pixel
+  art in `lib/og-sun.ts` and the font in `assets/fonts`).
+  They are generated once at build time, and Next adds the tags to every page.
+- **Crawling.** `app/robots.ts` allows everything and links the sitemap, and `app/sitemap.ts` lists
+  the paths in `sitemapPaths` (`lib/site.ts`). Add a page's path there when it ships.
+- **Structured data.** See the next section.
+
+A route here shadows a paste link with the same name, because this site answers first and only
+unknown paths go to the app. When you add a route whose name could be a paste link (such as
+`/opengraph-image`), add it to `RESERVED` in `apps/web/lib/pastes/store.ts` in the app repo too.
+
 ### Legal pages
 
 `/impressum`, `/privacy` and `/terms` are linked from the footer. They are templates, not legal

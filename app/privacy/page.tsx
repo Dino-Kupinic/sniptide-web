@@ -3,7 +3,8 @@ import { LegalPage } from "@/components/legal-page"
 import { analyticsInEu, authority, hosting, operator } from "@/lib/legal"
 
 export const metadata: Metadata = {
-  title: "Privacy policy: Sniptide",
+  alternates: { canonical: "/privacy" },
+  title: "Privacy policy",
   description: "What personal data Sniptide processes, why, and what rights you have.",
 }
 

@@ -3,7 +3,8 @@ import { LegalPage } from "@/components/legal-page"
 import { operator } from "@/lib/legal"
 
 export const metadata: Metadata = {
-  title: "Terms of service: Sniptide",
+  alternates: { canonical: "/terms" },
+  title: "Terms of service",
   description: "The rules for using the hosted Sniptide service at sniptide.com.",
 }
 

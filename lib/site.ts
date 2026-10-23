@@ -7,6 +7,13 @@ export const imageUrl = "ghcr.io/dino-kupinic/sniptide"
 
 export const siteName = "Sniptide"
 
+// The hero's headline and the line under it. The browser tab, search results and link previews for
+// the home page say the same thing, so they read them from here.
+export const heroTitle = "The pastebin for your agents."
+export const heroSummary =
+  "Let your coding agents search, read and save snippets. Open source and self-hostable."
+export const siteTitle = "Sniptide: the pastebin for your agents"
+
 export const siteTagline =
   "The self-hostable pastebin for snippets, configs and secrets, and a library of clean patterns your coding agents can reuse."
 
@@ -25,3 +32,8 @@ export const features = [
 ]
 
 export const logoUrl = `${appBase}/web-app-manifest-512x512.png`
+// The 1200 by 630 card from app/opengraph-image.tsx, the same one link previews show.
+export const ogImageUrl = `${siteUrl}/opengraph-image`
+
+// Every page that belongs in sitemap.xml, as a path on siteUrl. Add a page here when it ships.
+export const sitemapPaths = ["/", "/privacy", "/terms", "/impressum"]

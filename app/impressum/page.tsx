@@ -3,7 +3,8 @@ import { LegalPage } from "@/components/legal-page"
 import { operator } from "@/lib/legal"
 
 export const metadata: Metadata = {
-  title: "Impressum: Sniptide",
+  alternates: { canonical: "/impressum" },
+  title: "Impressum",
   description: "Who runs sniptide.com and how to reach them.",
 }
 
