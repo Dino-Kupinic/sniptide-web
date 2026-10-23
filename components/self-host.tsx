@@ -18,7 +18,7 @@ export function SelfHost() {
     <section
       id="self-host"
       data-cta-location="self-host"
-      className="flex scroll-mt-4 flex-col gap-12 bg-[#0a0a0a] px-5 pb-16 text-white md:px-10 xl:gap-24 xl:px-30 xl:pb-24"
+      className="[--button-focus:#8f8cff] flex scroll-mt-4 flex-col gap-12 bg-[#0a0a0a] px-5 pb-16 text-white md:px-10 xl:gap-24 xl:px-30 xl:pb-24"
     >
       <div className="h-px bg-[#262626]" />
 
@@ -34,13 +34,13 @@ export function SelfHost() {
           <div className="flex flex-wrap gap-2.5 pt-2">
             <a
               href={links.selfHost}
-              className="flex h-11 items-center bg-[#2a26ec] px-5 text-[15px] leading-4.5 font-semibold hover:bg-[#3a36ff]"
+              className="raised-button flex h-11 items-center bg-[#2a26ec] px-5 text-[15px] leading-4.5 font-semibold hover:bg-[#3a36ff]"
             >
               Read the guide
             </a>
             <a
               href={links.github}
-              className="flex h-11 items-center gap-2 border border-[#3a3a3a] px-5 text-[15px] leading-4.5 font-semibold hover:bg-white/5"
+              className="raised-button flex h-11 items-center gap-2 bg-[#0a0a0a] [--button-depth:#3a3a3a] border border-[#3a3a3a] px-5 text-[15px] leading-4.5 font-semibold hover:bg-white/5"
             >
               <span className="size-2.25 bg-white" />
               Star on GitHub
@@ -48,7 +48,7 @@ export function SelfHost() {
           </div>
         </div>
 
-        <div className="min-w-0 border border-[#262626] bg-[#111111] xl:max-w-150 xl:flex-1">
+        <div className="min-w-0 overflow-hidden rounded-lg border border-[#262626] bg-[#111111] xl:max-w-150 xl:flex-1">
           <div className="flex h-10 items-center justify-between border-b border-[#262626] px-4">
             <div className="flex gap-1.5">
               <span className="size-2.25 border border-[#444444]" />
@@ -63,8 +63,8 @@ export function SelfHost() {
         </div>
       </div>
 
-      <div className="flex flex-col items-start gap-3.5 border border-[#262626] p-5 md:flex-row md:items-center md:gap-4 md:px-6 md:py-5.5">
-        <span className="flex h-6 shrink-0 items-center border border-[#6aa3ff] px-2 font-mono text-[11px] leading-3.5 tracking-[0.08em] text-[#6aa3ff]">
+      <div className="flex flex-col items-start gap-3.5 rounded-lg border border-[#262626] p-5 md:flex-row md:items-center md:gap-4 md:px-6 md:py-5.5">
+        <span className="flex h-6 shrink-0 items-center rounded-sm border border-[#8f8cff] px-2 font-mono text-[11px] leading-3.5 tracking-[0.08em] text-[#8f8cff]">
           COMING SOON
         </span>
         <p className="text-[17px] leading-5.5 font-medium">

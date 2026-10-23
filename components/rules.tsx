@@ -40,13 +40,13 @@ export function Rules() {
           <div className="flex flex-wrap gap-2.5">
             <a
               href="#features"
-              className="flex h-11 items-center bg-[#2b0a1f] px-5 text-[15px] leading-4.5 font-semibold text-[#fbd3ea] hover:bg-[#3d1230]"
+              className="raised-button flex h-11 items-center bg-[#2b0a1f] [--button-depth:#160510] [--button-focus:#2b0a1f] px-5 text-[15px] leading-4.5 font-semibold text-[#fbd3ea] hover:bg-[#3d1230]"
             >
               See sharing rules
             </a>
             <a
               href={links.docs}
-              className="flex h-11 items-center border border-[#2b0a1f] px-5 text-[15px] leading-4.5 font-semibold hover:bg-[#2b0a1f]/8"
+              className="raised-button flex h-11 items-center border border-[#2b0a1f] bg-[#fbd3ea] [--button-depth:#a04577] [--button-focus:#2b0a1f] px-5 text-[15px] leading-4.5 font-semibold hover:bg-[#2b0a1f]/8"
             >
               Read the docs
             </a>
@@ -54,16 +54,16 @@ export function Rules() {
         </div>
 
         {/* A burn-after-read link, step by step. */}
-        <div className="flex flex-col items-center justify-center bg-[#2b0a1f] px-4 py-12 font-mono text-sm leading-4.5 xl:max-w-155 xl:flex-1 xl:p-12">
-          <div className="flex h-11 items-center border border-[#f6a9d3] px-4.5 text-[#fbd3ea]">
+        <div className="flex flex-col items-center justify-center rounded-lg bg-[#2b0a1f] px-4 py-12 font-mono text-sm leading-4.5 xl:max-w-155 xl:flex-1 xl:p-12">
+          <div className="flex h-11 items-center rounded-md border border-[#f6a9d3] px-4.5 text-[#fbd3ea]">
             ● paste created · expires 24h
           </div>
           <div className="h-11 w-px bg-[#f6a9d3]" />
-          <div className="flex h-11 items-center bg-[#f6a9d3] px-4.5 font-semibold text-[#2b0a1f]">
+          <div className="flex h-11 items-center rounded-md bg-[#f6a9d3] px-4.5 font-semibold text-[#2b0a1f]">
             ◉ first view · 10.0.4.12
           </div>
           <div className="h-11 w-px bg-[#f6a9d3]" />
-          <div className="flex h-11 items-center border border-dashed border-[#f6a9d3]/60 px-4.5 text-[#fbd3ea]/60">
+          <div className="flex h-11 items-center rounded-md border border-dashed border-[#f6a9d3]/60 px-4.5 text-[#fbd3ea]/60">
             ✕ burned · link returns 410
           </div>
         </div>

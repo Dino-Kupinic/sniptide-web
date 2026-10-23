@@ -71,21 +71,21 @@ export function Analytics() {
         <div className="flex flex-wrap items-center gap-2.5 pt-2">
           <a
             href={links.newPaste}
-            className="flex h-10 items-center gap-2 bg-[#2a26ec] px-4 text-sm leading-5 font-medium text-white hover:bg-[#3a36ff]"
+            className="raised-button flex h-10 items-center gap-2 bg-[#2a26ec] px-4 text-sm leading-5 font-medium text-white hover:bg-[#3a36ff]"
           >
             <span className="size-2 bg-white" />
             Create a paste
           </a>
           <a
             href={links.dashboard}
-            className="flex h-10 items-center bg-[#f4f4f4] px-4 text-sm leading-5 font-medium hover:bg-[#e8e8e8] dark:bg-[#1f1f1f] dark:hover:bg-[#2a2a2a]"
+            className="raised-button flex h-10 items-center bg-[#f4f4f4] [--button-depth:#d0d0d0] dark:[--button-depth:#383838] px-4 text-sm leading-5 font-medium hover:bg-[#e8e8e8] dark:bg-[#1f1f1f] dark:hover:bg-[#2a2a2a]"
           >
             Open the dashboard
           </a>
         </div>
       </div>
 
-      <div className="min-w-0 grow border border-[#e8e8e8] font-mono text-xs leading-4 dark:border-[#262626] dark:bg-[#111111]">
+      <div className="min-w-0 grow overflow-hidden rounded-lg border border-[#e8e8e8] font-mono text-xs leading-4 dark:border-[#262626] dark:bg-[#111111]">
         <div className="flex h-11 items-center justify-between border-b border-[#e8e8e8] px-4.5 tracking-[0.08em] dark:border-[#262626]">
           <span className="text-[#6b6b6b] dark:text-[#9a9a9a]">LIVE LINK OPENS</span>
           <span className="flex items-center gap-1.5 text-[#2a26ec] dark:text-[#8f8cff]">
@@ -109,7 +109,7 @@ export function Analytics() {
             >
               {row.slug}
               {row.burned && (
-                <span className="bg-[#2a26ec] px-1.25 py-px text-[10px] leading-3.5 text-white">
+                <span className="rounded-sm bg-[#2a26ec] px-1.25 py-px text-[10px] leading-3.5 text-white">
                   BURNED
                 </span>
               )}

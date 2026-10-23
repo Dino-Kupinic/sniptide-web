@@ -15,14 +15,14 @@ export function Cta() {
       <div className="flex flex-wrap items-center gap-2.5 pt-2.5">
         <a
           href={links.signUp}
-          className="flex h-11 items-center gap-2 bg-white px-4.5 text-[15px] leading-5 font-medium text-[#2a26ec] hover:bg-white/90"
+          className="raised-button flex h-11 items-center gap-2 bg-white [--button-depth:#b6b4ff] [--button-focus:white] px-4.5 text-[15px] leading-5 font-medium text-[#2a26ec] hover:bg-white/90"
         >
           <span className="size-2.25 bg-[#2a26ec]" />
           Create a free account
         </a>
         <a
           href={links.signIn}
-          className="flex h-11 items-center bg-[#4744f0] px-4.5 text-[15px] leading-5 font-medium text-white hover:bg-[#5552f2] dark:bg-[#2a26ec] dark:hover:bg-[#3a36ff]"
+          className="raised-button flex h-11 items-center bg-[#4744f0] [--button-focus:white] px-4.5 text-[15px] leading-5 font-medium text-white hover:bg-[#5552f2] dark:bg-[#2a26ec] dark:hover:bg-[#3a36ff]"
         >
           Sign in
         </a>
