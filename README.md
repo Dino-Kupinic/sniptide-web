@@ -66,8 +66,8 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
 
 - **Metadata.** `app/layout.tsx` sets the base URL, the title template, the description and the
   Open Graph and Twitter tags that every page inherits. A page sets its own `title`, `description`
-  and `alternates.canonical` in its `metadata` export. `/home` repeats `/`, so it is `noindex` and
-  points its canonical link at `/`.
+  and `alternates.canonical` in its `metadata` export, and its link previews reuse them. `/home`
+  repeats `/`, so its canonical link points at `/`.
 - **Images.** `app/opengraph-image.tsx` and `app/twitter-image.tsx` render the 1200 by 630 card
   with the logo, the heading font and the Tide blue (`lib/og.tsx`, fonts in `assets/fonts`).
   They are generated once at build time, and Next adds the tags to every page.
@@ -86,7 +86,7 @@ advice. The operator's name, address, register entries, hosting provider and sim
 in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
 the privacy policy says PostHog stores events in the EU or the US follows
 `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
-`privacy` or `impressum` is shadowed here; `RESERVED` in the app repo keeps those links from being taken.
+`privacy` or `impressum` is shadowed here; the app should reserve them.
 
 ### Comparison pages
 

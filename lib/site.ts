@@ -7,9 +7,12 @@ export const imageUrl = "ghcr.io/dino-kupinic/sniptide"
 
 export const siteName = "Sniptide"
 
-// What the browser tab, search results and link previews show for the home page.
-export const siteTitle = "Sniptide: the pastebin for modern teams"
-export const heroSummary = "Beautiful by default, self-hostable by design, and open to all."
+// The hero's headline and the line under it. The browser tab, search results and link previews for
+// the home page say the same thing, so they read them from here.
+export const heroTitle = "The pastebin for your agents."
+export const heroSummary =
+  "Let your coding agents search, read and save snippets. Open source and self-hostable."
+export const siteTitle = "Sniptide: the pastebin for your agents"
 
 export const siteTagline =
   "The self-hostable pastebin for snippets, configs and secrets, and a library of clean patterns your coding agents can reuse."

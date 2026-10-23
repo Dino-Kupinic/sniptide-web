@@ -1,5 +1,6 @@
 import { PixelCanvas } from "@/components/pixel-canvas"
 import { links } from "@/lib/links"
+import { heroSummary, heroTitle } from "@/lib/site"
 
 export function Hero() {
   return (
@@ -16,10 +17,10 @@ export function Hero() {
 
       <div className="relative flex flex-col gap-4 bg-white p-6 md:absolute md:top-10 md:left-8 md:w-160 md:max-w-[calc(100%-64px)] md:gap-5.5 md:p-10 dark:bg-[#0a0a0a]">
         <h1 className="font-heading text-[44px] leading-none tracking-[-1.5px] text-[#0a0a0a] md:text-7xl md:tracking-[-2.5px] dark:text-white">
-          The pastebin for your agents.
+          {heroTitle}
         </h1>
         <p className="text-base leading-[1.5] text-[#6b6b6b] md:text-[19px] dark:text-[#a3a3a3]">
-          Let your coding agents search, read and save snippets. Open source and self-hostable.
+          {heroSummary}
         </p>
         <div className="flex flex-col gap-2 pt-1 md:flex-row md:gap-2.5 md:pt-1.5">
           <a
