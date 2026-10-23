@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "lucide-react"
 import Image from "next/image"
-import demoPreview from "@/assets/landing/demo-preview.webp"
+import demoPreviewDark from "@/assets/landing/demo-preview-dark.webp"
+import demoPreviewLight from "@/assets/landing/demo-preview-light.webp"
 import { links } from "@/lib/links"
 
 const alt =
@@ -22,13 +23,19 @@ export function ProductBand() {
       </a>
 
       {/* On phones the app runs off the right edge, like a window that doesn't fit the screen. */}
-      <div className="relative h-85 w-full self-start overflow-clip rounded-t-lg border-t border-l border-[#0a0a0a] bg-[#0a0a0a] md:aspect-[1360/640] md:h-auto md:w-full md:max-w-340 md:self-center md:border-r">
-        {/* The demo is dark-themed, so the same shot is used in both color schemes. */}
+      <div className="relative h-85 w-full self-start overflow-clip rounded-t-lg border-t border-l border-[#e8e8e8] bg-white dark:border-[#0a0a0a] dark:bg-[#0a0a0a] md:aspect-[1360/640] md:h-auto md:w-full md:max-w-340 md:self-center md:border-r">
+        {/* The app follows the color scheme, so each scheme shows its own shot of the demo. */}
         <Image
-          src={demoPreview}
+          src={demoPreviewLight}
           alt={alt}
           unoptimized
-          className="block h-auto w-200 max-w-none md:w-full"
+          className="block h-auto w-200 max-w-none md:w-full dark:hidden"
+        />
+        <Image
+          src={demoPreviewDark}
+          alt={alt}
+          unoptimized
+          className="hidden h-auto w-200 max-w-none md:w-full dark:block"
         />
 
         {/* Dimmed so the button reads as the way in. */}
