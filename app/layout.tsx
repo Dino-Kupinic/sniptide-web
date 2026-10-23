@@ -1,15 +1,16 @@
 import type { Metadata } from "next"
-import { Inter, JetBrains_Mono, Stack_Sans_Notch } from "next/font/google"
+import { Archivo, Inter, JetBrains_Mono } from "next/font/google"
 
 import "./globals.css"
 import { cn } from "@sniptide/ui/lib/utils"
 
-const fontHeading = Stack_Sans_Notch({
+const fontHeading = Archivo({
   subsets: ["latin"],
-  weight: ["500", "700"],
+  weight: ["400", "500"],
   variable: "--font-heading",
 })
 
+// Body text matches the app, so the site and the dashboard read the same.
 const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -21,15 +22,27 @@ const fontMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Sniptide: short links for your code",
-  description:
-    "Paste code, choose when it expires, and share one link. Every paste shows how often it was opened.",
+  title: "Sniptide: the pastebin for modern teams",
+  description: "Beautiful by default, self-hostable by design, and open to all.",
+  // Icons and the web manifest are the files in app/ and public/ from RealFaviconGenerator.
+  appleWebApp: { title: "Sniptide" },
 }
+
+// The page follows the visitor's color scheme. Set the class before first paint so dark visitors
+// never see a light flash, and keep it in sync if the system setting changes.
+const themeScript = `(() => {
+  const query = matchMedia("(prefers-color-scheme: dark)")
+  const apply = () => document.documentElement.classList.toggle("dark", query.matches)
+  apply()
+  query.addEventListener("change", apply)
+})()`
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
+      // The theme script adds the dark class before React hydrates.
+      suppressHydrationWarning
       className={cn(
         "antialiased font-sans",
         fontSans.variable,
@@ -37,6 +50,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         fontHeading.variable,
       )}
     >
+      <head>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: static inline script, no input. */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>{children}</body>
     </html>
   )

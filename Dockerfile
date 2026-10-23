@@ -11,6 +11,11 @@ COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 COPY . .
+# NEXT_PUBLIC_* values are baked in at build time; Coolify passes build variables as build args.
+ARG NEXT_PUBLIC_APP_URL
+ARG NEXT_PUBLIC_DEMO_URL
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ARG NEXT_PUBLIC_POSTHOG_HOST
 RUN bun run build
 
 FROM node:24-slim AS run
@@ -22,6 +27,8 @@ ENV NODE_ENV=production \
 
 COPY --from=build --chown=node:node /app/.next/standalone ./
 COPY --from=build --chown=node:node /app/.next/static ./.next/static
+# Standalone output leaves public/ out; it holds the web app manifest icons.
+COPY --from=build --chown=node:node /app/public ./public
 USER node
 
 EXPOSE 3000
