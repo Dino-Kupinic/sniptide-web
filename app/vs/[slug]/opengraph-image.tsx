@@ -13,10 +13,5 @@ export function generateStaticParams() {
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const comparison = getComparison((await params).slug)
   if (!comparison) notFound()
-  return renderOgImage({
-    title: `Sniptide vs ${comparison.name}`,
-    summary: comparison.imageSummary,
-    // Long enough for "Sniptide vs GitHub Gist" to stay on one line.
-    titleSize: 88,
-  })
+  return renderOgImage({ title: `Sniptide vs ${comparison.name}` })
 }

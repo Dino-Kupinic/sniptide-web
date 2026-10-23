@@ -11,7 +11,6 @@ function copy(comparison: (typeof comparisons)[number]) {
     comparison.title,
     comparison.description,
     comparison.summary,
-    comparison.imageSummary,
     comparison.lead,
     ...comparison.rows.flatMap((row) => [row.label, row.sniptide, row.other]),
     ...comparison.sections.flatMap((section) => [section.heading, ...section.paragraphs]),

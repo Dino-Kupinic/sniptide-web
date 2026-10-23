@@ -11,8 +11,6 @@ export type Comparison = {
   description: string
   // The one-sentence summary on the landing page.
   summary: string
-  // The line under the headline on the link-preview image.
-  imageSummary: string
   lead: string
   rows: { label: string; sniptide: string; other: string }[]
   sections: { heading: string; paragraphs: string[] }[]
@@ -27,8 +25,6 @@ export const comparisons: Comparison[] = [
     description:
       "How Sniptide and GitHub Gist differ on privacy, self-hosting, expiry, collections and agent access, and when a gist is still the better choice.",
     summary: "The same quick link on your own server, with passwords, expiry and burn-after-read.",
-    imageSummary:
-      "Privacy, self-hosting and agent access, and when a gist is still the better fit.",
     lead: "GitHub Gist is where most developers already share a snippet, and every gist is a git repository you can clone and fork. Sniptide gives you the same quick link on a server you run, with sharing rules for each paste and an MCP endpoint for your coding agents.",
     rows: [
       {
@@ -123,7 +119,6 @@ export const comparisons: Comparison[] = [
     description:
       "How Sniptide and Pastebin differ on limits, private pastes, accounts, self-hosting and agent access, and where Pastebin still has the edge.",
     summary: "Open source, with accounts, revisions and tools for your coding agents.",
-    imageSummary: "Limits, private pastes and self-hosting, and where Pastebin still has the edge.",
     lead: "Pastebin is a hosted service that people have used for years to share a block of text, and its free plan shows ads and limits how many pastes you can keep private. Sniptide is open source, so you can use it at sniptide.com or run it yourself.",
     rows: [
       {
@@ -220,7 +215,6 @@ export const comparisons: Comparison[] = [
       "Both are self-hostable pastebins. See how Sniptide and PrivateBin differ on encryption, accounts, collections, the API and agent access.",
     summary:
       "Both self-host. PrivateBin encrypts in the browser, and Sniptide adds accounts, collections and agent tools.",
-    imageSummary: "Browser-side encryption on one side, accounts and agent tools on the other.",
     lead: "PrivateBin and Sniptide are both open-source pastebins that you run on your own server, and they make different trade-offs. PrivateBin encrypts every paste in the browser so the server never sees it, and Sniptide offers accounts, collections and an API on top of paste text that the server can read.",
     rows: [
       {

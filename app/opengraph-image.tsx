@@ -1,10 +1,10 @@
 import { ogContentType, ogSize, renderOgImage } from "@/lib/og"
-import { heroSummary, heroTitle, siteTitle } from "@/lib/site"
+import { heroTitle, siteTitle } from "@/lib/site"
 
 export const alt = siteTitle
 export const size = ogSize
 export const contentType = ogContentType
 
 export default function Image() {
-  return renderOgImage({ title: heroTitle, summary: heroSummary })
+  return renderOgImage({ title: heroTitle })
 }

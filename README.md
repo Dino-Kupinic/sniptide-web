@@ -69,7 +69,8 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
   and `alternates.canonical` in its `metadata` export, and its link previews reuse them. `/home`
   repeats `/`, so its canonical link points at `/`.
 - **Images.** `app/opengraph-image.tsx` and `app/twitter-image.tsx` render the 1200 by 630 card
-  with the logo, the heading font and the Tide blue (`lib/og.tsx`, fonts in `assets/fonts`).
+  with the logo, the headline and a pink pixel sun on the Tide blue (`lib/og.tsx`, with the pixel
+  art in `lib/og-sun.ts` and the font in `assets/fonts`).
   They are generated once at build time, and Next adds the tags to every page.
 - **Crawling.** `app/robots.ts` allows everything and links the sitemap, and `app/sitemap.ts` lists
   the paths in `sitemapPaths` (`lib/site.ts`). Add a page's path there when it ships.
