@@ -20,10 +20,7 @@ async function font(file: string) {
 // set in the heading font of the landing page, and one line under it. The images are rendered
 // once at build time.
 export async function renderOgImage({ title, summary }: { title: string; summary: string }) {
-  const [heading, body] = await Promise.all([
-    font("Archivo-500.woff"),
-    font("StackSansText-400.woff"),
-  ])
+  const [heading, body] = await Promise.all([font("Archivo-500.woff"), font("Inter-400.woff")])
 
   return new ImageResponse(
     <div
@@ -67,7 +64,7 @@ export async function renderOgImage({ title, summary }: { title: string; summary
         </div>
         <div
           style={{
-            fontFamily: "Stack Sans Text",
+            fontFamily: "Inter",
             fontSize: 34,
             lineHeight: 1.4,
             color: graphite,
@@ -80,16 +77,14 @@ export async function renderOgImage({ title, summary }: { title: string; summary
 
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <div style={{ width: 14, height: 14, background: blue }} />
-        <div style={{ fontFamily: "Stack Sans Text", fontSize: 28, color: graphite }}>
-          sniptide.com
-        </div>
+        <div style={{ fontFamily: "Inter", fontSize: 28, color: graphite }}>sniptide.com</div>
       </div>
     </div>,
     {
       ...ogSize,
       fonts: [
         { name: "Archivo", data: heading, style: "normal", weight: 500 },
-        { name: "Stack Sans Text", data: body, style: "normal", weight: 400 },
+        { name: "Inter", data: body, style: "normal", weight: 400 },
       ],
     },
   )
