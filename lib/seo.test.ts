@@ -1,7 +1,9 @@
 import { describe, expect, test } from "bun:test"
+import { existsSync, statSync } from "node:fs"
+import { join } from "node:path"
 import robots from "@/app/robots"
 import sitemap from "@/app/sitemap"
-import { siteDescription, siteTitle, siteUrl } from "@/lib/site"
+import { ogVideo, siteDescription, siteTitle, siteUrl } from "@/lib/site"
 
 describe("search engine basics", () => {
   test("the home page title and description fit in search results", () => {
@@ -25,5 +27,17 @@ describe("search engine basics", () => {
     )
     expect(new Set(urls).size).toBe(urls.length)
     for (const url of urls) expect(url.startsWith(siteUrl)).toBe(true)
+  })
+})
+
+describe("link preview video", () => {
+  test("og:video is an MP4 in public/ the size of the Open Graph card", () => {
+    expect(ogVideo.url.startsWith(siteUrl)).toBe(true)
+    expect(ogVideo.secureUrl.startsWith("https://")).toBe(true)
+    expect({ width: ogVideo.width, height: ogVideo.height }).toEqual({ width: 1200, height: 630 })
+    const file = join(process.cwd(), "public", new URL(ogVideo.url).pathname)
+    expect(existsSync(file)).toBe(true)
+    // Preview bots give up on large files, so the loop stays small.
+    expect(statSync(file).size).toBeLessThan(5 * 1024 * 1024)
   })
 })

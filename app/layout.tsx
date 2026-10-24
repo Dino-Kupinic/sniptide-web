@@ -3,7 +3,7 @@ import { Archivo, Inter, JetBrains_Mono } from "next/font/google"
 
 import "./globals.css"
 import { cn } from "@sniptide/ui/lib/utils"
-import { siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site"
+import { ogVideo, siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site"
 
 const fontHeading = Archivo({
   subsets: ["latin"],
@@ -35,6 +35,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName,
     locale: "en_US",
+    videos: [ogVideo],
   },
   twitter: { card: "summary_large_image" },
   // Icons and the web manifest are the files in app/ and public/ from RealFaviconGenerator.
