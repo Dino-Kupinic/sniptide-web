@@ -5,14 +5,16 @@ import { ChevronRightIcon, MenuIcon, XIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { links } from "@/lib/links"
-import { navLinks } from "@/lib/nav"
+import { navHref, navLinks } from "@/lib/nav"
 
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
 const navLink =
   "flex h-9 items-center rounded-lg px-3 text-[15px] leading-4.5 font-medium hover:bg-[#f3f3fe] dark:hover:bg-[#1f1e2e]"
 
-export function SiteHeader() {
+// `home` is the address of the home page when the header sits on another page, so that section
+// links like "#features" still lead somewhere.
+export function SiteHeader({ home }: { home?: string }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
@@ -77,7 +79,7 @@ export function SiteHeader() {
           className="hidden items-center gap-2 whitespace-nowrap lg:flex"
         >
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className={cn(navLink, focusRing)}>
+            <a key={link.label} href={navHref(link.href, home)} className={cn(navLink, focusRing)}>
               {link.label}
             </a>
           ))}
@@ -131,7 +133,11 @@ export function SiteHeader() {
           className="absolute inset-x-0 top-full flex max-h-[calc(100dvh-56px)] flex-col gap-1 overflow-y-auto border-b border-[#e8e8e8] bg-white px-5 pt-3 pb-4 md:max-h-[calc(100dvh-72px)] md:px-10 lg:hidden dark:border-[#222222] dark:bg-[#0a0a0a]"
         >
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className={cn(navLink, "h-11", focusRing)}>
+            <a
+              key={link.label}
+              href={navHref(link.href, home)}
+              className={cn(navLink, "h-11", focusRing)}
+            >
               {link.label}
             </a>
           ))}

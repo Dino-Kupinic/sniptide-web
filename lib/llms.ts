@@ -1,7 +1,15 @@
+import { comparisonPath, comparisons } from "@/lib/comparisons"
 import { appBase, imageUrl, repoUrl, siteName, siteTagline, siteUrl } from "@/lib/site"
 
 const mcpGuide = `${repoUrl}/blob/main/packages/mcp/README.md`
 const cliGuide = `${repoUrl}/blob/main/packages/cli/README.md`
+
+const compareLinks = comparisons
+  .map(
+    ({ slug, name, summary }) =>
+      `- [Sniptide vs ${name}](${siteUrl}${comparisonPath(slug)}): ${summary}`,
+  )
+  .join("\n")
 
 // https://llmstxt.org: an H1, a one-line summary, then sections of annotated links.
 export const llmsTxt = `# ${siteName}
@@ -17,6 +25,10 @@ ${siteName} is not a full secrets manager: it has no key rotation, audit trail o
 - [Home page](${siteUrl}): what ${siteName} is and what it does
 - [Create a paste](${appBase}/new): paste code and get a short link
 - [Sign up](${appBase}/sign-up): free account on the hosted app
+
+## Compare
+
+${compareLinks}
 
 ## For agents and developers
 

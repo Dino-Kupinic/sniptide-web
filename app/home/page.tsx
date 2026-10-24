@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Analytics } from "@/components/analytics"
+import { Compare } from "@/components/compare"
 import { Cta } from "@/components/cta"
 import { Features } from "@/components/features"
 import { Hero } from "@/components/hero"
@@ -28,6 +29,7 @@ export default function Home() {
         <Features />
         <Rules />
         <Analytics />
+        <Compare />
         <RawLinks />
         <SelfHost />
         <Cta />

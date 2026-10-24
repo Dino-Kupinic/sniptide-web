@@ -89,6 +89,19 @@ the privacy policy says PostHog stores events in the EU or the US follows
 `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
 `privacy` or `impressum` is shadowed here; the app should reserve them.
 
+### Comparison pages
+
+`/vs/github-gist`, `/vs/pastebin` and `/vs/privatebin` compare Sniptide with each tool. The copy for
+all of them lives in `lib/comparisons.ts`: a lead, a feature table, a few sections and the sources.
+The page template is `components/comparison-page.tsx`, and `app/vs/[slug]` renders each entry with
+its own title, description, canonical link and link-preview image (`pageMetadata` in `lib/seo.ts`).
+The landing page, `sitemap.xml` and `llms.txt` list every entry, so adding one to `comparisons` is
+enough.
+
+The facts come from `docs/competitors.md` in the Sniptide repository, which also holds the sources.
+Re-check a row there before changing it, and update `comparisonsChecked` when you do. Every page
+says when its competitor details were last checked.
+
 ### For agents and search engines
 
 `/llms.txt` and `/llms-full.txt` ([llmstxt.org](https://llmstxt.org)) describe Sniptide for AI
