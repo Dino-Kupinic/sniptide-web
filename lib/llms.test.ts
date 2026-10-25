@@ -23,13 +23,17 @@ describe("llms.txt", () => {
     expect(llmsFullTxt.endsWith("\n")).toBe(true)
   })
 
-  test("names the five MCP tools in both files", () => {
+  test("names the nine MCP tools in both files", () => {
     for (const tool of [
       "search_snippets",
       "read_snippet",
       "fetch_collection",
       "create_snippet",
       "update_snippet",
+      "list_collections",
+      "create_collection",
+      "update_snippet_settings",
+      "trash_snippet",
     ]) {
       expect(llmsTxt).toContain(tool)
       expect(llmsFullTxt).toContain(tool)
