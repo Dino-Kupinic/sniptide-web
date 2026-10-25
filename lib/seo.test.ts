@@ -13,7 +13,7 @@ describe("search engine basics", () => {
   })
 
   test("robots.txt allows crawling and points at the sitemap", () => {
-    expect(robots()).toEqual({
+    expect(robots()).toMatchObject({
       rules: { userAgent: "*", allow: "/" },
       sitemap: `${siteUrl}/sitemap.xml`,
     })

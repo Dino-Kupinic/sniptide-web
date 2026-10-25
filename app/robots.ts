@@ -5,7 +5,16 @@ import { siteUrl } from "@/lib/site"
 // unlisted and private ones noindex itself, so there is nothing to block here.
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      other: {
+        "# Agent index": `${siteUrl}/llms.txt`,
+        "# Documentation": `${siteUrl}/docs`,
+        "# MCP manifest": `${siteUrl}/.well-known/mcp.json`,
+        "# Authentication": `${siteUrl}/auth.md`,
+      },
+    },
     sitemap: `${siteUrl}/sitemap.xml`,
   }
 }

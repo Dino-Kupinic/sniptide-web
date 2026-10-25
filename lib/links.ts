@@ -21,7 +21,7 @@ export const links = {
   collections: app("/collections"),
   apiDocs: app("/docs/api"),
   github: repoUrl,
-  docs: `${repoUrl}#readme`,
+  docs: "/docs",
   selfHost: `${repoUrl}#self-hosting`,
   demo: demoUrl,
 }

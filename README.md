@@ -97,6 +97,29 @@ share-link fallback never proxies them to the app. The home page also carries JS
 (`Organization`, `WebSite`, `SoftwareApplication`) from `lib/structured-data.ts`. Wording comes from
 `docs/positioning.md` in the app repo: change claims there first, then here.
 
+`/docs` links the agent setup guides and API reference. `/docs/mcp` describes the remote MCP
+endpoint, and `/docs/auth` shares its content with `/auth.md`. The document model, tool list,
+client configuration, and discovery metadata live in `lib/agent-docs.ts`. Verify tool names and
+scopes against `packages/mcp/src/server.ts` in the app repo when they change.
+
+`/.well-known/mcp.json` advertises the remote server and links its server card at
+`/.well-known/mcp/server-card.json`. Authentication uses personal bearer tokens. Agent OAuth is
+not supported. The docs, manifest, and auth guide are linked from the llms files and robots.txt;
+the docs pages also appear in the sitemap.
+
+The server card follows the [experimental MCP Server Card schema](https://github.com/modelcontextprotocol/ext-server-card).
+Its required `$schema` URL currently returns 404, so validate against that repository's generated
+`schema.json`, using `$defs.ServerCard`. The extension may change before it becomes part of MCP.
+
+With a local server running on port 3193, check the rendered routes and discovery chain:
+
+```bash
+bun run check:agents
+```
+
+After deployment, run `bun run check:agents https://sniptide.com` before requesting a fresh Ora
+scan. The script checks response bodies, content types, canonical URLs, and local cross-links.
+
 ### Analytics
 
 Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud) as build variables to

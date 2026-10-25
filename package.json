@@ -12,7 +12,8 @@
     "format": "biome format --write .",
     "typecheck": "next typegen && tsc --noEmit",
     "prepare": "husky",
-    "test": "bun test"
+    "test": "bun test",
+    "check:agents": "bun scripts/check-agent-discovery.ts"
   },
   "dependencies": {
     "@sniptide/ui": "^0.1.1",

@@ -1,7 +1,5 @@
+import { authMarkdown, cliGuide, mcpGuide, mcpTools } from "@/lib/agent-docs"
 import { appBase, imageUrl, repoUrl, siteName, siteTagline, siteUrl } from "@/lib/site"
-
-const mcpGuide = `${repoUrl}/blob/main/packages/mcp/README.md`
-const cliGuide = `${repoUrl}/blob/main/packages/cli/README.md`
 
 // https://llmstxt.org: an H1, a one-line summary, then sections of annotated links.
 export const llmsTxt = `# ${siteName}
@@ -20,7 +18,11 @@ ${siteName} is not a full secrets manager: it has no key rotation, audit trail o
 
 ## For agents and developers
 
-- [MCP server](${mcpGuide}): five tools (search_snippets, read_snippet, fetch_collection, create_snippet, update_snippet) at ${appBase}/api/mcp, authenticated with a personal API token
+- [Developer docs](${siteUrl}/docs): MCP setup, agent authentication, API and CLI guides
+- [MCP setup](${siteUrl}/docs/mcp): connect a client using Streamable HTTP and a bearer token
+- [MCP discovery manifest](${siteUrl}/.well-known/mcp.json): remote server address and authentication documentation
+- [Agent authentication](${siteUrl}/auth.md): create scoped API tokens, verify access, handle errors, and revoke credentials
+- [MCP server](${mcpGuide}): ${mcpTools.length} tools (${mcpTools.map(({ name }) => name).join(", ")}) at ${appBase}/api/mcp, authenticated with a personal API token
 - [CLI](${cliGuide}): capture files or folders as pastes, restore them in another project, and sync \`.env\` files
 - [HTTP API reference](${appBase}/docs/api): raw files, the token API under /api/v1 and more
 - [OpenAPI document](${appBase}/api/openapi.json): machine-readable API description
@@ -67,15 +69,11 @@ Your best snippets become a pattern library. A coding agent searches summaries, 
 
 ### MCP server
 
-Endpoint: ${appBase}/api/mcp (or <your-instance-url>/api/mcp when self-hosted). Create a personal API token in Settings, then API tokens, and send it as a bearer token. Use read-only access for retrieval, or enable write access to save and edit snippets. There is no OAuth login or discovery yet.
+Endpoint: ${appBase}/api/mcp (or <your-instance-url>/api/mcp when self-hosted). Create a personal API token in Settings, then API tokens, and send it as a bearer token. Use read-only access for retrieval, or enable write access to save and edit snippets. Agent OAuth is not supported. Discovery manifest: ${siteUrl}/.well-known/mcp.json. Setup guide: ${siteUrl}/docs/mcp.
 
 Tools:
 
-- search_snippets: summary page filtered by title or slug, tags, language and collection
-- read_snippet: one snippet by ID or slug, including file paths and code
-- fetch_collection: numbered recipe steps containing full snippets, in capture order
-- create_snippet: a new snippet, private unless visibility is set explicitly; needs write scope
-- update_snippet: replaces the title and all files; needs write scope
+${mcpTools.map(({ name, scope, description }) => `- ${name}: ${description} Requires ${scope} scope.`).join("\n")}
 
 Only the token owner's snippets are available. The server doesn't run code, expose env secrets or accept browser session cookies. Snippets an agent creates are private by default.
 
@@ -126,8 +124,12 @@ Guide: ${repoUrl}#self-hosting
 ## Links
 
 - Website: ${siteUrl}
+- Developer docs: ${siteUrl}/docs
+- Authentication guide: ${siteUrl}/auth.md
 - App: ${appBase}
 - HTTP API reference: ${appBase}/docs/api
 - OpenAPI document: ${appBase}/api/openapi.json
 - Source code and license (AGPL-3.0): ${repoUrl}
+
+${authMarkdown.replace(/^# /, "## ").replace(/^## (?!Sniptide agent authentication)/gm, "### ")}
 `
