@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { LegalPage } from "@/components/legal-page"
 import { analyticsInEu, authority, hosting, operator } from "@/lib/legal"
+import { app } from "@/lib/links"
 
 export const metadata: Metadata = {
   title: "Privacy policy: Sniptide",
@@ -48,10 +49,10 @@ export default function Privacy() {
 
       <h3>Analytics on the website</h3>
       <p>
-        We measure visits and clicks on the website with PostHog. The site sets no cookies and
-        stores nothing in your browser for this. Each event carries the page address, the referrer,
-        your browser and device type, your approximate location and the button or link you clicked.
-        Session recording is off.
+        We measure visits and clicks on the website with PostHog. The site sets no analytics cookies
+        and stores no visitor identifier in your browser. Each event carries the page address, the
+        referrer, your browser and device type, your approximate location and the button or link you
+        clicked. Session recording is off.
       </p>
       <p>
         Your browser sends these events to sniptide.com, which passes them on to PostHog together
@@ -69,6 +70,14 @@ export default function Privacy() {
       <p>
         Because these events cannot be tied to you, we cannot look up or delete yours on request.
         Blocking requests to <code>sniptide.com/_site/ph</code> in your browser stops them.
+      </p>
+      <p>
+        You can also <a href="/_site/analytics">exclude this browser from website analytics</a> and{" "}
+        <a href={app("/_site/analytics")}>set the same preference for the app</a>. Only when you
+        request exclusion do we save a local storage flag. It contains no account or visitor
+        identifier and stays until you include this browser again or clear the site&apos;s data. Set
+        the preference separately on each site and in each browser. It does not remove past activity
+        or change paste view counts.
       </p>
 
       <h3>Your account</h3>

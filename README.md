@@ -87,11 +87,16 @@ which needs **Cookieless server hash mode** turned on in the PostHog project set
 through `/_site/ph` on this site so ad blockers don't drop them. The app reports to the same
 project; filter on the `surface` property (`marketing` or `app`). Without a key nothing loads.
 
-The site stores nothing on the visitor's device and sets no cookies, so Austria's § 165(3) TKG
-(the ePrivacy rule on storing or reading data on a device) has no consent to ask for, and the
-legal basis is legitimate interest under Art. 6(1)(f) GDPR, stated in the privacy policy. That
-reasoning relies on cookieless mode staying on and on the site loading no other tracker, so
-re-check it before adding any cookie, local storage, session replay or `identify()` call.
+Analytics stores no visitor identifiers on the device and sets no cookies. An optional exclusion
+preference uses local storage only after an explicit request. See the privacy policy for how
+analytics data is processed. Re-check the policy before adding another tracker, session replay,
+or an `identify()` call.
+
+To exclude your own browser, open `/_site/analytics` and select **Exclude this browser**. Use the
+link there to repeat the choice for the app, and repeat in each browser you use. The choice
+survives reloads and network changes. **Include this browser** removes the exclusion flag.
+Clearing site data also removes it. Reload other open tabs after a change. The preference page
+always skips analytics. This does not remove past events or change paste view counts.
 
 Button and link clicks are also sent as `cta_clicked` with `location` (the section: `header`, `hero`,
 `features`, `analytics`, `raw-links`, `cta` or `footer`, set with `data-cta-location`) and `target`
