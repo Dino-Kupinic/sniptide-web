@@ -34,6 +34,16 @@ export const features = [
 export const logoUrl = `${appBase}/web-app-manifest-512x512.png`
 // The 1200 by 630 card from app/opengraph-image.tsx, the same one link previews show.
 export const ogImageUrl = `${siteUrl}/opengraph-image`
+// The same card as a 20 second loop with the water drifting (public/og/sniptide.mp4). Discord,
+// Telegram and Facebook play it in the preview, and every other site shows the image.
+export const ogVideoUrl = `${siteUrl}/og/sniptide.mp4`
+export const ogVideo = {
+  url: ogVideoUrl,
+  secureUrl: ogVideoUrl,
+  type: "video/mp4",
+  width: 1200,
+  height: 630,
+}
 
 // Every page that belongs in sitemap.xml, as a path on siteUrl. Add a page here when it ships.
 export const sitemapPaths = ["/", "/privacy", "/terms", "/impressum"]
