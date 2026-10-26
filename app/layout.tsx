@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { Archivo, Inter, JetBrains_Mono } from "next/font/google"
+import { Archivo, Inter } from "next/font/google"
+import localFont from "next/font/local"
 
 import "./globals.css"
 import { cn } from "@sniptide/ui/lib/utils"
@@ -17,8 +18,9 @@ const fontSans = Inter({
   variable: "--font-sans",
 })
 
-const fontMono = JetBrains_Mono({
-  subsets: ["latin"],
+const fontMono = localFont({
+  src: "../assets/fonts/PaperMono[wght].ttf",
+  weight: "100 800",
   variable: "--font-mono",
 })
 
