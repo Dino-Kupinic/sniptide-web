@@ -161,3 +161,7 @@ Commits and PR titles follow [Conventional Commits](https://www.conventionalcomm
 ## License
 
 [AGPL-3.0](LICENSE), like Sniptide itself.
+
+## Browser agent tools
+
+When a browser exposes WebMCP, the site registers two read-only tools with public setup guides and the MCP tool list. It prefers `document.modelContext` and falls back to `navigator.modelContext` for older hosts. Unsupported browsers and rejected registrations continue to render the site normally. These tools do not access account data or accept credentials. Registration ends when the site component unmounts; the navigator fallback also supports legacy `unregisterTool` hosts.

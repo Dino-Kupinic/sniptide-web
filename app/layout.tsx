@@ -4,6 +4,7 @@ import localFont from "next/font/local"
 
 import "./globals.css"
 import { cn } from "@sniptide/ui/lib/utils"
+import { WebMcp } from "@/components/webmcp"
 import { ogVideo, siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site"
 
 const fontHeading = Archivo({
@@ -70,7 +71,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: static inline script, no input. */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <WebMcp />
+        {children}
+      </body>
     </html>
   )
 }
