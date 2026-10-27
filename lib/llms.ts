@@ -1,6 +1,14 @@
 import { authMarkdown, cliGuide, mcpGuide, mcpTools } from "@/lib/agent-docs"
 import { appBase, imageUrl, repoUrl, siteName, siteTagline, siteUrl } from "@/lib/site"
 
+export const whenToUseSniptide = `## When to use Sniptide
+
+- Reuse a code pattern: use MCP search_snippets to find candidates, read_snippet to inspect a match, and fetch_collection to follow a recipe in order.
+- Capture files or folders and restore their relative paths in another project: use the CLI.
+- Share code as a paste: create a link and choose visibility, expiry, password, or burn-after-read as needed.
+- For secret rotation, audit trails, or per-environment access policies, use a full secrets manager. Sniptide is not a replacement for one.
+- Agent API and MCP access use scoped personal API tokens. Agent OAuth is not supported.`
+
 // https://llmstxt.org: an H1, a one-line summary, then sections of annotated links.
 export const llmsTxt = `# ${siteName}
 
@@ -9,6 +17,8 @@ export const llmsTxt = `# ${siteName}
 Paste code or a whole folder, choose who can open it and for how long, and share one short link (${siteUrl}/<slug>). Pastes are private, unlisted or public, with an optional password, expiry or burn-after-read. Coding agents such as Claude Code and Cursor can search, read and save snippets through an MCP server or the CLI. \`.env\` files sync as encrypted env groups.
 
 ${siteName} is not a full secrets manager: it has no key rotation, audit trail or per-environment access policies. The MCP server uses a personal API token and has no OAuth login yet.
+
+${whenToUseSniptide}
 
 ## Use ${siteName}
 
@@ -43,6 +53,8 @@ export const llmsFullTxt = `# ${siteName}
 > ${siteTagline} Open source (AGPL-3.0), hosted at sniptide.com or run on your own server with Docker.
 
 This is the long version of ${siteUrl}/llms.txt. Everything below describes what ${siteName} does today.
+
+${whenToUseSniptide}
 
 ## What ${siteName} is
 

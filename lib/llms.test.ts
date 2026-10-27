@@ -23,6 +23,19 @@ describe("llms.txt", () => {
     expect(llmsFullTxt.endsWith("\n")).toBe(true)
   })
 
+  test("routes common tasks and states authentication and secrets boundaries in both files", () => {
+    for (const document of [llmsTxt, llmsFullTxt]) {
+      expect(document).toContain("## When to use Sniptide")
+      expect(document).toContain(
+        "search_snippets to find candidates, read_snippet to inspect a match, and fetch_collection",
+      )
+      expect(document).toContain("Capture files or folders and restore their relative paths")
+      expect(document).toContain("Share code as a paste")
+      expect(document).toContain("use a full secrets manager")
+      expect(document).toContain("Agent OAuth is not supported")
+    }
+  })
+
   test("names the nine MCP tools in both files", () => {
     for (const tool of [
       "search_snippets",
