@@ -32,7 +32,7 @@ test("auth.md gives a token walkthrough without promising agent OAuth", async ()
   const response = getAuth()
   expect(response.headers.get("content-type")).toBe("text/markdown; charset=utf-8")
   const body = await response.text()
-  expect(body).toStartWith("# Sniptide agent authentication\n")
+  expect(body).toContain("# Sniptide agent authentication\n")
   for (const value of [
     "https://app.sniptide.com/settings?tab=api",
     "Authorization: Bearer",

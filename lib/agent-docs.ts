@@ -1,4 +1,5 @@
-import { appBase, repoUrl, siteUrl } from "@/lib/site"
+import { appBase, repoUrl, siteUrl, siteDescription, features } from "@/lib/site"
+import { operator } from "@/lib/legal"
 
 export const mcpEndpoint = `${appBase}/api/mcp`
 export const tokenSettings = `${appBase}/settings?tab=api`
@@ -99,6 +100,17 @@ export const mcpServerCard = {
   _meta: { "com.sniptide/auth": { type: "bearer", documentation: `${siteUrl}/auth.md` } },
 }
 
+export const docsServerCard = {
+  $schema: "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
+  name: "com.sniptide/docs",
+  title: "Sniptide public documentation",
+  description: "Search and read public Sniptide guides without accessing account data.",
+  version: "1.0.0",
+  websiteUrl: `${siteUrl}/docs`,
+  repository: { url: "https://github.com/Dino-Kupinic/sniptide-web", source: "github" },
+  remotes: [{ type: "streamable-http", url: `${siteUrl}/api/mcp` }],
+}
+
 export const mcpManifest = {
   servers: [
     {
@@ -109,6 +121,15 @@ export const mcpManifest = {
       card: `${siteUrl}/.well-known/mcp/server-card.json`,
       documentation: `${siteUrl}/docs/mcp`,
       authentication: { type: "bearer", documentation: `${siteUrl}/auth.md` },
+    },
+    {
+      name: "Sniptide documentation",
+      description: docsServerCard.description,
+      url: `${siteUrl}/api/mcp`,
+      transport: "streamable-http",
+      card: `${siteUrl}/.well-known/mcp/docs-server-card.json`,
+      documentation: `${siteUrl}/docs`,
+      authentication: { type: "none" },
     },
   ],
 }
@@ -238,12 +259,17 @@ export const mcpDocument: AgentDocument = {
       title: "Discovery and self-hosting",
       paragraphs: [
         "The public manifest describes the remote endpoint and bearer authentication. For a self-hosted app, use your instance URL followed by /api/mcp and a token issued by that instance. OAuth for agents is not supported.",
-        "The local @sniptide/mcp workspace package is private and is not published to npm. Build it from the repository if you need stdio transport. The setup guide includes the build commands and absolute executable path.",
+        "The @sniptide/mcp package is published on npm and provides local stdio transport. See the setup guide for configuration.",
       ],
       links: [
         { label: "MCP discovery manifest", href: `${siteUrl}/.well-known/mcp.json` },
         { label: "Machine-readable authentication guide", href: `${siteUrl}/auth.md` },
         { label: "MCP source and setup guide", href: mcpGuide },
+        {
+          label: "Official MCP registry entry",
+          href: "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.Dino-Kupinic%2Fsniptide/versions/latest",
+        },
+        { label: "MCP package on npm", href: "https://www.npmjs.com/package/@sniptide/mcp" },
       ],
     },
   ],
@@ -267,12 +293,13 @@ export const docsDocument: AgentDocument = {
     {
       title: "Integrate with the API or CLI",
       paragraphs: [
-        "The token API runs under /api/v1 on your app instance. Use the same personal API token as MCP. The CLI captures files or folders as pastes, restores their relative paths, and syncs encrypted environment groups. Build the CLI from source; it is not published to npm.",
+        "The token API runs under /api/v1 on your app instance. Use the same personal API token as MCP. The CLI captures files or folders as pastes, restores their relative paths, and syncs encrypted environment groups. Install the published @sniptide/cli package from npm.",
       ],
       links: [
         { label: "HTTP API reference", href: `${appBase}/docs/api` },
         { label: "OpenAPI document", href: `${appBase}/api/openapi.json` },
         { label: "CLI setup and commands", href: cliGuide },
+        { label: "CLI package on npm", href: "https://www.npmjs.com/package/@sniptide/cli" },
         { label: "Self-hosting guide", href: `${repoUrl}#self-hosting` },
       ],
     },
@@ -288,17 +315,103 @@ export const docsDocument: AgentDocument = {
   ],
 }
 
-export const authMarkdown = [
-  `# ${authDocument.title}`,
-  authDocument.description,
-  ...authDocument.sections.map((section) =>
-    [
-      `## ${section.title}`,
-      ...(section.paragraphs ?? []),
-      ...(section.items?.map((item) => `- ${item}`) ?? []),
-      ...(section.code ? [`\`\`\`\n${section.code}\n\`\`\``] : []),
-      ...(section.links?.map(({ label, href }) => `- [${label}](${href})`) ?? []),
-    ].join("\n\n"),
-  ),
-  "",
-].join("\n\n")
+export const homeDocument: AgentDocument = {
+  path: "/",
+  title: "Sniptide",
+  description: siteDescription,
+  sections: [
+    { title: "Features", items: features },
+    {
+      title: "Agent access",
+      paragraphs: [
+        `The REST API is ${appBase}/api/v1 and the product MCP endpoint is ${mcpEndpoint}. Both require a personal API token in the Authorization: Bearer header. Choose read scope for retrieval and enable write scope only for mutations.`,
+        `Public documentation is available without credentials through ${siteUrl}/api/mcp. It searches and reads this site's documentation, without accessing account data.`,
+      ],
+      links: [
+        { label: "OpenAPI specification", href: `${appBase}/api/openapi.json` },
+        { label: "Authentication and token setup", href: `${siteUrl}/auth.md` },
+        { label: "Agent skills", href: `${siteUrl}/.well-known/agent-skills/index.json` },
+      ],
+    },
+    {
+      title: "Get started",
+      links: [
+        { label: "Developer docs", href: `${siteUrl}/docs` },
+        { label: "Create a paste", href: `${appBase}/new` },
+        { label: "Source code", href: repoUrl },
+      ],
+    },
+  ],
+}
+
+export const aboutDocument: AgentDocument = {
+  path: "/about",
+  title: "About Sniptide",
+  description: siteDescription,
+  sections: [
+    {
+      title: "Open source",
+      paragraphs: [
+        "Sniptide is an open-source pastebin and library of reusable patterns. It can be self-hosted with Docker and Postgres under the AGPL-3.0 license.",
+        "You can share code through short links, keep snippets private, organize them in collections, and reuse them through the API, CLI, or MCP server. Coding agents can search a connected account's snippets and read a collection as an ordered recipe. Account owners choose which personal tokens can read or change their data.",
+        "The hosted app and self-hosted software use the same repository. Self-hosting lets you choose where the app and its Postgres database run. The developer documentation describes the HTTP endpoints and the authentication required for programmatic access.",
+      ],
+      links: [{ label: "Source code", href: repoUrl }],
+    },
+    {
+      title: "Operator",
+      paragraphs: [`Sniptide is operated by ${operator.name}.`],
+      links: [{ label: "Impressum", href: `${siteUrl}/impressum` }],
+    },
+  ],
+}
+export const contactDocument: AgentDocument = {
+  path: "/contact",
+  title: "Contact Sniptide",
+  description: "Contact the operator of Sniptide.",
+  sections: [
+    {
+      title: "Contact",
+      paragraphs: [
+        `${operator.name}, ${operator.street}, ${operator.city}, ${operator.country}.`,
+        `Email: ${operator.email}.`,
+        "For help with the hosted service, describe the action you attempted, the time it occurred, and the error message you received. Include the affected public URL when it is safe to share. Keep personal API tokens, passwords, private snippet contents, and environment variable values out of reports.",
+        "For a reproducible software problem or feature request, use the source repository's issue tracker. For a privacy request or a report about hosted content, contact the operator by email. If you run your own Sniptide instance, contact its operator for account and data questions. The Impressum identifies the operator of sniptide.com and provides the published contact details.",
+      ],
+      links: [
+        { label: "Impressum", href: `${siteUrl}/impressum` },
+        { label: "Software issues", href: `${repoUrl}/issues` },
+        { label: "Report a paste", href: `${siteUrl}/terms#reporting` },
+      ],
+    },
+  ],
+}
+export const agentDocuments = [
+  homeDocument,
+  docsDocument,
+  authDocument,
+  mcpDocument,
+  aboutDocument,
+  contactDocument,
+]
+export function markdownPath(path: string) {
+  return path === "/" ? "/index.md" : path === "/docs/auth" ? "/auth.md" : `${path}.md`
+}
+export function renderMarkdown(doc: AgentDocument) {
+  return [
+    `---\ntitle: ${JSON.stringify(doc.title)}\ndescription: ${JSON.stringify(doc.description)}\ncanonical: ${siteUrl}${doc.path === "/" ? "" : doc.path}\n---`,
+    `# ${doc.title}`,
+    doc.description,
+    ...doc.sections.map((section) =>
+      [
+        `## ${section.title}`,
+        ...(section.paragraphs ?? []),
+        ...(section.items?.map((item) => `- ${item}`) ?? []),
+        ...(section.code ? [`\`\`\`\n${section.code}\n\`\`\``] : []),
+        ...(section.links?.map(({ label, href }) => `- [${label}](${href})`) ?? []),
+      ].join("\n\n"),
+    ),
+    "",
+  ].join("\n\n")
+}
+export const authMarkdown = renderMarkdown(authDocument)

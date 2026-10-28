@@ -37,6 +37,15 @@ ${whenToUseSniptide}
 - [HTTP API reference](${appBase}/docs/api): raw files, the token API under /api/v1 and more
 - [OpenAPI document](${appBase}/api/openapi.json): machine-readable API description
 
+## More documentation
+
+- [Home as Markdown](${siteUrl}/index.md): product overview
+- [Documentation as Markdown](${siteUrl}/docs.md): API, MCP and CLI entry points
+- [MCP guide as Markdown](${siteUrl}/docs/mcp.md): client setup and tools
+- [Skills index](${siteUrl}/skills/index.json): reusable agent procedures
+- [Public documentation MCP](${siteUrl}/api/mcp): search and read public documentation
+- [API catalog](${siteUrl}/.well-known/api-catalog): links to the API and OpenAPI description
+
 ## Self-hosting
 
 - [Self-hosting guide](${repoUrl}#self-hosting): one Docker image (${imageUrl}, AMD64 and ARM64) plus Postgres
@@ -107,7 +116,7 @@ Guide: ${mcpGuide}
 
 ### CLI
 
-The ${siteName} CLI captures files, folders or globs as pastes, restores their relative paths in another project, and syncs \`.env\` files. It authenticates with a personal API token. Bundle export and import work offline without an account. It isn't published to npm yet; build it from the repository.
+The ${siteName} CLI captures files, folders or globs as pastes, restores their relative paths in another project, and syncs \`.env\` files. It authenticates with a personal API token. Bundle export and import work offline without an account. Install the published @sniptide/cli package from npm.
 
 Guide: ${cliGuide}
 
@@ -135,6 +144,11 @@ Guide: ${repoUrl}#self-hosting
 
 ## Links
 
+- Focused developer index: ${siteUrl}/docs/llms.txt
+- Agent skills: ${siteUrl}/.well-known/agent-skills/index.json
+- About: ${siteUrl}/about
+- Contact: ${siteUrl}/contact
+
 - Website: ${siteUrl}
 - Developer docs: ${siteUrl}/docs
 - Authentication guide: ${siteUrl}/auth.md
@@ -143,5 +157,8 @@ Guide: ${repoUrl}#self-hosting
 - OpenAPI document: ${appBase}/api/openapi.json
 - Source code and license (AGPL-3.0): ${repoUrl}
 
-${authMarkdown.replace(/^# /, "## ").replace(/^## (?!Sniptide agent authentication)/gm, "### ")}
+${authMarkdown
+  .replace(/^---[\s\S]*?---\n\n/, "")
+  .replace(/^# /, "## ")
+  .replace(/^## (?!Sniptide agent authentication)/gm, "### ")}
 `

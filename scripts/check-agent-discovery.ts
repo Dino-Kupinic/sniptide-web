@@ -33,7 +33,7 @@ for (const document of [docsDocument, mcpDocument, authDocument]) {
 }
 
 const auth = await read("/auth.md", "text/markdown")
-assert.ok(auth.startsWith(`# ${authDocument.title}\n`))
+assert.ok(auth.includes(`# ${authDocument.title}\n`))
 assert.ok(auth.includes("Authorization: Bearer"))
 assert.ok(auth.includes("does not support OAuth"))
 for (const { title, paragraphs, items, code } of authDocument.sections) {
