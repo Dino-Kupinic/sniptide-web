@@ -39,6 +39,7 @@ ${whenToUseSniptide}
 
 ## More documentation
 
+- [Focused developer index](${siteUrl}/docs/llms.txt): authentication, API and MCP documentation
 - [Home as Markdown](${siteUrl}/index.md): product overview
 - [Documentation as Markdown](${siteUrl}/docs.md): API, MCP and CLI entry points
 - [MCP guide as Markdown](${siteUrl}/docs/mcp.md): client setup and tools
