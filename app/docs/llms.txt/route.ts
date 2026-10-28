@@ -1,5 +1,5 @@
-import { docsDocument, authDocument, mcpDocument, markdownPath } from "@/lib/agent-docs"
-import { siteUrl, appBase } from "@/lib/site"
+import { authDocument, docsDocument, markdownPath, mcpDocument } from "@/lib/agent-docs"
+import { appBase, siteUrl } from "@/lib/site"
 
 export function GET() {
   const text = [

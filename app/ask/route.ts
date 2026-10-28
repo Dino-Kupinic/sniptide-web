@@ -1,7 +1,7 @@
+import { z } from "zod"
 import { markdownPath } from "@/lib/agent-docs"
 import { searchDocuments } from "@/lib/public-doc-search"
 import { siteUrl } from "@/lib/site"
-import { z } from "zod"
 
 const askSchema = z
   .object({

@@ -1,9 +1,8 @@
-import { agentDocuments, markdownPath, renderMarkdown } from "@/lib/agent-docs"
-import { prefersMarkdown } from "@/lib/accept"
-import { appBase } from "@/lib/site"
-import { siteUrl } from "@/lib/site"
 import { type NextRequest, NextResponse } from "next/server"
+import { prefersMarkdown } from "@/lib/accept"
+import { agentDocuments, markdownPath, renderMarkdown } from "@/lib/agent-docs"
 import { headersForUpstream, type RevealBlock, revealBlock } from "@/lib/share-proxy"
+import { appBase, siteUrl } from "@/lib/site"
 
 export function proxy(request: NextRequest) {
   const doc = agentDocuments.find((item) => item.path === request.nextUrl.pathname)

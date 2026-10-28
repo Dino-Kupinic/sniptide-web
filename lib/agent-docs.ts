@@ -1,5 +1,5 @@
-import { appBase, repoUrl, siteUrl, siteDescription, features } from "@/lib/site"
 import { operator } from "@/lib/legal"
+import { appBase, features, repoUrl, siteDescription, siteUrl } from "@/lib/site"
 
 export const mcpEndpoint = `${appBase}/api/mcp`
 export const tokenSettings = `${appBase}/settings?tab=api`

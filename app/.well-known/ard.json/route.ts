@@ -1,5 +1,4 @@
-import { siteUrl } from "@/lib/site"
-import { appBase } from "@/lib/site"
+import { appBase, siteUrl } from "@/lib/site"
 import { agentSkills } from "@/lib/skills"
 
 export function GET() {

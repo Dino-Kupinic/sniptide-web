@@ -1,14 +1,14 @@
 import { expect, test } from "bun:test"
-import { POST as ask } from "@/app/ask/route"
-import { POST as mcp } from "@/app/api/mcp/route"
-import { agentDocuments, renderMarkdown } from "@/lib/agent-docs"
-import { proxy } from "@/proxy"
 import { NextRequest } from "next/server"
-import { agentSkills } from "@/lib/skills"
-import { prefersMarkdown } from "@/lib/accept"
-import { GET as catalog } from "@/app/.well-known/api-catalog/route"
 import { GET as skillIndex } from "@/app/.well-known/agent-skills/index.json/route"
+import { GET as catalog } from "@/app/.well-known/api-catalog/route"
+import { POST as mcp } from "@/app/api/mcp/route"
+import { POST as ask } from "@/app/ask/route"
 import { GET as sectionIndex } from "@/app/docs/llms.txt/route"
+import { prefersMarkdown } from "@/lib/accept"
+import { agentDocuments, renderMarkdown } from "@/lib/agent-docs"
+import { agentSkills } from "@/lib/skills"
+import { proxy } from "@/proxy"
 
 test("public documents have canonical Markdown and negotiation preserves share paths", () => {
   for (const doc of agentDocuments) {
