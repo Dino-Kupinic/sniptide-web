@@ -38,8 +38,7 @@ export const analyticsInEu = posthogHost.includes("//eu.")
 
 export const lastUpdated = "28 October 2026"
 
-// The youngest age the terms allow. Keep it equal to MINIMUM_AGE on the app, which makes sign-up
-// ask for it.
+// The youngest age the terms allow.
 export const minimumAge = 16
 
 export const legalLinks = [
