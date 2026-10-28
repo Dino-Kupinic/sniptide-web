@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { LegalPage } from "@/components/legal-page"
-import { operator } from "@/lib/legal"
+import { minimumAge, operator } from "@/lib/legal"
 
 export const metadata: Metadata = {
   alternates: { canonical: "/terms" },
@@ -22,8 +22,8 @@ export default function Terms() {
       <p>
         You need an account to create pastes. Give us a working email address, keep your password
         private, and tell us if you think someone else has access to your account. You are
-        responsible for what happens under your account. You must be able to enter a contract under
-        the law that applies to you.
+        responsible for what happens under your account. You must be at least {minimumAge} years old
+        and able to enter a contract under the law that applies to you.
       </p>
 
       <h2>Your content</h2>
@@ -65,6 +65,14 @@ export default function Terms() {
         and why, which rule or law it rests on, and how to contest the decision. We decide each case
         ourselves and do not use automated moderation. You can contest a decision by replying to
         that email.
+      </p>
+
+      <h2 id="copyright">Copyright</h2>
+      <p>
+        If a paste infringes your copyright, send a notice as described on the{" "}
+        <a href="/copyright">copyright page</a>. We remove or disable the paste, tell its owner and
+        let them send a counter-notice. We close the accounts of people who repeatedly infringe
+        copyright.
       </p>
 
       <h2>Availability and changes to the service</h2>

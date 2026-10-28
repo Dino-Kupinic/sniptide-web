@@ -36,12 +36,17 @@ export const hosting = {
 // site sends them to the EU or the US.
 export const analyticsInEu = posthogHost.includes("//eu.")
 
-export const lastUpdated = "21 October 2026"
+export const lastUpdated = "28 October 2026"
+
+// The youngest age the terms allow.
+export const minimumAge = 16
 
 export const legalLinks = [
   { label: "Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },
   { label: "Impressum", href: "/impressum" },
+  // Served by the app (COPYRIGHT_EMAIL) and reached through the share-link proxy.
+  { label: "Copyright", href: "/copyright" },
 ]
 
 export const authority = {
