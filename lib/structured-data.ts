@@ -1,3 +1,4 @@
+import { operator } from "@/lib/legal"
 import {
   appBase,
   features,
@@ -22,6 +23,18 @@ export const structuredData = {
       logo: logoUrl,
       description: siteDescription,
       sameAs: [repoUrl],
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: operator.email,
+        contactType: "customer support",
+      },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: operator.street,
+        addressLocality: "Vienna",
+        postalCode: "1150",
+        addressCountry: operator.country,
+      },
     },
     {
       "@type": "WebSite",

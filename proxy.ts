@@ -1,7 +1,29 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { prefersMarkdown } from "@/lib/accept"
+import { agentDocuments, markdownPath, renderMarkdown } from "@/lib/agent-docs"
 import { headersForUpstream, type RevealBlock, revealBlock } from "@/lib/share-proxy"
+import { appBase, siteUrl } from "@/lib/site"
 
 export function proxy(request: NextRequest) {
+  const doc = agentDocuments.find((item) => item.path === request.nextUrl.pathname)
+  if (doc && (request.method === "GET" || request.method === "HEAD")) {
+    const acceptsMarkdown = prefersMarkdown(request.headers.get("accept"))
+    const links = `<${siteUrl}${doc.path === "/" ? "" : doc.path}>; rel="canonical", <${siteUrl}${markdownPath(doc.path)}>; rel="alternate"; type="text/markdown", <${siteUrl}/.well-known/ard.json>; rel="ard", <${siteUrl}/.well-known/api-catalog>; rel="api-catalog", <${siteUrl}/sitemap.xml>; rel="sitemap", <${appBase}/api/openapi.json>; rel="service-desc"; type="application/json"`
+    const response =
+      acceptsMarkdown || request.nextUrl.searchParams.get("mode") === "agent"
+        ? new NextResponse(request.method === "HEAD" ? null : renderMarkdown(doc), {
+            headers: {
+              "Content-Type": "text/markdown; charset=utf-8",
+              "Cache-Control": "public, max-age=3600",
+            },
+          })
+        : NextResponse.next({ request: { headers: headersForUpstream(request.headers) } })
+    if (!acceptsMarkdown && request.nextUrl.searchParams.get("mode") !== "agent")
+      response.headers.set("Cache-Control", "private, no-store")
+    response.headers.set("Vary", "Accept")
+    response.headers.set("Link", links)
+    return response
+  }
   // POST /<slug>/reveal is the only request that burns a paste, and the rewrite proxies it.
   // Preview bots and cross-site posts are answered here so they never reach the app.
   const blocked = revealBlock(request.nextUrl.pathname, request.method, request.headers)

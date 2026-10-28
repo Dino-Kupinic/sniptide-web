@@ -51,6 +51,8 @@ export const sitemapPaths = [
   "/docs",
   "/docs/mcp",
   "/docs/auth",
+  "/about",
+  "/contact",
   "/privacy",
   "/terms",
   "/impressum",

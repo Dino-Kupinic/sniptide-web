@@ -9,6 +9,8 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       other: {
+        schemamap: `${siteUrl}/schemamap.xml`,
+        Agentmap: `${siteUrl}/.well-known/ard.json`,
         "# Agent index": `${siteUrl}/llms.txt`,
         "# Documentation": `${siteUrl}/docs`,
         "# MCP manifest": `${siteUrl}/.well-known/mcp.json`,
