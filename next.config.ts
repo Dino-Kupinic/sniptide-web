@@ -1,4 +1,5 @@
 import type { NextConfig } from "next"
+import { documentation } from "./lib/agent-docs"
 import { appUrl } from "./lib/links"
 import { posthogAssetsHost, posthogHost, posthogProxyPath } from "./lib/posthog"
 
@@ -29,6 +30,9 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      { source: "/docs", destination: documentation.home.url, permanent: true },
+      { source: "/docs/mcp", destination: documentation.mcp.url, permanent: true },
+      { source: "/docs/auth", destination: documentation.oauth.url, permanent: true },
       {
         source: `/:page(${appPages})/:rest*`,
         destination: `${appUrl}/:page/:rest*`,

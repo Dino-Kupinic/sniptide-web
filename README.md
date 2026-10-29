@@ -97,17 +97,16 @@ share-link fallback never proxies them to the app. The home page also carries JS
 (`Organization`, `WebSite`, `SoftwareApplication`) from `lib/structured-data.ts`. Wording comes from
 `docs/positioning.md` in the app repo: change claims there first, then here.
 
-`/docs` links the agent setup guides and API reference. `/docs/mcp` describes the remote MCP
-endpoint, and `/docs/auth` shares its content with `/auth.md`. The document model, tool list,
-client configuration, and discovery metadata live in `lib/agent-docs.ts`. Verify tool names and
-scopes against `packages/mcp/src/server.ts` in the app repo when they change.
+Documentation lives at https://docs.sniptide.com. Legacy `/docs`, `/docs/mcp`, and
+`/docs/auth` paths redirect to the canonical guides. `lib/agent-docs.ts` owns discovery links
+and MCP metadata; `/auth.md` is a short authentication index.
 
 `/.well-known/mcp.json` advertises the remote server and links its server card at
-`/.well-known/mcp/server-card.json`. Authentication is OAuth 2.1, served by the app at
-app.sniptide.com, or a personal bearer token. `/auth.md` follows the WorkOS auth.md outline and
-links the app's OAuth metadata. `/.well-known/agent-card.json` describes the A2A documentation
-agent at `/api/a2a`. The docs, manifest, and auth guide are linked from the llms files and robots.txt;
-the docs pages also appear in the sitemap.
+`/.well-known/mcp/server-card.json`. The discovery records describe OAuth with a personal bearer token alternative and
+link to the canonical guides. The public documentation MCP at `/api/mcp`, A2A agent at
+`/api/a2a`, and conversational search at `/ask` return lightweight documentation indexes.
+The llms files and robots.txt point to canonical documentation. About and contact pages
+remain in the sitemap; redirected documentation pages do not.
 
 The server card follows the [experimental MCP Server Card schema](https://github.com/modelcontextprotocol/ext-server-card).
 Its required `$schema` URL currently returns 404, so validate against that repository's generated
@@ -166,4 +165,4 @@ Commits and PR titles follow [Conventional Commits](https://www.conventionalcomm
 
 ## Browser agent tools
 
-When a browser exposes WebMCP, the site registers two read-only tools with public setup guides and the MCP tool list. It prefers `document.modelContext` and falls back to `navigator.modelContext` for older hosts. Unsupported browsers and rejected registrations continue to render the site normally. These tools do not access account data or accept credentials. Registration ends when the site component unmounts; the navigator fallback also supports legacy `unregisterTool` hosts.
+When a browser exposes WebMCP, the site registers two read-only tools with canonical setup guide links and the product MCP endpoint. It prefers `document.modelContext` and falls back to `navigator.modelContext` for older hosts. Unsupported browsers and rejected registrations continue to render the site normally. These tools do not access account data or accept credentials. Registration ends when the site component unmounts; the navigator fallback also supports legacy `unregisterTool` hosts.

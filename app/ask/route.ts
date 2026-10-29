@@ -1,7 +1,5 @@
 import { z } from "zod"
-import { markdownPath } from "@/lib/agent-docs"
 import { searchDocuments } from "@/lib/public-doc-search"
-import { siteUrl } from "@/lib/site"
 
 const askSchema = z
   .object({
@@ -98,7 +96,7 @@ export async function POST(request: Request) {
     "@type": "WebPage",
     name: doc.title,
     description: doc.description,
-    url: `${siteUrl}${markdownPath(doc.path)}`,
+    url: doc.canonicalUrl,
   }))
   if (!results.length) return failure("NO_RESULTS", "No matching public documents.", 200, streaming)
   const meta = {

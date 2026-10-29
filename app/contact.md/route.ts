@@ -1,5 +1,4 @@
 import { contactDocument, renderMarkdown } from "@/lib/agent-docs"
-import { siteUrl } from "@/lib/site"
 
 export const dynamic = "force-static"
 export function GET() {
@@ -7,7 +6,7 @@ export function GET() {
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
       "Cache-Control": "public, max-age=3600",
-      Link: `<${siteUrl}${contactDocument.path === "/" ? "" : contactDocument.path}>; rel="canonical"`,
+      Link: `<${contactDocument.canonicalUrl}>; rel="canonical"`,
     },
   })
 }

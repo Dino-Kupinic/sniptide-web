@@ -6,20 +6,46 @@ import { POST as mcp } from "@/app/api/mcp/route"
 import { POST as ask } from "@/app/ask/route"
 import { GET as sectionIndex } from "@/app/docs/llms.txt/route"
 import { prefersMarkdown } from "@/lib/accept"
-import { agentDocuments, renderMarkdown } from "@/lib/agent-docs"
+import { agentDocuments, documentation, renderMarkdown } from "@/lib/agent-docs"
+import { searchDocuments } from "@/lib/public-doc-search"
 import { agentSkills } from "@/lib/skills"
 import { proxy } from "@/proxy"
 
+test.each([
+  ["PKCE", documentation.oauth.url],
+  ["refresh token", documentation.oauth.url],
+  ["access token", documentation.oauth.url],
+  ["registration", documentation.oauth.url],
+  ["revocation", documentation.oauth.url],
+  ["consent", documentation.oauth.url],
+  ["scope", documentation.oauth.url],
+  ["Claude Code", documentation.mcp.url],
+  ["Cursor", documentation.mcp.url],
+  ["Streamable HTTP", documentation.mcp.url],
+  ["stdio", documentation.mcp.url],
+  ["search_snippets", documentation.mcp.url],
+  ["read snippets", documentation.mcp.url],
+  ["save snippets", documentation.mcp.url],
+  ["collections", documentation.mcp.url],
+])("topic search for %s discovers its canonical guide", (query, canonicalUrl) => {
+  expect(searchDocuments(query).map((doc) => doc.canonicalUrl)).toContain(canonicalUrl)
+})
+
+test("CLI search discovers the canonical CLI link through the documentation index", () => {
+  const index = searchDocuments("CLI").find((doc) => doc.path === "/docs")
+  expect(index).toBeDefined()
+  if (index) expect(renderMarkdown(index)).toContain(documentation.cli.url)
+})
+
 test("public documents have canonical Markdown and negotiation preserves share paths", () => {
   for (const doc of agentDocuments) {
-    expect(renderMarkdown(doc)).toContain(
-      `canonical: https://sniptide.com${doc.path === "/" ? "" : doc.path}`,
-    )
+    expect(renderMarkdown(doc)).toContain(`canonical: ${doc.canonicalUrl}`)
     const response = proxy(
       new NextRequest(`https://sniptide.com${doc.path}`, { headers: { accept: "text/markdown" } }),
     )
     expect(response.headers.get("content-type")).toContain("text/markdown")
     expect(response.headers.get("vary")).toContain("Accept")
+    expect(response.headers.get("link")).toContain(`<${doc.canonicalUrl}>; rel="canonical"`)
   }
   expect(
     proxy(
@@ -42,7 +68,9 @@ test("NLWeb returns matching public documents in JSON and SSE", async () => {
     })
   const json = await (await ask(request("application/json"))).json()
   expect(json._meta.version).toBe("0.55")
-  expect(json.results.some((result: { url: string }) => result.url.endsWith("/auth.md"))).toBe(true)
+  expect(
+    json.results.some((result: { url: string }) => result.url === documentation.oauth.url),
+  ).toBe(true)
   const stream = await (await ask(request("text/event-stream"))).text()
   expect(stream).toContain("event: start")
   expect(stream).toContain("event: result")
@@ -71,10 +99,35 @@ test("public MCP initializes and lists tools", async () => {
   expect(init.result.serverInfo.name).toBe("sniptide-public-docs")
   const list = await (await call("tools/list", {})).json()
   expect(list.result.tools.map((tool: { name: string }) => tool.name)).toContain("read_doc")
+  for (const [query, canonicalUrl] of [
+    ["PKCE", documentation.oauth.url],
+    ["Claude Code", documentation.mcp.url],
+    ["search_snippets", documentation.mcp.url],
+  ]) {
+    const search = await (
+      await call("tools/call", { name: "search_docs", arguments: { query } })
+    ).json()
+    const results = JSON.parse(search.result.content[0].text)
+    expect(results.map((result: { url: string }) => result.url)).toContain(canonicalUrl)
+  }
   const read = await (
     await call("tools/call", { name: "read_doc", arguments: { path: "/auth.md" } })
   ).json()
-  expect(read.result.content[0].text).toContain("## Discover")
+  expect(read.result.content[0].text).toContain(documentation.oauth.url)
+  expect(read.result.content[0].text).toContain(documentation.apiTokens.url)
+  expect(read.result.content[0].text).not.toContain("code_challenge_method")
+  expect(read.result.content[0].text).not.toContain("PKCE")
+  const cliSearch = await (
+    await call("tools/call", { name: "search_docs", arguments: { query: "CLI" } })
+  ).json()
+  const cliIndex = JSON.parse(cliSearch.result.content[0].text).find(
+    (result: { path: string }) => result.path === "/docs",
+  )
+  expect(cliIndex).toBeDefined()
+  const cliRead = await (
+    await call("tools/call", { name: "read_doc", arguments: { path: cliIndex.path } })
+  ).json()
+  expect(cliRead.result.content[0].text).toContain(documentation.cli.url)
 })
 
 test("portable skill and published skill have identical contents", async () => {

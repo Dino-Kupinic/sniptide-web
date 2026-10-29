@@ -1,4 +1,5 @@
 // Relative, because next.config.ts loads this file too.
+import { documentation } from "./agent-docs"
 import { repoUrl } from "./site"
 
 // The app runs on its own subdomain; sniptide.com is this site. For local development set
@@ -21,7 +22,7 @@ export const links = {
   collections: app("/collections"),
   apiDocs: app("/docs/api"),
   github: repoUrl,
-  docs: "/docs",
-  selfHost: `${repoUrl}#self-hosting`,
+  docs: documentation.home.url,
+  selfHost: documentation.selfHosting.url,
   demo: demoUrl,
 }

@@ -1,3 +1,4 @@
+import { documentation } from "@/lib/agent-docs"
 import { siteUrl } from "@/lib/site"
 import { agentSkills } from "@/lib/skills"
 
@@ -13,7 +14,7 @@ export function GET() {
     ...agentSkills.map(({ name, description, url }) => `- [${name}](${url}): ${description}`),
     "## Discovery",
     `- [Skills index](${siteUrl}/.well-known/agent-skills/index.json): every skill with its sha256 digest`,
-    `- [MCP setup](${siteUrl}/docs/mcp.md): connect the server these skills call`,
+    `- [MCP setup](${documentation.mcp.url}): connect the server these skills call`,
     "",
   ].join("\n\n")
   return new Response(text, {

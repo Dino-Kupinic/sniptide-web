@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { LogoMark, Wordmark } from "@/components/brand"
-import type { AgentDocument } from "@/lib/agent-docs"
+import { type AgentDocument, documentation } from "@/lib/agent-docs"
 
 export function AgentDocPage({ document }: { document: AgentDocument }) {
   return (
@@ -16,15 +16,15 @@ export function AgentDocPage({ document }: { document: AgentDocument }) {
         <nav aria-label="Documentation" className="mt-5 flex flex-wrap gap-5 text-sm">
           {(
             [
-              ["/docs", "Docs"],
-              ["/docs/mcp", "MCP server"],
-              ["/docs/auth", "Authentication"],
+              [documentation.home.url, "Docs"],
+              [documentation.mcp.url, "MCP server"],
+              [documentation.oauth.url, "Authentication"],
             ] as const
           ).map(([href, label]) => (
             <Link
               key={href}
               href={href}
-              aria-current={document.path === href ? "page" : undefined}
+              aria-current={document.canonicalUrl === href ? "page" : undefined}
               className="underline-offset-4 hover:underline aria-[current=page]:underline"
             >
               {label}

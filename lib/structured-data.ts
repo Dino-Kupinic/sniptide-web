@@ -1,6 +1,6 @@
+import { documentation } from "@/lib/agent-docs"
 import { operator } from "@/lib/legal"
 import {
-  appBase,
   features,
   logoUrl,
   ogImageUrl,
@@ -77,7 +77,7 @@ export const structuredData = {
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       featureList: features,
       screenshot: { "@id": screenshotId },
-      softwareHelp: { "@type": "WebPage", url: `${appBase}/docs/api` },
+      softwareHelp: { "@type": "WebPage", url: documentation.home.url },
       sameAs: [repoUrl, mcpRegistry, ...packages],
       publisher: { "@id": organizationId },
     },
