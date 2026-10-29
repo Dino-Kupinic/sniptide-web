@@ -74,7 +74,7 @@ test("public MCP initializes and lists tools", async () => {
   const read = await (
     await call("tools/call", { name: "read_doc", arguments: { path: "/auth.md" } })
   ).json()
-  expect(read.result.content[0].text).toContain("Create a personal API token")
+  expect(read.result.content[0].text).toContain("## Discover")
 })
 
 test("portable skill and published skill have identical contents", async () => {

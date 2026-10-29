@@ -31,7 +31,7 @@ describe("public WebMCP tools", () => {
     expect(tools.map((tool) => tool.name)).toEqual(["sniptide_setup_guides", "sniptide_mcp_guide"])
     const setup = JSON.parse((await tools[0]?.execute()) ?? "null")
     expect(JSON.stringify(setup)).toContain("https://app.sniptide.com/docs/api")
-    expect(JSON.stringify(setup)).toContain("OAuth for agent API or MCP authentication")
+    expect(JSON.stringify(setup)).toContain("oauth-authorization-server")
     const guide = JSON.parse((await tools[1]?.execute()) ?? "null")
     expect(guide.tools.map((tool: Tool) => tool.name)).toContain("search_snippets")
     expect(guide.tools.map((tool: Tool) => tool.name)).toContain("fetch_collection")

@@ -103,8 +103,10 @@ client configuration, and discovery metadata live in `lib/agent-docs.ts`. Verify
 scopes against `packages/mcp/src/server.ts` in the app repo when they change.
 
 `/.well-known/mcp.json` advertises the remote server and links its server card at
-`/.well-known/mcp/server-card.json`. Authentication uses personal bearer tokens. Agent OAuth is
-not supported. The docs, manifest, and auth guide are linked from the llms files and robots.txt;
+`/.well-known/mcp/server-card.json`. Authentication is OAuth 2.1, served by the app at
+app.sniptide.com, or a personal bearer token. `/auth.md` follows the WorkOS auth.md outline and
+links the app's OAuth metadata. `/.well-known/agent-card.json` describes the A2A documentation
+agent at `/api/a2a`. The docs, manifest, and auth guide are linked from the llms files and robots.txt;
 the docs pages also appear in the sitemap.
 
 The server card follows the [experimental MCP Server Card schema](https://github.com/modelcontextprotocol/ext-server-card).

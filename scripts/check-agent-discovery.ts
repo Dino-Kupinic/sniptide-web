@@ -33,9 +33,9 @@ for (const document of [docsDocument, mcpDocument, authDocument]) {
 }
 
 const auth = await read("/auth.md", "text/markdown")
-assert.ok(auth.includes(`# ${authDocument.title}\n`))
+assert.ok(auth.startsWith(`# ${authDocument.title}\n`))
 assert.ok(auth.includes("Authorization: Bearer"))
-assert.ok(auth.includes("does not support OAuth"))
+assert.ok(auth.includes("oauth-protected-resource"))
 for (const { title, paragraphs, items, code } of authDocument.sections) {
   assert.ok(auth.includes(`## ${title}`))
   for (const value of [...(paragraphs ?? []), ...(items ?? []), ...(code ? [code] : [])]) {
@@ -46,14 +46,14 @@ const manifest = JSON.parse(await read("/.well-known/mcp.json", "application/jso
 const server = manifest.servers[0]
 assert.equal(server.url, mcpEndpoint)
 assert.equal(server.transport, "streamable-http")
-assert.equal(server.authentication.type, "bearer")
+assert.equal(server.authentication.type, "oauth2")
 assert.equal(server.authentication.documentation, `${siteUrl}/auth.md`)
 const card = JSON.parse(await read(new URL(server.card).pathname, "application/json"))
 assert.ok(card.remotes.some((remote: { url: string }) => remote.url === server.url))
 assert.ok(
   card.remotes[0].headers.some(
     (header: { name: string; isRequired: boolean }) =>
-      header.name === "Authorization" && header.isRequired,
+      header.name === "Authorization" && !header.isRequired,
   ),
 )
 

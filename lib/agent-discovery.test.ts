@@ -14,7 +14,12 @@ test("agents discover the same authenticated HTTP server documented for clients"
   expect(manifest.servers[0]).toMatchObject({
     url: "https://app.sniptide.com/api/mcp",
     transport: "streamable-http",
-    authentication: { type: "bearer", documentation: `${siteUrl}/auth.md` },
+    authentication: {
+      type: "oauth2",
+      protectedResourceMetadata:
+        "https://app.sniptide.com/.well-known/oauth-protected-resource/api/mcp",
+      documentation: `${siteUrl}/auth.md`,
+    },
   })
   expect(JSON.stringify(manifest)).not.toContain("YOUR_PERSONAL_API_TOKEN")
   expect(manifest.servers[0].card).toBe(`${siteUrl}/.well-known/mcp/server-card.json`)
@@ -25,27 +30,43 @@ test("agents discover the same authenticated HTTP server documented for clients"
     "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
   )
   expect(card.remotes[0].headers[0].variables.token.isSecret).toBe(true)
-  expect(card.remotes[0].headers[0].isRequired).toBe(true)
+  expect(card.remotes[0].headers[0].isRequired).toBe(false)
 })
 
-test("auth.md gives a token walkthrough without promising agent OAuth", async () => {
+test("auth.md walks through OAuth discovery and personal tokens in the WorkOS outline", async () => {
   const response = getAuth()
   expect(response.headers.get("content-type")).toBe("text/markdown; charset=utf-8")
   const body = await response.text()
-  expect(body).toContain("# Sniptide agent authentication\n")
+  expect(body.startsWith("# Sniptide agent authentication\n")).toBe(true)
+  const headings = [...body.matchAll(/^## (.+)$/gm)].map(([, heading]) => heading)
+  for (const heading of [
+    "Discover",
+    "Pick a method",
+    "Register",
+    "Exchange",
+    "Use the access_token",
+    "Errors",
+    "Revocation",
+  ])
+    expect(headings).toContain(heading)
   for (const value of [
+    "https://app.sniptide.com/.well-known/oauth-protected-resource",
+    "https://app.sniptide.com/.well-known/oauth-authorization-server",
+    "https://app.sniptide.com/api/oauth/register",
+    "https://app.sniptide.com/api/oauth/token",
+    "https://app.sniptide.com/api/oauth/revoke",
+    "WWW-Authenticate",
+    "code_challenge_method=S256",
     "https://app.sniptide.com/settings?tab=api",
-    "Authorization: Bearer",
     "/api/v1/me",
-    "read",
-    "write",
     "401",
     "403",
     "429",
-    "revok",
-    "does not support OAuth",
   ])
     expect(body).toContain(value)
+  // agent_auth identity flows aren't implemented, so no identity_endpoint URL is advertised.
+  expect(body).toContain("does not implement agent_auth")
+  expect(body).not.toMatch(/identity_endpoint[^.]*https?:/)
 })
 
 test("crawler indexes link the public docs and machine-readable entry points", () => {
