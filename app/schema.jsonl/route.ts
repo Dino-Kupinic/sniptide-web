@@ -1,7 +1,10 @@
-import { structuredData } from "@/lib/structured-data"
+import demoPreviewLight from "@/assets/landing/demo-preview-light.webp"
+import { homeGraph, jsonLdDocuments } from "@/lib/structured-data"
 export function GET() {
   return new Response(
-    `${structuredData["@graph"].map((item) => JSON.stringify({ "@context": "https://schema.org", ...item })).join("\n")}\n`,
+    `${jsonLdDocuments(homeGraph(demoPreviewLight.src))
+      .map((document) => JSON.stringify(document))
+      .join("\n")}\n`,
     { headers: { "Content-Type": "application/x-jsonlines; charset=utf-8" } },
   )
 }

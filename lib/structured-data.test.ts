@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { serializeJsonLd, structuredData } from "./structured-data"
+import { homeGraph, jsonLdDocuments, serializeJsonLd, structuredData } from "./structured-data"
 
 const graph = structuredData["@graph"]
 const byType = (type: string) => graph.find((node) => node["@type"] === type)
@@ -38,5 +38,24 @@ describe("structured data", () => {
     expect(json).not.toContain("<")
     expect(JSON.parse(json)).toEqual({ name: "</script><script>alert(1)</script>" })
     expect(JSON.parse(serializeJsonLd(structuredData))).toEqual(structuredData)
+  })
+
+  test("adds the product band screenshot to the home page graph", () => {
+    const home = homeGraph("/_next/static/media/demo-preview-light.abc123.webp")
+    const image = home.find((node) => node["@type"] === "ImageObject")
+    expect(image).toMatchObject({
+      "@id": "https://sniptide.com/#screenshot",
+      contentUrl: "https://sniptide.com/_next/static/media/demo-preview-light.abc123.webp",
+    })
+    expect(byType("SoftwareApplication")).toHaveProperty("screenshot", { "@id": image?.["@id"] })
+  })
+
+  test("splits the graph into documents with a top-level @context and @type", () => {
+    const documents = jsonLdDocuments(homeGraph("/screenshot.webp"))
+    expect(documents).toHaveLength(graph.length + 1)
+    for (const document of documents) {
+      expect(document).toHaveProperty("@context", "https://schema.org")
+      expect(document).toHaveProperty("@type")
+    }
   })
 })
