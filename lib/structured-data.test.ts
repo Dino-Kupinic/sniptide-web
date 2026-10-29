@@ -10,6 +10,8 @@ describe("structured data", () => {
       "Organization",
       "WebSite",
       "SoftwareApplication",
+      "WebPage",
+      "SoftwareSourceCode",
     ])
     expect(byType("SoftwareApplication")).toMatchObject({
       name: "Sniptide",

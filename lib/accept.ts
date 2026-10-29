@@ -9,3 +9,13 @@ export function prefersMarkdown(accept: string | null) {
   const html = ranges.find((range) => range.mediaType === "text/html")?.q ?? 0
   return markdown > 0 && markdown >= html
 }
+
+// AI assistants and crawlers that read pages for a model. They get the Markdown twin of a page
+// even when they ask for HTML, since the HTML adds only layout. Search engine crawlers such as
+// Googlebot and Bingbot are not in this list and keep getting HTML.
+const aiAgents =
+  /\b(?:GPTBot|ChatGPT-User|OAI-SearchBot|ClaudeBot|Claude-User|Claude-SearchBot|anthropic-ai|PerplexityBot|Perplexity-User)\b/i
+
+export function isAiAgent(userAgent: string | null) {
+  return aiAgents.test(userAgent ?? "")
+}

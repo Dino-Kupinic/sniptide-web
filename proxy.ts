@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { prefersMarkdown } from "@/lib/accept"
+import { isAiAgent, prefersMarkdown } from "@/lib/accept"
 import { agentDocuments, markdownPath, renderMarkdown } from "@/lib/agent-docs"
 import { headersForUpstream, type RevealBlock, revealBlock } from "@/lib/share-proxy"
 import { appBase, siteUrl } from "@/lib/site"
@@ -7,7 +7,8 @@ import { appBase, siteUrl } from "@/lib/site"
 export function proxy(request: NextRequest) {
   const doc = agentDocuments.find((item) => item.path === request.nextUrl.pathname)
   if (doc && (request.method === "GET" || request.method === "HEAD")) {
-    const acceptsMarkdown = prefersMarkdown(request.headers.get("accept"))
+    const acceptsMarkdown =
+      prefersMarkdown(request.headers.get("accept")) || isAiAgent(request.headers.get("user-agent"))
     const links = `<${siteUrl}${doc.path === "/" ? "" : doc.path}>; rel="canonical", <${siteUrl}${markdownPath(doc.path)}>; rel="alternate"; type="text/markdown", <${siteUrl}/.well-known/ard.json>; rel="ard", <${siteUrl}/.well-known/api-catalog>; rel="api-catalog", <${siteUrl}/sitemap.xml>; rel="sitemap", <${appBase}/api/openapi.json>; rel="service-desc"; type="application/json"`
     const response =
       acceptsMarkdown || request.nextUrl.searchParams.get("mode") === "agent"
@@ -20,7 +21,7 @@ export function proxy(request: NextRequest) {
         : NextResponse.next({ request: { headers: headersForUpstream(request.headers) } })
     if (!acceptsMarkdown && request.nextUrl.searchParams.get("mode") !== "agent")
       response.headers.set("Cache-Control", "private, no-store")
-    response.headers.set("Vary", "Accept")
+    response.headers.set("Vary", "Accept, User-Agent")
     response.headers.set("Link", links)
     return response
   }

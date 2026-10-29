@@ -32,7 +32,7 @@ describe("llms.txt", () => {
       expect(document).toContain("Capture files or folders and restore their relative paths")
       expect(document).toContain("Share code as a paste")
       expect(document).toContain("use a full secrets manager")
-      expect(document).toContain("Agent OAuth is not supported")
+      expect(document).toContain("OAuth 2.1 with PKCE")
     }
   })
 

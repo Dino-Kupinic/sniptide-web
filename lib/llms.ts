@@ -7,7 +7,7 @@ export const whenToUseSniptide = `## When to use Sniptide
 - Capture files or folders and restore their relative paths in another project: use the CLI.
 - Share code as a paste: create a link and choose visibility, expiry, password, or burn-after-read as needed.
 - For secret rotation, audit trails, or per-environment access policies, use a full secrets manager. Sniptide is not a replacement for one.
-- Agent API and MCP access use scoped personal API tokens. Agent OAuth is not supported.`
+- Agent API and MCP access use OAuth 2.1 with PKCE, discovered from the first 401, or a scoped personal API token for scripts.`
 
 // https://llmstxt.org: an H1, a one-line summary, then sections of annotated links.
 export const llmsTxt = `# ${siteName}
@@ -16,7 +16,7 @@ export const llmsTxt = `# ${siteName}
 
 Paste code or a whole folder, choose who can open it and for how long, and share one short link (${siteUrl}/<slug>). Pastes are private, unlisted or public, with an optional password, expiry or burn-after-read. Coding agents such as Claude Code and Cursor can search, read and save snippets through an MCP server or the CLI. \`.env\` files sync as encrypted env groups.
 
-${siteName} is not a full secrets manager: it has no key rotation, audit trail or per-environment access policies. The MCP server uses a personal API token and has no OAuth login yet.
+${siteName} is not a full secrets manager: it has no key rotation, audit trail or per-environment access policies. The MCP server signs agents in with OAuth 2.1 or accepts a personal API token.
 
 ${whenToUseSniptide}
 
@@ -29,10 +29,10 @@ ${whenToUseSniptide}
 ## For agents and developers
 
 - [Developer docs](${siteUrl}/docs): MCP setup, agent authentication, API and CLI guides
-- [MCP setup](${siteUrl}/docs/mcp): connect a client using Streamable HTTP and a bearer token
+- [MCP setup](${siteUrl}/docs/mcp): connect a client using Streamable HTTP with OAuth or a bearer token
 - [MCP discovery manifest](${siteUrl}/.well-known/mcp.json): remote server address and authentication documentation
-- [Agent authentication](${siteUrl}/auth.md): create scoped API tokens, verify access, handle errors, and revoke credentials
-- [MCP server](${mcpGuide}): ${mcpTools.length} tools (${mcpTools.map(({ name }) => name).join(", ")}) at ${appBase}/api/mcp, authenticated with a personal API token
+- [Agent authentication](${siteUrl}/auth.md): OAuth discovery, registration, token exchange, scoped API tokens, errors and revocation
+- [MCP server](${mcpGuide}): ${mcpTools.length} tools (${mcpTools.map(({ name }) => name).join(", ")}) at ${appBase}/api/mcp, authenticated with OAuth or a personal API token
 - [CLI](${cliGuide}): capture files or folders as pastes, restore them in another project, and sync \`.env\` files
 - [HTTP API reference](${appBase}/docs/api): raw files, the token API under /api/v1 and more
 - [OpenAPI document](${appBase}/api/openapi.json): machine-readable API description
@@ -40,11 +40,13 @@ ${whenToUseSniptide}
 ## More documentation
 
 - [Focused developer index](${siteUrl}/docs/llms.txt): authentication, API and MCP documentation
+- [Focused skills index](${siteUrl}/skills/llms.txt): agent skills for reusing and saving snippets
 - [Home as Markdown](${siteUrl}/index.md): product overview
 - [Documentation as Markdown](${siteUrl}/docs.md): API, MCP and CLI entry points
 - [MCP guide as Markdown](${siteUrl}/docs/mcp.md): client setup and tools
 - [Skills index](${siteUrl}/skills/index.json): reusable agent procedures
 - [Public documentation MCP](${siteUrl}/api/mcp): search and read public documentation
+- [A2A agent card](${siteUrl}/.well-known/agent-card.json): a documentation search agent over Agent2Agent JSON-RPC
 - [API catalog](${siteUrl}/.well-known/api-catalog): links to the API and OpenAPI description
 
 ## Self-hosting
@@ -91,7 +93,7 @@ Your best snippets become a pattern library. A coding agent searches summaries, 
 
 ### MCP server
 
-Endpoint: ${appBase}/api/mcp (or <your-instance-url>/api/mcp when self-hosted). Create a personal API token in Settings, then API tokens, and send it as a bearer token. Use read-only access for retrieval, or enable write access to save and edit snippets. Agent OAuth is not supported. Discovery manifest: ${siteUrl}/.well-known/mcp.json. Setup guide: ${siteUrl}/docs/mcp.
+Endpoint: ${appBase}/api/mcp (or <your-instance-url>/api/mcp when self-hosted). Clients that support OAuth need only this URL: the first 401 points to the OAuth metadata and the user approves the client in the browser. Otherwise create a personal API token in Settings, then API tokens, and send it as a bearer token. Use read access for retrieval, or write access to save and edit snippets. Discovery manifest: ${siteUrl}/.well-known/mcp.json. Setup guide: ${siteUrl}/docs/mcp.
 
 Tools:
 
