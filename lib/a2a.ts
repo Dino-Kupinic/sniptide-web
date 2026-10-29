@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto"
-import { markdownPath } from "@/lib/agent-docs"
+import { documentation } from "@/lib/agent-docs"
 import { searchDocuments } from "@/lib/public-doc-search"
 import { siteName, siteUrl } from "@/lib/site"
 
@@ -12,13 +12,13 @@ export const agentCard = {
   protocolVersion: "0.3.0",
   name: `${siteName} documentation agent`,
   description:
-    "Finds the public Sniptide guide that answers a question about setup, authentication, the HTTP API, the CLI or the MCP server, and links its Markdown version. It reads no account data.",
+    "Finds the public Sniptide guide that answers a question about setup, authentication, the HTTP API, the CLI or the MCP server, and links its canonical documentation. It reads no account data.",
   url: a2aEndpoint,
   preferredTransport: "JSONRPC",
   additionalInterfaces: [{ url: a2aEndpoint, transport: "JSONRPC" }],
   provider: { organization: siteName, url: siteUrl },
   version: "1.0.0",
-  documentationUrl: `${siteUrl}/docs`,
+  documentationUrl: documentation.home.url,
   iconUrl: `${siteUrl}/web-app-manifest-512x512.png`,
   capabilities: { streaming: false, pushNotifications: false, stateTransitionHistory: false },
   defaultInputModes: ["text/plain"],
@@ -28,7 +28,7 @@ export const agentCard = {
       id: "search-docs",
       name: "Search documentation",
       description:
-        "Returns the public Sniptide guides that match the words in a question, best match first, with their Markdown URLs.",
+        "Returns the public Sniptide guides that match the words in a question, best match first, with their canonical URLs.",
       tags: ["documentation", "search", "mcp", "authentication"],
       examples: ["How do I authenticate with the Sniptide API?", "Connect the Sniptide MCP server"],
       inputModes: ["text/plain"],
@@ -83,14 +83,14 @@ export function handleA2a(payload: unknown) {
 
   const results = searchDocuments(text)
     .slice(0, 5)
-    .map(({ title, description, path }) => ({
+    .map(({ title, description, canonicalUrl }) => ({
       title,
       description,
-      url: `${siteUrl}${markdownPath(path)}`,
+      url: canonicalUrl,
     }))
   const summary = results.length
     ? results.map(({ title, url }) => `- ${title}: ${url}`).join("\n")
-    : `No public guide matches that question. Start at ${siteUrl}/docs.`
+    : `No public guide matches that question. Start at ${documentation.home.url}.`
   return rpc(id, {
     result: {
       kind: "message",

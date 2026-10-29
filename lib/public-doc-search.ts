@@ -5,7 +5,7 @@ export function searchDocuments(query: string) {
   if (!terms.length) return []
   return agentDocuments
     .map((doc) => {
-      const text = renderMarkdown(doc).toLowerCase()
+      const text = [renderMarkdown(doc), ...(doc.searchTerms ?? [])].join("\n").toLowerCase()
       const score = terms.reduce((sum, term) => sum + (text.includes(term) ? 1 : 0), 0)
       return { doc, score }
     })

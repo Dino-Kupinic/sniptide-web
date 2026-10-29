@@ -23,33 +23,17 @@ describe("llms.txt", () => {
     expect(llmsFullTxt.endsWith("\n")).toBe(true)
   })
 
-  test("routes common tasks and states authentication and secrets boundaries in both files", () => {
+  test("routes readers to canonical guides without a duplicated tool catalog", () => {
     for (const document of [llmsTxt, llmsFullTxt]) {
       expect(document).toContain("## When to use Sniptide")
-      expect(document).toContain(
-        "search_snippets to find candidates, read_snippet to inspect a match, and fetch_collection",
-      )
       expect(document).toContain("Capture files or folders and restore their relative paths")
       expect(document).toContain("Share code as a paste")
       expect(document).toContain("use a full secrets manager")
-      expect(document).toContain("OAuth 2.1 with PKCE")
-    }
-  })
-
-  test("names the nine MCP tools in both files", () => {
-    for (const tool of [
-      "search_snippets",
-      "read_snippet",
-      "fetch_collection",
-      "create_snippet",
-      "update_snippet",
-      "list_collections",
-      "create_collection",
-      "update_snippet_settings",
-      "trash_snippet",
-    ]) {
-      expect(llmsTxt).toContain(tool)
-      expect(llmsFullTxt).toContain(tool)
+      expect(document).toContain("https://docs.sniptide.com/mcp")
+      expect(document).toContain("https://docs.sniptide.com/oauth")
+      expect(document).toContain("https://docs.sniptide.com/api-tokens")
+      expect(document).not.toContain("Agent OAuth is not supported")
+      expect(document).not.toContain("search_snippets")
     }
   })
 })

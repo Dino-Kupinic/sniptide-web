@@ -9,7 +9,7 @@ export function proxy(request: NextRequest) {
   if (doc && (request.method === "GET" || request.method === "HEAD")) {
     const acceptsMarkdown =
       prefersMarkdown(request.headers.get("accept")) || isAiAgent(request.headers.get("user-agent"))
-    const links = `<${siteUrl}${doc.path === "/" ? "" : doc.path}>; rel="canonical", <${siteUrl}${markdownPath(doc.path)}>; rel="alternate"; type="text/markdown", <${siteUrl}/.well-known/ard.json>; rel="ard", <${siteUrl}/.well-known/api-catalog>; rel="api-catalog", <${siteUrl}/sitemap.xml>; rel="sitemap", <${appBase}/api/openapi.json>; rel="service-desc"; type="application/json"`
+    const links = `<${doc.canonicalUrl}>; rel="canonical", <${siteUrl}${markdownPath(doc.path)}>; rel="alternate"; type="text/markdown", <${siteUrl}/.well-known/ard.json>; rel="ard", <${siteUrl}/.well-known/api-catalog>; rel="api-catalog", <${siteUrl}/sitemap.xml>; rel="sitemap", <${appBase}/api/openapi.json>; rel="service-desc"; type="application/json"`
     const response =
       acceptsMarkdown || request.nextUrl.searchParams.get("mode") === "agent"
         ? new NextResponse(request.method === "HEAD" ? null : renderMarkdown(doc), {

@@ -65,7 +65,7 @@ test("the A2A agent answers message/send with guide links", async () => {
   const body = await response.json()
   expect(body.id).toBe(7)
   expect(body.result.role).toBe("agent")
-  expect(body.result.parts[0].text).toContain("https://sniptide.com/auth.md")
+  expect(body.result.parts[0].text).toContain("https://docs.sniptide.com/oauth")
   const unknown = await (
     await a2a(post(card.url, { jsonrpc: "2.0", id: 8, method: "tasks/resubscribe" }))
   ).json()

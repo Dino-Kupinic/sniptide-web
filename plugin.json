@@ -3,7 +3,7 @@
   "name": "sniptide",
   "version": "0.1.0",
   "description": "Procedures for reusing Sniptide snippets and collections.",
-  "homepage": "https://sniptide.com/docs/mcp",
+  "homepage": "https://docs.sniptide.com/mcp",
   "repository": "https://github.com/Dino-Kupinic/sniptide-web",
   "license": "AGPL-3.0-only"
 }

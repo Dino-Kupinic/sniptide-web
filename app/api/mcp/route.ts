@@ -3,7 +3,6 @@ import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/
 import { z } from "zod"
 import { agentDocuments, markdownPath, renderMarkdown } from "@/lib/agent-docs"
 import { searchDocuments } from "@/lib/public-doc-search"
-import { siteUrl } from "@/lib/site"
 
 const MAX_BODY_BYTES = 16 * 1024
 
@@ -15,7 +14,7 @@ const inputs = {
 const annotations = { readOnlyHint: true, destructiveHint: false, openWorldHint: false }
 
 const instructions =
-  "Public Sniptide documentation: setup, authentication, the HTTP API and the product MCP server. Call search_docs with keywords, then read_doc with a returned path. This server reads no account data and changes nothing. To search or save a user's snippets, connect the product MCP server at https://app.sniptide.com/api/mcp with the user's personal API token."
+  "Public Sniptide documentation: setup, authentication, the HTTP API and the product MCP server. Call search_docs with keywords, then read_doc with a returned path. This server reads no account data and changes nothing. To search or save a user's snippets, connect the product MCP server at https://app.sniptide.com/api/mcp with OAuth or the user's personal API token."
 
 function rpcError(id: unknown, code: number, message: string, data?: unknown, status = 200) {
   return Response.json(
@@ -65,7 +64,7 @@ export async function POST(request: Request) {
     {
       title: "Search documentation",
       description:
-        "Search public Sniptide documentation by keywords. Returns titles, descriptions and Markdown URLs, best match first.",
+        "Search public Sniptide documentation by keywords. Returns titles, descriptions and canonical URLs, best match first.",
       inputSchema: inputs.search_docs,
       annotations,
     },
@@ -74,11 +73,11 @@ export async function POST(request: Request) {
         {
           type: "text",
           text: JSON.stringify(
-            searchDocuments(query).map(({ title, description, path }) => ({
+            searchDocuments(query).map(({ title, description, path, canonicalUrl }) => ({
               title,
               description,
               path,
-              url: `${siteUrl}${markdownPath(path)}`,
+              url: canonicalUrl,
             })),
           ),
         },
@@ -90,7 +89,7 @@ export async function POST(request: Request) {
     {
       title: "Read a document",
       description:
-        "Read a public document as Markdown by the path search_docs returned, such as /docs/mcp or /auth.md.",
+        "Read a public document or canonical guide index as Markdown by the path search_docs returned, such as /docs/mcp or /auth.md.",
       inputSchema: inputs.read_doc,
       annotations,
     },

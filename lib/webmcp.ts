@@ -1,4 +1,5 @@
-import { authDocument, docsDocument, mcpDocument, mcpTools } from "@/lib/agent-docs"
+import { documentation, mcpEndpoint } from "@/lib/agent-docs"
+import { appBase, siteUrl } from "@/lib/site"
 
 type PublicTool = {
   name: string
@@ -18,17 +19,22 @@ type Capability = { modelContext?: ModelContext }
 const tools: PublicTool[] = [
   {
     name: "sniptide_setup_guides",
-    description: "Get public Sniptide setup, authentication, CLI, and API documentation.",
+    description: "Get links to public Sniptide setup, authentication, CLI, and API documentation.",
     inputSchema: { type: "object", properties: {} },
     annotations: { readOnlyHint: true },
-    execute: async () => JSON.stringify({ docs: docsDocument, authentication: authDocument }),
+    execute: async () => JSON.stringify({ documentation, apiReference: `${appBase}/docs/api` }),
   },
   {
     name: "sniptide_mcp_guide",
-    description: "Get the public Sniptide MCP setup guide and supported tools.",
+    description: "Get links to the public Sniptide MCP guide and discovery manifest.",
     inputSchema: { type: "object", properties: {} },
     annotations: { readOnlyHint: true },
-    execute: async () => JSON.stringify({ guide: mcpDocument, tools: mcpTools }),
+    execute: async () =>
+      JSON.stringify({
+        guide: documentation.mcp,
+        endpoint: mcpEndpoint,
+        manifest: `${siteUrl}/.well-known/mcp.json`,
+      }),
   },
 ]
 
