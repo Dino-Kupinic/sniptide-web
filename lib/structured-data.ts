@@ -13,6 +13,11 @@ import {
 
 const organizationId = `${siteUrl}/#organization`
 const softwareId = `${siteUrl}/#software`
+const screenshotId = `${siteUrl}/#screenshot`
+
+// The product band's screenshot of the demo dashboard, which the page and the JSON-LD both describe.
+export const screenshotCaption =
+  "The Sniptide demo dashboard: paste and view counts, a quick paste editor and a chart of views."
 
 // Profiles Sniptide itself publishes. Personal profiles of the operator stay out, and Wikipedia,
 // Wikidata or social profiles join this list only once they exist.
@@ -71,6 +76,7 @@ export const structuredData = {
       isAccessibleForFree: true,
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       featureList: features,
+      screenshot: { "@id": screenshotId },
       softwareHelp: { "@type": "WebPage", url: `${appBase}/docs/api` },
       sameAs: [repoUrl, mcpRegistry, ...packages],
       publisher: { "@id": organizationId },
@@ -100,6 +106,28 @@ export const structuredData = {
       publisher: { "@id": organizationId },
     },
   ],
+}
+
+// The home page's graph with the screenshot, whose URL the bundler fingerprints at build time.
+export function homeGraph(screenshotSrc: string) {
+  return [
+    ...structuredData["@graph"],
+    {
+      "@type": "ImageObject",
+      "@id": screenshotId,
+      contentUrl: new URL(screenshotSrc, siteUrl).href,
+      caption: screenshotCaption,
+      encodingFormat: "image/webp",
+      width: 2532,
+      height: 1586,
+    },
+  ]
+}
+
+// One document per node, each with its own @context and @type at the top, because some readers
+// look only at a script's top-level @type and never walk an @graph.
+export function jsonLdDocuments(graph: object[]) {
+  return graph.map((node) => ({ "@context": "https://schema.org", ...node }))
 }
 
 // JSON.stringify doesn't escape "<", so "</script>" in a value would end the tag early.

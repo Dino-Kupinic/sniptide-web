@@ -3,9 +3,7 @@ import Image from "next/image"
 import demoPreviewDark from "@/assets/landing/demo-preview-dark.webp"
 import demoPreviewLight from "@/assets/landing/demo-preview-light.webp"
 import { links } from "@/lib/links"
-
-const alt =
-  "The Sniptide demo dashboard: paste and view counts, a quick paste editor and a chart of views."
+import { screenshotCaption as alt } from "@/lib/structured-data"
 
 export function ProductBand() {
   return (
