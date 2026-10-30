@@ -161,7 +161,9 @@ Commits and PR titles follow [Conventional Commits](https://www.conventionalcomm
 
 ## License
 
-[AGPL-3.0](LICENSE), like Sniptide itself.
+This website repository is licensed under [AGPL-3.0-only](LICENSE). See the core repository's
+[licensing guide](https://github.com/Dino-Kupinic/sniptide/blob/main/LICENSING.md) for the
+open-source core and hosted services.
 
 ## Browser agent tools
 
