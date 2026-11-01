@@ -29,15 +29,17 @@ export function SiteFooter() {
   return (
     <footer
       data-cta-location="footer"
-      className="relative h-145 overflow-clip bg-white text-black md:h-210 dark:bg-[#08080b] dark:text-[#d4d4dc]"
+      className="@container relative h-145 overflow-clip bg-white text-black md:h-210 dark:bg-[#08080b] dark:text-[#d4d4dc]"
     >
-      {/* Dithered glow grid, cropped so its lower rows meet the tagline. */}
+      {/* Dithered glow grid, cropped so its lower rows meet the tagline. Past 1440px it scales with
+          the footer's width and stays anchored at the grid's last row (700px of the 1440px image),
+          so it fills wide screens. In dark mode it lightens onto the footer so its black edges vanish. */}
       <Image
         src={grid}
         alt=""
         aria-hidden="true"
         unoptimized
-        className="pointer-events-none absolute top-[-440px] left-[-60px] h-205 w-360 max-w-none invert hue-rotate-180 md:top-[-231px] md:left-1/2 md:-translate-x-1/2 dark:invert-0 dark:hue-rotate-0"
+        className="pointer-events-none absolute top-[-440px] left-[-60px] h-205 w-360 max-w-none invert hue-rotate-180 md:top-[calc(469px-max(1440px,100cqw)*700/1440)] md:left-1/2 md:h-auto md:w-[max(1440px,100cqw)] md:-translate-x-1/2 dark:mix-blend-lighten dark:invert-0 dark:hue-rotate-0"
       />
       <div className="pointer-events-none absolute top-95 left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:top-145 md:left-30 md:h-80 md:w-300 dark:block" />
 
