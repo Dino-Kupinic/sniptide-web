@@ -19,8 +19,8 @@ import {
 import { posthogKey } from "@/lib/posthog"
 import { track } from "@/lib/tracking"
 
-// The site's raised buttons (app/globals.css): Deny and Accept all match Sign in, and the settings
-// and Save buttons match Get started. Colors are the landing page's own.
+// The site's raised buttons (app/globals.css): Deny, settings and Save match Sign in, and Accept all
+// matches Get started. Colors are the landing page's own.
 const surface =
   "border border-[#e8e8e8] bg-white text-[#1b1919] dark:border-[#262626] dark:bg-[#0c0b0b] dark:text-[#f5f5f5]"
 const muted = "text-[#6b6b6b] dark:text-[#9a9a9a]"
@@ -52,7 +52,7 @@ const categories: { id: ConsentCategory | "essential"; label: string }[] = [
 ]
 
 // Asks once per six months which kinds of cookies analytics may use (lib/tracking.ts). The banner
-// offers Deny and Accept all at the same size, and Consent settings opens a switch per category.
+// offers Deny and Consent settings as secondary buttons and Accept all as the primary one. Consent settings opens a switch per category.
 // Neither blocks the page. Without a PostHog key there is nothing to ask about, so both stay hidden.
 export function ConsentBanner() {
   const [banner, setBanner] = useState(false)
@@ -115,17 +115,17 @@ export function ConsentBanner() {
             </button>
             <button
               type="button"
-              onClick={() => choose(fullConsent, "accept_all", "banner")}
+              onClick={() => openSettings("banner")}
               className={cn(outline, "flex-1 sm:flex-none")}
             >
-              Accept all
+              Consent settings
             </button>
             <button
               type="button"
-              onClick={() => openSettings("banner")}
+              onClick={() => choose(fullConsent, "accept_all", "banner")}
               className={cn(primary, "w-full sm:ml-auto sm:w-auto")}
             >
-              Consent settings
+              Accept all
             </button>
           </div>
         </section>
@@ -172,17 +172,17 @@ export function ConsentBanner() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => choose(fullConsent, "accept_all", settingsSource.current)}
+                  onClick={() => choose(draft, "save", settingsSource.current)}
                   className={cn(outline, "flex-1 sm:flex-none")}
                 >
-                  Accept all
+                  Save
                 </button>
                 <button
                   type="button"
-                  onClick={() => choose(draft, "save", settingsSource.current)}
+                  onClick={() => choose(fullConsent, "accept_all", settingsSource.current)}
                   className={cn(primary, "w-full sm:ml-auto sm:w-auto")}
                 >
-                  Save
+                  Accept all
                 </button>
               </div>
               <p className={cn("text-sm leading-5", muted)}>
