@@ -1,8 +1,9 @@
 import posthog from "posthog-js"
 import { isAnalyticsExcluded } from "@/lib/analytics-preference"
 import {
-  type ConsentStatus,
+  type ConsentState,
   consentCookieDomain,
+  consentLabel,
   onConsentChange,
   readConsent,
 } from "@/lib/consent"
@@ -12,11 +13,11 @@ import { posthogHost, posthogKey, posthogProxyPath } from "@/lib/posthog"
 
 // PostHog on sniptide.com, gated by the cookie banner (components/consent-banner.tsx).
 //
-// Until the visitor accepts, and after they reject, PostHog runs in cookieless mode: no cookies or
-// browser storage, and visitors are counted with a daily server-side hash, as before the banner.
-// Cookieless mode must be turned on in the PostHog project. Once the visitor accepts, PostHog keeps
-// a visitor ID in a cookie on .sniptide.com, so a visit can be followed across days and into the
-// app, and session replay and heatmaps start.
+// Until the visitor allows analytics, and after they refuse it, PostHog runs in cookieless mode: no
+// cookies or browser storage, and visitors are counted with a daily server-side hash, as before the
+// banner. Cookieless mode must be turned on in the PostHog project. With analytics allowed, PostHog
+// keeps a visitor ID in a cookie on .sniptide.com, so a visit can be followed across days and into
+// the app, and heatmaps start. Session replay is its own category and needs analytics.
 //
 // This site shows no user content, so autocapture stays on. Funnel steps are also sent as named
 // events with stable properties, so funnels don't depend on selectors:
@@ -24,18 +25,18 @@ import { posthogHost, posthogKey, posthogProxyPath } from "@/lib/posthog"
 //   outbound_link_clicked  { location, host }     any other link that leaves Sniptide
 //   section_viewed         { section, position }  a landing section came into view
 //   scroll_depth_reached   { percent, path }      25, 50, 75 and 100% of a page
-//   consent_banner_shown   { trigger }            the banner appeared
-//   consent_updated        { status, source }     the visitor answered it
-// Every event carries surface=marketing and consent=granted|denied|pending.
+//   consent_banner_shown   { trigger }            the banner or the settings appeared
+//   consent_updated        { action, analytics, replay, source }  the visitor answered
+// Every event carries surface=marketing and consent=pending|denied|analytics|analytics_replay.
 
 let started = false
-let status: ConsentStatus = "pending"
+let consent: ConsentState = null
 
 export function startTracking() {
   if (started || !posthogKey || isAnalyticsExcluded()) return
   started = true
-  status = readConsent()
-  const granted = status === "granted"
+  consent = readConsent()
+  const analytics = consent?.analytics ?? false
 
   posthog.init(posthogKey, {
     api_host: posthogProxyPath,
@@ -48,18 +49,18 @@ export function startTracking() {
     cross_subdomain_cookie: true,
     capture_performance: { web_vitals: true },
     capture_exceptions: true,
-    capture_heatmaps: granted,
-    capture_dead_clicks: granted,
-    disable_session_recording: !granted,
+    capture_heatmaps: analytics,
+    capture_dead_clicks: analytics,
+    disable_session_recording: !consent?.replay,
     disable_surveys: true,
     before_send: (event) => {
       if (!event || isAnalyticsExcluded()) return null
       event.properties.surface = "marketing"
-      event.properties.consent = status
+      event.properties.consent = consentLabel(consent)
       return event
     },
   })
-  applyConsent(status)
+  applyConsent(consent)
   onConsentChange(applyConsent)
   listen()
 }
@@ -68,26 +69,28 @@ export function track(event: string, properties?: Record<string, string | number
   if (started && !isAnalyticsExcluded()) posthog.capture(event, properties)
 }
 
-function applyConsent(next: ConsentStatus) {
+function applyConsent(next: ConsentState) {
   const previous = posthog.get_explicit_consent_status()
-  status = next
-  if (next === "granted") {
-    if (previous !== "granted") posthog.opt_in_capturing({ captureEventName: false })
-    posthog.set_config({
-      capture_heatmaps: true,
-      capture_dead_clicks: true,
-      disable_session_recording: false,
-    })
+  consent = next
+
+  if (next?.replay) {
+    posthog.set_config({ disable_session_recording: false })
     posthog.startSessionRecording()
+  } else if (posthog.sessionRecordingStarted()) {
+    posthog.stopSessionRecording()
+  }
+
+  if (next?.analytics) {
+    if (previous !== "granted") posthog.opt_in_capturing({ captureEventName: false })
+    posthog.set_config({ capture_heatmaps: true, capture_dead_clicks: true })
     return
   }
-  // A visitor who rejects, or whose choice expired, goes back to cookieless counting, and what
-  // PostHog stored while they had accepted is removed.
+  // A visitor who refuses analytics, or whose choice expired, goes back to cookieless counting,
+  // and what PostHog stored while analytics was allowed is removed.
   if (previous === "granted") {
-    posthog.stopSessionRecording()
     posthog.set_config({ capture_heatmaps: false, capture_dead_clicks: false })
   }
-  if (next === "denied") {
+  if (next) {
     if (previous !== "denied") posthog.opt_out_capturing()
   } else if (previous !== "pending") {
     posthog.clear_opt_in_out_capturing()

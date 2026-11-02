@@ -64,19 +64,20 @@ export default function Privacy() {
         interest in knowing how the site is used (Art. 6(1)(f) GDPR).
       </p>
       <p>
-        If you accept cookies in the banner, PostHog stores a random visitor identifier in a cookie
-        and in your browser&apos;s local storage. It lets us see how one visitor moves across
-        sniptide.com and the app over several visits, for example from a page on this site to
-        signing up. PostHog then also records your session on this website, meaning the pages you
-        see, your clicks, mouse movement and scrolling, so we can replay it, and draws heatmaps from
-        the clicks. The website has no forms, so a recording never contains anything you typed. We
-        do not use any of this for advertising. The legal basis is your consent (Art. 6(1)(a) GDPR
-        and § 165(3) TKG 2021). You can withdraw it at any time with{" "}
+        The cookie banner asks about two categories separately. If you allow analytics, PostHog
+        stores a random visitor identifier in a cookie and in your browser&apos;s local storage. It
+        lets us see how one visitor moves across sniptide.com and the app over several visits, for
+        example from a page on this site to signing up, and PostHog draws heatmaps from the clicks.
+        If you also allow session replay, PostHog records your session on this website, meaning the
+        pages you see, your clicks, mouse movement and scrolling, so we can replay it. Replay needs
+        analytics. The website has no forms, so a recording never contains anything you typed. We do
+        not use any of this for advertising. The legal basis is your consent (Art. 6(1)(a) GDPR and
+        § 165(3) TKG 2021). You can change or withdraw it at any time in the{" "}
         <ConsentSettingsButton className="text-[#2a26ec] underline underline-offset-2 hover:no-underline dark:text-[#8f8cff]">
           cookie settings
         </ConsentSettingsButton>{" "}
-        or the Cookies link at the bottom of every page, and PostHog&apos;s cookie and local storage
-        are then removed.
+        or with the Cookies link at the bottom of every page. Withdrawing analytics removes
+        PostHog&apos;s cookie and local storage.
       </p>
       <p>
         {analyticsStorage} PostHog acts as our processor under a data processing agreement. Session
@@ -143,18 +144,18 @@ export default function Privacy() {
       </p>
 
       <h2 id="cookies">Cookies</h2>
-      <p>The website sets one cookie on its own and two more only if you accept them:</p>
+      <p>The website sets one cookie on its own and two more only if you allow analytics:</p>
       <ul>
         <li>
-          <code>sniptide_consent</code> saves your answer to the cookie banner for six months, so
-          the banner does not ask again on every page. It is valid for sniptide.com and its
-          subdomains, so the app can respect the same answer. It is needed to honor your choice (§
-          165(3) TKG 2021).
+          <code>sniptide_consent</code> saves which categories you allowed for six months, so the
+          banner does not ask again on every page. It is valid for sniptide.com and its subdomains,
+          so the app can respect the same answer. It is needed to honor your choice (§ 165(3) TKG
+          2021).
         </li>
         <li>
-          Only after you accept, PostHog&apos;s <code>ph_…_posthog</code> cookie holds the random
-          visitor identifier for one year, and PostHog keeps the same identifier and the current
-          session in local storage.
+          Only after you allow analytics, PostHog&apos;s <code>ph_…_posthog</code> cookie holds the
+          random visitor identifier for one year, and PostHog keeps the same identifier and the
+          current session in local storage.
         </li>
       </ul>
       <p>The app sets only cookies that the service needs, so there is nothing to consent to:</p>

@@ -3,13 +3,15 @@
 :root {
   --radius: 0.375rem;
   --button-focus: #2a26ec;
-  /* Floating layers such as the cookie banner, as in the app (DESIGN.md, Elevation). */
+  /* Floating layers such as the cookie banner and its settings, as in the app (DESIGN.md, Elevation). */
   --float-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px -6px rgb(0 0 0 / 0.14);
+  --dialog-shadow: 0 2px 4px rgb(0 0 0 / 0.06), 0 24px 48px -12px rgb(0 0 0 / 0.22);
 }
 
 .dark {
   --button-focus: #8f8cff;
   --float-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -6px rgb(0 0 0 / 0.6);
+  --dialog-shadow: 0 2px 4px rgb(0 0 0 / 0.4), 0 24px 48px -12px rgb(0 0 0 / 0.7);
 }
 
 @utility raised-button {

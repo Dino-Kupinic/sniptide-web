@@ -16,13 +16,14 @@
     "check:agents": "bun scripts/check-agent-discovery.ts"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "@sniptide/ui": "^0.1.1",
     "lucide-react": "^1.43.0",
     "next": "16.4.3",
     "posthog-js": "^1.438.7",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "@modelcontextprotocol/sdk": "^1.32.1",
     "zod": "^4.0.0"
   },
   "devDependencies": {

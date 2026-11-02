@@ -1,10 +1,16 @@
 "use client"
 
+import { Dialog } from "@base-ui/react/dialog"
+import { Switch } from "@sniptide/ui/components/switch"
 import { cn } from "@sniptide/ui/lib/utils"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { isAnalyticsExcluded } from "@/lib/analytics-preference"
 import {
-  type ConsentChoice,
+  type Consent,
+  type ConsentCategory,
+  fullConsent,
+  noConsent,
+  normalizeConsent,
   onConsentSettingsOpen,
   openConsentSettings,
   readConsent,
@@ -14,78 +20,234 @@ import { posthogKey } from "@/lib/posthog"
 import { track } from "@/lib/tracking"
 
 const button =
-  "raised-button flex h-10 flex-1 items-center justify-center px-4 text-sm leading-5 font-medium sm:h-9"
+  "raised-button flex h-10 items-center justify-center px-4 text-sm leading-5 font-medium whitespace-nowrap sm:h-9"
+const primary = cn(button, "bg-primary text-primary-foreground hover:bg-[#3a36ff]")
+const secondary = cn(
+  button,
+  "bg-secondary text-secondary-foreground [--button-depth:#d0d0d0] hover:bg-[#e8e8e8] dark:[--button-depth:#383838] dark:hover:bg-[#2a2a2a]",
+)
+const link =
+  "text-[#2a26ec] underline underline-offset-2 hover:no-underline dark:text-[#8f8cff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
 
-// Asks once per six months whether PostHog may use cookies (lib/tracking.ts). Reject and Accept
-// share one size and one row. The banner never blocks the page, and without a PostHog key there is
-// nothing to ask about, so it stays hidden.
+type Action = "accept_all" | "reject_all" | "save"
+type Source = "banner" | "settings"
+
+const categories: { id: ConsentCategory | "essential"; label: string; description: string }[] = [
+  {
+    id: "essential",
+    label: "Essential",
+    description: "Remembers this choice for six months. It is always on.",
+  },
+  {
+    id: "analytics",
+    label: "Analytics",
+    description:
+      "A PostHog cookie lets us see which pages lead to sign-up across visits and draw heatmaps from clicks. Without it we still count visits, without cookies.",
+  },
+  {
+    id: "replay",
+    label: "Session replay",
+    description:
+      "Records clicks, scrolling and mouse movement on this site so we can watch where visitors get stuck. It needs analytics.",
+  },
+]
+
+// Asks once per six months which kinds of cookies PostHog may use (lib/tracking.ts). The banner
+// offers Reject all and Accept all at the same size, and Settings opens a switch per category.
+// Neither blocks the page. Without a PostHog key there is nothing to ask about, so both stay hidden.
 export function ConsentBanner() {
-  const [open, setOpen] = useState(false)
-  const shownFrom = useRef<string | null>(null)
+  const [banner, setBanner] = useState(false)
+  const [settings, setSettings] = useState(false)
+  const [draft, setDraft] = useState<Consent>(noConsent)
+  const settingsSource = useRef<Source>("banner")
+
+  const openSettings = useCallback((from: Source) => {
+    settingsSource.current = from
+    setDraft(readConsent() ?? noConsent)
+    setSettings(true)
+    track("consent_banner_shown", { trigger: from === "banner" ? "banner_settings" : "settings" })
+  }, [])
 
   useEffect(() => {
     if (!posthogKey || isAnalyticsExcluded()) return
-    const show = (trigger: string) => {
-      shownFrom.current = trigger
-      setOpen(true)
-      track("consent_banner_shown", { trigger })
+    if (readConsent() === null) {
+      setBanner(true)
+      track("consent_banner_shown", { trigger: "first_visit" })
     }
-    if (readConsent() === "pending") show("first_visit")
-    return onConsentSettingsOpen(() => show("settings"))
-  }, [])
+    return onConsentSettingsOpen(() => openSettings("settings"))
+  }, [openSettings])
 
-  function choose(choice: ConsentChoice) {
-    writeConsent(choice)
-    track("consent_updated", { status: choice, source: shownFrom.current ?? "first_visit" })
-    setOpen(false)
+  function choose(consent: Consent, action: Action, source: Source) {
+    const next = normalizeConsent(consent)
+    writeConsent(next)
+    track("consent_updated", { action, source, ...next })
+    setBanner(false)
+    setSettings(false)
   }
 
-  if (!open) return null
+  function toggle(category: ConsentCategory, on: boolean) {
+    setDraft((current) => {
+      if (category === "analytics") return normalizeConsent({ ...current, analytics: on })
+      // Turning replay on turns analytics on, since replay needs it.
+      return { analytics: current.analytics || on, replay: on }
+    })
+  }
 
   return (
-    <section
-      aria-label="Cookie consent"
-      className={cn(
-        "fixed inset-x-4 bottom-4 z-40 flex flex-col gap-4 rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-(--float-shadow)",
-        "sm:inset-x-auto sm:bottom-6 sm:left-6 sm:w-100",
-        "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-200",
-      )}
-    >
-      <p className="text-sm leading-5">
-        We count visits without cookies. If you accept, we also use cookies and session replays to
-        see which parts of this site lead people to sign up. We never use them for ads. Read the{" "}
-        <a
-          href="/privacy#cookies"
-          className="text-[#2a26ec] underline underline-offset-2 hover:no-underline dark:text-[#8f8cff]"
-        >
-          privacy policy
-        </a>
-        .
-      </p>
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => choose("denied")}
+    <>
+      {banner && !settings && (
+        <section
+          aria-label="Cookie consent"
           className={cn(
-            button,
-            "bg-secondary text-secondary-foreground [--button-depth:#d0d0d0] hover:bg-[#e8e8e8] dark:[--button-depth:#383838] dark:hover:bg-[#2a2a2a]",
+            "fixed inset-x-4 bottom-4 z-40 flex flex-col gap-4 rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-(--float-shadow)",
+            "sm:inset-x-auto sm:bottom-6 sm:left-6 sm:w-100",
+            "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-200",
           )}
         >
-          Reject
-        </button>
-        <button
-          type="button"
-          onClick={() => choose("granted")}
-          className={cn(button, "bg-primary text-primary-foreground hover:bg-[#3a36ff]")}
-        >
-          Accept
-        </button>
-      </div>
-    </section>
+          <p className="text-sm leading-5">
+            We count visits without cookies. With your consent, we also use cookies for analytics
+            and session replays to see which parts of this site lead people to sign up. We never use
+            them for ads. Read the{" "}
+            <a href="/privacy#cookies" className={link}>
+              privacy policy
+            </a>
+            .
+          </p>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex flex-1 gap-2">
+              <button
+                type="button"
+                onClick={() => choose(noConsent, "reject_all", "banner")}
+                className={cn(secondary, "flex-1")}
+              >
+                Reject all
+              </button>
+              <button
+                type="button"
+                onClick={() => choose(fullConsent, "accept_all", "banner")}
+                className={cn(primary, "flex-1")}
+              >
+                Accept all
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={() => openSettings("banner")}
+              className="h-10 rounded-lg px-3 text-sm leading-5 font-medium hover:bg-muted sm:h-9 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
+            >
+              Settings
+            </button>
+          </div>
+        </section>
+      )}
+
+      <Dialog.Root open={settings} onOpenChange={setSettings}>
+        <Dialog.Portal>
+          <Dialog.Backdrop className="fixed inset-0 z-50 bg-foreground/20 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none dark:bg-black/60" />
+          <Dialog.Popup
+            className={cn(
+              "fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-lg border border-border bg-popover p-6 text-popover-foreground shadow-(--dialog-shadow) outline-none",
+              "transition-[scale,opacity] duration-150 data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:opacity-0 motion-reduce:transition-none",
+            )}
+          >
+            <Dialog.Title className="font-heading text-xl leading-7 font-medium tracking-[-0.02em]">
+              Cookie settings
+            </Dialog.Title>
+            <Dialog.Description className="text-sm leading-5 text-muted-foreground">
+              Choose what PostHog may store in your browser. You can change this at any time with
+              the Cookies link at the bottom of every page.
+            </Dialog.Description>
+
+            <ul className="flex shrink-0 flex-col divide-y divide-border overflow-hidden rounded-lg border border-border">
+              {categories.map((category) => (
+                <CategoryRow
+                  key={category.id}
+                  label={category.label}
+                  description={category.description}
+                  checked={category.id === "essential" ? true : draft[category.id]}
+                  disabled={category.id === "essential"}
+                  onChange={(on) => category.id !== "essential" && toggle(category.id, on)}
+                />
+              ))}
+            </ul>
+
+            <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:items-center">
+              <div className="flex flex-1 gap-2">
+                <button
+                  type="button"
+                  onClick={() => choose(noConsent, "reject_all", settingsSource.current)}
+                  className={cn(secondary, "flex-1 sm:flex-none")}
+                >
+                  Reject all
+                </button>
+                <button
+                  type="button"
+                  onClick={() => choose(fullConsent, "accept_all", settingsSource.current)}
+                  className={cn(secondary, "flex-1 sm:flex-none")}
+                >
+                  Accept all
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => choose(draft, "save", settingsSource.current)}
+                className={primary}
+              >
+                Save choices
+              </button>
+            </div>
+
+            <p className="text-sm leading-5 text-muted-foreground">
+              Read how we handle your data in the{" "}
+              <a href="/privacy#cookies" className={link}>
+                privacy policy
+              </a>
+              .
+            </p>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
+    </>
   )
 }
 
-// Reopens the banner, for the footer and the privacy policy.
+function CategoryRow({
+  label,
+  description,
+  checked,
+  disabled,
+  onChange,
+}: {
+  label: string
+  description: string
+  checked: boolean
+  disabled: boolean
+  onChange: (on: boolean) => void
+}) {
+  const id = useId()
+  return (
+    <li className="flex items-start gap-4 p-4">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <label htmlFor={id} className="text-sm leading-5 font-medium">
+          {label}
+        </label>
+        <p id={`${id}-description`} className="text-sm leading-5 text-muted-foreground">
+          {description}
+        </p>
+      </div>
+      <Switch
+        id={id}
+        checked={checked}
+        disabled={disabled}
+        onCheckedChange={onChange}
+        aria-describedby={`${id}-description`}
+        className="mt-0.5 rounded-sm disabled:opacity-60"
+      />
+    </li>
+  )
+}
+
+// Opens the cookie settings, for the footer and the privacy policy.
 export function ConsentSettingsButton({
   className,
   children = "Cookies",
