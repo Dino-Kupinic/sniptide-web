@@ -103,26 +103,28 @@ export function SiteHeader({ stars }: { stars: number | null }) {
       className="sticky top-0 z-30 border-b border-[#e8e8e8] bg-white text-[#0a0a0a] dark:border-[#222222] dark:bg-[#0a0a0a] dark:text-white"
     >
       <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-5 md:h-16 md:px-10">
-        <a href="/home" className={cn("shrink-0 lg:w-60", focusRing)}>
-          <span className="flex items-center gap-1.75">
-            <LogoMark className="h-6 w-[25px] text-[#2a26ec] dark:text-white" />
-            <Wordmark className="mt-px h-[18px] w-[111px]" />
-            <span className="sr-only">Sniptide</span>
-          </span>
-        </a>
+        <div className="flex min-w-0 items-center gap-8">
+          <a href="/home" className={cn("shrink-0", focusRing)}>
+            <span className="flex items-center gap-1.75">
+              <LogoMark className="h-6 w-[25px] text-[#2a26ec] dark:text-white" />
+              <Wordmark className="mt-px h-[18px] w-[111px]" />
+              <span className="sr-only">Sniptide</span>
+            </span>
+          </a>
 
-        <nav
-          aria-label="Main navigation"
-          className="hidden items-center gap-1 whitespace-nowrap lg:flex"
-        >
-          {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className={cn(navLink, focusRing)}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
+          <nav
+            aria-label="Main navigation"
+            className="-ml-3 hidden items-center gap-1 whitespace-nowrap lg:flex"
+          >
+            {navLinks.map((link) => (
+              <a key={link.label} href={link.href} className={cn(navLink, focusRing)}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
 
-        <div className="flex shrink-0 items-center justify-end gap-2 lg:w-[21rem]">
+        <div className="flex shrink-0 items-center justify-end gap-2">
           <a
             href={links.github}
             aria-label={
