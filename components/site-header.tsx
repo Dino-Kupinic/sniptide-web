@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@sniptide/ui/lib/utils"
-import { ChevronRightIcon, MenuIcon, XIcon } from "lucide-react"
+import { ChevronRightIcon, MenuIcon, StarIcon, XIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { links } from "@/lib/links"
@@ -17,6 +17,30 @@ function GitHubMark({ className }: { className: string }) {
     <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 .297a12 12 0 0 0-3.793 23.4c.6.111.82-.258.82-.577 0-.285-.011-1.04-.016-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.236 1.84 1.236 1.07 1.834 2.807 1.304 3.492.997.108-.776.418-1.305.762-1.604-2.665-.304-5.466-1.333-5.466-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 0 1 6.006 0c2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.873.12 3.176.77.84 1.233 1.91 1.233 3.221 0 4.61-2.806 5.624-5.479 5.921.43.372.823 1.102.823 2.221 0 1.604-.014 2.898-.014 3.293 0 .322.216.694.825.576A12.002 12.002 0 0 0 12 .297z" />
     </svg>
+  )
+}
+
+function StarCount({
+  formattedStars,
+  showUnit = false,
+}: {
+  formattedStars: string | null
+  showUnit?: boolean
+}) {
+  if (!formattedStars) return null
+
+  return (
+    <span className="inline-flex items-center gap-1">
+      <StarIcon
+        aria-hidden="true"
+        className="size-3.5 fill-[#f2b400] text-[#bb8200]"
+        strokeWidth={1.5}
+      />
+      <span>
+        {formattedStars}
+        {showUnit && " stars"}
+      </span>
+    </span>
   )
 }
 
@@ -111,7 +135,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             )}
           >
             <GitHubMark className="size-5" />
-            {formattedStars && <span>{formattedStars}</span>}
+            <StarCount formattedStars={formattedStars} />
           </a>
           <span
             aria-hidden="true"
@@ -170,7 +194,8 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           ))}
           <a href={links.github} className={cn(navLink, "h-11 gap-2", focusRing)}>
             <GitHubMark className="size-4" />
-            <span>Star on GitHub{formattedStars && ` · ${formattedStars} stars`}</span>
+            <span>Star on GitHub{formattedStars && " · "}</span>
+            <StarCount formattedStars={formattedStars} showUnit />
           </a>
           <a href={links.signIn} className={cn(navLink, "h-11", focusRing)}>
             Sign in
