@@ -27,7 +27,9 @@ export function SiteHeader({ stars }: { stars: number | null }) {
   const formattedStars =
     stars === null
       ? null
-      : new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(stars)
+      : new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(
+          stars,
+        )
 
   useEffect(() => {
     if (!mobileOpen) return
