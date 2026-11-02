@@ -62,7 +62,7 @@ export function ConsentBanner() {
 
   const openSettings = useCallback((from: Source) => {
     settingsSource.current = from
-    setDraft(readConsent() ?? noConsent)
+    setDraft(readConsent() ?? fullConsent)
     setSettings(true)
     track("consent_banner_shown", { trigger: from === "banner" ? "banner_settings" : "settings" })
   }, [])
