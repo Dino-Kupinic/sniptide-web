@@ -34,7 +34,7 @@ export function LegalPage({
         Skip to content
       </a>
       <header className="border-b border-[#e8e8e8] dark:border-[#222222]">
-        <div className="flex h-14 items-center px-5 md:h-18 md:px-10">
+        <div className="mx-auto flex h-14 max-w-[1440px] items-center px-5 md:h-16 md:px-10">
           <a href="/home" className={focusRing}>
             <span className="flex items-center gap-1.75">
               <LogoMark className="h-6 w-[25px] text-[#2a26ec] dark:text-white" />

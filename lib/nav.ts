@@ -4,5 +4,4 @@ export const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Self-host", href: links.selfHost },
   { label: "Docs", href: links.docs },
-  { label: "GitHub", href: links.github },
 ]

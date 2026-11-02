@@ -52,13 +52,13 @@
 
 html {
   scroll-behavior: smooth;
-  /* Section links land below the sticky header (h-14, md:h-18). */
+  /* Section links land below the sticky header (h-14, md:h-16). */
   scroll-padding-top: 56px;
 }
 
 @media (width >= 48rem) {
   html {
-    scroll-padding-top: 72px;
+    scroll-padding-top: 64px;
   }
 }
 
