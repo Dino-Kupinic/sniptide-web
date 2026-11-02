@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { ConsentSettingsButton } from "@/components/consent-banner"
 import { LegalPage } from "@/components/legal-page"
 import { analyticsInEu, authority, hosting, operator } from "@/lib/legal"
 import { app } from "@/lib/links"
@@ -50,18 +51,37 @@ export default function Privacy() {
 
       <h3>Analytics on the website</h3>
       <p>
-        We measure visits and clicks on the website with PostHog. The site sets no analytics cookies
-        and stores no visitor identifier in your browser. Each event carries the page address, the
-        referrer, your browser and device type, your approximate location and the button or link you
-        clicked. Session recording is off.
+        We measure visits and clicks on the website with PostHog. Each event carries the page
+        address, the referrer, your browser and device type, your approximate location, the section
+        you scrolled to and the button or link you clicked.
       </p>
       <p>
-        Your browser sends these events to sniptide.com, which passes them on to PostHog together
-        with your IP address. PostHog turns your IP address, browser and the site into an identifier
-        with a salt that changes every day, so we can count visitors for one day but cannot follow
-        anyone from one day to the next. {analyticsStorage} PostHog acts as our processor under a
-        data processing agreement. The legal basis is our legitimate interest in knowing how the
-        site is used (Art. 6(1)(f) GDPR).
+        Unless you accept cookies, the site sets no analytics cookies and stores no visitor
+        identifier in your browser. Your browser sends these events to sniptide.com, which passes
+        them on to PostHog together with your IP address. PostHog turns your IP address, browser and
+        the site into an identifier with a salt that changes every day, so we can count visitors for
+        one day but cannot follow anyone from one day to the next. The legal basis is our legitimate
+        interest in knowing how the site is used (Art. 6(1)(f) GDPR).
+      </p>
+      <p>
+        If you accept cookies in the banner, PostHog stores a random visitor identifier in a cookie
+        and in your browser&apos;s local storage. It lets us see how one visitor moves across
+        sniptide.com and the app over several visits, for example from a page on this site to
+        signing up. PostHog then also records your session on this website, meaning the pages you
+        see, your clicks, mouse movement and scrolling, so we can replay it, and draws heatmaps from
+        the clicks. The website has no forms, so a recording never contains anything you typed. We
+        do not use any of this for advertising. The legal basis is your consent (Art. 6(1)(a) GDPR
+        and § 165(3) TKG 2021). You can withdraw it at any time with{" "}
+        <ConsentSettingsButton className="text-[#2a26ec] underline underline-offset-2 hover:no-underline dark:text-[#8f8cff]">
+          cookie settings
+        </ConsentSettingsButton>{" "}
+        or the Cookies link at the bottom of every page, and PostHog&apos;s cookie and local storage
+        are then removed.
+      </p>
+      <p>
+        {analyticsStorage} PostHog acts as our processor under a data processing agreement. Session
+        recordings are kept for [replay retention set in PostHog, for example 30 days], and events
+        for [event retention set in PostHog].
       </p>
       <p>
         The app reports to the same PostHog project in the same way, with explicit events such as
@@ -69,8 +89,10 @@ export default function Privacy() {
         titles, file names or links.
       </p>
       <p>
-        Because these events cannot be tied to you, we cannot look up or delete yours on request.
-        Blocking requests to <code>sniptide.com/_site/ph</code> in your browser stops them.
+        Events sent without cookies cannot be tied to you, so we cannot look up or delete yours on
+        request. If you accepted cookies, write to us with the identifier from the{" "}
+        <code>ph_…_posthog</code> cookie and we delete its events and recordings. Blocking requests
+        to <code>sniptide.com/_site/ph</code> in your browser stops them.
       </p>
       <p>
         You can also <a href="/_site/analytics">exclude this browser from website analytics</a> and{" "}
@@ -120,11 +142,22 @@ export default function Privacy() {
         pastes (Art. 6(1)(f) GDPR).
       </p>
 
-      <h2>Cookies</h2>
-      <p>
-        The website sets no cookies. The app sets only cookies that the service needs, so there is
-        nothing to consent to:
-      </p>
+      <h2 id="cookies">Cookies</h2>
+      <p>The website sets one cookie on its own and two more only if you accept them:</p>
+      <ul>
+        <li>
+          <code>sniptide_consent</code> saves your answer to the cookie banner for six months, so
+          the banner does not ask again on every page. It is valid for sniptide.com and its
+          subdomains, so the app can respect the same answer. It is needed to honor your choice (§
+          165(3) TKG 2021).
+        </li>
+        <li>
+          Only after you accept, PostHog&apos;s <code>ph_…_posthog</code> cookie holds the random
+          visitor identifier for one year, and PostHog keeps the same identifier and the current
+          session in local storage.
+        </li>
+      </ul>
+      <p>The app sets only cookies that the service needs, so there is nothing to consent to:</p>
       <ul>
         <li>
           A session cookie keeps you signed in. It is valid for sniptide.com and its subdomains so
