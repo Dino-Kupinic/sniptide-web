@@ -120,7 +120,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           <a
             href={links.signIn}
             className={cn(
-              "hidden px-3.5 text-[15px] leading-4.5 font-medium hover:opacity-70 md:block",
+              "raised-button hidden h-9 items-center border border-[#d8d8d8] bg-white [--button-depth:#d0d0d0] px-4 text-sm font-semibold text-[#0a0a0a] hover:bg-[#f7f7f7] md:flex md:h-12 dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:hover:bg-[#1c1c1c] dark:[--button-depth:#383838]",
               focusRing,
             )}
           >
@@ -129,7 +129,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           <a
             href={links.signUp}
             className={cn(
-              "raised-button flex h-9 items-center gap-2 bg-[#2a26ec] px-3.5 text-[15px] leading-4.5 font-semibold text-white hover:bg-[#3a36ff] md:h-10 md:px-4",
+              "raised-button flex h-9 items-center gap-2 border border-[#2a26ec] bg-[#2a26ec] px-4 text-sm font-semibold text-white hover:border-[#3a36ff] hover:bg-[#3a36ff] md:h-12 md:px-4.5",
               focusRing,
             )}
           >
