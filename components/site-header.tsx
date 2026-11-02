@@ -121,7 +121,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center justify-end gap-2 lg:w-72">
+        <div className="flex shrink-0 items-center justify-end gap-2 lg:w-[21rem]">
           <a
             href={links.github}
             aria-label={
@@ -130,7 +130,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
                 : "Star Sniptide on GitHub"
             }
             className={cn(
-              "hidden items-center gap-2 px-2 text-[15px] leading-4.5 font-medium hover:opacity-70 lg:flex",
+              "hidden shrink-0 items-center gap-2 whitespace-nowrap px-2 text-[15px] leading-4.5 font-medium hover:opacity-70 lg:flex",
               focusRing,
             )}
           >
@@ -144,7 +144,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           <a
             href={links.signIn}
             className={cn(
-              "raised-button hidden h-9 items-center border border-[#d8d8d8] bg-white [--button-depth:#d0d0d0] px-4 text-sm font-semibold text-[#0a0a0a] hover:bg-[#f7f7f7] md:flex md:h-12 dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:hover:bg-[#1c1c1c] dark:[--button-depth:#383838]",
+              "raised-button hidden h-9 shrink-0 items-center whitespace-nowrap border border-[#d8d8d8] bg-white [--button-depth:#d0d0d0] px-4 text-sm font-semibold text-[#0a0a0a] hover:bg-[#f7f7f7] md:flex md:h-12 dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:hover:bg-[#1c1c1c] dark:[--button-depth:#383838]",
               focusRing,
             )}
           >
@@ -153,7 +153,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           <a
             href={links.signUp}
             className={cn(
-              "raised-button flex h-9 items-center gap-2 border border-[#2a26ec] bg-[#2a26ec] px-4 text-sm font-semibold text-white hover:border-[#3a36ff] hover:bg-[#3a36ff] md:h-12 md:px-4.5",
+              "raised-button flex h-9 shrink-0 items-center gap-2 whitespace-nowrap border border-[#2a26ec] bg-[#2a26ec] px-4 text-sm font-semibold text-white hover:border-[#3a36ff] hover:bg-[#3a36ff] md:h-12 md:px-4.5",
               focusRing,
             )}
           >
