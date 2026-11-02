@@ -22,7 +22,7 @@ export function Hero() {
         <p className="text-base leading-[1.5] text-[#6b6b6b] md:text-[19px] dark:text-[#a3a3a3]">
           {heroSummary}
         </p>
-        <div className="flex flex-col gap-2 pt-1 md:flex-row md:gap-2.5 md:pt-1.5">
+        <div className="flex flex-col gap-2 pt-1 md:flex-row md:flex-wrap md:gap-2.5 md:pt-1.5">
           <a
             href={links.newPaste}
             className="raised-button flex h-12 items-center justify-center gap-2.5 bg-[#2a26ec] px-5.5 text-base leading-5 font-semibold text-white hover:bg-[#3a36ff]"

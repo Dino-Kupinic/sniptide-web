@@ -11,16 +11,20 @@ import { SelfHost } from "@/components/self-host"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { WorksWith } from "@/components/works-with"
+import { getGithubStars } from "@/lib/github-stars"
 
 // The same page as /. The canonical link folds it into / for search engines; adding noindex as
 // well would send them two conflicting signals.
 export const metadata: Metadata = { alternates: { canonical: "/" } }
 
-export default function Home() {
+export const revalidate = 3600
+
+export default async function Home() {
+  const stars = await getGithubStars()
   return (
     <div className="text-[#0a0a0a] dark:text-white">
       <JsonLd />
-      <SiteHeader />
+      <SiteHeader stars={stars} />
       <main>
         <Hero />
         <WorksWith />
