@@ -24,9 +24,9 @@ export default async function Home() {
   return (
     <div className="text-[#0a0a0a] dark:text-white">
       <JsonLd />
-      <SiteHeader />
+      <SiteHeader stars={stars} />
       <main>
-        <Hero stars={stars} />
+        <Hero />
         <WorksWith />
         <ProductBand />
         <Features />
@@ -34,7 +34,7 @@ export default async function Home() {
         <Analytics />
         <RawLinks />
         <SelfHost />
-        <Cta stars={stars} />
+        <Cta />
       </main>
       <SiteFooter />
     </div>

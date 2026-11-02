@@ -1,6 +1,6 @@
 import { links } from "@/lib/links"
 
-export function Cta({ stars }: { stars: number | null }) {
+export function Cta() {
   return (
     <section
       data-cta-location="cta"
@@ -25,12 +25,6 @@ export function Cta({ stars }: { stars: number | null }) {
           className="raised-button flex h-11 items-center bg-[#4744f0] [--button-focus:white] px-4.5 text-[15px] leading-5 font-medium text-white hover:bg-[#5552f2] dark:bg-[#2a26ec] dark:hover:bg-[#3a36ff]"
         >
           Sign in
-        </a>
-        <a
-          href={links.github}
-          className="raised-button flex h-11 items-center bg-[#4744f0] [--button-focus:white] px-4.5 text-[15px] leading-5 font-medium text-white hover:bg-[#5552f2] dark:bg-[#2a26ec] dark:hover:bg-[#3a36ff]"
-        >
-          Star on GitHub{stars !== null && <span> · {stars.toLocaleString("en-US")} stars</span>}
         </a>
       </div>
     </section>

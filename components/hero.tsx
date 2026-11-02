@@ -2,7 +2,7 @@ import { PixelCanvas } from "@/components/pixel-canvas"
 import { links } from "@/lib/links"
 import { heroSummary, heroTitle } from "@/lib/site"
 
-export function Hero({ stars }: { stars: number | null }) {
+export function Hero() {
   return (
     <section
       data-cta-location="hero"
@@ -35,12 +35,6 @@ export function Hero({ stars }: { stars: number | null }) {
             className="raised-button flex h-12 items-center justify-center bg-[#f2f2f2] [--button-depth:#d0d0d0] dark:[--button-depth:#383838] px-5.5 text-base leading-5 font-semibold text-[#0a0a0a] hover:bg-[#e8e8e8] dark:bg-[#1c1c1c] dark:text-white dark:hover:bg-[#262626]"
           >
             Self-host Sniptide
-          </a>
-          <a
-            href={links.github}
-            className="raised-button flex h-12 items-center justify-center gap-2 bg-[#f2f2f2] [--button-depth:#d0d0d0] px-5.5 text-base leading-5 font-semibold text-[#0a0a0a] hover:bg-[#e8e8e8] dark:bg-[#1c1c1c] dark:text-white dark:hover:bg-[#262626] dark:[--button-depth:#383838]"
-          >
-            Star on GitHub{stars !== null && <span> · {stars.toLocaleString("en-US")} stars</span>}
           </a>
         </div>
       </div>
