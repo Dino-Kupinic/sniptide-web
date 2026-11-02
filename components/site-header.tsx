@@ -31,15 +31,13 @@ function StarCount({
 
   return (
     <span className="inline-flex items-center gap-1">
+      <span>{formattedStars}</span>
       <StarIcon
         aria-hidden="true"
         className="size-3.5 fill-[#f2b400] text-[#bb8200]"
         strokeWidth={1.5}
       />
-      <span>
-        {formattedStars}
-        {showUnit && " stars"}
-      </span>
+      {showUnit && <span>stars</span>}
     </span>
   )
 }
