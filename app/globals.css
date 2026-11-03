@@ -86,3 +86,17 @@ body {
     transform: translateX(-100%);
   }
 }
+
+/* The shared content frame of the landing sections: a 20px gutter on phones, 40px on tablets and
+   120px on desktops, and never wider than 1280px, so every section lines up on wide screens. */
+@utility section-frame {
+  padding-inline: max(1.25rem, calc((100% - 1280px) / 2));
+
+  @media (width >= 48rem) {
+    padding-inline: max(2.5rem, calc((100% - 1280px) / 2));
+  }
+
+  @media (width >= 80rem) {
+    padding-inline: max(7.5rem, calc((100% - 1280px) / 2));
+  }
+}

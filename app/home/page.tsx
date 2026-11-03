@@ -35,7 +35,7 @@ export default async function Home() {
         <Recipes />
         <Secrets />
         <Sharing />
-        <SelfHost />
+        <SelfHost stars={stars} />
         <Proof />
         <Cta />
       </main>

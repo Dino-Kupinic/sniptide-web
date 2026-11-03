@@ -26,3 +26,14 @@ export const links = {
   selfHost: documentation.selfHosting.url,
   demo: demoUrl,
 }
+
+// Docs pages the landing sections link to next to the feature they explain.
+const docsUrl = documentation.home.url
+export const docsPages = {
+  sharing: `${docsUrl}/core-concepts/sharing`,
+  revisions: `${docsUrl}/core-concepts/revisions`,
+  analytics: `${docsUrl}/core-concepts/analytics`,
+  importGist: `${docsUrl}/getting-started/import-gist`,
+  sdks: `${docsUrl}/sdks`,
+  envSync: `${documentation.cli.url}#sync-env-files`,
+}

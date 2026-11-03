@@ -1,5 +1,5 @@
 import { SectionHeading } from "@/components/section-heading"
-import { documentation } from "@/lib/agent-docs"
+import { docsPages } from "@/lib/links"
 
 const variables = ["DATABASE_URL", "STRIPE_SECRET_KEY", "RESEND_API_KEY", "PORT"]
 
@@ -45,7 +45,7 @@ function Panel({
         className={
           accent
             ? "flex h-9 items-center justify-between border-b border-[#8f8cff]/40 px-3.5 text-[11px] text-[#8f8cff]"
-            : "flex h-9 items-center justify-between border-b border-[#2c2a2a] px-3.5 text-[11px] text-[#6b6b6b]"
+            : "flex h-9 items-center justify-between border-b border-[#2c2a2a] px-3.5 text-[11px] text-[#a3a3a3]"
         }
       >
         <span>{title}</span>
@@ -74,7 +74,7 @@ export function Secrets() {
     <section
       id="secrets"
       data-cta-location="secrets"
-      className="flex scroll-mt-4 flex-col gap-10 bg-[#0a0a0a] px-5 py-16 text-white [--button-focus:#8f8cff] md:gap-14 md:p-10 xl:p-30"
+      className="flex scroll-mt-4 flex-col gap-10 bg-[#0a0a0a] section-frame py-16 text-white [--button-focus:#8f8cff] md:gap-14 md:py-20 xl:py-30"
     >
       <SectionHeading
         claim="Your .env stays in sync and out of agent output."
@@ -82,7 +82,10 @@ export function Secrets() {
         reasonClassName="text-[#8f8cff]"
       />
 
-      <div className="grid items-stretch gap-2 font-mono text-[11px] leading-5 text-[#d4d4d4] lg:grid-cols-[minmax(0,1fr)_40px_minmax(0,0.8fr)_40px_minmax(0,1.2fr)] lg:gap-0">
+      <figure
+        aria-label="Illustration: a local .env file is pushed to an encrypted env group, and an agent runs the app with it while printing variable names only."
+        className="grid items-stretch gap-2 font-mono text-xs leading-5 text-[#d4d4d4] lg:grid-cols-[minmax(0,1fr)_40px_minmax(0,0.8fr)_40px_minmax(0,1.2fr)] lg:gap-0"
+      >
         <Panel title=".env" meta="~/acme/checkout">
           {
             "DATABASE_URL=postgres://db.acme…\nSTRIPE_SECRET_KEY=sk_live_51H…\nRESEND_API_KEY=re_8f2k…\nPORT=3000\n\n"
@@ -108,22 +111,22 @@ export function Secrets() {
           {"\n  ⎿ wrote .env · "}
           <span className="text-[#a3a3a3]">{variables.slice(0, 2).join(", ")}, …</span>
         </Panel>
-      </div>
+      </figure>
 
       <ul className="grid gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
         {facts.map((fact) => (
           <li key={fact.title} className="flex flex-col gap-1.5 border-t border-[#262626] pt-4">
             <h3 className="text-base leading-5.5 font-semibold">{fact.title}</h3>
-            <p className="text-sm leading-5.5 text-[#a3a3a3]">{fact.text}</p>
+            <p className="text-base leading-6 text-[#a3a3a3]">{fact.text}</p>
           </li>
         ))}
       </ul>
 
       <a
-        href={`${documentation.cli.url}#sync-env-files`}
+        href={docsPages.envSync}
         className="raised-button flex h-10 items-center self-start border border-[#3a3737] bg-[#0a0a0a] [--button-depth:#3a3737] px-4 text-sm leading-5 font-medium hover:bg-white/5"
       >
-        Sync your first .env
+        Read the env sync guide
       </a>
     </section>
   )

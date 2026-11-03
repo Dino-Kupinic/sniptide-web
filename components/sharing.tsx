@@ -2,7 +2,7 @@ import { cn } from "@sniptide/ui/lib/utils"
 import { EyeIcon, LockIcon, XIcon } from "lucide-react"
 import { PixelCanvas } from "@/components/pixel-canvas"
 import { SectionHeading } from "@/components/section-heading"
-import { links } from "@/lib/links"
+import { docsPages, links } from "@/lib/links"
 
 // The pink section looks the same in both themes. Small labels use the ink at 70%, which keeps
 // AA contrast on the pink, and only the large second line of the heading uses #a04577.
@@ -173,39 +173,50 @@ export function Sharing() {
     <section
       id="sharing"
       data-cta-location="sharing"
-      className="relative flex scroll-mt-4 flex-col gap-10 overflow-clip bg-[#fbd3ea] px-5 py-16 text-[#2b0a1f] md:gap-14 md:p-10 xl:p-30"
+      className="relative flex scroll-mt-4 flex-col gap-10 overflow-clip bg-[#fbd3ea] section-frame py-16 text-[#2b0a1f] md:gap-14 md:py-20 xl:py-30"
     >
       <PixelCanvas kind="grain" className="absolute inset-0 size-full opacity-35" />
 
-      <div className="relative flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <SectionHeading
-          claim="When a person needs it, send a link."
-          reason="Every link carries its own rules."
-          reasonClassName="text-[#a04577]"
-        />
-        <a
-          href={links.newPaste}
-          className="raised-button flex h-10 shrink-0 items-center gap-2 bg-[#2b0a1f] [--button-depth:#160510] [--button-focus:#2b0a1f] px-4 text-sm leading-5 font-medium text-[#fbd3ea] hover:bg-[#3d1230]"
-        >
-          <span className="size-2 bg-[#fbd3ea]" />
-          Create a paste
-        </a>
-      </div>
+      <SectionHeading
+        className="relative"
+        claim="When a person needs it, send a link."
+        reason="Every link carries its own rules."
+        reasonClassName="text-[#a04577]"
+      />
 
       <ul className="relative grid border-t border-l border-[#2b0a1f]/18 sm:grid-cols-2 lg:grid-cols-3">
         {tiles.map((tile) => (
           <li
             key={tile.title}
-            className="flex min-w-0 flex-col gap-6 border-r border-b border-[#2b0a1f]/18 p-5 md:p-7"
+            className="flex min-w-0 flex-col gap-6 border-r border-b border-[#2b0a1f]/18 p-6 md:p-8"
           >
-            <div className="flex h-28 items-center justify-center">{tile.visual}</div>
+            {/* The illustration repeats what the text below says, so screen readers skip it. */}
+            <div aria-hidden="true" className="flex h-28 items-center justify-center">
+              {tile.visual}
+            </div>
             <div className="flex flex-col gap-1.5">
               <h3 className="text-base leading-5.5 font-semibold">{tile.title}</h3>
-              <p className="text-sm leading-5.5 text-[#2b0a1f]/75">{tile.text}</p>
+              <p className="text-base leading-6 text-[#2b0a1f]/75">{tile.text}</p>
             </div>
           </li>
         ))}
       </ul>
+
+      <div className="relative flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+        <a
+          href={links.newPaste}
+          className="raised-button flex h-11 shrink-0 items-center gap-2 bg-[#2b0a1f] [--button-depth:#160510] [--button-focus:#2b0a1f] px-4 text-sm leading-5 font-medium text-[#fbd3ea] hover:bg-[#3d1230]"
+        >
+          <span className="size-2 bg-[#fbd3ea]" />
+          Create a paste
+        </a>
+        <a
+          href={docsPages.sharing}
+          className="text-base leading-6 font-medium underline decoration-[#2b0a1f]/40 underline-offset-4 hover:decoration-[#2b0a1f]"
+        >
+          Read how sharing works
+        </a>
+      </div>
     </section>
   )
 }

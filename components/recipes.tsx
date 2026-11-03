@@ -26,8 +26,8 @@ function Stage({ children }: { children: React.ReactNode }) {
 
 function Shell({ title, lines }: { title: string; lines: React.ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-[#2c2a2a] bg-[#1b1919] font-mono text-[11px] leading-5 text-[#d4d4d4]">
-      <div className="flex h-8 items-center border-b border-[#2c2a2a] px-3 text-[#6b6b6b]">
+    <div className="overflow-hidden rounded-lg border border-[#2c2a2a] bg-[#1b1919] font-mono text-xs leading-5 text-[#d4d4d4]">
+      <div className="flex h-8 items-center border-b border-[#2c2a2a] px-3 text-[#a3a3a3]">
         {title}
       </div>
       <div className="overflow-x-auto px-3 py-3 whitespace-pre">{lines}</div>
@@ -55,7 +55,11 @@ function CollectionCard() {
                 added && "bg-[#2a26ec] text-white dark:border-transparent",
               )}
             >
-              <span className={cn("w-3 text-[#8a8a8a]", added && "text-white/70")}>{i + 1}</span>
+              <span
+                className={cn("w-3 text-[#6b6b6b] dark:text-[#a3a3a3]", added && "text-white/70")}
+              >
+                {i + 1}
+              </span>
               <span className="grow">{step}</span>
               {added && <span className="text-[11px] text-white/80">added</span>}
             </li>
@@ -103,7 +107,7 @@ function Step({
       <Stage>{visual}</Stage>
       <div className="flex flex-col gap-1.5">
         <h3 className="text-base leading-5.5 font-semibold">{title}</h3>
-        <p className="text-sm leading-5.5 text-[#6b6b6b] dark:text-[#9a9a9a]">{children}</p>
+        <p className="text-base leading-6 text-[#6b6b6b] dark:text-[#9a9a9a]">{children}</p>
       </div>
     </li>
   )
@@ -114,7 +118,7 @@ export function Recipes() {
     <section
       id="recipes"
       data-cta-location="recipes"
-      className="flex scroll-mt-4 flex-col gap-8 border-t border-[#e8e8e8] bg-[#fafafa] px-5 py-16 text-[#1b1919] md:gap-12 md:p-10 xl:p-30 dark:border-[#1f1f1f] dark:bg-[#0f0f0f] dark:text-[#f5f5f5]"
+      className="flex scroll-mt-4 flex-col gap-8 border-t border-[#e8e8e8] bg-[#fafafa] section-frame py-16 text-[#1b1919] md:gap-12 md:py-20 xl:py-30 dark:border-[#1f1f1f] dark:bg-[#0f0f0f] dark:text-[#f5f5f5]"
     >
       <SectionHeading
         claim="Capture a folder once and restore it anywhere."
@@ -133,7 +137,7 @@ export function Recipes() {
           visual={<Shell title="~/acme/admin" lines={pull} />}
         >
           The CLI checks every path before it writes, and replaces a file only when you pass{" "}
-          <code className="font-mono text-[13px]">--force</code>.
+          <code className="font-mono text-[15px]">--force</code>.
         </Step>
       </ol>
 
