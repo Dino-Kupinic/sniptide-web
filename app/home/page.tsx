@@ -1,14 +1,13 @@
 import type { Metadata } from "next"
-import { Analytics } from "@/components/analytics"
 import { Cta } from "@/components/cta"
-import { Features } from "@/components/features"
 import { FunnelTracking } from "@/components/funnel-tracking"
 import { Hero } from "@/components/hero"
 import { JsonLd } from "@/components/json-ld"
+import { Overview } from "@/components/overview"
 import { ProductBand } from "@/components/product-band"
-import { RawLinks } from "@/components/raw-links"
-import { Rules } from "@/components/rules"
-import { SelfHost } from "@/components/self-host"
+import { Recipes } from "@/components/recipes"
+import { Secrets } from "@/components/secrets"
+import { Sharing } from "@/components/sharing"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { WorksWith } from "@/components/works-with"
@@ -30,12 +29,11 @@ export default async function Home() {
         <Hero />
         <WorksWith />
         <ProductBand />
-        <Features />
-        <Rules />
-        <Analytics />
-        <RawLinks />
-        <SelfHost />
-        <Cta />
+        <Overview />
+        <Recipes />
+        <Secrets />
+        <Sharing />
+        <Cta stars={stars} />
       </main>
       <SiteFooter />
       <FunnelTracking />

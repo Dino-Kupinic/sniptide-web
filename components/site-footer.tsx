@@ -2,6 +2,7 @@ import Image from "next/image"
 import grid from "@/assets/landing/footer-grid.png"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { ConsentSettingsButton } from "@/components/consent-banner"
+import { ThemeSwitch } from "@/components/theme-switch"
 import { legalLinks } from "@/lib/legal"
 import { links } from "@/lib/links"
 
@@ -40,13 +41,13 @@ export function SiteFooter() {
         alt=""
         aria-hidden="true"
         unoptimized
-        className="pointer-events-none absolute top-[-440px] left-[-60px] h-205 w-360 max-w-none invert hue-rotate-180 md:top-[calc(469px-max(1440px,100cqw)*700/1440)] md:left-1/2 md:h-auto md:w-[max(1440px,100cqw)] md:-translate-x-1/2 dark:mix-blend-lighten dark:invert-0 dark:hue-rotate-0"
+        className="pointer-events-none absolute top-[-440px] left-[-60px] max-md:[mask-image:linear-gradient(to_bottom,transparent_440px,black_600px)] h-205 w-360 max-w-none invert hue-rotate-180 md:top-[calc(469px-max(1440px,100cqw)*700/1440)] md:left-1/2 md:h-auto md:w-[max(1440px,100cqw)] md:-translate-x-1/2 dark:mix-blend-lighten dark:invert-0 dark:hue-rotate-0"
       />
       <div className="pointer-events-none absolute top-95 left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:top-145 md:left-30 md:h-80 md:w-300 dark:block" />
 
       <p className="absolute top-72 right-5 left-5 text-[15px] leading-5.5 md:top-112 md:right-auto md:left-6 md:w-120 md:text-base md:leading-5.75">
-        The pastebin for modern teams. Share code on the open web, or run Sniptide on your own
-        servers.
+        The pastebin for your agents. Keep the code you reuse in one library, on sniptide.com or on
+        your own server.
       </p>
 
       <nav className="absolute top-93 right-5 left-5 flex flex-wrap gap-x-3 gap-y-2.5 font-mono text-[13px] leading-4 tracking-[0.5px] uppercase md:top-113 md:right-6 md:left-auto md:gap-6">
@@ -71,8 +72,11 @@ export function SiteFooter() {
         <span className="sr-only">Sniptide</span>
       </div>
 
-      <div className="absolute right-5 bottom-5 left-5 flex flex-col-reverse gap-2 text-xs md:flex-row md:justify-between leading-4 md:right-6 md:left-6 dark:text-[#8a8a93]">
-        <p>© 2026 Sniptide</p>
+      <div className="absolute right-5 bottom-5 left-5 flex flex-col-reverse gap-3 text-xs md:flex-row md:items-center md:justify-between leading-4 md:right-6 md:left-6 dark:text-[#8a8a93]">
+        <div className="flex items-center justify-between gap-4 md:justify-start">
+          <p>© 2026 Sniptide</p>
+          <ThemeSwitch />
+        </div>
         <div className="flex flex-wrap gap-x-3 gap-y-2 font-mono uppercase md:gap-6">
           {legalLinks.map((item) => (
             <a

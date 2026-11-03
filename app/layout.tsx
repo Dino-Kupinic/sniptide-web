@@ -46,11 +46,17 @@ export const metadata: Metadata = {
   appleWebApp: { title: siteName },
 }
 
-// The page follows the visitor's color scheme. Set the class before first paint so dark visitors
-// never see a light flash, and keep it in sync if the system setting changes.
+// The page follows the visitor's color scheme unless they picked light or dark in the footer. Set
+// the class before first paint so dark visitors never see a light flash, and keep it in sync if
+// the system setting changes.
 const themeScript = `(() => {
   const query = matchMedia("(prefers-color-scheme: dark)")
-  const apply = () => document.documentElement.classList.toggle("dark", query.matches)
+  const apply = () => {
+    let theme = null
+    try { theme = localStorage.getItem("theme") } catch {}
+    const dark = theme === "dark" || (theme !== "light" && query.matches)
+    document.documentElement.classList.toggle("dark", dark)
+  }
   apply()
   query.addEventListener("change", apply)
 })()`
