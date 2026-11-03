@@ -4,8 +4,8 @@ import { Cta } from "@/components/cta"
 import { FunnelTracking } from "@/components/funnel-tracking"
 import { Hero } from "@/components/hero"
 import { JsonLd } from "@/components/json-ld"
+import { Overview } from "@/components/overview"
 import { ProductBand } from "@/components/product-band"
-import { Proof } from "@/components/proof"
 import { Recipes } from "@/components/recipes"
 import { Secrets } from "@/components/secrets"
 import { SelfHost } from "@/components/self-host"
@@ -31,12 +31,12 @@ export default async function Home() {
         <Hero />
         <WorksWith />
         <ProductBand />
+        <Overview />
         <Agents />
         <Recipes />
         <Secrets />
         <Sharing />
         <SelfHost stars={stars} />
-        <Proof />
         <Cta />
       </main>
       <SiteFooter />

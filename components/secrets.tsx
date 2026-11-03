@@ -1,3 +1,5 @@
+import secretsDark from "@/assets/landing/secrets-dark.webp"
+import { Screenshot } from "@/components/screenshot"
 import { SectionHeading } from "@/components/section-heading"
 import { docsPages } from "@/lib/links"
 
@@ -22,48 +24,22 @@ const facts = [
   },
 ]
 
-function Panel({
-  title,
-  meta,
-  children,
-  accent,
-}: {
-  title: string
-  meta: string
-  children: React.ReactNode
-  accent?: boolean
-}) {
+function Terminal() {
   return (
-    <div
-      className={
-        accent
-          ? "min-w-0 overflow-hidden rounded-lg border border-[#8f8cff] bg-[#141228]"
-          : "min-w-0 overflow-hidden rounded-lg border border-[#2c2a2a] bg-[#1b1919]"
-      }
-    >
-      <div
-        className={
-          accent
-            ? "flex h-9 items-center justify-between border-b border-[#8f8cff]/40 px-3.5 text-[11px] text-[#8f8cff]"
-            : "flex h-9 items-center justify-between border-b border-[#2c2a2a] px-3.5 text-[11px] text-[#a3a3a3]"
-        }
-      >
-        <span>{title}</span>
-        <span>{meta}</span>
+    <div className="min-w-0 overflow-hidden rounded-lg border border-[#2c2a2a] bg-[#1b1919] font-mono text-xs leading-5 text-[#d4d4d4] lg:shadow-[0_24px_48px_-12px_rgb(0_0_0/0.7)]">
+      <div className="flex h-9 items-center justify-between border-b border-[#2c2a2a] px-3.5 text-[11px] text-[#a3a3a3]">
+        <span>claude</span>
+        <span>~/acme/checkout</span>
       </div>
-      <div className="overflow-x-auto px-3.5 py-3.5 whitespace-pre">{children}</div>
-    </div>
-  )
-}
-
-function Arrow() {
-  return (
-    <div
-      aria-hidden="true"
-      className="flex items-center justify-center text-[#8f8cff] max-lg:h-8 max-lg:rotate-90"
-    >
-      <span className="h-px w-6 border-t border-dashed border-[#8f8cff]" />
-      <span className="size-1.5 bg-[#8f8cff]" />
+      <div className="overflow-x-auto px-3.5 py-3.5 whitespace-pre">
+        <span className="text-[#8f8cff]">● </span>
+        <span className="text-white">sniptide env run checkout -- bun dev</span>
+        {"\n  ⎿ Ready on http://localhost:3000\n"}
+        <span className="text-[#8f8cff]">● </span>
+        <span className="text-white">sniptide env pull checkout --json</span>
+        {"\n  ⎿ wrote .env · "}
+        <span className="text-[#a3a3a3]">{variables.slice(0, 2).join(", ")}, …</span>
+      </div>
     </div>
   )
 }
@@ -82,35 +58,17 @@ export function Secrets() {
         reasonClassName="text-[#8f8cff]"
       />
 
-      <figure
-        aria-label="Illustration: a local .env file is pushed to an encrypted env group, and an agent runs the app with it while printing variable names only."
-        className="grid items-stretch gap-2 font-mono text-xs leading-5 text-[#d4d4d4] lg:grid-cols-[minmax(0,1fr)_40px_minmax(0,0.8fr)_40px_minmax(0,1.2fr)] lg:gap-0"
-      >
-        <Panel title=".env" meta="~/acme/checkout">
-          {
-            "DATABASE_URL=postgres://db.acme…\nSTRIPE_SECRET_KEY=sk_live_51H…\nRESEND_API_KEY=re_8f2k…\nPORT=3000\n\n"
-          }
-          <span className="text-white">$ sniptide env push checkout</span>
-        </Panel>
-        <Arrow />
-        <Panel title="Env group checkout" meta="encrypted" accent>
-          {variables.map((name) => (
-            <span key={name} className="flex justify-between gap-4">
-              <span>{name}</span>
-              <span className="text-[#8f8cff]">••••••••••</span>
-            </span>
-          ))}
-        </Panel>
-        <Arrow />
-        <Panel title="claude" meta="~/acme/checkout">
-          <span className="text-[#8f8cff]">● </span>
-          <span className="text-white">sniptide env run checkout -- bun dev</span>
-          {"\n  ⎿ Ready on http://localhost:3000\n"}
-          <span className="text-[#8f8cff]">● </span>
-          <span className="text-white">sniptide env pull checkout --json</span>
-          {"\n  ⎿ wrote .env · "}
-          <span className="text-[#a3a3a3]">{variables.slice(0, 2).join(", ")}, …</span>
-        </Panel>
+      {/* The real env group page, with the agent's terminal laid over its corner. */}
+      <figure className="relative flex flex-col gap-3 lg:pb-16">
+        <Screenshot
+          light={secretsDark}
+          alt="The checkout env group in Sniptide with four variables whose values stay hidden: DATABASE_URL, STRIPE_SECRET_KEY, RESEND_API_KEY and PORT."
+          crop
+          className="border-[#262626] lg:w-[78%]"
+        />
+        <div className="lg:absolute lg:right-0 lg:bottom-0 lg:w-[44%]">
+          <Terminal />
+        </div>
       </figure>
 
       <ul className="grid gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
