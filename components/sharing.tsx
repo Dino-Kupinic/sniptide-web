@@ -249,7 +249,7 @@ function ProtectGraphic() {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 sm:grid-cols-2">
         <span
           className={cn(
             "flex h-10 items-center gap-2 rounded-lg border bg-white px-3 dark:bg-[#121111]",
@@ -443,7 +443,7 @@ function ConnectGraphic() {
       </div>
       <span
         className={cn(
-          "overflow-x-auto rounded-lg border bg-[#1b1919] px-3.5 py-3 font-mono text-xs leading-5 whitespace-pre text-white",
+          "overflow-x-auto rounded-lg border bg-[#1b1919] px-3.5 py-3 font-mono text-xs leading-5 whitespace-pre text-white max-sm:hidden",
           "border-[#2c2a2a]",
         )}
       >
@@ -643,7 +643,7 @@ export function Sharing() {
           <div
             role="tablist"
             aria-label="Features around a paste"
-            className="grid min-w-0 grow grid-cols-2 gap-1 sm:grid-cols-4"
+            className="grid min-w-0 grow grid-cols-4 gap-1"
           >
             {tabs.map((tab, i) => {
               const selected = i === active
@@ -662,7 +662,7 @@ export function Sharing() {
                   onClick={() => select(i)}
                   onKeyDown={onKeyDown}
                   className={cn(
-                    "relative flex h-11 items-center justify-center gap-2 overflow-hidden rounded-md text-base leading-6 font-medium focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none",
+                    "relative flex h-14 flex-col items-center justify-center gap-1 overflow-hidden rounded-md text-[13px] leading-4 font-medium sm:h-11 sm:flex-row sm:gap-2 sm:text-base sm:leading-6 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none",
                     selected
                       ? "bg-white shadow-[0_1px_2px_rgb(0_0_0/0.08)] dark:bg-[#1a1919]"
                       : cn(muted, "hover:bg-[#f4f4f4] dark:hover:bg-[#1a1919]"),
@@ -695,7 +695,7 @@ export function Sharing() {
             onClick={() => setStopped(!stopped)}
             aria-label={stopped ? "Play the tour" : "Pause the tour"}
             className={cn(
-              "flex size-11 shrink-0 items-center justify-center rounded-md hover:bg-[#f4f4f4] focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none motion-reduce:hidden dark:hover:bg-[#1a1919]",
+              "flex h-14 w-8 shrink-0 items-center justify-center rounded-md hover:bg-[#f4f4f4] sm:size-11 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none motion-reduce:hidden dark:hover:bg-[#1a1919]",
               muted,
             )}
           >
@@ -717,13 +717,13 @@ export function Sharing() {
               id={`${id}-panel-${i}`}
               aria-labelledby={`${id}-tab-${i}`}
               className={cn(
-                "grid items-center gap-10 p-5 [grid-area:1/1] motion-safe:transition-opacity motion-safe:duration-300 md:p-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14 lg:py-16",
+                "grid content-start items-center gap-8 p-4 [grid-area:1/1] sm:gap-10 sm:p-6 motion-safe:transition-opacity motion-safe:duration-300 md:p-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14 lg:py-16",
                 i === active ? "opacity-100" : "invisible opacity-0",
               )}
             >
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <h3 className="font-heading text-[26px] leading-8 font-medium tracking-[-0.025em] md:text-3xl md:leading-9">
+                  <h3 className="font-heading text-[28px] leading-8.5 font-medium tracking-[-0.025em] md:text-4xl md:leading-11">
                     {tab.title}
                   </h3>
                   <p className={cn("text-base leading-6.5", muted)}>{tab.summary}</p>
@@ -738,7 +738,7 @@ export function Sharing() {
                   {tab.features.map((feature) => (
                     <li
                       key={feature.title}
-                      className="flex flex-col gap-1.5 bg-[#fafafa] p-5 dark:bg-[#0c0b0b]"
+                      className="flex flex-col gap-1 bg-[#fafafa] p-4 sm:gap-1.5 sm:p-5 dark:bg-[#0c0b0b]"
                     >
                       <span className="flex items-center gap-2">
                         <feature.icon
@@ -748,7 +748,11 @@ export function Sharing() {
                         />
                         <span className="text-base leading-6 font-semibold">{feature.title}</span>
                       </span>
-                      <span className={cn("text-[15px] leading-5.5", muted)}>{feature.text}</span>
+                      <span
+                        className={cn("text-sm leading-5 sm:text-[15px] sm:leading-5.5", muted)}
+                      >
+                        {feature.text}
+                      </span>
                     </li>
                   ))}
                 </ul>

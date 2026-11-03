@@ -3,7 +3,7 @@ import { documentation } from "@/lib/agent-docs"
 import { links } from "@/lib/links"
 
 const outline =
-  "raised-button flex h-11 items-center gap-2 border border-[#e8e8e8] bg-white [--button-depth:#d0d0d0] px-4.5 text-[15px] leading-5 font-medium hover:border-[#1b1919] dark:border-[#262626] dark:bg-[#121216] dark:[--button-depth:#2a2a33] dark:hover:border-[#f5f5f5]"
+  "raised-button flex h-11 items-center justify-center gap-2 border border-[#e8e8e8] bg-white [--button-depth:#d0d0d0] px-3 text-sm leading-5 font-medium whitespace-nowrap hover:border-[#1b1919] sm:px-4.5 sm:text-[15px] dark:border-[#262626] dark:bg-[#121216] dark:[--button-depth:#2a2a33] dark:hover:border-[#f5f5f5]"
 
 // The closing section offers both ways in, the hosted app and your own server, and sits on the
 // footer's surface so the footer grid rises straight out of it.
@@ -34,10 +34,10 @@ export function Cta({ stars }: { stars: number | null }) {
               sign-in in the browser.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="grid grid-cols-2 gap-2.5 sm:flex">
             <a
               href={links.newPaste}
-              className="raised-button flex h-11 items-center gap-2 bg-[#2a26ec] px-4.5 text-[15px] leading-5 font-medium text-white hover:bg-[#3a36ff]"
+              className="raised-button flex h-11 items-center justify-center gap-2 bg-[#2a26ec] px-3 text-sm leading-5 font-medium whitespace-nowrap text-white hover:bg-[#3a36ff] sm:px-4.5 sm:text-[15px]"
             >
               <span className="size-2.25 bg-white" />
               Create a paste
@@ -56,13 +56,13 @@ export function Cta({ stars }: { stars: number | null }) {
               open source under AGPL-3.0.
             </p>
           </div>
-          <code className="flex h-11 items-center gap-2 self-start rounded-lg border border-[#e8e8e8] bg-[#fafafa] px-4 font-mono text-sm dark:border-[#262626] dark:bg-[#121216]">
+          <code className="flex h-14 w-full items-center gap-3 rounded-lg border border-[#e8e8e8] bg-[#fafafa] px-5 font-mono text-base dark:border-[#262626] dark:bg-[#121216]">
             <span className="text-[#6b6b6b] dark:text-[#a3a3a3]">$</span>
             docker compose up -d
           </code>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="grid grid-cols-2 gap-2.5 sm:flex">
             <a href={links.selfHost} className={outline}>
-              Read the self-host guide
+              Self-host guide
             </a>
             <a
               href={links.github}
