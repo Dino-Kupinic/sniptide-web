@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@sniptide/ui/lib/utils"
-import { ChevronRightIcon, MenuIcon, StarIcon, XIcon } from "lucide-react"
+import { ChevronRightIcon, StarIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { links } from "@/lib/links"
@@ -14,12 +14,34 @@ const navLink =
 // The two calls to action share one slim size: 32px including the raised edge.
 const headerButton =
   "raised-button h-[30px] shrink-0 items-center whitespace-nowrap border px-3 text-sm leading-5 font-medium"
+const secondaryButton =
+  "border-[#d8d8d8] bg-white text-[#0a0a0a] [--button-depth:#d0d0d0] hover:bg-[#f7f7f7] dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:[--button-depth:#383838] dark:hover:bg-[#1c1c1c]"
+const primaryButton =
+  "border-[#2a26ec] bg-[#2a26ec] text-white hover:border-[#3a36ff] hover:bg-[#3a36ff]"
+// Mobile menu rows: 48px touch targets on a hairline, the label in ink.
+const menuRow =
+  "flex h-12 items-center gap-3 border-b border-[#e8e8e8] text-base leading-6 font-medium text-[#0a0a0a] transition-colors active:text-[#6b6b6b] dark:border-[#222222] dark:text-white dark:active:text-[#a3a3a3]"
+// Rows and actions rise 4px into place one after another as the menu opens.
+const menuItem =
+  "translate-y-1 opacity-0 transition-[opacity,translate] duration-200 ease-out group-data-open:translate-y-0 group-data-open:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
 
 function GitHubMark({ className }: { className: string }) {
   return (
     <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 .297a12 12 0 0 0-3.793 23.4c.6.111.82-.258.82-.577 0-.285-.011-1.04-.016-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.236 1.84 1.236 1.07 1.834 2.807 1.304 3.492.997.108-.776.418-1.305.762-1.604-2.665-.304-5.466-1.333-5.466-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 0 1 6.006 0c2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.873.12 3.176.77.84 1.233 1.91 1.233 3.221 0 4.61-2.806 5.624-5.479 5.921.43.372.823 1.102.823 2.221 0 1.604-.014 2.898-.014 3.293 0 .322.216.694.825.576A12.002 12.002 0 0 0 12 .297z" />
     </svg>
+  )
+}
+
+// Two bars that cross into an X, so the toggle changes state in place.
+function MenuToggleIcon({ open }: { open: boolean }) {
+  const bar =
+    "absolute top-[calc(50%-0.75px)] left-0 h-[1.5px] w-4 rounded-full bg-current transition-transform duration-200 ease-out motion-reduce:transition-none"
+  return (
+    <span aria-hidden="true" className="relative block size-4">
+      <span className={cn(bar, open ? "rotate-45" : "-translate-y-[3.5px]")} />
+      <span className={cn(bar, open ? "-rotate-45" : "translate-y-[3.5px]")} />
+    </span>
   )
 }
 
@@ -65,11 +87,6 @@ export function SiteHeader({ stars }: { stars: number | null }) {
         toggleRef.current?.focus()
       }
     }
-    function onPointer(event: PointerEvent) {
-      if (event.target instanceof Node && !headerRef.current?.contains(event.target)) {
-        setMobileOpen(false)
-      }
-    }
     function onClick(event: MouseEvent) {
       if (
         event.target instanceof Element &&
@@ -83,14 +100,27 @@ export function SiteHeader({ stars }: { stars: number | null }) {
       if (event.matches) setMobileOpen(false)
     }
 
+    // The menu covers the page below the header, so the page stops scrolling and leaves the
+    // tab order until the menu closes.
+    const root = document.documentElement
+    const previousOverflow = root.style.overflow
+    root.style.overflow = "hidden"
+    const covered = Array.from(headerRef.current?.parentElement?.children ?? []).filter(
+      (element): element is HTMLElement =>
+        element instanceof HTMLElement &&
+        element !== headerRef.current &&
+        (element.tagName === "MAIN" || element.tagName === "FOOTER"),
+    )
+    for (const element of covered) element.inert = true
+
     const desktop = window.matchMedia("(min-width: 1024px)")
     document.addEventListener("keydown", onKey)
-    document.addEventListener("pointerdown", onPointer)
     document.addEventListener("click", onClick)
     desktop.addEventListener("change", onDesktop)
     return () => {
+      root.style.overflow = previousOverflow
+      for (const element of covered) element.inert = false
       document.removeEventListener("keydown", onKey)
-      document.removeEventListener("pointerdown", onPointer)
       document.removeEventListener("click", onClick)
       desktop.removeEventListener("change", onDesktop)
     }
@@ -146,11 +176,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           />
           <a
             href={links.signIn}
-            className={cn(
-              headerButton,
-              "hidden border-[#d8d8d8] bg-white text-[#0a0a0a] [--button-depth:#d0d0d0] hover:bg-[#f7f7f7] md:flex dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:[--button-depth:#383838] dark:hover:bg-[#1c1c1c]",
-              focusRing,
-            )}
+            className={cn(headerButton, secondaryButton, "hidden md:flex", focusRing)}
           >
             Sign in
           </a>
@@ -158,13 +184,17 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             href={links.signUp}
             className={cn(
               headerButton,
-              "flex gap-1.5 border-[#2a26ec] bg-[#2a26ec] text-white hover:border-[#3a36ff] hover:bg-[#3a36ff]",
+              primaryButton,
+              "flex gap-1.5",
+              // The open menu repeats this action next to Sign in, so the header copy steps aside.
+              mobileOpen && "invisible opacity-0 lg:visible lg:opacity-100",
               focusRing,
             )}
           >
             Get started
             <ChevronRightIcon className="hidden size-3 md:block" strokeWidth={2.5} />
           </a>
+          {/* A 40px touch target whose icon lines up with the gutter. */}
           <button
             ref={toggleRef}
             type="button"
@@ -172,41 +202,82 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(!mobileOpen)}
             className={cn(
-              "flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-[#f4f4f4] lg:hidden dark:hover:bg-[#1c1c1c]",
+              "-mr-3 flex size-10 items-center justify-center rounded-lg transition-colors hover:bg-[#f4f4f4] lg:hidden dark:hover:bg-[#1c1c1c]",
               focusRing,
             )}
           >
-            {mobileOpen ? (
-              <XIcon className="size-4.5" strokeWidth={2} />
-            ) : (
-              <MenuIcon className="size-4.5" strokeWidth={2} />
-            )}
+            <MenuToggleIcon open={mobileOpen} />
             <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
           </button>
         </div>
       </div>
 
-      {mobileOpen && (
+      <div
+        id="mobile-navigation"
+        data-open={mobileOpen ? "" : undefined}
+        inert={!mobileOpen}
+        className="group invisible fixed inset-x-0 top-[57px] bottom-0 flex flex-col bg-white opacity-0 transition-[opacity,visibility] duration-200 ease-out data-open:visible data-open:opacity-100 motion-reduce:transition-none md:top-[65px] lg:hidden dark:bg-[#0a0a0a]"
+      >
         <nav
-          id="mobile-navigation"
           aria-label="Mobile navigation"
-          className="absolute inset-x-0 top-full flex max-h-[calc(100dvh-56px)] flex-col gap-1 overflow-y-auto border-b border-[#e8e8e8] bg-white px-5 pt-3 pb-4 md:max-h-[calc(100dvh-64px)] md:px-10 lg:hidden dark:border-[#222222] dark:bg-[#0a0a0a]"
+          className="mx-auto w-full max-w-[1440px] flex-1 overflow-y-auto px-5 pt-2 md:px-10"
         >
-          {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className={cn(navLink, "h-11", focusRing)}>
-              {link.label}
-            </a>
-          ))}
-          <a href={links.github} className={cn(navLink, "h-11 gap-2", focusRing)}>
-            <GitHubMark className="size-4" />
-            <span>Star on GitHub</span>
-            <StarCount formattedStars={formattedStars} showUnit />
-          </a>
-          <a href={links.signIn} className={cn(navLink, "h-11", focusRing)}>
+          <ul>
+            {navLinks.map((link, index) => (
+              <li
+                key={link.label}
+                className={menuItem}
+                style={{ transitionDelay: mobileOpen ? `${index * 30}ms` : "0ms" }}
+              >
+                <a href={link.href} className={cn(menuRow, focusRing)}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+            <li
+              className={menuItem}
+              style={{ transitionDelay: mobileOpen ? `${navLinks.length * 30}ms` : "0ms" }}
+            >
+              <a
+                href={links.github}
+                aria-label={
+                  formattedStars
+                    ? `Star Sniptide on GitHub, ${formattedStars} stars`
+                    : "Star Sniptide on GitHub"
+                }
+                className={cn(menuRow, focusRing)}
+              >
+                <GitHubMark className="size-4" />
+                <span>GitHub</span>
+                <span className="ml-auto text-sm leading-5 font-medium text-[#6b6b6b] tabular-nums dark:text-[#a3a3a3]">
+                  <StarCount formattedStars={formattedStars} />
+                </span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div
+          className={cn(
+            menuItem,
+            "mx-auto grid w-full max-w-[1440px] grid-cols-2 gap-3 px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:px-10",
+          )}
+          style={{ transitionDelay: mobileOpen ? `${(navLinks.length + 1) * 30}ms` : "0ms" }}
+        >
+          <a
+            href={links.signIn}
+            className={cn(headerButton, secondaryButton, "flex h-[38px] justify-center", focusRing)}
+          >
             Sign in
           </a>
-        </nav>
-      )}
+          <a
+            href={links.signUp}
+            className={cn(headerButton, primaryButton, "flex h-[38px] justify-center", focusRing)}
+          >
+            Get started
+          </a>
+        </div>
+      </div>
     </header>
   )
 }
