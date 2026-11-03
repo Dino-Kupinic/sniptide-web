@@ -245,7 +245,9 @@ function ConnectGraphic() {
       <div className="flex flex-col gap-3">
         {inputs.map((input) => (
           <span key={input} className="flex items-center">
-            <span className={cn(node, "min-w-0 grow font-mono text-xs whitespace-nowrap")}>{input}</span>
+            <span className={cn(node, "min-w-0 grow font-mono text-xs whitespace-nowrap")}>
+              {input}
+            </span>
             <Stub className="h-px w-4 shrink-0 sm:w-8" />
           </span>
         ))}
@@ -259,7 +261,9 @@ function ConnectGraphic() {
         {outputs.map((output) => (
           <span key={output} className="flex items-center">
             <Stub className="h-px w-4 shrink-0 sm:w-8" />
-            <span className={cn(node, "min-w-0 grow font-mono text-xs whitespace-nowrap")}>{output}</span>
+            <span className={cn(node, "min-w-0 grow font-mono text-xs whitespace-nowrap")}>
+              {output}
+            </span>
           </span>
         ))}
       </div>
