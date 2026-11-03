@@ -1,8 +1,4 @@
-"use client"
-
 import { cn } from "@sniptide/ui/lib/utils"
-import { PauseIcon, PlayIcon } from "lucide-react"
-import { useState } from "react"
 
 // Tool logos from Simple Icons (CC0, simpleicons.org), drawn in one colour on a 24×24 grid. Only
 // tools Sniptide works with today: agents over MCP and skills (Claude Code, Cursor, Codex), Gist
@@ -45,17 +41,14 @@ export const tools: { name: string; path: string }[] = [
 ]
 
 export function WorksWith() {
-  // The row moves on its own for longer than five seconds, so it has a pause button (WCAG 2.2.2).
-  const [paused, setPaused] = useState(false)
-
   // Two copies of the row slide left by one copy's width, so the loop has no seam. The second
-  // copy is hidden from screen readers; with reduced motion the row stops and wraps instead.
+  // copy is hidden from screen readers. Hovering holds the row, and with reduced motion it stops
+  // and wraps instead.
   const row = (copy: boolean) => (
     <ul
       aria-hidden={copy || undefined}
       className={cn(
         "flex shrink-0 items-center gap-12 pr-12 motion-safe:animate-[marquee_40s_linear_infinite] group-hover:[animation-play-state:paused] md:gap-16 md:pr-16 motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:pr-0",
-        paused && "[animation-play-state:paused]",
       )}
     >
       {tools.map((tool) => (
@@ -79,24 +72,9 @@ export function WorksWith() {
 
   return (
     <section className="flex flex-col items-center gap-5 pt-7 pb-12 md:gap-7 md:pt-6 md:pb-18">
-      <div className="flex items-center gap-2 px-5">
-        <p className="text-[13px] leading-4 text-[#6b6b6b] dark:text-[#a3a3a3]">
-          Works with the tools you already use.
-        </p>
-        <button
-          type="button"
-          onClick={() => setPaused((value) => !value)}
-          aria-label={paused ? "Play the tool logos" : "Pause the tool logos"}
-          aria-pressed={paused}
-          className="-my-3 flex size-10 items-center justify-center rounded-md text-[#6b6b6b] md:my-0 md:size-6 hover:bg-[#f4f4f4] focus-visible:outline-2 focus-visible:outline-[var(--button-focus)] motion-reduce:hidden dark:text-[#a3a3a3] dark:hover:bg-[#1f1f1f]"
-        >
-          {paused ? (
-            <PlayIcon aria-hidden="true" className="size-3" strokeWidth={2.5} />
-          ) : (
-            <PauseIcon aria-hidden="true" className="size-3" strokeWidth={2.5} />
-          )}
-        </button>
-      </div>
+      <p className="px-5 text-[13px] leading-4 text-[#6b6b6b] dark:text-[#a3a3a3]">
+        Works with the tools you already use.
+      </p>
       <div className="group flex w-full max-w-300 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)] motion-reduce:[mask-image:none]">
         {row(false)}
         <div className="contents motion-reduce:hidden">{row(true)}</div>

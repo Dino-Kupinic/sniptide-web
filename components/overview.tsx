@@ -1,5 +1,6 @@
 import { cn } from "@sniptide/ui/lib/utils"
 import { ChevronRightIcon } from "lucide-react"
+import { LifeField } from "@/components/life-field"
 import { SectionHeading } from "@/components/section-heading"
 import { documentation } from "@/lib/agent-docs"
 
@@ -87,8 +88,15 @@ export function Overview() {
     <section
       id="features"
       data-cta-location="features"
-      className="flex scroll-mt-4 flex-col gap-10 section-frame py-16 text-[#1b1919] md:gap-14 md:py-20 xl:py-30 dark:text-[#f5f5f5]"
+      className="relative flex scroll-mt-4 flex-col gap-10 overflow-clip section-frame *:relative py-16 text-[#1b1919] md:gap-14 md:py-20 xl:py-30 dark:text-[#f5f5f5]"
     >
+      {/* The Game of Life shows only in dark mode, where this section is pitch black. */}
+      <LifeField
+        live="#f6a9d3"
+        trail="#2a26ec"
+        density={0.06}
+        className="!absolute hidden opacity-20 dark:block"
+      />
       <SectionHeading
         claim="Everything you reuse lives in one library."
         reason="Your agents, the CLI and your team all read from it."

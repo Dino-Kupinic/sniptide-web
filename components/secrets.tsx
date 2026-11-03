@@ -1,4 +1,5 @@
 import secretsDark from "@/assets/landing/secrets-dark.webp"
+import { LifeField } from "@/components/life-field"
 import { Screenshot } from "@/components/screenshot"
 import { SectionHeading } from "@/components/section-heading"
 import { docsPages } from "@/lib/links"
@@ -47,8 +48,9 @@ export function Secrets() {
     <section
       id="secrets"
       data-cta-location="secrets"
-      className="flex scroll-mt-4 flex-col gap-10 bg-[#0a0a0a] section-frame py-16 text-white [--button-focus:#8f8cff] md:gap-14 md:py-20 xl:py-30"
+      className="relative flex scroll-mt-4 flex-col gap-10 overflow-clip bg-[#0a0a0a] section-frame *:relative py-16 text-white [--button-focus:#8f8cff] md:gap-14 md:py-20 xl:py-30"
     >
+      <LifeField live="#f6a9d3" trail="#2a26ec" density={0.06} className="!absolute opacity-25" />
       <SectionHeading
         claim="Your .env stays in sync and out of agent output."
         reason="Agents run your app with the keys set and never print them."
