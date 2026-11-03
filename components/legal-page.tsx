@@ -1,4 +1,5 @@
 import { LogoMark, Wordmark } from "@/components/brand"
+import { ConsentSettingsButton } from "@/components/consent-banner"
 import { lastUpdated, legalLinks } from "@/lib/legal"
 
 // Shared frame for the Impressum, privacy policy and terms. Headings, paragraphs, lists and links
@@ -33,7 +34,7 @@ export function LegalPage({
         Skip to content
       </a>
       <header className="border-b border-[#e8e8e8] dark:border-[#222222]">
-        <div className="flex h-14 items-center px-5 md:h-18 md:px-10">
+        <div className="mx-auto flex h-14 max-w-[1440px] items-center px-5 md:h-16 md:px-10">
           <a href="/home" className={focusRing}>
             <span className="flex items-center gap-1.75">
               <LogoMark className="h-6 w-[25px] text-[#2a26ec] dark:text-white" />
@@ -58,9 +59,12 @@ export function LegalPage({
         </article>
       </main>
 
-      <footer className="flex justify-between gap-4 border-t border-[#e8e8e8] px-5 py-5 text-xs leading-4 md:px-10 dark:border-[#222222] dark:text-[#8a8a93]">
+      <footer className="flex flex-col-reverse gap-2 border-t border-[#e8e8e8] px-5 py-5 text-xs leading-4 md:flex-row md:justify-between md:gap-4 md:px-10 dark:border-[#222222] dark:text-[#8a8a93]">
         <p>© 2026 Sniptide</p>
-        <nav aria-label="Legal" className="flex gap-4 font-mono uppercase md:gap-6">
+        <nav
+          aria-label="Legal"
+          className="flex flex-wrap gap-x-3 gap-y-2 font-mono uppercase md:gap-6"
+        >
           {legalLinks.map((item) => (
             <a
               key={item.label}
@@ -70,6 +74,7 @@ export function LegalPage({
               {item.label}
             </a>
           ))}
+          <ConsentSettingsButton className="uppercase hover:text-[#2a26ec] dark:hover:text-white" />
         </nav>
       </footer>
     </div>

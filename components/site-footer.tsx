@@ -1,6 +1,7 @@
 import Image from "next/image"
 import grid from "@/assets/landing/footer-grid.png"
 import { LogoMark, Wordmark } from "@/components/brand"
+import { ConsentSettingsButton } from "@/components/consent-banner"
 import { legalLinks } from "@/lib/legal"
 import { links } from "@/lib/links"
 
@@ -70,9 +71,9 @@ export function SiteFooter() {
         <span className="sr-only">Sniptide</span>
       </div>
 
-      <div className="absolute right-5 bottom-5 left-5 flex justify-between text-xs leading-4 md:right-6 md:left-6 dark:text-[#8a8a93]">
+      <div className="absolute right-5 bottom-5 left-5 flex flex-col-reverse gap-2 text-xs md:flex-row md:justify-between leading-4 md:right-6 md:left-6 dark:text-[#8a8a93]">
         <p>© 2026 Sniptide</p>
-        <div className="flex gap-4 font-mono uppercase md:gap-6">
+        <div className="flex flex-wrap gap-x-3 gap-y-2 font-mono uppercase md:gap-6">
           {legalLinks.map((item) => (
             <a
               key={item.label}
@@ -82,6 +83,7 @@ export function SiteFooter() {
               {item.label}
             </a>
           ))}
+          <ConsentSettingsButton className="uppercase hover:text-[#2a26ec] dark:hover:text-white" />
         </div>
       </div>
     </footer>

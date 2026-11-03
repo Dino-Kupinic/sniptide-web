@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Analytics } from "@/components/analytics"
 import { Cta } from "@/components/cta"
 import { Features } from "@/components/features"
+import { FunnelTracking } from "@/components/funnel-tracking"
 import { Hero } from "@/components/hero"
 import { JsonLd } from "@/components/json-ld"
 import { ProductBand } from "@/components/product-band"
@@ -37,6 +38,7 @@ export default async function Home() {
         <Cta />
       </main>
       <SiteFooter />
+      <FunnelTracking />
     </div>
   )
 }

@@ -124,15 +124,20 @@ scan. The script checks response bodies, content types, canonical URLs, and loca
 ### Analytics
 
 Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud) as build variables to
-send pageviews and button clicks to PostHog. It runs cookieless, so there is no consent banner,
-which needs **Cookieless server hash mode** turned on in the PostHog project settings. Requests go
-through `/_site/ph` on this site so ad blockers don't drop them. The app reports to the same
-project; filter on the `surface` property (`marketing` or `app`). Without a key nothing loads.
+send events to PostHog. Requests go through `/_site/ph` on this site so ad blockers don't drop them.
+The app reports to the same project; filter on the `surface` property (`marketing` or `app`).
+Without a key nothing loads and the cookie banner stays hidden.
 
-Analytics stores no visitor identifiers on the device and sets no cookies. An optional exclusion
-preference uses local storage only after an explicit request. See the privacy policy for how
-analytics data is processed. Re-check the policy before adding another tracker, session replay,
-or an `identify()` call.
+A cookie banner (`components/consent-banner.tsx`) asks whether PostHog may use cookies, with
+Reject all, Accept all and a settings dialog that has one switch per category: essential (always
+on), analytics and session replay. Until the visitor allows analytics, and after they refuse it,
+PostHog runs cookieless, which needs **Cookieless server hash mode** turned on in the PostHog
+project settings. With analytics, PostHog keeps a visitor ID in a cookie on `.sniptide.com` and
+draws heatmaps. With session replay as well, it records sessions. Turn on session replay and
+heatmaps in the project. The answer is stored in the `sniptide_consent` cookie for six months, and
+the Cookies link in the footer opens the settings. `lib/tracking.ts` lists the named funnel events,
+and every event carries `consent` (`pending`, `denied`, `analytics` or `analytics_replay`).
+Re-check the privacy policy before adding another tracker or an `identify()` call.
 
 To exclude your own browser, open `/_site/analytics` and select **Exclude this browser**. Use the
 link there to repeat the choice for the app, and repeat in each browser you use. The choice

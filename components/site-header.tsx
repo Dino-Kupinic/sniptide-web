@@ -10,7 +10,10 @@ import { navLinks } from "@/lib/nav"
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
 const navLink =
-  "flex h-9 items-center rounded-lg px-3 text-[15px] leading-4.5 font-medium hover:bg-[#f3f3fe] dark:hover:bg-[#1f1e2e]"
+  "flex h-8 items-center rounded-md px-3 text-sm leading-5 font-medium text-[#4a4747] transition-colors hover:bg-[#f4f4f4] hover:text-[#0a0a0a] dark:text-[#b0b0b0] dark:hover:bg-[#1c1c1c] dark:hover:text-white"
+// The two calls to action share one slim size: 32px including the raised edge.
+const headerButton =
+  "raised-button h-[30px] shrink-0 items-center whitespace-nowrap border px-3 text-sm leading-5 font-medium"
 
 function GitHubMark({ className }: { className: string }) {
   return (
@@ -34,7 +37,7 @@ function StarCount({
       <span>{formattedStars}</span>
       <StarIcon
         aria-hidden="true"
-        className="size-3.5 fill-[#f2b400] text-[#bb8200]"
+        className="size-3.5 fill-[#e353ac] text-[#e353ac] dark:fill-[#f6a9d3] dark:text-[#f6a9d3]"
         strokeWidth={1.5}
       />
       {showUnit && <span>stars</span>}
@@ -99,27 +102,29 @@ export function SiteHeader({ stars }: { stars: number | null }) {
       data-cta-location="header"
       className="sticky top-0 z-30 border-b border-[#e8e8e8] bg-white text-[#0a0a0a] dark:border-[#222222] dark:bg-[#0a0a0a] dark:text-white"
     >
-      <div className="flex h-14 items-center justify-between px-5 md:h-18 md:px-10">
-        <a href="/home" className={cn("shrink-0 lg:w-60", focusRing)}>
-          <span className="flex items-center gap-1.75">
-            <LogoMark className="h-6 w-[25px] text-[#2a26ec] dark:text-white" />
-            <Wordmark className="mt-px h-[18px] w-[111px]" />
-            <span className="sr-only">Sniptide</span>
-          </span>
-        </a>
+      <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-5 md:h-16 md:px-10">
+        <div className="flex min-w-0 items-center gap-8">
+          <a href="/home" className={cn("shrink-0", focusRing)}>
+            <span className="flex items-center gap-1.75">
+              <LogoMark className="h-6 w-[25px] text-[#2a26ec] dark:text-white" />
+              <Wordmark className="mt-px h-[18px] w-[111px]" />
+              <span className="sr-only">Sniptide</span>
+            </span>
+          </a>
 
-        <nav
-          aria-label="Main navigation"
-          className="hidden items-center gap-2 whitespace-nowrap lg:flex"
-        >
-          {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className={cn(navLink, focusRing)}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
+          <nav
+            aria-label="Main navigation"
+            className="-ml-3 hidden items-center gap-1 whitespace-nowrap lg:flex"
+          >
+            {navLinks.map((link) => (
+              <a key={link.label} href={link.href} className={cn(navLink, focusRing)}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
 
-        <div className="flex shrink-0 items-center justify-end gap-2 lg:w-[21rem]">
+        <div className="flex shrink-0 items-center justify-end gap-2">
           <a
             href={links.github}
             aria-label={
@@ -128,21 +133,22 @@ export function SiteHeader({ stars }: { stars: number | null }) {
                 : "Star Sniptide on GitHub"
             }
             className={cn(
-              "hidden shrink-0 items-center gap-2 whitespace-nowrap px-2 text-[15px] leading-4.5 font-medium hover:opacity-70 lg:flex",
+              "hidden h-8 shrink-0 items-center gap-2 rounded-md px-2.5 text-sm leading-5 font-medium text-[#4a4747] tabular-nums transition-colors hover:bg-[#f4f4f4] hover:text-[#0a0a0a] lg:flex dark:text-[#b0b0b0] dark:hover:bg-[#1c1c1c] dark:hover:text-white",
               focusRing,
             )}
           >
-            <GitHubMark className="size-5" />
+            <GitHubMark className="size-4" />
             <StarCount formattedStars={formattedStars} />
           </a>
           <span
             aria-hidden="true"
-            className="hidden h-6 border-r border-[#d6d6d6] lg:block dark:border-[#333333]"
+            className="mx-1 hidden h-5 border-r border-[#e8e8e8] lg:block dark:border-[#2f2c2c]"
           />
           <a
             href={links.signIn}
             className={cn(
-              "raised-button hidden h-9 shrink-0 items-center whitespace-nowrap border border-[#d8d8d8] bg-white [--button-depth:#d0d0d0] px-3.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#f7f7f7] md:flex md:h-10 dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:hover:bg-[#1c1c1c] dark:[--button-depth:#383838]",
+              headerButton,
+              "hidden border-[#d8d8d8] bg-white text-[#0a0a0a] [--button-depth:#d0d0d0] hover:bg-[#f7f7f7] md:flex dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:[--button-depth:#383838] dark:hover:bg-[#1c1c1c]",
               focusRing,
             )}
           >
@@ -151,12 +157,13 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           <a
             href={links.signUp}
             className={cn(
-              "raised-button flex h-9 shrink-0 items-center gap-2 whitespace-nowrap border border-[#2a26ec] bg-[#2a26ec] px-3.5 text-sm font-semibold text-white hover:border-[#3a36ff] hover:bg-[#3a36ff] md:h-10 md:px-4",
+              headerButton,
+              "flex gap-1.5 border-[#2a26ec] bg-[#2a26ec] text-white hover:border-[#3a36ff] hover:bg-[#3a36ff]",
               focusRing,
             )}
           >
             Get started
-            <ChevronRightIcon className="hidden size-2.5 md:block" strokeWidth={3} />
+            <ChevronRightIcon className="hidden size-3 md:block" strokeWidth={2.5} />
           </a>
           <button
             ref={toggleRef}
@@ -165,7 +172,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(!mobileOpen)}
             className={cn(
-              "flex size-9 items-center justify-center rounded-lg bg-[#f2f2f2] lg:hidden dark:bg-[#1c1c1c]",
+              "flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-[#f4f4f4] lg:hidden dark:hover:bg-[#1c1c1c]",
               focusRing,
             )}
           >
@@ -183,7 +190,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
         <nav
           id="mobile-navigation"
           aria-label="Mobile navigation"
-          className="absolute inset-x-0 top-full flex max-h-[calc(100dvh-56px)] flex-col gap-1 overflow-y-auto border-b border-[#e8e8e8] bg-white px-5 pt-3 pb-4 md:max-h-[calc(100dvh-72px)] md:px-10 lg:hidden dark:border-[#222222] dark:bg-[#0a0a0a]"
+          className="absolute inset-x-0 top-full flex max-h-[calc(100dvh-56px)] flex-col gap-1 overflow-y-auto border-b border-[#e8e8e8] bg-white px-5 pt-3 pb-4 md:max-h-[calc(100dvh-64px)] md:px-10 lg:hidden dark:border-[#222222] dark:bg-[#0a0a0a]"
         >
           {navLinks.map((link) => (
             <a key={link.label} href={link.href} className={cn(navLink, "h-11", focusRing)}>
@@ -192,7 +199,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           ))}
           <a href={links.github} className={cn(navLink, "h-11 gap-2", focusRing)}>
             <GitHubMark className="size-4" />
-            <span>Star on GitHub{formattedStars && " · "}</span>
+            <span>Star on GitHub</span>
             <StarCount formattedStars={formattedStars} showUnit />
           </a>
           <a href={links.signIn} className={cn(navLink, "h-11", focusRing)}>

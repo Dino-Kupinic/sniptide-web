@@ -4,6 +4,7 @@ import localFont from "next/font/local"
 
 import "./globals.css"
 import { cn } from "@sniptide/ui/lib/utils"
+import { ConsentBanner } from "@/components/consent-banner"
 import { WebMcp } from "@/components/webmcp"
 import { ogVideo, siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site"
 
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <WebMcp />
         {children}
+        <ConsentBanner />
       </body>
     </html>
   )
