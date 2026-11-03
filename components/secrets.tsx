@@ -5,18 +5,27 @@ import { docsPages } from "@/lib/links"
 
 const variables = ["DATABASE_URL", "STRIPE_SECRET_KEY", "RESEND_API_KEY", "PORT"]
 
+// The encryption facts mirror lib/env/crypto.ts in the app repo.
 const facts = [
   {
-    title: "Encrypted at rest",
-    text: "Values are encrypted with AES-256-GCM before they reach your Postgres.",
+    title: "AES-256-GCM for every value",
+    text: "Each value is encrypted with its own random nonce before it is written to the database, and its auth tag rejects any value that was changed.",
+  },
+  {
+    title: "A key the database never holds",
+    text: "The key is derived with HKDF-SHA256 from a secret in your server's environment, so a copy of the database alone cannot be decrypted.",
+  },
+  {
+    title: "Bound to its group and name",
+    text: "A value is tied to its group and variable name, so one copied into another row fails to decrypt instead of moving.",
   },
   {
     title: "Never printed",
     text: "The CLI and its JSON output name variables and never show values, so agent transcripts stay clean.",
   },
   {
-    title: "Warned before sharing",
-    text: "The paste editor flags anything that looks like a key before a link leaves your hands.",
+    title: "Shown only on request",
+    text: "The app masks every value until you choose to reveal or copy that one.",
   },
   {
     title: "Lighter than a vault",
@@ -71,7 +80,7 @@ export function Secrets() {
         </div>
       </figure>
 
-      <ul className="grid gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {facts.map((fact) => (
           <li key={fact.title} className="flex flex-col gap-1.5 border-t border-[#262626] pt-4">
             <h3 className="text-base leading-5.5 font-semibold">{fact.title}</h3>

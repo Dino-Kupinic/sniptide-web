@@ -31,7 +31,7 @@ export const features = [
   "Collections that agents and the CLI follow as ordered recipes",
   "Invite people to a private paste with view or edit access",
   "Sync .env files as encrypted env groups",
-  "Self-host with one Docker image and Postgres (AGPL-3.0)",
+  "Self-host with one Docker image and a database (AGPL-3.0)",
 ]
 
 export const logoUrl = `${appBase}/web-app-manifest-512x512.png`

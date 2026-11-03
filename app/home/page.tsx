@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { Agents } from "@/components/agents"
 import { Cta } from "@/components/cta"
 import { FunnelTracking } from "@/components/funnel-tracking"
 import { Hero } from "@/components/hero"
@@ -8,7 +7,6 @@ import { Overview } from "@/components/overview"
 import { ProductBand } from "@/components/product-band"
 import { Recipes } from "@/components/recipes"
 import { Secrets } from "@/components/secrets"
-import { SelfHost } from "@/components/self-host"
 import { Sharing } from "@/components/sharing"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
@@ -32,12 +30,10 @@ export default async function Home() {
         <WorksWith />
         <ProductBand />
         <Overview />
-        <Agents />
         <Recipes />
         <Secrets />
         <Sharing />
-        <SelfHost stars={stars} />
-        <Cta />
+        <Cta stars={stars} />
       </main>
       <SiteFooter />
       <FunnelTracking />

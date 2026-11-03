@@ -218,9 +218,9 @@ export const aboutDocument: AgentDocument = {
     {
       title: "Open source",
       paragraphs: [
-        "Sniptide is an open-source pastebin and library of reusable patterns. It can be self-hosted with Docker and Postgres under the AGPL-3.0 license.",
+        "Sniptide is an open-source pastebin and library of reusable patterns. It can be self-hosted with Docker and a database under the AGPL-3.0 license.",
         "You can share code through short links, keep snippets private, organize them in collections, and reuse them through the API, CLI, or MCP server. Coding agents can search a connected account's snippets and read a collection as an ordered recipe. Account owners choose which personal tokens can read or change their data.",
-        "The hosted app and self-hosted software use the same repository. Self-hosting lets you choose where the app and its Postgres database run. The developer documentation describes the HTTP endpoints and the authentication required for programmatic access.",
+        "The hosted app and self-hosted software use the same repository. Self-hosting lets you choose where the app and its database run. The developer documentation describes the HTTP endpoints and the authentication required for programmatic access.",
       ],
       links: [{ label: "Source code", href: repoUrl }],
     },

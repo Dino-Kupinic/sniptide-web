@@ -1,10 +1,10 @@
 import { cn } from "@sniptide/ui/lib/utils"
 import { ChevronRightIcon } from "lucide-react"
 import { SectionHeading } from "@/components/section-heading"
-import { docsPages } from "@/lib/links"
+import { documentation } from "@/lib/agent-docs"
 
-// The capability map: every core feature in one view, each linking down to its section. Agents
-// get the large tile because they are the reason to pick Sniptide over a paste bin.
+// The capability map: every core feature in one view. The small tiles link down to their
+// sections, and the agents tile links to the MCP guide, since agents have no section of their own.
 // What the large tile shows: an agent finding and reusing a snippet instead of writing it again.
 function Transcript() {
   return (
@@ -57,46 +57,14 @@ const tiles = [
   {
     href: "#sharing",
     title: "Links carry their own rules",
-    text: "Expiry, burn after read, passwords, invites and raw access, set per paste.",
+    text: "Expiry, passwords, invites, raw links, revisions and view counts come with every paste.",
     code: "sniptide.com/xhz57h",
   },
   {
     href: "#self-host",
     title: "Self-host with one command",
-    text: "One image and Postgres give you the app, the API and the MCP endpoint.",
+    text: "One image and a database run the app, the API and the MCP endpoint on your server.",
     code: "docker compose up -d",
-  },
-]
-
-const extras: { title: string; text: string; href?: string }[] = [
-  {
-    title: "API and SDKs",
-    text: "A REST API in OpenAPI, with TypeScript and Python SDKs.",
-    href: docsPages.sdks,
-  },
-  {
-    title: "Revisions",
-    text: "Every save is a revision you can compare and roll back.",
-    href: docsPages.revisions,
-  },
-  {
-    title: "Analytics without cookies",
-    text: "Views, visitors, copies and referrers in your own database.",
-    href: docsPages.analytics,
-  },
-  {
-    title: "Gist import",
-    text: "Bring a GitHub gist over with all of its files.",
-    href: docsPages.importGist,
-  },
-  {
-    title: "Link previews",
-    text: "Slack, Discord and X unfurl a card with the first lines.",
-    href: `${docsPages.sharing}#link-previews-and-channels`,
-  },
-  {
-    title: "Embed and print",
-    text: "Put a paste in your docs or print it with its highlighting.",
   },
 ]
 
@@ -117,8 +85,8 @@ function Chevron() {
 export function Overview() {
   return (
     <section
-      id="overview"
-      data-cta-location="overview"
+      id="features"
+      data-cta-location="features"
       className="flex scroll-mt-4 flex-col gap-10 section-frame py-16 text-[#1b1919] md:gap-14 md:py-20 xl:py-30 dark:text-[#f5f5f5]"
     >
       <SectionHeading
@@ -129,7 +97,7 @@ export function Overview() {
       <ul className="grid border-t border-l border-[#e8e8e8] md:grid-cols-2 lg:grid-cols-4 dark:border-[#262626]">
         <li className={cn(cellClass, "md:col-span-2 lg:row-span-2")}>
           <a
-            href="#features"
+            href={documentation.mcp.url}
             className={cn(
               tileClass,
               "justify-between gap-10 bg-[#fafafa] dark:bg-[#0f0f0f] dark:hover:bg-[#151515]",
@@ -163,41 +131,6 @@ export function Overview() {
           </li>
         ))}
       </ul>
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] lg:gap-16">
-        <h3 className="text-base leading-6 font-semibold">
-          Everything around the paste ships in the same app.
-        </h3>
-        <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-          {extras.map((item) => {
-            const body = (
-              <>
-                <span className="text-base leading-6 font-medium">{item.title}</span>
-                <span className="text-base leading-6 text-[#6b6b6b] dark:text-[#a3a3a3]">
-                  {item.text}
-                </span>
-              </>
-            )
-            return (
-              <li
-                key={item.title}
-                className="min-w-0 border-t border-[#e8e8e8] dark:border-[#262626]"
-              >
-                {item.href ? (
-                  <a
-                    href={item.href}
-                    className="flex flex-col gap-1 py-4 hover:text-[#2a26ec] dark:hover:text-[#8f8cff]"
-                  >
-                    {body}
-                  </a>
-                ) : (
-                  <div className="flex flex-col gap-1 py-4">{body}</div>
-                )}
-              </li>
-            )
-          })}
-        </ul>
-      </div>
     </section>
   )
 }

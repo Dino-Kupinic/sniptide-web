@@ -45,8 +45,8 @@ export function SiteFooter() {
       <div className="pointer-events-none absolute top-95 left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:top-145 md:left-30 md:h-80 md:w-300 dark:block" />
 
       <p className="absolute top-72 right-5 left-5 text-[15px] leading-5.5 md:top-112 md:right-auto md:left-6 md:w-120 md:text-base md:leading-5.75">
-        The pastebin for modern teams. Share code on the open web, or run Sniptide on your own
-        servers.
+        The pastebin for your agents. Keep the code you reuse in one library, on sniptide.com or on
+        your own server.
       </p>
 
       <nav className="absolute top-93 right-5 left-5 flex flex-wrap gap-x-3 gap-y-2.5 font-mono text-[13px] leading-4 tracking-[0.5px] uppercase md:top-113 md:right-6 md:left-auto md:gap-6">
