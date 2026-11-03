@@ -8,28 +8,16 @@ const variables = ["DATABASE_URL", "STRIPE_SECRET_KEY", "RESEND_API_KEY", "PORT"
 // The encryption facts mirror lib/env/crypto.ts in the app repo.
 const facts = [
   {
-    title: "AES-256-GCM for every value",
-    text: "Each value is encrypted with its own random nonce before it is written to the database, and its auth tag rejects any value that was changed.",
+    title: "Encrypted per value",
+    text: "AES-256-GCM with a fresh nonce for every value, verified each time it is read.",
   },
   {
-    title: "A key the database never holds",
-    text: "The key is derived with HKDF-SHA256 from a secret in your server's environment, so a copy of the database alone cannot be decrypted.",
-  },
-  {
-    title: "Bound to its group and name",
-    text: "A value is tied to its group and variable name, so one copied into another row fails to decrypt instead of moving.",
+    title: "Key kept off the database",
+    text: "The key is derived from your server's secret, so a copy of the database alone stays unreadable.",
   },
   {
     title: "Never printed",
-    text: "The CLI and its JSON output name variables and never show values, so agent transcripts stay clean.",
-  },
-  {
-    title: "Shown only on request",
-    text: "The app masks every value until you choose to reveal or copy that one.",
-  },
-  {
-    title: "Lighter than a vault",
-    text: "There is no key rotation or audit trail. Teams that need those should keep a full secrets manager.",
+    text: "The CLI names variables and never shows values, so agent output stays clean.",
   },
 ]
 
@@ -73,9 +61,9 @@ export function Secrets() {
           light={secretsDark}
           alt="The checkout env group in Sniptide with four variables whose values stay hidden: DATABASE_URL, STRIPE_SECRET_KEY, RESEND_API_KEY and PORT."
           crop
-          className="border-[#262626] lg:w-[78%]"
+          className="border-[#262626] lg:w-[66%]"
         />
-        <div className="lg:absolute lg:right-0 lg:bottom-0 lg:w-[44%]">
+        <div className="lg:absolute lg:right-0 lg:bottom-0 lg:w-[46%]">
           <Terminal />
         </div>
       </figure>

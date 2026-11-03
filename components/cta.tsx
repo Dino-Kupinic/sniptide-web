@@ -1,3 +1,4 @@
+import { StarIcon } from "lucide-react"
 import { documentation } from "@/lib/agent-docs"
 import { links } from "@/lib/links"
 
@@ -71,11 +72,14 @@ export function Cta({ stars }: { stars: number | null }) {
               className={outline}
             >
               Star on GitHub
-              {formattedStars && (
-                <span className="text-[#6b6b6b] tabular-nums dark:text-[#a3a3a3]">
-                  {formattedStars}
-                </span>
-              )}
+              <span className="flex items-center gap-1 text-[#6b6b6b] tabular-nums dark:text-[#a3a3a3]">
+                {formattedStars}
+                <StarIcon
+                  aria-hidden="true"
+                  className="size-3.5 fill-[#e353ac] text-[#e353ac] dark:fill-[#f6a9d3] dark:text-[#f6a9d3]"
+                  strokeWidth={1.5}
+                />
+              </span>
             </a>
           </div>
         </div>

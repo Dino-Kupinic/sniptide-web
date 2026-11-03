@@ -100,3 +100,13 @@ body {
     padding-inline: max(7.5rem, calc((100% - 1280px) / 2));
   }
 }
+
+/* The countdown under the active tab of the pink section; its end advances to the next tab. */
+@keyframes tab-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

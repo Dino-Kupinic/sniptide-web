@@ -63,7 +63,6 @@ export function Recipes() {
           dark={collectionDark}
           alt="The ui collection in Sniptide with four pastes: Confirm dialog, Toaster, Button with variants and Design tokens."
           crop
-          className="lg:sticky lg:top-8"
         />
 
         <div className="flex flex-col gap-8">
