@@ -1,76 +1,102 @@
+import { cn } from "@sniptide/ui/lib/utils"
+import { SectionHeading } from "@/components/section-heading"
 import { links } from "@/lib/links"
 import { imageUrl } from "@/lib/site"
 
-const boot = `$ docker run -d -p 3000:3000 ${imageUrl}
-
-  ▚▚ SNIPTIDE  self-hosted
-  ----------------------------------------------
-  [boot] database ............................ ok
-  [boot] storage (local disk) ................ ok
-  [boot] secret scanner ...................... ok
-  [boot] expiry worker ....................... ok
-
-  ready on http://pastes.acme.internal:3000
-$ _`
+const endpoints = [
+  { name: "App", url: "pastes.acme.dev", text: "For people in a browser." },
+  { name: "Token API", url: "pastes.acme.dev/api/v1", text: "For scripts, CI and the SDKs." },
+  {
+    name: "MCP endpoint",
+    url: "pastes.acme.dev/api/mcp",
+    text: "For Claude Code, Cursor and Codex.",
+    accent: true,
+  },
+]
 
 export function SelfHost() {
   return (
     <section
       id="self-host"
       data-cta-location="self-host"
-      className="[--button-focus:#8f8cff] flex scroll-mt-4 flex-col gap-12 bg-[#0a0a0a] px-5 pb-16 text-white md:px-10 xl:gap-24 xl:px-30 xl:pb-24"
+      className="flex scroll-mt-4 flex-col gap-10 px-5 py-16 text-[#1b1919] md:gap-14 md:p-10 xl:p-30 dark:text-[#f5f5f5]"
     >
-      <div className="h-px bg-[#262626]" />
-
-      <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between xl:gap-12 xl:pt-4">
-        <div className="flex shrink-0 flex-col gap-5 xl:w-125">
-          <h2 className="font-heading text-[34px] leading-9.5 font-medium tracking-[-0.035em] md:text-5xl md:leading-13">
-            Your server. Your pastes. One command.
-          </h2>
-          <p className="text-[17px] leading-6.5 text-[#a3a3a3]">
-            Run the same Sniptide we host, on your own hardware. Bring Postgres, keep every byte
-            inside your network, and upgrade with a single pull.
-          </p>
-          <div className="flex flex-wrap gap-2.5 pt-2">
-            <a
-              href={links.selfHost}
-              className="raised-button flex h-11 items-center bg-[#2a26ec] px-5 text-[15px] leading-4.5 font-semibold hover:bg-[#3a36ff]"
-            >
-              Read the guide
-            </a>
-            <a
-              href={links.github}
-              className="raised-button flex h-11 items-center gap-2 bg-[#0a0a0a] [--button-depth:#3a3a3a] border border-[#3a3a3a] px-5 text-[15px] leading-4.5 font-semibold hover:bg-white/5"
-            >
-              <span className="size-2.25 bg-white" />
-              Star on GitHub
-            </a>
-          </div>
-        </div>
-
-        <div className="min-w-0 overflow-hidden rounded-lg border border-[#262626] bg-[#111111] xl:max-w-150 xl:flex-1">
-          <div className="flex h-10 items-center justify-between border-b border-[#262626] px-4">
-            <div className="flex gap-1.5">
-              <span className="size-2.25 border border-[#444444]" />
-              <span className="size-2.25 border border-[#444444]" />
-              <span className="size-2.25 border border-[#444444]" />
-            </div>
-            <span className="font-mono text-xs text-[#6b6b6b]">~/infra</span>
-          </div>
-          <pre className="overflow-x-auto px-5.5 pt-5.5 pb-6.5 font-mono text-[13px] leading-6 text-[#d4d4d4]">
-            {boot}
-          </pre>
+      <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading
+          claim="Self-host it with one command."
+          reason="Then your agents talk to your server."
+        />
+        <div className="flex shrink-0 flex-wrap gap-2.5">
+          <a
+            href={links.selfHost}
+            className="raised-button flex h-10 items-center bg-[#2a26ec] px-4 text-sm leading-5 font-medium text-white hover:bg-[#3a36ff]"
+          >
+            Read the self-host guide
+          </a>
+          <a
+            href={links.github}
+            className="raised-button flex h-10 items-center gap-2 border border-[#e8e8e8] bg-white [--button-depth:#d0d0d0] px-4 text-sm leading-5 font-medium hover:border-[#1b1919] dark:border-[#262626] dark:bg-[#141414] dark:[--button-depth:#383838] dark:hover:border-[#f5f5f5]"
+          >
+            <span className="size-2 bg-[#1b1919] dark:bg-white" />
+            Star on GitHub
+          </a>
         </div>
       </div>
 
-      <div className="flex flex-col items-start gap-3.5 rounded-lg border border-[#262626] p-5 md:flex-row md:items-center md:gap-4 md:px-6 md:py-5.5">
-        <span className="flex h-6 shrink-0 items-center rounded-sm border border-[#8f8cff] px-2 font-mono text-[11px] leading-3.5 tracking-[0.08em] text-[#8f8cff]">
-          COMING SOON
-        </span>
-        <p className="text-[17px] leading-5.5 font-medium">
-          Sniptide Registry: snippets your agents can install, version and trust.
+      <div className="flex flex-col">
+        <p className="flex items-center gap-[0.35em] font-mono text-[22px] leading-none whitespace-nowrap tracking-[-0.02em] sm:text-5xl lg:text-[88px]">
+          <span className="text-[#8a8a8a]">$</span>
+          docker compose up -d
+          <span
+            aria-hidden="true"
+            className="h-[0.9em] w-[0.5em] bg-[#2a26ec] motion-safe:animate-pulse dark:bg-[#8f8cff]"
+          />
         </p>
+
+        {/* The command fans out to the three ways in. */}
+        <div
+          aria-hidden="true"
+          className="mx-[16.66%] mt-8 hidden h-6 border-x border-t border-[#c8c8c8] md:block dark:border-[#3a3a3a]"
+        >
+          <div className="mx-auto h-full w-px bg-[#c8c8c8] dark:bg-[#3a3a3a]" />
+        </div>
+
+        <ul className="mt-6 grid border-t border-l border-[#e8e8e8] md:mt-0 md:grid-cols-3 dark:border-[#262626]">
+          {endpoints.map((endpoint) => (
+            <li
+              key={endpoint.name}
+              className={cn(
+                "flex flex-col gap-1 border-r border-b border-[#e8e8e8] px-5 py-5 md:items-center md:text-center dark:border-[#262626]",
+                endpoint.accent &&
+                  "bg-[#f3f3fe] outline -outline-offset-1 outline-[#2a26ec] dark:bg-[#141228] dark:outline-[#8f8cff]",
+              )}
+            >
+              <span
+                className={cn(
+                  "text-base leading-5.5 font-semibold",
+                  endpoint.accent && "text-[#2a26ec] dark:text-[#8f8cff]",
+                )}
+              >
+                {endpoint.name}
+              </span>
+              <code className="font-mono text-xs leading-4.5 text-[#6b6b6b] dark:text-[#9a9a9a]">
+                {endpoint.url}
+              </code>
+              <span className="text-sm leading-5.5 text-[#6b6b6b] dark:text-[#9a9a9a]">
+                {endpoint.text}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
+
+      <p className="max-w-170 text-base leading-6.5 text-[#6b6b6b] dark:text-[#9a9a9a]">
+        One image at <code className="font-mono text-[15px]">{imageUrl}</code> runs on AMD64 and
+        ARM64, and Postgres is the only other service it needs. Sniptide is open source under
+        AGPL-3.0, and an update is one{" "}
+        <code className="font-mono text-[15px]">docker compose pull</code> away. Next on the roadmap
+        is the Sniptide Registry, where agents install and version shared snippets.
+      </p>
     </section>
   )
 }

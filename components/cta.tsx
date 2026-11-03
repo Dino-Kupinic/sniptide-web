@@ -1,3 +1,4 @@
+import { documentation } from "@/lib/agent-docs"
 import { links } from "@/lib/links"
 
 export function Cta() {
@@ -7,10 +8,11 @@ export function Cta() {
       className="flex h-110 flex-col justify-center gap-4 overflow-clip bg-[#2a26ec] px-5 md:h-135 md:gap-4.5 md:px-10 lg:px-30 dark:cta-dusk"
     >
       <h2 className="font-heading text-4xl leading-10 font-medium tracking-[-0.03em] text-white md:text-[44px] md:leading-12">
-        Start sharing on Sniptide.
+        Start the library your agents reuse.
       </h2>
-      <p className="max-w-110 text-base leading-6.5 text-[#d9d8ff]">
-        Share code on the open web, or on your own servers. Free, fast and always yours.
+      <p className="max-w-120 text-base leading-6.5 text-[#d9d8ff]">
+        Save your first pattern in the app, then connect Claude Code or Cursor with one sign-in. Use
+        sniptide.com, or run it on your own server.
       </p>
       <div className="flex flex-wrap items-center gap-2.5 pt-2.5">
         <a
@@ -21,10 +23,10 @@ export function Cta() {
           Create a free account
         </a>
         <a
-          href={links.signIn}
+          href={documentation.mcp.url}
           className="raised-button flex h-11 items-center bg-[#4744f0] [--button-focus:white] px-4.5 text-[15px] leading-5 font-medium text-white hover:bg-[#5552f2] dark:bg-[#2a26ec] dark:hover:bg-[#3a36ff]"
         >
-          Sign in
+          Connect over MCP
         </a>
       </div>
     </section>

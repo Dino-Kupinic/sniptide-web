@@ -27,6 +27,9 @@ export const features = [
   "Every paste shows how often it was opened",
   "Editor warns when you paste something that looks like a key",
   "MCP server and CLI so coding agents can search, read and save snippets",
+  "Agents connect over MCP with an OAuth sign-in or a personal token",
+  "Collections that agents and the CLI follow as ordered recipes",
+  "Invite people to a private paste with view or edit access",
   "Sync .env files as encrypted env groups",
   "Self-host with one Docker image and Postgres (AGPL-3.0)",
 ]
