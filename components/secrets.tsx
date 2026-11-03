@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from "lucide-react"
 import secretsDark from "@/assets/landing/secrets-dark.webp"
 import { LifeField } from "@/components/life-field"
 import { Screenshot } from "@/components/screenshot"
@@ -81,9 +82,10 @@ export function Secrets() {
 
       <a
         href={docsPages.envSync}
-        className="raised-button flex h-10 items-center self-start border border-[#3a3737] bg-[#0a0a0a] [--button-depth:#3a3737] px-4 text-sm leading-5 font-medium hover:bg-white/5"
+        className="raised-button flex h-10 items-center gap-2 self-start border border-[#3a3737] bg-[#0a0a0a] [--button-depth:#3a3737] px-4 text-sm leading-5 font-medium hover:bg-white/5"
       >
         Read the env sync guide
+        <ArrowRightIcon aria-hidden="true" className="size-4" strokeWidth={2} />
       </a>
     </section>
   )

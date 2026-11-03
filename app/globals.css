@@ -110,3 +110,10 @@ body {
     transform: scaleX(1);
   }
 }
+
+/* The dash that flows along the live wires of the pink section's drawings. */
+@keyframes wire-flow {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
