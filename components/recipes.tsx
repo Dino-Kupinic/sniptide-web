@@ -1,30 +1,20 @@
 import { LoopVideo } from "@/components/loop-video"
 import { SectionHeading } from "@/components/section-heading"
+import { type SessionLine, TypedSession } from "@/components/typed-session"
 import { documentation } from "@/lib/agent-docs"
 
-function Shell({ lines }: { lines: React.ReactNode }) {
-  return (
-    <div className="overflow-x-auto rounded-lg border border-[#2c2a2a] bg-[#1b1919] px-3.5 py-3 font-mono text-xs leading-5 whitespace-pre text-[#d4d4d4]">
-      {lines}
-    </div>
-  )
-}
+// What the CLI prints for each step: `push` reports the new paste, `pull` lists what it wrote.
+const push: SessionLine[] = [
+  { kind: "command", text: "sniptide push ./confirm-dialog --collection components" },
+  { kind: "output", text: "Created k7Qe2x (3 files).", tone: "success" },
+]
 
-const push = (
-  <>
-    <span className="text-white">$ sniptide push confirm-dialog --collection ui</span>
-    {"\n"}
-    <span className="text-[#8a8a8a]">✓ k7Qe2x · 3 files · ui</span>
-  </>
-)
-
-const pull = (
-  <>
-    <span className="text-white">$ sniptide pull collection:ui</span>
-    {"\n"}
-    <span className="text-[#8a8a8a]">✓ 4 steps · 6 files written</span>
-  </>
-)
+const pull: SessionLine[] = [
+  { kind: "command", text: "sniptide pull collection:components" },
+  { kind: "output", text: "Wrote 6 files in ~/acme/shop.", tone: "success" },
+  { kind: "output", text: "src/components/confirm-dialog.tsx" },
+  { kind: "output", text: "src/components/toaster.tsx" },
+]
 
 const steps = [
   {
@@ -56,7 +46,7 @@ export function Recipes() {
       />
 
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
-        {/* Recorded from a local demo instance with the ui collection seeded (public/landing). */}
+        {/* Recorded from a local demo instance with a Components collection seeded (public/landing). */}
         <LoopVideo
           light={{
             src: "/landing/collection-light.mp4",
@@ -67,8 +57,8 @@ export function Recipes() {
             poster: "/landing/collection-dark-poster.webp",
           }}
           width={1604}
-          height={834}
-          label="The ui collection in Sniptide with four pastes: Confirm dialog, Toaster, Button with variants and Design tokens. Filtering for button leaves Button with variants."
+          height={960}
+          label="The Components collection in Sniptide as cards in two columns, scrolling past Confirm dialog, Toaster, Button, Design tokens, Combobox, Data table, Bottom sheet, Kbd, Tabs and Switch."
           crop
         />
 
@@ -86,14 +76,14 @@ export function Recipes() {
                       {step.text}
                     </p>
                   </div>
-                  {step.shell && <Shell lines={step.shell} />}
+                  {step.shell && <TypedSession lines={step.shell} variant="shell" hold={2600} />}
                 </div>
               </li>
             ))}
           </ol>
           <p className="border-t border-[#e8e8e8] pt-6 pl-10 dark:border-[#262626] text-base leading-6.5 text-[#6b6b6b] dark:text-[#a3a3a3]">
             <code className="font-mono text-[15px] text-[#1b1919] dark:text-[#f5f5f5]">
-              sniptide skill ui
+              sniptide skill components
             </code>{" "}
             turns the same collection into a skill for Claude Code, Cursor or Codex.{" "}
             <a
