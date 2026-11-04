@@ -22,7 +22,7 @@ export function Cta({ stars }: { stars: number | null }) {
       className="flex scroll-mt-4 flex-col gap-10 border-t border-[#e8e8e8] bg-white section-frame pt-16 pb-8 text-[#1b1919] md:gap-14 md:pt-24 xl:pt-30 dark:border-[#1f1f1f] dark:bg-[#08080b] dark:text-[#f5f5f5]"
     >
       <h2 className="max-w-240 font-heading text-4xl leading-10 font-medium tracking-[-0.03em] text-balance md:text-6xl md:leading-16">
-        Start the library your agents reuse.
+        Pick where your library lives.
       </h2>
 
       <div className="grid border-t border-[#e8e8e8] md:grid-cols-2 dark:border-[#262626]">

@@ -39,14 +39,15 @@ import { docsPages, links } from "@/lib/links"
 // in the page's own colors, so every line of text sits on white or on the dark canvas. The pink
 // behind it runs a sparse Game of Life that the pointer can sow.
 
-const muted = "text-[#6b6b6b] dark:text-[#a3a3a3]"
-const line = "border-[#e8e8e8] dark:border-[#262626]"
-const blueText = "text-[#2a26ec] dark:text-[#8f8cff]"
+// Muted text leans pink so it keeps AA contrast on the glass window over the pink.
+const muted = "text-[#5c4653] dark:text-[#cbbfc5]"
+const line = "border-[#2b0a1f]/10 dark:border-white/10"
+const blueText = "text-[#2a26ec] dark:text-[#f6a9d3]"
 
 // ---------- Infographics. Each repeats what its tab's cards say, so screen readers skip it. ----------
 
 const wireGray = "text-[#b8b8b8] dark:text-[#4a4747]"
-const wireBlue = "text-[#2a26ec] dark:text-[#8f8cff]"
+const wireBlue = "text-[#2a26ec] dark:text-[#f6a9d3]"
 
 // Curved connectors drawn in a stretchable box: each path runs from a point on one edge to a point
 // on the other, in percent. The blue ones carry a slow dash that flows from start to end.
@@ -96,7 +97,7 @@ function CodeLines({ widths }: { widths: string[] }) {
           key={i}
           className={cn(
             "block h-1.5 rounded-sm",
-            i % 3 === 0 ? "bg-[#2a26ec]/35 dark:bg-[#8f8cff]/40" : "bg-[#e0e0e0] dark:bg-[#2f2c2c]",
+            i % 3 === 0 ? "bg-[#2a26ec]/35 dark:bg-[#f6a9d3]/40" : "bg-[#e0e0e0] dark:bg-[#2f2c2c]",
           )}
           style={{ width }}
         />
@@ -197,7 +198,7 @@ function ProtectGraphic() {
     <div className="flex flex-col gap-9">
       {/* The lifecycle: blue up to the first view, dashed to the end, where the paste is gone. */}
       <div className="relative grid grid-cols-4">
-        <span className="absolute top-5.5 left-[12.5%] h-px w-[50%] bg-[#2a26ec] dark:bg-[#8f8cff]" />
+        <span className="absolute top-5.5 left-[12.5%] h-px w-[50%] bg-[#2a26ec] dark:bg-[#f6a9d3]" />
         <span className="absolute top-5.5 left-[62.5%] w-[25%] border-t border-dashed border-[#b0b0b0] dark:border-[#4a4747]" />
         {steps.map((step, i) => (
           <div key={step.label} className="relative flex flex-col items-center gap-2 text-center">
@@ -208,7 +209,7 @@ function ProtectGraphic() {
                   ? "border-dashed border-[#b0b0b0] bg-[#fafafa] text-[#6b6b6b] dark:border-[#4a4747] dark:bg-[#0c0b0b] dark:text-[#a3a3a3]"
                   : i === 2
                     ? "border-[#2a26ec] bg-[#2a26ec] text-white"
-                    : cn(line, "bg-white text-[#2a26ec] dark:bg-[#121111] dark:text-[#8f8cff]"),
+                    : cn(line, "bg-white text-[#2a26ec] dark:bg-[#121111] dark:text-[#f6a9d3]"),
               )}
             >
               <step.icon className="size-4.5" strokeWidth={2} />
@@ -359,7 +360,7 @@ function TrackGraphic() {
               className={cn(
                 "size-2 shrink-0 rounded-full",
                 revision.current
-                  ? "bg-[#2a26ec] ring-4 ring-[#2a26ec]/15 dark:bg-[#8f8cff] dark:ring-[#8f8cff]/20"
+                  ? "bg-[#2a26ec] ring-4 ring-[#2a26ec]/15 dark:bg-[#f6a9d3] dark:ring-[#f6a9d3]/20"
                   : "bg-[#b0b0b0] dark:bg-[#4a4747]",
               )}
             />
@@ -468,8 +469,8 @@ const tabs: {
   {
     label: "Share",
     icon: Share2Icon,
-    title: "Share with exactly who needs it.",
-    summary: "Pick who can see a paste, then send the link anywhere.",
+    title: "Share it with the right people.",
+    summary: "Pick who can see a paste, then send the link.",
     features: [
       {
         icon: GlobeIcon,
@@ -497,8 +498,8 @@ const tabs: {
   {
     label: "Protect",
     icon: ShieldIcon,
-    title: "Decide how long a link lives.",
-    summary: "Every link carries its own rules, set in the panel next to the paste.",
+    title: "Set how long a link lives.",
+    summary: "Each link carries its own rules.",
     features: [
       { icon: TimerIcon, title: "Expiry", text: "An hour, a day, a week, a month or never." },
       {
@@ -522,8 +523,8 @@ const tabs: {
   {
     label: "Track",
     icon: ActivityIcon,
-    title: "See what happened to every paste.",
-    summary: "Numbers and history sit next to the code they belong to.",
+    title: "See who opened what.",
+    summary: "Views and history sit next to the code.",
     features: [
       {
         icon: ChartColumnIcon,
@@ -551,8 +552,8 @@ const tabs: {
   {
     label: "Connect",
     icon: PlugIcon,
-    title: "Move code in and out the way you work.",
-    summary: "The same pastes reach your scripts, your docs and your chat.",
+    title: "Reach your pastes from any tool.",
+    summary: "Scripts, docs and chat all read the same pastes.",
     features: [
       {
         icon: BracesIcon,
@@ -619,14 +620,14 @@ export function Sharing() {
 
       <SectionHeading
         className="relative"
-        claim="When a person needs it, send a link."
-        reason="Everything around the link is already built in."
+        claim="Share any paste with a link."
+        reason="Passwords, expiry and view counts come with it."
         reasonClassName="text-[#a04577]"
       />
 
       {/* biome-ignore lint/a11y/noStaticElementInteractions: these handlers only hold the tour while the pointer or focus is inside; the tabs are the controls. */}
       <div
-        className="relative overflow-hidden rounded-lg border border-[#2b0a1f]/15 bg-white text-[#1b1919] shadow-[0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] dark:border-[#2b0a1f]/40 dark:bg-[#121111] dark:text-[#f5f5f5]"
+        className="relative overflow-hidden rounded-lg border border-white/70 max-md:-mx-5 max-md:rounded-none max-md:border-x-0 bg-linear-to-b from-white/75 to-white/60 text-[#1b1919] shadow-[inset_0_1px_0_rgb(255_255_255/0.8),0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-[3px] dark:border-white/15 dark:from-[#121111]/96 dark:to-[#121111]/94 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_24px_48px_-12px_rgb(43_10_31/0.4)] dark:text-[#f5f5f5]"
         onPointerEnter={() => setHeld(true)}
         onPointerLeave={() => setHeld(false)}
         onFocus={() => setHeld(true)}
@@ -635,10 +636,7 @@ export function Sharing() {
         }}
       >
         <div
-          className={cn(
-            "flex items-start gap-1 border-b bg-[#fafafa] p-1.5 dark:bg-[#0c0b0b]",
-            line,
-          )}
+          className={cn("flex items-start gap-1 border-b bg-white/30 p-1.5 dark:bg-black/20", line)}
         >
           <div
             role="tablist"
@@ -664,8 +662,8 @@ export function Sharing() {
                   className={cn(
                     "relative flex h-14 flex-col items-center justify-center gap-1 overflow-hidden rounded-md text-[13px] leading-4 font-medium sm:h-11 sm:flex-row sm:gap-2 sm:text-base sm:leading-6 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none",
                     selected
-                      ? "bg-white shadow-[0_1px_2px_rgb(0_0_0/0.08)] dark:bg-[#1a1919]"
-                      : cn(muted, "hover:bg-[#f4f4f4] dark:hover:bg-[#1a1919]"),
+                      ? "bg-white/70 shadow-[0_1px_2px_rgb(0_0_0/0.08)] dark:bg-white/10"
+                      : cn(muted, "hover:bg-white/40 dark:hover:bg-white/5"),
                   )}
                 >
                   {/* The countdown to the next tab: a faint wash that fills the selected tab. */}
@@ -675,7 +673,7 @@ export function Sharing() {
                       aria-hidden="true"
                       onAnimationEnd={() => setActive((active + 1) % tabs.length)}
                       className={cn(
-                        "absolute inset-0 origin-left bg-[#2a26ec]/8 motion-safe:animate-[tab-progress_5s_linear] motion-reduce:hidden dark:bg-[#8f8cff]/10",
+                        "absolute inset-0 origin-left bg-[#2a26ec]/8 motion-safe:animate-[tab-progress_5s_linear] motion-reduce:hidden dark:bg-[#f6a9d3]/10",
                         held && "[animation-play-state:paused]",
                       )}
                     />
@@ -695,7 +693,7 @@ export function Sharing() {
             onClick={() => setStopped(!stopped)}
             aria-label={stopped ? "Play the tour" : "Pause the tour"}
             className={cn(
-              "flex h-14 w-8 shrink-0 items-center justify-center rounded-md hover:bg-[#f4f4f4] sm:size-11 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none motion-reduce:hidden dark:hover:bg-[#1a1919]",
+              "flex h-14 w-8 shrink-0 items-center justify-center rounded-md hover:bg-white/40 sm:size-11 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none motion-reduce:hidden dark:hover:bg-white/5",
               muted,
             )}
           >
@@ -717,28 +715,32 @@ export function Sharing() {
               id={`${id}-panel-${i}`}
               aria-labelledby={`${id}-tab-${i}`}
               className={cn(
-                "grid content-start items-center gap-8 p-4 [grid-area:1/1] sm:gap-10 sm:p-6 motion-safe:transition-opacity motion-safe:duration-300 md:p-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14 lg:py-16",
+                "grid content-start items-center gap-8 p-4 lg:items-stretch [grid-area:1/1] sm:gap-10 sm:p-6 motion-safe:transition-opacity motion-safe:duration-300 md:p-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14 lg:py-16",
                 i === active ? "opacity-100" : "invisible opacity-0",
               )}
             >
               <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 lg:pt-2">
                   <h3 className="font-heading text-[28px] leading-8.5 font-medium tracking-[-0.025em] md:text-4xl md:leading-11">
                     {tab.title}
                   </h3>
                   <p className={cn("text-base leading-6.5", muted)}>{tab.summary}</p>
                 </div>
-                {/* One panel split into four cells: the 1px gap shows the hairline between them. */}
+                {/* One panel split into four cells with hairlines between them. On desktops it grows to the
+                    height of the drawing beside it. */}
                 <ul
                   className={cn(
-                    "grid gap-px overflow-hidden rounded-lg border bg-[#e8e8e8] sm:grid-cols-2 dark:bg-[#262626]",
+                    "grid overflow-hidden rounded-lg border sm:grid-cols-2 lg:grow lg:grid-rows-2",
                     line,
                   )}
                 >
                   {tab.features.map((feature) => (
                     <li
                       key={feature.title}
-                      className="flex flex-col gap-1 bg-[#fafafa] p-4 sm:gap-1.5 sm:p-5 dark:bg-[#0c0b0b]"
+                      className={cn(
+                        "flex flex-col gap-1 border-b bg-white/35 p-4 last:border-b-0 sm:gap-1.5 sm:p-5 sm:odd:border-r sm:[&:nth-last-child(-n+2)]:border-b-0 lg:justify-center dark:bg-black/15",
+                        line,
+                      )}
                     >
                       <span className="flex items-center gap-2">
                         <feature.icon
@@ -760,7 +762,7 @@ export function Sharing() {
               <div
                 aria-hidden="true"
                 className={cn(
-                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-[#fafafa] p-4 sm:p-8 lg:min-h-112 dark:bg-[#0c0b0b]",
+                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-white/40 p-4 sm:p-8 lg:min-h-112 dark:bg-black/20",
                   line,
                 )}
               >
