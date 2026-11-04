@@ -49,12 +49,12 @@ export function Recipes() {
         {/* Recorded from a local demo instance with a Components collection seeded (public/landing). */}
         <LoopVideo
           light={{
-            src: "/landing/collection-light.mp4",
-            poster: "/landing/collection-light-poster.webp",
+            src: "/landing/components-light.mp4",
+            poster: "/landing/components-light-poster.webp",
           }}
           dark={{
-            src: "/landing/collection-dark.mp4",
-            poster: "/landing/collection-dark-poster.webp",
+            src: "/landing/components-dark.mp4",
+            poster: "/landing/components-dark-poster.webp",
           }}
           width={1604}
           height={960}
