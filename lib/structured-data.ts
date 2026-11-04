@@ -17,7 +17,7 @@ const screenshotId = `${siteUrl}/#screenshot`
 
 // The product band's screenshot of the demo dashboard, which the page and the JSON-LD both describe.
 export const screenshotCaption =
-  "The Sniptide demo dashboard: a one-line setup to connect a coding agent above the recent pastes."
+  "The Sniptide demo dashboard with connected coding agents, agent activity, and recent pastes."
 
 // Profiles Sniptide itself publishes. Personal profiles of the operator stay out, and Wikipedia,
 // Wikidata or social profiles join this list only once they exist.
@@ -118,8 +118,8 @@ export function homeGraph(screenshotSrc: string) {
       contentUrl: new URL(screenshotSrc, siteUrl).href,
       caption: screenshotCaption,
       encodingFormat: "image/webp",
-      width: 2532,
-      height: 1586,
+      width: 1266,
+      height: 793,
     },
   ]
 }

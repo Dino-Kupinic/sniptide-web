@@ -47,6 +47,9 @@ describe("structured data", () => {
     expect(image).toMatchObject({
       "@id": "https://sniptide.com/#screenshot",
       contentUrl: "https://sniptide.com/_next/static/media/demo-preview-light.abc123.webp",
+      encodingFormat: "image/webp",
+      width: 1266,
+      height: 793,
     })
     expect(byType("SoftwareApplication")).toHaveProperty("screenshot", { "@id": image?.["@id"] })
   })
