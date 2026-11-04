@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "lucide-react"
 import Image from "next/image"
-import demoPreviewDark from "@/assets/landing/demo-preview-dark.webp"
-import demoPreviewLight from "@/assets/landing/demo-preview-light.webp"
+import demoPreviewDark from "@/assets/landing/demo-walkthrough-dark.gif"
+import demoPreviewLight from "@/assets/landing/demo-walkthrough-light.gif"
 import { links } from "@/lib/links"
 import { screenshotCaption as alt } from "@/lib/structured-data"
 
@@ -21,7 +21,7 @@ export function ProductBand() {
 
       {/* On phones the app runs off the right edge, like a window that doesn't fit the screen. */}
       <div className="relative h-85 w-full self-start overflow-clip rounded-t-lg border-t border-l border-[#e8e8e8] bg-white dark:border-[#0a0a0a] dark:bg-[#0a0a0a] md:aspect-[1360/640] md:h-auto md:w-full md:max-w-340 md:self-center md:border-r">
-        {/* The app follows the color scheme, so each scheme shows its own shot of the demo. */}
+        {/* The app follows the color scheme, so each scheme shows its own recording of the demo. */}
         <Image
           src={demoPreviewLight}
           alt={alt}
