@@ -154,10 +154,10 @@ event rather than autocapture selectors.
 
 The product preview loops through the demo dashboard, creating a TypeScript paste, the saved paste,
 and account analytics, then returns to the dashboard. Light and dark GIFs live in
-`assets/landing/demo-walkthrough-{light,dark}.gif`; matching WebP dashboard stills are used before
-playback, when paused, and when the visitor prefers reduced motion. The GIF loads only when the
-preview enters the viewport, and follows the theme selected in the footer. **Play** and **Pause**
-switch between the loop and the dashboard still. **Try the demo** opens the interactive app.
+`assets/landing/demo-walkthrough-{light,dark}.gif`. They replace the screenshots inside the existing
+preview, with the same dimensions, phone cropping, dimming, and centered **Try the demo** link.
+The recording follows the theme selected in the footer. The WebP dashboard stills supply the
+homepage screenshot metadata.
 
 To refresh the media, record the same flow at 1266 × 793 in each theme using the shared demo's
 example data. Use only sample code, discard restored drafts before recording, and remove any
@@ -166,7 +166,7 @@ pastes created for the recording afterwards. Until the companion banner removal 
 `p[role=note]` banner in the recording browser. Export an infinitely looping GIF and a WebP of the
 opening dashboard frame for each theme. Keep the dimensions and dashboard caption in
 `lib/structured-data.ts` in sync with the stills. Check both themes, the footer theme switch,
-Play/Pause, reduced motion, and phone width after replacing the files.
+the centered demo link, and phone cropping after replacing the files.
 
 ## Checks
 
