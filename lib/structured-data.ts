@@ -17,7 +17,7 @@ const screenshotId = `${siteUrl}/#screenshot`
 
 // The product band's screenshot of the demo dashboard, which the page and the JSON-LD both describe.
 export const screenshotCaption =
-  "The Sniptide demo dashboard: paste and view counts, a quick paste editor and a chart of views."
+  "The Sniptide demo dashboard: a one-line setup to connect a coding agent above the recent pastes."
 
 // Profiles Sniptide itself publishes. Personal profiles of the operator stay out, and Wikipedia,
 // Wikidata or social profiles join this list only once they exist.
