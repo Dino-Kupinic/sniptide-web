@@ -39,7 +39,8 @@ import { docsPages, links } from "@/lib/links"
 // in the page's own colors, so every line of text sits on white or on the dark canvas. The pink
 // behind it runs a sparse Game of Life that the pointer can sow.
 
-const muted = "text-[#6b6b6b] dark:text-[#a3a3a3]"
+// Muted text leans pink so it keeps AA contrast on the glass window over the pink.
+const muted = "text-[#5c4653] dark:text-[#cbbfc5]"
 const line = "border-[#2b0a1f]/10 dark:border-white/10"
 const blueText = "text-[#2a26ec] dark:text-[#8f8cff]"
 
@@ -626,7 +627,7 @@ export function Sharing() {
 
       {/* biome-ignore lint/a11y/noStaticElementInteractions: these handlers only hold the tour while the pointer or focus is inside; the tabs are the controls. */}
       <div
-        className="relative overflow-hidden rounded-lg border border-[#2b0a1f]/15 bg-white/45 text-[#1b1919] shadow-[0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-xl backdrop-saturate-150 dark:border-[#2b0a1f]/40 dark:bg-[#121111]/80 dark:text-[#f5f5f5]"
+        className="relative overflow-hidden rounded-lg border border-white/70 bg-linear-to-b from-white/35 to-white/10 text-[#1b1919] shadow-[inset_0_1px_0_rgb(255_255_255/0.8),0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-[6px] backdrop-saturate-[1.8] dark:border-white/15 dark:from-[#121111]/80 dark:to-[#121111]/70 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_24px_48px_-12px_rgb(43_10_31/0.4)] dark:text-[#f5f5f5]"
         onPointerEnter={() => setHeld(true)}
         onPointerLeave={() => setHeld(false)}
         onFocus={() => setHeld(true)}
@@ -635,10 +636,7 @@ export function Sharing() {
         }}
       >
         <div
-          className={cn(
-            "flex items-start gap-1 border-b bg-white/30 p-1.5 dark:bg-[#0c0b0b]/40",
-            line,
-          )}
+          className={cn("flex items-start gap-1 border-b bg-white/15 p-1.5 dark:bg-black/20", line)}
         >
           <div
             role="tablist"
@@ -664,8 +662,8 @@ export function Sharing() {
                   className={cn(
                     "relative flex h-14 flex-col items-center justify-center gap-1 overflow-hidden rounded-md text-[13px] leading-4 font-medium sm:h-11 sm:flex-row sm:gap-2 sm:text-base sm:leading-6 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none",
                     selected
-                      ? "bg-white shadow-[0_1px_2px_rgb(0_0_0/0.08)] dark:bg-[#1a1919]"
-                      : cn(muted, "hover:bg-[#f4f4f4] dark:hover:bg-[#1a1919]"),
+                      ? "bg-white/70 shadow-[0_1px_2px_rgb(0_0_0/0.08)] dark:bg-white/10"
+                      : cn(muted, "hover:bg-white/40 dark:hover:bg-white/5"),
                   )}
                 >
                   {/* The countdown to the next tab: a faint wash that fills the selected tab. */}
@@ -695,7 +693,7 @@ export function Sharing() {
             onClick={() => setStopped(!stopped)}
             aria-label={stopped ? "Play the tour" : "Pause the tour"}
             className={cn(
-              "flex h-14 w-8 shrink-0 items-center justify-center rounded-md hover:bg-[#f4f4f4] sm:size-11 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none motion-reduce:hidden dark:hover:bg-[#1a1919]",
+              "flex h-14 w-8 shrink-0 items-center justify-center rounded-md hover:bg-white/40 sm:size-11 focus-visible:ring-2 focus-visible:ring-[#2a26ec]/40 focus-visible:outline-none motion-reduce:hidden dark:hover:bg-white/5",
               muted,
             )}
           >
@@ -740,7 +738,7 @@ export function Sharing() {
                     <li
                       key={feature.title}
                       className={cn(
-                        "flex flex-col gap-1 border-b bg-white/40 p-4 last:border-b-0 sm:gap-1.5 sm:p-5 sm:odd:border-r sm:[&:nth-last-child(-n+2)]:border-b-0 lg:justify-center dark:bg-[#0c0b0b]/40",
+                        "flex flex-col gap-1 border-b bg-white/15 p-4 last:border-b-0 sm:gap-1.5 sm:p-5 sm:odd:border-r sm:[&:nth-last-child(-n+2)]:border-b-0 lg:justify-center dark:bg-black/15",
                         line,
                       )}
                     >
@@ -764,7 +762,7 @@ export function Sharing() {
               <div
                 aria-hidden="true"
                 className={cn(
-                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-white/50 p-4 sm:p-8 lg:min-h-112 dark:bg-[#0c0b0b]/50",
+                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-white/20 p-4 sm:p-8 lg:min-h-112 dark:bg-black/20",
                   line,
                 )}
               >
