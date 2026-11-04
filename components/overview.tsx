@@ -2,52 +2,27 @@ import { cn } from "@sniptide/ui/lib/utils"
 import { ChevronRightIcon } from "lucide-react"
 import { LifeField } from "@/components/life-field"
 import { SectionHeading } from "@/components/section-heading"
+import { type SessionLine, TypedSession } from "@/components/typed-session"
 import { documentation } from "@/lib/agent-docs"
 
 // The capability map: every core feature in one view. The small tiles link down to their
 // sections, and the agents tile links to the MCP guide, since agents have no section of their own.
 // What the large tile shows: an agent finding and reusing a snippet instead of writing it again.
-function Transcript() {
-  return (
-    <span
-      aria-hidden="true"
-      className="flex flex-col overflow-hidden rounded-lg border border-[#2c2a2a] bg-[#1b1919] font-mono text-xs leading-5 text-[#d4d4d4]"
-    >
-      <span className="flex h-9 items-center justify-between border-b border-[#2c2a2a] px-3.5 text-[11px] text-[#a3a3a3]">
-        <span>claude</span>
-        <span>~/acme/web</span>
-      </span>
-      <span className="flex flex-col gap-3 overflow-x-auto px-4 py-4 whitespace-pre">
-        <span className="text-white whitespace-normal">
-          <span className="text-[#a3a3a3]">&gt; </span>Add a confirm dialog to the delete button.
-          Use our usual pattern.
-        </span>
-        <span className="flex flex-col">
-          <span>
-            <span className="text-[#8f8cff]">● </span>sniptide · search_snippets
-            <span className="text-[#a3a3a3]">("confirm dialog")</span>
-          </span>
-          <span className="pl-3.5 text-[#a3a3a3]">⎿ 1 match in ui</span>
-          <span>
-            <span className="text-[#8f8cff]">● </span>sniptide · read_snippet
-            <span className="text-[#a3a3a3]">("k7Qe2x")</span>
-          </span>
-          <span className="pl-3.5 text-[#a3a3a3]">⎿ 3 files, 84 lines</span>
-          <span>
-            <span className="text-[#f6a9d3]">● </span>Update src/components/delete-button.tsx
-          </span>
-        </span>
-      </span>
-    </span>
-  )
-}
+const transcript: SessionLine[] = [
+  { kind: "prompt", text: "Add a confirm dialog to the delete button. Use our usual pattern." },
+  { kind: "command", text: "sniptide · search_snippets", detail: '("confirm dialog")' },
+  { kind: "output", text: "1 match in components" },
+  { kind: "command", text: "sniptide · read_snippet", detail: '("k7Qe2x")' },
+  { kind: "output", text: "3 files, 84 lines" },
+  { kind: "reply", text: "Updated src/components/delete-button.tsx with your confirm dialog." },
+]
 
 const tiles = [
   {
     href: "#recipes",
     title: "Folders become recipes",
     text: "Push a folder with its paths, order it in a collection and pull it into the next project.",
-    code: "sniptide pull collection:ui",
+    code: "sniptide pull collection:components",
   },
   {
     href: "#secrets",
@@ -98,8 +73,8 @@ export function Overview() {
         className="!absolute hidden opacity-20 dark:block"
       />
       <SectionHeading
-        claim="Everything you reuse lives in one library."
-        reason="Your agents, the CLI and your team all read from it."
+        claim="Keep your best code in one library."
+        reason="Agents, the CLI and your team all pull from it."
       />
 
       <ul className="grid border-t border-l border-[#e8e8e8] md:grid-cols-2 lg:grid-cols-4 dark:border-[#262626]">
@@ -120,7 +95,10 @@ export function Overview() {
                 write new code. One sign-in in the browser connects them.
               </span>
             </span>
-            <Transcript />
+            {/* The link names the tile, so the transcript stays out of the accessible name. */}
+            <span aria-hidden="true" className="flex min-w-0 flex-col">
+              <TypedSession lines={transcript} title={["claude", "~/acme/web"]} />
+            </span>
             <Chevron />
           </a>
         </li>
