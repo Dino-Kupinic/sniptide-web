@@ -1,11 +1,10 @@
 import { ArrowRightIcon } from "lucide-react"
 import secretsDark from "@/assets/landing/secrets-dark.webp"
+import { EnvTerminal } from "@/components/env-terminal"
 import { LifeField } from "@/components/life-field"
 import { Screenshot } from "@/components/screenshot"
 import { SectionHeading } from "@/components/section-heading"
 import { docsPages } from "@/lib/links"
-
-const variables = ["DATABASE_URL", "STRIPE_SECRET_KEY", "RESEND_API_KEY", "PORT"]
 
 // The encryption facts mirror lib/env/crypto.ts in the app repo.
 const facts = [
@@ -22,26 +21,6 @@ const facts = [
     text: "The CLI names variables and never shows values, so agent output stays clean.",
   },
 ]
-
-function Terminal() {
-  return (
-    <div className="min-w-0 overflow-hidden rounded-lg border border-[#2c2a2a] bg-[#1b1919] font-mono text-xs leading-5 text-[#d4d4d4] lg:shadow-[0_24px_48px_-12px_rgb(0_0_0/0.7)]">
-      <div className="flex h-9 items-center justify-between border-b border-[#2c2a2a] px-3.5 text-[11px] text-[#a3a3a3]">
-        <span>claude</span>
-        <span>~/acme/checkout</span>
-      </div>
-      <div className="overflow-x-auto px-3.5 py-3.5 whitespace-pre">
-        <span className="text-[#8f8cff]">● </span>
-        <span className="text-white">sniptide env run checkout -- bun dev</span>
-        {"\n  ⎿ Ready on http://localhost:3000\n"}
-        <span className="text-[#8f8cff]">● </span>
-        <span className="text-white">sniptide env pull checkout --json</span>
-        {"\n  ⎿ wrote .env · "}
-        <span className="text-[#a3a3a3]">{variables.slice(0, 2).join(", ")}, …</span>
-      </div>
-    </div>
-  )
-}
 
 // Dark in both themes, like a terminal.
 export function Secrets() {
@@ -67,7 +46,7 @@ export function Secrets() {
           className="border-[#262626] lg:w-[66%]"
         />
         <div className="lg:absolute lg:right-0 lg:bottom-0 lg:w-[46%]">
-          <Terminal />
+          <EnvTerminal />
         </div>
       </figure>
 

@@ -1,6 +1,4 @@
-import collectionDark from "@/assets/landing/collection-dark.webp"
-import collectionLight from "@/assets/landing/collection-light.webp"
-import { Screenshot } from "@/components/screenshot"
+import { LoopVideo } from "@/components/loop-video"
 import { SectionHeading } from "@/components/section-heading"
 import { documentation } from "@/lib/agent-docs"
 
@@ -58,10 +56,19 @@ export function Recipes() {
       />
 
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
-        <Screenshot
-          light={collectionLight}
-          dark={collectionDark}
-          alt="The ui collection in Sniptide with four pastes: Confirm dialog, Toaster, Button with variants and Design tokens."
+        {/* Recorded from a local demo instance with the ui collection seeded (public/landing). */}
+        <LoopVideo
+          light={{
+            src: "/landing/collection-light.mp4",
+            poster: "/landing/collection-light-poster.webp",
+          }}
+          dark={{
+            src: "/landing/collection-dark.mp4",
+            poster: "/landing/collection-dark-poster.webp",
+          }}
+          width={1604}
+          height={834}
+          label="The ui collection in Sniptide with four pastes: Confirm dialog, Toaster, Button with variants and Design tokens. Filtering for button leaves Button with variants."
           crop
         />
 
