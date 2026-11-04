@@ -627,7 +627,7 @@ export function Sharing() {
 
       {/* biome-ignore lint/a11y/noStaticElementInteractions: these handlers only hold the tour while the pointer or focus is inside; the tabs are the controls. */}
       <div
-        className="relative overflow-hidden rounded-lg border border-white/70 bg-linear-to-b from-white/75 to-white/60 text-[#1b1919] shadow-[inset_0_1px_0_rgb(255_255_255/0.8),0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-[3px] dark:border-white/15 dark:from-[#121111]/80 dark:to-[#121111]/70 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_24px_48px_-12px_rgb(43_10_31/0.4)] dark:text-[#f5f5f5]"
+        className="relative overflow-hidden rounded-lg border border-white/70 max-md:-mx-5 max-md:rounded-none max-md:border-x-0 bg-linear-to-b from-white/75 to-white/60 text-[#1b1919] shadow-[inset_0_1px_0_rgb(255_255_255/0.8),0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-[3px] dark:border-white/15 dark:from-[#121111]/80 dark:to-[#121111]/70 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_24px_48px_-12px_rgb(43_10_31/0.4)] dark:text-[#f5f5f5]"
         onPointerEnter={() => setHeld(true)}
         onPointerLeave={() => setHeld(false)}
         onFocus={() => setHeld(true)}
