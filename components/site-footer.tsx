@@ -33,17 +33,18 @@ export function SiteFooter() {
       data-cta-location="footer"
       className="@container relative h-145 overflow-clip bg-white text-black md:h-210 dark:bg-[#08080b] dark:text-[#d4d4dc]"
     >
-      {/* Dithered glow grid, cropped so its lower rows meet the tagline. Past 1440px it scales with
-          the footer's width and stays anchored at the grid's last row (700px of the 1440px image),
-          so it fills wide screens. In dark mode it lightens onto the footer so its black edges vanish. */}
+      {/* Dithered glow grid, cropped so its lower rows meet the tagline. From md up it stays at its
+          1440px size, centered under the content, and past 1440px its sides fade into the footer
+          so the grid ends softly instead of stretching. In dark mode it lightens onto the footer
+          so its black edges vanish. */}
       <Image
         src={grid}
         alt=""
         aria-hidden="true"
         unoptimized
-        className="pointer-events-none absolute top-[-440px] left-[-60px] max-md:[mask-image:linear-gradient(to_bottom,transparent_440px,black_600px)] h-205 w-360 max-w-none invert hue-rotate-180 md:top-[calc(469px-max(1440px,100cqw)*700/1440)] md:left-1/2 md:h-auto md:w-[max(1440px,100cqw)] md:-translate-x-1/2 dark:mix-blend-lighten dark:invert-0 dark:hue-rotate-0"
+        className="pointer-events-none absolute top-[-440px] left-[-60px] max-md:[mask-image:linear-gradient(to_bottom,transparent_440px,black_600px)] h-205 w-360 max-w-none invert hue-rotate-180 md:top-[-231px] md:left-1/2 md:h-auto md:w-360 md:-translate-x-1/2 min-[90rem]:[mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)] dark:mix-blend-lighten dark:invert-0 dark:hue-rotate-0"
       />
-      <div className="pointer-events-none absolute top-95 left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:top-145 md:left-30 md:h-80 md:w-300 dark:block" />
+      <div className="pointer-events-none absolute top-95 left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:top-145 md:left-[calc(50%-600px)] md:h-80 md:w-300 dark:block" />
 
       {/* The text, links and wordmark share the header's 1440px frame, so they stay centered on
           wide screens while the grid above runs edge to edge. */}
