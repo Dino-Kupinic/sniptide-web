@@ -42,12 +42,12 @@ import { docsPages, links } from "@/lib/links"
 // Muted text leans pink so it keeps AA contrast on the glass window over the pink.
 const muted = "text-[#5c4653] dark:text-[#cbbfc5]"
 const line = "border-[#2b0a1f]/10 dark:border-white/10"
-const blueText = "text-[#2a26ec] dark:text-[#8f8cff]"
+const blueText = "text-[#2a26ec] dark:text-[#f6a9d3]"
 
 // ---------- Infographics. Each repeats what its tab's cards say, so screen readers skip it. ----------
 
 const wireGray = "text-[#b8b8b8] dark:text-[#4a4747]"
-const wireBlue = "text-[#2a26ec] dark:text-[#8f8cff]"
+const wireBlue = "text-[#2a26ec] dark:text-[#f6a9d3]"
 
 // Curved connectors drawn in a stretchable box: each path runs from a point on one edge to a point
 // on the other, in percent. The blue ones carry a slow dash that flows from start to end.
@@ -97,7 +97,7 @@ function CodeLines({ widths }: { widths: string[] }) {
           key={i}
           className={cn(
             "block h-1.5 rounded-sm",
-            i % 3 === 0 ? "bg-[#2a26ec]/35 dark:bg-[#8f8cff]/40" : "bg-[#e0e0e0] dark:bg-[#2f2c2c]",
+            i % 3 === 0 ? "bg-[#2a26ec]/35 dark:bg-[#f6a9d3]/40" : "bg-[#e0e0e0] dark:bg-[#2f2c2c]",
           )}
           style={{ width }}
         />
@@ -198,7 +198,7 @@ function ProtectGraphic() {
     <div className="flex flex-col gap-9">
       {/* The lifecycle: blue up to the first view, dashed to the end, where the paste is gone. */}
       <div className="relative grid grid-cols-4">
-        <span className="absolute top-5.5 left-[12.5%] h-px w-[50%] bg-[#2a26ec] dark:bg-[#8f8cff]" />
+        <span className="absolute top-5.5 left-[12.5%] h-px w-[50%] bg-[#2a26ec] dark:bg-[#f6a9d3]" />
         <span className="absolute top-5.5 left-[62.5%] w-[25%] border-t border-dashed border-[#b0b0b0] dark:border-[#4a4747]" />
         {steps.map((step, i) => (
           <div key={step.label} className="relative flex flex-col items-center gap-2 text-center">
@@ -209,7 +209,7 @@ function ProtectGraphic() {
                   ? "border-dashed border-[#b0b0b0] bg-[#fafafa] text-[#6b6b6b] dark:border-[#4a4747] dark:bg-[#0c0b0b] dark:text-[#a3a3a3]"
                   : i === 2
                     ? "border-[#2a26ec] bg-[#2a26ec] text-white"
-                    : cn(line, "bg-white text-[#2a26ec] dark:bg-[#121111] dark:text-[#8f8cff]"),
+                    : cn(line, "bg-white text-[#2a26ec] dark:bg-[#121111] dark:text-[#f6a9d3]"),
               )}
             >
               <step.icon className="size-4.5" strokeWidth={2} />
@@ -360,7 +360,7 @@ function TrackGraphic() {
               className={cn(
                 "size-2 shrink-0 rounded-full",
                 revision.current
-                  ? "bg-[#2a26ec] ring-4 ring-[#2a26ec]/15 dark:bg-[#8f8cff] dark:ring-[#8f8cff]/20"
+                  ? "bg-[#2a26ec] ring-4 ring-[#2a26ec]/15 dark:bg-[#f6a9d3] dark:ring-[#f6a9d3]/20"
                   : "bg-[#b0b0b0] dark:bg-[#4a4747]",
               )}
             />
@@ -673,7 +673,7 @@ export function Sharing() {
                       aria-hidden="true"
                       onAnimationEnd={() => setActive((active + 1) % tabs.length)}
                       className={cn(
-                        "absolute inset-0 origin-left bg-[#2a26ec]/8 motion-safe:animate-[tab-progress_5s_linear] motion-reduce:hidden dark:bg-[#8f8cff]/10",
+                        "absolute inset-0 origin-left bg-[#2a26ec]/8 motion-safe:animate-[tab-progress_5s_linear] motion-reduce:hidden dark:bg-[#f6a9d3]/10",
                         held && "[animation-play-state:paused]",
                       )}
                     />
