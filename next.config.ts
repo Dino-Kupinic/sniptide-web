@@ -1,6 +1,6 @@
 import type { NextConfig } from "next"
 import { documentation } from "./lib/agent-docs"
-import { appUrl } from "./lib/links"
+import { appUrl, installScriptUrl } from "./lib/links"
 import { posthogAssetsHost, posthogHost, posthogProxyPath } from "./lib/posthog"
 
 // App pages: sniptide.com sends people to app.sniptide.com for these.
@@ -39,6 +39,9 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       { source: "/api/auth/:rest*", destination: `${appUrl}/api/auth/:rest*`, permanent: true },
+      // `curl -fsSL https://sniptide.com/install.sh | sh` follows this to the self-host installer
+      // in the app repo. Temporary, so the script's location can change.
+      { source: "/install.sh", destination: installScriptUrl, permanent: false },
     ]
   },
 
