@@ -627,7 +627,7 @@ export function Sharing() {
 
       {/* biome-ignore lint/a11y/noStaticElementInteractions: these handlers only hold the tour while the pointer or focus is inside; the tabs are the controls. */}
       <div
-        className="relative overflow-hidden rounded-lg border border-white/70 bg-linear-to-b from-white/35 to-white/10 text-[#1b1919] shadow-[inset_0_1px_0_rgb(255_255_255/0.8),0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-[6px] backdrop-saturate-[1.8] dark:border-white/15 dark:from-[#121111]/80 dark:to-[#121111]/70 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_24px_48px_-12px_rgb(43_10_31/0.4)] dark:text-[#f5f5f5]"
+        className="relative overflow-hidden rounded-lg border border-white/70 bg-linear-to-b from-white/75 to-white/60 text-[#1b1919] shadow-[inset_0_1px_0_rgb(255_255_255/0.8),0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-[3px] dark:border-white/15 dark:from-[#121111]/80 dark:to-[#121111]/70 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_24px_48px_-12px_rgb(43_10_31/0.4)] dark:text-[#f5f5f5]"
         onPointerEnter={() => setHeld(true)}
         onPointerLeave={() => setHeld(false)}
         onFocus={() => setHeld(true)}
@@ -636,7 +636,7 @@ export function Sharing() {
         }}
       >
         <div
-          className={cn("flex items-start gap-1 border-b bg-white/15 p-1.5 dark:bg-black/20", line)}
+          className={cn("flex items-start gap-1 border-b bg-white/30 p-1.5 dark:bg-black/20", line)}
         >
           <div
             role="tablist"
@@ -738,7 +738,7 @@ export function Sharing() {
                     <li
                       key={feature.title}
                       className={cn(
-                        "flex flex-col gap-1 border-b bg-white/15 p-4 last:border-b-0 sm:gap-1.5 sm:p-5 sm:odd:border-r sm:[&:nth-last-child(-n+2)]:border-b-0 lg:justify-center dark:bg-black/15",
+                        "flex flex-col gap-1 border-b bg-white/35 p-4 last:border-b-0 sm:gap-1.5 sm:p-5 sm:odd:border-r sm:[&:nth-last-child(-n+2)]:border-b-0 lg:justify-center dark:bg-black/15",
                         line,
                       )}
                     >
@@ -762,7 +762,7 @@ export function Sharing() {
               <div
                 aria-hidden="true"
                 className={cn(
-                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-white/20 p-4 sm:p-8 lg:min-h-112 dark:bg-black/20",
+                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-white/40 p-4 sm:p-8 lg:min-h-112 dark:bg-black/20",
                   line,
                 )}
               >
