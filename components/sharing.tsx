@@ -468,8 +468,8 @@ const tabs: {
   {
     label: "Share",
     icon: Share2Icon,
-    title: "Share with exactly who needs it.",
-    summary: "Pick who can see a paste, then send the link anywhere.",
+    title: "Share it with the right people.",
+    summary: "Pick who can see a paste, then send the link.",
     features: [
       {
         icon: GlobeIcon,
@@ -497,8 +497,8 @@ const tabs: {
   {
     label: "Protect",
     icon: ShieldIcon,
-    title: "Decide how long a link lives.",
-    summary: "Every link carries its own rules, set in the panel next to the paste.",
+    title: "Set how long a link lives.",
+    summary: "Each link carries its own rules.",
     features: [
       { icon: TimerIcon, title: "Expiry", text: "An hour, a day, a week, a month or never." },
       {
@@ -522,8 +522,8 @@ const tabs: {
   {
     label: "Track",
     icon: ActivityIcon,
-    title: "See what happened to every paste.",
-    summary: "Numbers and history sit next to the code they belong to.",
+    title: "See who opened what.",
+    summary: "Views and history sit next to the code.",
     features: [
       {
         icon: ChartColumnIcon,
@@ -551,8 +551,8 @@ const tabs: {
   {
     label: "Connect",
     icon: PlugIcon,
-    title: "Move code in and out the way you work.",
-    summary: "The same pastes reach your scripts, your docs and your chat.",
+    title: "Reach your pastes from any tool.",
+    summary: "Scripts, docs and chat all read the same pastes.",
     features: [
       {
         icon: BracesIcon,
@@ -619,14 +619,14 @@ export function Sharing() {
 
       <SectionHeading
         className="relative"
-        claim="When a person needs it, send a link."
-        reason="Everything around the link is already built in."
+        claim="Share any paste with a link."
+        reason="Passwords, expiry and view counts come with it."
         reasonClassName="text-[#a04577]"
       />
 
       {/* biome-ignore lint/a11y/noStaticElementInteractions: these handlers only hold the tour while the pointer or focus is inside; the tabs are the controls. */}
       <div
-        className="relative overflow-hidden rounded-lg border border-[#2b0a1f]/15 bg-white text-[#1b1919] shadow-[0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] dark:border-[#2b0a1f]/40 dark:bg-[#121111] dark:text-[#f5f5f5]"
+        className="relative overflow-hidden rounded-lg border border-[#2b0a1f]/15 bg-white/80 text-[#1b1919] shadow-[0_2px_4px_rgb(43_10_31/0.06),0_24px_48px_-12px_rgb(43_10_31/0.22)] backdrop-blur-md dark:border-[#2b0a1f]/40 dark:bg-[#121111]/90 dark:text-[#f5f5f5]"
         onPointerEnter={() => setHeld(true)}
         onPointerLeave={() => setHeld(false)}
         onFocus={() => setHeld(true)}
@@ -636,7 +636,7 @@ export function Sharing() {
       >
         <div
           className={cn(
-            "flex items-start gap-1 border-b bg-[#fafafa] p-1.5 dark:bg-[#0c0b0b]",
+            "flex items-start gap-1 border-b bg-white/50 p-1.5 dark:bg-[#0c0b0b]/50",
             line,
           )}
         >
@@ -717,28 +717,32 @@ export function Sharing() {
               id={`${id}-panel-${i}`}
               aria-labelledby={`${id}-tab-${i}`}
               className={cn(
-                "grid content-start items-center gap-8 p-4 [grid-area:1/1] sm:gap-10 sm:p-6 motion-safe:transition-opacity motion-safe:duration-300 md:p-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14 lg:py-16",
+                "grid content-start items-center gap-8 p-4 lg:items-stretch [grid-area:1/1] sm:gap-10 sm:p-6 motion-safe:transition-opacity motion-safe:duration-300 md:p-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14 lg:py-16",
                 i === active ? "opacity-100" : "invisible opacity-0",
               )}
             >
               <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 lg:pt-2">
                   <h3 className="font-heading text-[28px] leading-8.5 font-medium tracking-[-0.025em] md:text-4xl md:leading-11">
                     {tab.title}
                   </h3>
                   <p className={cn("text-base leading-6.5", muted)}>{tab.summary}</p>
                 </div>
-                {/* One panel split into four cells: the 1px gap shows the hairline between them. */}
+                {/* One panel split into four cells with hairlines between them. On desktops it grows to the
+                    height of the drawing beside it. */}
                 <ul
                   className={cn(
-                    "grid gap-px overflow-hidden rounded-lg border bg-[#e8e8e8] sm:grid-cols-2 dark:bg-[#262626]",
+                    "grid overflow-hidden rounded-lg border sm:grid-cols-2 lg:grow lg:grid-rows-2",
                     line,
                   )}
                 >
                   {tab.features.map((feature) => (
                     <li
                       key={feature.title}
-                      className="flex flex-col gap-1 bg-[#fafafa] p-4 sm:gap-1.5 sm:p-5 dark:bg-[#0c0b0b]"
+                      className={cn(
+                        "flex flex-col gap-1 border-b bg-[#fafafa]/60 p-4 last:border-b-0 sm:gap-1.5 sm:p-5 sm:odd:border-r sm:[&:nth-last-child(-n+2)]:border-b-0 lg:justify-center dark:bg-[#0c0b0b]/60",
+                        line,
+                      )}
                     >
                       <span className="flex items-center gap-2">
                         <feature.icon
@@ -760,7 +764,7 @@ export function Sharing() {
               <div
                 aria-hidden="true"
                 className={cn(
-                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-[#fafafa] p-4 sm:p-8 lg:min-h-112 dark:bg-[#0c0b0b]",
+                  "flex min-h-80 min-w-0 flex-col justify-center rounded-lg border bg-[#fafafa]/60 p-4 sm:p-8 lg:min-h-112 dark:bg-[#0c0b0b]",
                   line,
                 )}
               >

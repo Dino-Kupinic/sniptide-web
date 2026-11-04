@@ -98,8 +98,8 @@ export function Overview() {
         className="!absolute hidden opacity-20 dark:block"
       />
       <SectionHeading
-        claim="Everything you reuse lives in one library."
-        reason="Your agents, the CLI and your team all read from it."
+        claim="Keep your best code in one library."
+        reason="Agents, the CLI and your team all pull from it."
       />
 
       <ul className="grid border-t border-l border-[#e8e8e8] md:grid-cols-2 lg:grid-cols-4 dark:border-[#262626]">

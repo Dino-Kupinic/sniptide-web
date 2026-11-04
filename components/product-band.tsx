@@ -15,8 +15,7 @@ export function ProductBand() {
         href={links.signUp}
         className="raised-button flex h-8.5 shrink-0 items-center gap-2.5 self-start bg-[#2a26ec] [--button-focus:white] border border-white/35 px-3.5 text-sm leading-4.5 font-medium text-white hover:bg-white/10 md:self-auto"
       >
-        <span className="md:hidden">Write, share and track every paste</span>
-        <span className="hidden md:inline">Write, share and track every paste from one place</span>
+        Write, share and track every paste
         <ChevronRightIcon className="size-2.5" strokeWidth={3} />
       </a>
 

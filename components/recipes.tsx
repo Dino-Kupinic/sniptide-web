@@ -53,8 +53,8 @@ export function Recipes() {
       className="flex scroll-mt-4 flex-col gap-10 border-t border-[#e8e8e8] bg-[#fafafa] section-frame py-16 text-[#1b1919] md:gap-14 md:py-20 xl:py-30 dark:border-[#1f1f1f] dark:bg-[#0f0f0f] dark:text-[#f5f5f5]"
     >
       <SectionHeading
-        claim="Capture a folder once and restore it anywhere."
-        reason="The CLI keeps the paths, and collections keep the order."
+        claim="Save a folder once and pull it anywhere."
+        reason="Every path and every step comes back in order."
       />
 
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">

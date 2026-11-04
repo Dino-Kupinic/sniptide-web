@@ -53,8 +53,8 @@ export function Secrets() {
     >
       <LifeField live="#f6a9d3" trail="#2a26ec" density={0.06} className="!absolute opacity-25" />
       <SectionHeading
-        claim="Your .env stays in sync and out of agent output."
-        reason="Agents run your app with the keys set and never print them."
+        claim="Your .env files stay in sync."
+        reason="Agents use the keys and never print them."
         reasonClassName="text-[#8f8cff]"
       />
 
