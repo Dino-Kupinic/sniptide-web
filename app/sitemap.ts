@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return sitemapPaths.map((path) => ({
     url: path === "/" ? siteUrl : `${siteUrl}${path}`,
     lastModified:
-      path === "/blog" || path === "/brand"
+      path === "/blog" || path === "/brand" || path === "/vision"
         ? "2026-11-05"
         : path === "/about" || path === "/contact" || path.startsWith("/docs")
           ? "2026-10-28"

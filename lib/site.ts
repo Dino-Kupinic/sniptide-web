@@ -58,4 +58,5 @@ export const sitemapPaths = [
   "/privacy",
   "/terms",
   "/impressum",
+  "/vision",
 ]

@@ -3,9 +3,9 @@
 import { Accordion } from "@base-ui/react/accordion"
 import { NavigationMenu } from "@base-ui/react/navigation-menu"
 import { cn } from "@sniptide/ui/lib/utils"
-import { ArrowUpRightIcon, ChevronDownIcon } from "lucide-react"
-import type { CSSProperties } from "react"
-import { type NavItem, type NavMenu, navLinks, navMenus } from "@/lib/nav"
+import { ArrowRightIcon, ArrowUpRightIcon, ChevronDownIcon } from "lucide-react"
+import type { CSSProperties, RefObject } from "react"
+import { type NavFeature, type NavItem, type NavMenu, navLinks, navMenus } from "@/lib/nav"
 
 export const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
@@ -55,21 +55,50 @@ function MenuRow({ item }: { item: NavItem }) {
   )
 }
 
-function MenuPanel({ menu }: { menu: NavMenu }) {
-  const columns = menu.groups.length
+// The last column: a filled panel with one link, a sentence and the action it leads to.
+function FeatureCard({ feature }: { feature: NavFeature }) {
+  const Icon = feature.icon
   return (
-    <div
-      className={cn(
-        "grid gap-1 p-1.5",
-        columns > 1 ? "w-[42rem] grid-cols-2" : "w-[25rem] grid-cols-1",
-      )}
+    <NavigationMenu.Link
+      href={feature.href}
+      closeOnClick
+      {...linkTarget(feature)}
+      className="group/feature flex h-full flex-col gap-3 rounded-lg bg-[#f4f4f4] p-5 outline-none transition-colors hover:bg-[#ededed] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#2a26ec] dark:bg-[#1a1919] dark:hover:bg-[#211f1f] dark:focus-visible:outline-[#8f8cff]"
     >
+      <Icon className="size-4 text-[#2a26ec] dark:text-[#8f8cff]" />
+      <span className="flex flex-col gap-1">
+        <span className="text-sm leading-5 font-medium text-[#0a0a0a] dark:text-white">
+          {feature.label}
+        </span>
+        <span className={cn("text-[13px] leading-[18px]", muted)}>{feature.description}</span>
+      </span>
+      <span className="mt-auto inline-flex items-center gap-1 text-sm leading-5 font-medium text-[#2a26ec] dark:text-[#8f8cff]">
+        {feature.action}
+        {feature.external ? (
+          <>
+            <ArrowUpRightIcon aria-hidden="true" className="size-3.5" />
+            <span className="sr-only">(opens in a new tab)</span>
+          </>
+        ) : (
+          <ArrowRightIcon
+            aria-hidden="true"
+            className="size-3.5 transition-transform duration-200 ease-out group-hover/feature:translate-x-0.5 motion-reduce:transition-none"
+          />
+        )}
+      </span>
+    </NavigationMenu.Link>
+  )
+}
+
+// A full-width panel under the header: one column per group, then the feature card. The columns
+// start at the header's gutter, under the logo.
+function MenuPanel({ menu }: { menu: NavMenu }) {
+  return (
+    <div className="mx-auto grid max-w-[1440px] grid-cols-[repeat(2,minmax(0,23rem))_minmax(0,1fr)_minmax(0,20rem)] gap-8 px-10 pt-6 pb-8">
       {menu.groups.map((group) => (
-        <div key={group.label ?? menu.label} className="flex min-w-0 flex-col">
-          {group.label && (
-            <p className={cn("px-2 pt-1.5 pb-1 text-xs leading-4", muted)}>{group.label}</p>
-          )}
-          <ul className="flex flex-col">
+        <div key={group.label} className="flex min-w-0 flex-col gap-1">
+          <p className={cn("pb-1 text-xs leading-4", muted)}>{group.label}</p>
+          <ul className="-mx-2 flex flex-col">
             {group.items.map((item) => (
               <li key={item.label}>
                 <MenuRow item={item} />
@@ -78,6 +107,9 @@ function MenuPanel({ menu }: { menu: NavMenu }) {
           </ul>
         </div>
       ))}
+      <div className="col-start-4 min-w-0">
+        <FeatureCard feature={menu.feature} />
+      </div>
     </div>
   )
 }
@@ -86,7 +118,8 @@ function MenuPanel({ menu }: { menu: NavMenu }) {
 const content =
   "transition-[opacity,translate] duration-(--duration) ease-(--easing) data-starting-style:opacity-0 data-ending-style:opacity-0 data-starting-style:data-[activation-direction=left]:-translate-x-6 data-starting-style:data-[activation-direction=right]:translate-x-6 data-ending-style:data-[activation-direction=left]:translate-x-6 data-ending-style:data-[activation-direction=right]:-translate-x-6 motion-reduce:transition-none"
 
-export function DesktopNav() {
+// The menus open as one panel the width of the header, attached to its bottom edge.
+export function DesktopNav({ anchor }: { anchor: RefObject<HTMLElement | null> }) {
   return (
     <NavigationMenu.Root aria-label="Main navigation" className="-ml-3 hidden lg:block">
       <NavigationMenu.List className="flex items-center gap-1 whitespace-nowrap">
@@ -120,15 +153,16 @@ export function DesktopNav() {
 
       <NavigationMenu.Portal>
         {/* The popup renders outside the header, so it carries the header's tracking location.
-            Its ::before bridges the gap to the trigger so the pointer can cross it. */}
+            Its ::before covers the header below the triggers so the pointer can cross it. */}
         <NavigationMenu.Positioner
+          anchor={anchor}
           data-cta-location="header"
           side="bottom"
           align="start"
-          sideOffset={20}
-          collisionPadding={20}
+          sideOffset={-1}
+          collisionPadding={0}
           collisionAvoidance={{ side: "none" }}
-          className="z-40 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-(--duration) ease-(--easing) before:absolute before:inset-x-0 before:-top-5 before:h-5 before:content-[''] data-instant:transition-none motion-reduce:transition-none"
+          className="z-40 h-(--positioner-height) w-(--anchor-width) before:absolute before:inset-x-0 before:-top-4 before:h-4 before:content-['']"
           style={
             {
               "--duration": "0.25s",
@@ -136,8 +170,8 @@ export function DesktopNav() {
             } as CSSProperties
           }
         >
-          <NavigationMenu.Popup className="relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) rounded-lg border border-[#e8e8e8] bg-white text-[#0a0a0a] shadow-(--float-shadow) outline-none transition-[opacity,scale,width,height] duration-(--duration) ease-(--easing) data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-ending-style:duration-150 data-ending-style:ease-out motion-reduce:transition-none dark:border-[#262626] dark:bg-[#0c0b0b] dark:text-white">
-            <NavigationMenu.Viewport className="relative size-full overflow-hidden rounded-[inherit]" />
+          <NavigationMenu.Popup className="relative h-(--popup-height) w-full origin-top overflow-hidden border-y border-[#e8e8e8] bg-white text-[#0a0a0a] shadow-(--float-shadow) outline-none transition-[opacity,height] duration-(--duration) ease-(--easing) data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-150 data-ending-style:ease-out motion-reduce:transition-none dark:border-[#222222] dark:bg-[#0a0a0a] dark:text-white">
+            <NavigationMenu.Viewport className="relative size-full overflow-hidden" />
           </NavigationMenu.Popup>
         </NavigationMenu.Positioner>
       </NavigationMenu.Portal>
@@ -154,6 +188,24 @@ export const menuItem =
 
 export function staggerStyle(open: boolean, index: number): CSSProperties {
   return { transitionDelay: open ? `${index * 30}ms` : "0ms" }
+}
+
+function MobileRow({ item }: { item: NavItem }) {
+  const Icon = item.icon
+  return (
+    <a
+      href={item.href}
+      {...linkTarget(item)}
+      className={cn(
+        "flex h-11 items-center gap-3 text-sm leading-5 text-[#0a0a0a] transition-colors active:text-[#6b6b6b] dark:text-white dark:active:text-[#a3a3a3]",
+        focusRing,
+      )}
+    >
+      <Icon className={cn("size-4 shrink-0", muted)} />
+      {item.label}
+      {item.external && <ExternalMark />}
+    </a>
+  )
 }
 
 // The same menus as the desktop header, as sections that fold open one at a time.
@@ -179,33 +231,20 @@ export function MobileNavMenus({ open }: { open: boolean }) {
           <Accordion.Panel className="h-(--accordion-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none">
             <div className="border-b border-[#e8e8e8] py-2 dark:border-[#222222]">
               {menu.groups.map((group) => (
-                <div key={group.label ?? menu.label}>
-                  {group.label && (
-                    <p className={cn("pt-2 pb-1 text-xs leading-4", muted)}>{group.label}</p>
-                  )}
+                <div key={group.label}>
+                  <p className={cn("pt-2 pb-1 text-xs leading-4", muted)}>{group.label}</p>
                   <ul>
-                    {group.items.map((item) => {
-                      const Icon = item.icon
-                      return (
-                        <li key={item.label}>
-                          <a
-                            href={item.href}
-                            {...linkTarget(item)}
-                            className={cn(
-                              "flex h-11 items-center gap-3 text-sm leading-5 text-[#0a0a0a] transition-colors active:text-[#6b6b6b] dark:text-white dark:active:text-[#a3a3a3]",
-                              focusRing,
-                            )}
-                          >
-                            <Icon className={cn("size-4 shrink-0", muted)} />
-                            {item.label}
-                            {item.external && <ExternalMark />}
-                          </a>
-                        </li>
-                      )
-                    })}
+                    {group.items.map((item) => (
+                      <li key={item.label}>
+                        <MobileRow item={item} />
+                      </li>
+                    ))}
                   </ul>
                 </div>
               ))}
+              <div className="mt-2 border-t border-[#e8e8e8] pt-2 dark:border-[#222222]">
+                <MobileRow item={menu.feature} />
+              </div>
             </div>
           </Accordion.Panel>
         </Accordion.Item>

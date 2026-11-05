@@ -5,17 +5,10 @@ import { LogoMark, Wordmark } from "@/components/brand"
 import { ConsentSettingsButton } from "@/components/consent-banner"
 import { ThemeSwitch } from "@/components/theme-switch"
 import { legalLinks } from "@/lib/legal"
-import { type NavItem, navLinks, navMenus } from "@/lib/nav"
+import { menuItems, navMenus } from "@/lib/nav"
 
-// The header's menus as columns. Docs leads the Developers column, since the header shows it on
-// its own after the menus.
-const columns = navMenus.map((menu) => ({
-  label: menu.label,
-  items: [
-    ...(menu.label === "Developers" ? navLinks : []),
-    ...menu.groups.flatMap((group) => group.items),
-  ] as Pick<NavItem, "label" | "href" | "external">[],
-}))
+// The header's menus as columns, with each menu's featured link last.
+const columns = navMenus.map((menu) => ({ label: menu.label, items: menuItems(menu) }))
 
 // Moonlit in dark mode; light mode inverts the grid and sets the logo in blue and black.
 const markStops: [number, string][] = [

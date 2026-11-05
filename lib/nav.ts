@@ -31,17 +31,21 @@ export type NavItem = {
   external?: boolean
 }
 
-export type NavGroup = { label?: string; items: NavItem[] }
+export type NavGroup = { label: string; items: NavItem[] }
 
-export type NavMenu = { label: string; groups: NavGroup[] }
+// The last column of a menu: one link with room for a sentence and a call to action.
+export type NavFeature = NavItem & { action: string }
+
+export type NavMenu = { label: string; groups: NavGroup[]; feature: NavFeature }
 
 // The header's menus. Section links point at the landing page, which is the only page with this
-// header. The mobile menu shows the same items, grouped the same way.
+// header. The mobile menu and the footer list the same items in the same order.
 export const navMenus: NavMenu[] = [
   {
     label: "Product",
     groups: [
       {
+        label: "Save and reuse",
         items: [
           {
             label: "Snippet library",
@@ -55,12 +59,11 @@ export const navMenus: NavMenu[] = [
             href: "#recipes",
             icon: FolderSyncIcon,
           },
-          {
-            label: "Env sync",
-            description: "Share .env files without printing the keys.",
-            href: "#secrets",
-            icon: KeyRoundIcon,
-          },
+        ],
+      },
+      {
+        label: "Share and sync",
+        items: [
           {
             label: "Sharing",
             description: "Send any paste as a link with a password or expiry.",
@@ -68,14 +71,21 @@ export const navMenus: NavMenu[] = [
             icon: Link2Icon,
           },
           {
-            label: "Live demo",
-            description: "Try the app as a guest without an account.",
-            href: links.demo,
-            icon: MonitorPlayIcon,
+            label: "Env sync",
+            description: "Share .env files without printing the keys.",
+            href: "#secrets",
+            icon: KeyRoundIcon,
           },
         ],
       },
     ],
+    feature: {
+      label: "Live demo",
+      description: "Try the app as a guest, with nothing to install and no account to create.",
+      action: "Open the demo",
+      href: links.demo,
+      icon: MonitorPlayIcon,
+    },
   },
   {
     label: "Developers",
@@ -127,16 +137,24 @@ export const navMenus: NavMenu[] = [
         ],
       },
     ],
+    feature: {
+      label: "Documentation",
+      description: "Guides for every feature, from your first paste to running your own server.",
+      action: "Read the docs",
+      href: links.docs,
+      icon: BookOpenIcon,
+    },
   },
   {
     label: "Resources",
     groups: [
       {
+        label: "Company",
         items: [
           {
             label: "Vision",
             description: "Why Sniptide exists and where it is going.",
-            href: "/about",
+            href: "/vision",
             icon: TelescopeIcon,
           },
           {
@@ -146,16 +164,21 @@ export const navMenus: NavMenu[] = [
             icon: NewspaperIcon,
           },
           {
-            label: "Brand guidelines",
-            description: "Logos, colors and type for press and partners.",
-            href: "/brand",
-            icon: PaletteIcon,
-          },
-          {
             label: "Contact",
             description: "Reach us with a question or a bug.",
             href: "/contact",
             icon: MailIcon,
+          },
+        ],
+      },
+      {
+        label: "Press and releases",
+        items: [
+          {
+            label: "Brand guidelines",
+            description: "Logos, colors and type for press and partners.",
+            href: "/brand",
+            icon: PaletteIcon,
           },
           {
             label: "Releases",
@@ -164,18 +187,25 @@ export const navMenus: NavMenu[] = [
             icon: TagIcon,
             external: true,
           },
-          {
-            label: "GitHub",
-            description: "Read the code, open an issue or star the repo.",
-            href: links.github,
-            icon: GitHubMark,
-            external: true,
-          },
         ],
       },
     ],
+    feature: {
+      label: "Open source",
+      description:
+        "Sniptide is open source under the AGPL. Read the code, open an issue or star it.",
+      action: "View on GitHub",
+      href: links.github,
+      icon: GitHubMark,
+      external: true,
+    },
   },
 ]
 
+// Every link in a menu, in the order the mobile menu and the footer list them.
+export function menuItems(menu: NavMenu): NavItem[] {
+  return [...menu.groups.flatMap((group) => group.items), menu.feature]
+}
+
 // Plain links that sit after the menus.
-export const navLinks = [{ label: "Docs", href: links.docs, icon: BookOpenIcon }]
+export const navLinks = [{ label: "Docs", href: links.docs }]
