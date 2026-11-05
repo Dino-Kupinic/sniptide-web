@@ -3,12 +3,23 @@ import Image from "next/image"
 import grid from "@/assets/landing/footer-grid.png"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { ConsentSettingsButton } from "@/components/consent-banner"
+import { StatusBadge } from "@/components/status-badge"
 import { ThemeSwitch } from "@/components/theme-switch"
 import { legalLinks } from "@/lib/legal"
 import { menuItems, navMenus } from "@/lib/nav"
+import { heroTitle, repoUrl, xUrl } from "@/lib/site"
 
-// The header's menus as columns, with each menu's featured link last.
-const columns = navMenus.map((menu) => ({ label: menu.label, items: menuItems(menu) }))
+// The header's menus as columns, with each menu's featured link last, then the profiles.
+const columns = [
+  ...navMenus.map((menu) => ({ label: menu.label, items: menuItems(menu) })),
+  {
+    label: "Social",
+    items: [
+      { label: "X", href: xUrl, external: true },
+      { label: "GitHub", href: repoUrl, external: true },
+    ],
+  },
+]
 
 // Moonlit in dark mode; light mode inverts the grid and sets the logo in blue and black.
 const markStops: [number, string][] = [
@@ -43,31 +54,36 @@ export function SiteFooter() {
       <div className="pointer-events-none absolute bottom-[-40px] left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:bottom-[-60px] md:left-[calc(50%-600px)] md:h-80 md:w-300 dark:block" />
 
       {/* The text, links and wordmark share the header's 1440px frame, so they stay centered on
-          wide screens while the grid above runs edge to edge. The top padding leaves the grid's
-          lit rows clear. */}
-      <div className="relative mx-auto flex max-w-[1440px] flex-col px-5 pt-72 md:px-6 md:pt-112">
-        <div className="grid gap-10 md:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] md:gap-12">
-          <p className="max-w-120 text-[15px] leading-5.5 md:text-base md:leading-5.75">
-            The pastebin for your agents. Keep the code you reuse in one library, on sniptide.com or
-            on your own server.
-          </p>
+          wide screens while the grid above runs edge to edge. The top padding starts them below
+          the grid's last lit row. */}
+      <div className="relative mx-auto flex max-w-[1440px] flex-col px-5 pt-76 md:px-6 md:pt-136">
+        <div className="grid gap-x-6 gap-y-12 md:grid-cols-6">
+          <div className="flex flex-col items-start gap-5 md:col-span-2 md:pr-6 xl:pr-12">
+            <div className="flex flex-col gap-2">
+              <h2 className="font-heading text-2xl leading-8 font-bold tracking-[-0.02em] text-balance">
+                {heroTitle}
+              </h2>
+              <p className="max-w-96 text-[15px] leading-6 text-[#6b6b6b] dark:text-[#a3a3a3]">
+                Keep the code you reuse in one library, on sniptide.com or on your own server.
+              </p>
+            </div>
+            <StatusBadge />
+          </div>
 
           <nav
             aria-label="Footer"
-            className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 md:justify-self-end md:gap-x-16"
+            className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 md:col-span-4"
           >
             {columns.map((column) => (
-              <div key={column.label} className="flex min-w-0 flex-col gap-3">
-                <h2 className="text-[13px] leading-[18px] text-[#6b6b6b] dark:text-[#8a8a93]">
-                  {column.label}
-                </h2>
-                <ul className="flex flex-col gap-2">
+              <div key={column.label} className="flex min-w-0 flex-col gap-4">
+                <h2 className="text-sm leading-5 font-medium">{column.label}</h2>
+                <ul className="flex flex-col gap-2.5">
                   {column.items.map((item) => (
                     <li key={item.label}>
                       <a
                         href={item.href}
                         {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                        className="inline-flex items-center gap-1 text-sm leading-5 transition-colors hover:text-[#2a26ec] dark:hover:text-white"
+                        className="inline-flex items-center gap-1 text-sm leading-5 text-[#6b6b6b] transition-colors hover:text-[#0a0a0a] dark:text-[#a3a3a3] dark:hover:text-white"
                       >
                         {item.label}
                         {item.external && (
@@ -85,7 +101,7 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <div className="mt-16 flex max-w-348 items-center gap-4 md:mt-20 md:gap-[4.67%]">
+        <div className="mt-20 flex max-w-348 items-center gap-4 md:mt-20 md:gap-[4.67%]">
           <LogoMark className="aspect-[243/234] w-[17.4%] text-[#2a26ec] dark:hidden" />
           <LogoMark className="hidden aspect-[243/234] w-[17.4%] dark:block" stops={markStops} />
           <div className="flex-1 pt-[0.65%]">
