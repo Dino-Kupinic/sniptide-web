@@ -5,7 +5,15 @@ import { NavigationMenu } from "@base-ui/react/navigation-menu"
 import { cn } from "@sniptide/ui/lib/utils"
 import { ArrowRightIcon, ArrowUpRightIcon, ChevronDownIcon } from "lucide-react"
 import type { CSSProperties, RefObject } from "react"
-import { type NavFeature, type NavItem, type NavMenu, navLinks, navMenus } from "@/lib/nav"
+import { CopyButton, FeatureVisual } from "@/components/nav-visuals"
+import {
+  type NavFeature,
+  type NavItem,
+  type NavMenu,
+  type NavStrip,
+  navLinks,
+  navMenus,
+} from "@/lib/nav"
 
 export const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
@@ -26,7 +34,10 @@ function ExternalMark() {
   )
 }
 
+const hairline = "border-[#e8e8e8] dark:border-[#262626]"
+
 // One row of a desktop menu: a 36px tile with the icon, the name and one line on what it does.
+// The tile fills with blue while the row is hovered or focused.
 function MenuRow({ item }: { item: NavItem }) {
   const Icon = item.icon
   return (
@@ -38,7 +49,8 @@ function MenuRow({ item }: { item: NavItem }) {
     >
       <span
         className={cn(
-          "flex size-9 shrink-0 items-center justify-center rounded-md border border-[#e8e8e8] bg-white transition-colors group-hover/row:text-[#2a26ec] group-focus-visible/row:text-[#2a26ec] dark:border-[#2f2c2c] dark:bg-[#121111] dark:group-hover/row:text-[#8f8cff] dark:group-focus-visible/row:text-[#8f8cff]",
+          "flex size-9 shrink-0 items-center justify-center rounded-md border bg-white transition-colors duration-150 group-hover/row:border-[#2a26ec] group-hover/row:bg-[#2a26ec] group-hover/row:text-white group-focus-visible/row:border-[#2a26ec] group-focus-visible/row:bg-[#2a26ec] group-focus-visible/row:text-white dark:bg-[#121111]",
+          hairline,
           muted,
         )}
       >
@@ -55,60 +67,103 @@ function MenuRow({ item }: { item: NavItem }) {
   )
 }
 
-// The last column: a filled panel with one link, a sentence and the action it leads to.
-function FeatureCard({ feature }: { feature: NavFeature }) {
-  const Icon = feature.icon
+// The last column: a picture of the real thing, then the link's name, a sentence and its action.
+function FeatureCard({ feature, stars }: { feature: NavFeature; stars: string | null }) {
   return (
     <NavigationMenu.Link
       href={feature.href}
       closeOnClick
       {...linkTarget(feature)}
-      className="group/feature flex h-full flex-col gap-3 rounded-lg bg-[#f4f4f4] p-5 outline-none transition-colors hover:bg-[#ededed] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#2a26ec] dark:bg-[#1a1919] dark:hover:bg-[#211f1f] dark:focus-visible:outline-[#8f8cff]"
+      className={cn(
+        "group/feature flex h-full flex-col overflow-hidden rounded-lg border bg-white outline-none transition-colors hover:border-[#d0d0d0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2a26ec] dark:bg-[#121111] dark:hover:border-[#3a3737] dark:focus-visible:outline-[#8f8cff]",
+        hairline,
+      )}
     >
-      <Icon className="size-4 text-[#2a26ec] dark:text-[#8f8cff]" />
-      <span className="flex flex-col gap-1">
+      <FeatureVisual visual={feature.visual} stars={stars} />
+      <span className="flex flex-1 flex-col gap-1 p-5">
         <span className="text-sm leading-5 font-medium text-[#0a0a0a] dark:text-white">
           {feature.label}
         </span>
         <span className={cn("text-[13px] leading-[18px]", muted)}>{feature.description}</span>
-      </span>
-      <span className="mt-auto inline-flex items-center gap-1 text-sm leading-5 font-medium text-[#2a26ec] dark:text-[#8f8cff]">
-        {feature.action}
-        {feature.external ? (
-          <>
-            <ArrowUpRightIcon aria-hidden="true" className="size-3.5" />
-            <span className="sr-only">(opens in a new tab)</span>
-          </>
-        ) : (
-          <ArrowRightIcon
-            aria-hidden="true"
-            className="size-3.5 transition-transform duration-200 ease-out group-hover/feature:translate-x-0.5 motion-reduce:transition-none"
-          />
-        )}
+        <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm leading-5 font-medium text-[#2a26ec] dark:text-[#8f8cff]">
+          {feature.action}
+          {feature.external ? (
+            <>
+              <ArrowUpRightIcon aria-hidden="true" className="size-3.5" />
+              <span className="sr-only">(opens in a new tab)</span>
+            </>
+          ) : (
+            <ArrowRightIcon
+              aria-hidden="true"
+              className="size-3.5 transition-transform duration-200 ease-out group-hover/feature:translate-x-0.5 motion-reduce:transition-none"
+            />
+          )}
+        </span>
       </span>
     </NavigationMenu.Link>
   )
 }
 
-// A full-width panel under the header: one column per group, then the feature card. The columns
-// start at the header's gutter, under the logo.
-function MenuPanel({ menu }: { menu: NavMenu }) {
+// The line under the columns: one identifier to copy, such as the install command.
+function MenuStrip({ strip }: { strip: NavStrip }) {
   return (
-    <div className="mx-auto grid max-w-[1440px] grid-cols-[repeat(2,minmax(0,23rem))_minmax(0,1fr)_minmax(0,20rem)] gap-8 px-10 pt-6 pb-8">
-      {menu.groups.map((group) => (
-        <div key={group.label} className="flex min-w-0 flex-col gap-1">
-          <p className={cn("pb-1 text-xs leading-4", muted)}>{group.label}</p>
-          <ul className="-mx-2 flex flex-col">
-            {group.items.map((item) => (
-              <li key={item.label}>
-                <MenuRow item={item} />
-              </li>
-            ))}
-          </ul>
+    <div className={cn("col-span-2 flex h-14 min-w-0 items-center gap-3 border-t px-4", hairline)}>
+      <span className={cn("shrink-0 text-[13px] leading-[18px]", muted)}>{strip.label}</span>
+      {strip.href ? (
+        <a
+          href={strip.href}
+          className="min-w-0 truncate rounded-sm font-mono text-[13px] leading-[18px] text-[#2a26ec] underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2a26ec] dark:text-[#8f8cff] dark:focus-visible:outline-[#8f8cff]"
+        >
+          {strip.value}
+        </a>
+      ) : (
+        <code className="min-w-0 truncate rounded-md bg-[#f4f4f4] px-2 py-1 font-mono text-[13px] leading-[18px] text-[#0a0a0a] dark:bg-[#1c1c1c] dark:text-white">
+          {strip.value}
+        </code>
+      )}
+      <CopyButton value={strip.value} label={strip.label.toLowerCase()} />
+    </div>
+  )
+}
+
+// A full-width panel under the header, laid out on hairline columns inside the 1440px frame: one
+// column per group with its name on top, the featured card on the right and the copy strip
+// under the groups.
+function MenuPanel({ menu, stars }: { menu: NavMenu; stars: string | null }) {
+  return (
+    <div className="mx-auto max-w-[1440px] px-10">
+      <div
+        className={cn(
+          "grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,24rem)] grid-rows-[1fr_auto] border-x",
+          hairline,
+        )}
+      >
+        {menu.groups.map((group, index) => (
+          <section
+            key={group.label}
+            className={cn("row-start-1 flex min-w-0 flex-col", index > 0 && "border-l", hairline)}
+          >
+            <h3
+              className={cn(
+                "flex h-11 items-center border-b px-4 text-[13px] leading-[18px] font-medium text-[#0a0a0a] dark:text-white",
+                hairline,
+              )}
+            >
+              {group.label}
+            </h3>
+            <ul className="flex flex-col gap-0.5 p-2 pb-4">
+              {group.items.map((item) => (
+                <li key={item.label}>
+                  <MenuRow item={item} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+        <div className={cn("col-start-3 row-span-2 row-start-1 min-w-0 border-l p-3", hairline)}>
+          <FeatureCard feature={menu.feature} stars={stars} />
         </div>
-      ))}
-      <div className="col-start-4 min-w-0">
-        <FeatureCard feature={menu.feature} />
+        <MenuStrip strip={menu.strip} />
       </div>
     </div>
   )
@@ -119,7 +174,13 @@ const content =
   "transition-[opacity,translate] duration-(--duration) ease-(--easing) data-starting-style:opacity-0 data-ending-style:opacity-0 data-starting-style:data-[activation-direction=left]:-translate-x-6 data-starting-style:data-[activation-direction=right]:translate-x-6 data-ending-style:data-[activation-direction=left]:translate-x-6 data-ending-style:data-[activation-direction=right]:-translate-x-6 motion-reduce:transition-none"
 
 // The menus open as one panel the width of the header, attached to its bottom edge.
-export function DesktopNav({ anchor }: { anchor: RefObject<HTMLElement | null> }) {
+export function DesktopNav({
+  anchor,
+  stars,
+}: {
+  anchor: RefObject<HTMLElement | null>
+  stars: string | null
+}) {
   return (
     <NavigationMenu.Root aria-label="Main navigation" className="-ml-3 hidden lg:block">
       <NavigationMenu.List className="flex items-center gap-1 whitespace-nowrap">
@@ -138,7 +199,7 @@ export function DesktopNav({ anchor }: { anchor: RefObject<HTMLElement | null> }
               </NavigationMenu.Icon>
             </NavigationMenu.Trigger>
             <NavigationMenu.Content className={content}>
-              <MenuPanel menu={menu} />
+              <MenuPanel menu={menu} stars={stars} />
             </NavigationMenu.Content>
           </NavigationMenu.Item>
         ))}

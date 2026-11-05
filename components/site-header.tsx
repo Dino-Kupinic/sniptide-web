@@ -132,7 +132,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             </span>
           </a>
 
-          <DesktopNav anchor={headerRef} />
+          <DesktopNav anchor={headerRef} stars={formattedStars} />
         </div>
 
         <div className="flex shrink-0 items-center justify-end gap-2">

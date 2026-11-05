@@ -1,7 +1,10 @@
 import {
   BookOpenIcon,
   BracesIcon,
+  ChartColumnIcon,
+  DownloadIcon,
   FolderSyncIcon,
+  HistoryIcon,
   KeyRoundIcon,
   LibraryBigIcon,
   Link2Icon,
@@ -19,7 +22,8 @@ import {
 } from "lucide-react"
 import type { ComponentType } from "react"
 import { GitHubMark } from "@/components/github-mark"
-import { documentation } from "./agent-docs"
+import { documentation, mcpEndpoint } from "./agent-docs"
+import { operator } from "./legal"
 import { docsPages, links } from "./links"
 
 export type NavItem = {
@@ -33,10 +37,13 @@ export type NavItem = {
 
 export type NavGroup = { label: string; items: NavItem[] }
 
-// The last column of a menu: one link with room for a sentence and a call to action.
-export type NavFeature = NavItem & { action: string }
+// The last column of a menu: one link with a picture, a sentence and a call to action.
+export type NavFeature = NavItem & { action: string; visual: "demo" | "terminal" | "github" }
 
-export type NavMenu = { label: string; groups: NavGroup[]; feature: NavFeature }
+// The line under a menu's columns: one identifier worth copying, such as a command or an address.
+export type NavStrip = { label: string; value: string; href?: string }
+
+export type NavMenu = { label: string; groups: NavGroup[]; feature: NavFeature; strip: NavStrip }
 
 // The header's menus. Section links point at the landing page, which is the only page with this
 // header. The mobile menu and the footer list the same items in the same order.
@@ -59,6 +66,18 @@ export const navMenus: NavMenu[] = [
             href: "#recipes",
             icon: FolderSyncIcon,
           },
+          {
+            label: "Revisions",
+            description: "Every edit is kept, so you can compare and go back.",
+            href: docsPages.revisions,
+            icon: HistoryIcon,
+          },
+          {
+            label: "Gist import",
+            description: "Bring your GitHub gists over in one step.",
+            href: docsPages.importGist,
+            icon: DownloadIcon,
+          },
         ],
       },
       {
@@ -76,6 +95,12 @@ export const navMenus: NavMenu[] = [
             href: "#secrets",
             icon: KeyRoundIcon,
           },
+          {
+            label: "Analytics",
+            description: "See how often each paste is opened.",
+            href: docsPages.analytics,
+            icon: ChartColumnIcon,
+          },
         ],
       },
     ],
@@ -85,6 +110,11 @@ export const navMenus: NavMenu[] = [
       action: "Open the demo",
       href: links.demo,
       icon: MonitorPlayIcon,
+      visual: "demo",
+    },
+    strip: {
+      label: "Run it on your own server",
+      value: "curl -fsSL https://sniptide.com/install.sh | sh",
     },
   },
   {
@@ -143,7 +173,9 @@ export const navMenus: NavMenu[] = [
       action: "Read the docs",
       href: links.docs,
       icon: BookOpenIcon,
+      visual: "terminal",
     },
+    strip: { label: "MCP endpoint", value: mcpEndpoint },
   },
   {
     label: "Resources",
@@ -198,6 +230,12 @@ export const navMenus: NavMenu[] = [
       href: links.github,
       icon: GitHubMark,
       external: true,
+      visual: "github",
+    },
+    strip: {
+      label: "Press and partnerships",
+      value: operator.email,
+      href: `mailto:${operator.email}`,
     },
   },
 ]
