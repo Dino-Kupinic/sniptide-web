@@ -14,6 +14,7 @@ import {
   useSeen,
 } from "@/components/dithercn/logo-image"
 import { useDitherColors } from "@/lib/dither/color"
+import { ditherCoverage } from "@/lib/dither/logo"
 import type { DitherMatrix } from "@/lib/dither/matrices"
 import { thresholdAt } from "@/lib/dither/matrices"
 import { useFrameLoop } from "@/lib/dither/motion"
@@ -52,6 +53,8 @@ export type DitheredLogoProps = Omit<ComponentProps<"div">, "children"> & {
   source?: LogoSource
   /** Texture inside the letterforms. Default `"gradient"`. */
   fill?: FillVariant
+  /** Texture contrast from 0 (smooth artwork) to 1 (cut-out cells). Default 1. */
+  strength?: number
   /**
    * Keep a solid outline one cell wide, so the shapes stay exact however
    * open the fill is. Default `true`.
@@ -242,6 +245,8 @@ interface PaintOptions {
   tone: LogoTone
   fill: FillVariant
   outline: boolean
+  strength: number
+  source: LogoSource
   floor: number
   matrix: DitherMatrix
   effect: LogoEffect
@@ -272,6 +277,8 @@ const paintLogo = ({
   tone,
   fill,
   outline,
+  strength,
+  source,
   floor,
   matrix,
   effect,
@@ -285,7 +292,8 @@ const paintLogo = ({
     for (let x = 0; x < columns; x += 1) {
       const index = y * columns + x
       const offset = index * 4
-      if (shape.inside[index] !== 1) {
+      const coverage = coverageAt(shape.pixels.data, index, source)
+      if (strength < 1 ? coverage === 0 : shape.inside[index] !== 1) {
         out[offset + 3] = 0
         continue
       }
@@ -299,16 +307,22 @@ const paintLogo = ({
         y,
       })
       const density = fall + (1 - fall) * boost
+      const scale = strength < 1 ? columns / shape.grid.width : 1
+      const patternX = Math.floor(x / scale)
+      const patternY = Math.floor(y / scale)
       const inked =
         (outline && shape.rim[index] === 1) ||
-        fillInks(fill, matrix, x, y, density) ||
-        boost > thresholdAt(matrix, x, y)
-      if (!inked) {
+        fillInks(fill, matrix, patternX, patternY, density) ||
+        boost > thresholdAt(matrix, patternX, patternY)
+      if (!inked && strength >= 1) {
         out[offset + 3] = 0
         continue
       }
       const base = tone === "original" ? sourceColor(shape.pixels.data, offset) : ink
       writeCell(out, offset, line ? glint : base)
+      if (strength < 1) {
+        out[offset + 3] = (out[offset + 3] ?? 0) * ditherCoverage(coverage, inked, strength)
+      }
     }
   }
 }
@@ -320,6 +334,7 @@ const splitLogoProps = ({
   source = "alpha",
   fill = "gradient",
   outline = true,
+  strength = 1,
   floor = 0.3,
   matrix = "bayer4",
   cell = 1,
@@ -336,6 +351,7 @@ const splitLogoProps = ({
     floor,
     matrix,
     outline,
+    strength,
     period,
     phase,
     source,
@@ -345,21 +361,21 @@ const splitLogoProps = ({
 })
 
 /**
- * A logo drawn in dithered ink. Edges land on whole cells, so the shapes
- * stay sharp while the inside takes a dither texture, with an optional
+ * A logo drawn in dithered ink. Full-strength edges land on whole cells;
+ * subtle textures retain source antialiasing. Supports an optional
  * shimmer or scan line. Size it with a height in `className`; the width
  * follows the logo's own ratio.
  */
 export const DitheredLogo = (allProps: DitheredLogoProps) => {
   const { options, rest } = splitLogoProps(allProps)
-  const { color, tone, source, fill, outline, floor, matrix, cell } = options
+  const { color, tone, source, fill, outline, floor, matrix, cell, strength } = options
   const { effect, period, phase } = options
   const { src, alt, ratio, lazy = true, className, style, ...props } = rest
   const rootRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const seen = useSeen(rootRef)
   const { image, status } = useLoadedImage(src, seen || !lazy)
-  const grid = useDitherGrid(rootRef, cell)
+  const grid = useDitherGrid(rootRef, strength < 1 ? 0 : cell)
   const colors = useDitherColors(rootRef, [
     color,
     `color-mix(in oklch, ${cssColor(color)} 35%, white)`,
@@ -396,6 +412,8 @@ export const DitheredLogo = (allProps: DitheredLogoProps) => {
         ink,
         matrix,
         outline,
+        strength,
+        source,
         shape,
         sweep,
         tone,
@@ -403,7 +421,7 @@ export const DitheredLogo = (allProps: DitheredLogoProps) => {
       })
       context.putImageData(work, 0, 0)
     },
-    [shape, colors, effect, period, phase, fill, floor, matrix, outline, tone],
+    [shape, colors, effect, period, phase, fill, floor, matrix, outline, tone, strength, source],
   )
 
   const loop = useFrameLoop((time) => paint(time), {
@@ -451,6 +469,7 @@ export const DitheredLogo = (allProps: DitheredLogoProps) => {
       />
       <canvas
         ref={canvasRef}
+        style={{ imageRendering: strength < 1 ? "auto" : "pixelated" }}
         aria-hidden
         className={cn(CANVAS_CLASS, FADE_CLASS, shape ? "opacity-100" : "opacity-0")}
       />

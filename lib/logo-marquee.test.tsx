@@ -12,6 +12,7 @@ describe("compatible tool artwork", () => {
       expect(markup).not.toContain(`>${tool.alt}</span>`)
     }
     expect(markup).not.toContain("<button")
+    expect(markup).not.toContain("hover:opacity-100")
   })
 
   test("the complete artwork uses the dither fill, including its edges", () => {
@@ -19,6 +20,7 @@ describe("compatible tool artwork", () => {
     const marquee = section.props.children[1]
     expect(marquee.props.fill).toBe("hatched")
     expect(marquee.props.outline).toBe(false)
+    expect(marquee.props.strength).toBe(0.12)
     expect(marquee.props.effect).toBe("none")
     expect(tools.every((tool) => tool.ratio > 2)).toBe(true)
   })

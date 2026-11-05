@@ -9,7 +9,10 @@ only the image loading, sizing and rasterization helpers from `dither-image.json
 Imports use the shared Sniptide utilities. Logos keep accessible link labels and a source image
 fallback. Hook dependencies are explicit for Biome. No shader or WebGL is used.
 
-`settings.ts` matches the app: hatched fill, one-pixel cells, bloom off. The marquee
+`settings.ts` supplies the hatched fill and one-pixel texture spacing, with bloom off.
+The marketing logos use 12% texture contrast, preserve source antialiasing and render
+at device resolution with smooth image sampling. Hover/focus does not change logo
+opacity or texture. The marquee
 has soft fades, coasts to a stop on hover/focus, and wraps without moving under
 reduced motion. The pause control and typeset brand labels are removed. Official
 artwork supplies the lettering, with solid outlines disabled so the entire logo

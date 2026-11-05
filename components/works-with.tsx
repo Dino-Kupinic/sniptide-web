@@ -6,7 +6,7 @@ export const tools = [
     src: "/logos/claude-code.svg",
     alt: "Claude Code",
     href: "https://claude.com/product/claude-code",
-    ratio: 254 / 28,
+    ratio: 188 / 28,
   },
   { src: "/logos/cursor.svg", alt: "Cursor", href: "https://cursor.com", ratio: 2238.7 / 532.09 },
   { src: "/logos/codex.svg", alt: "Codex", href: "https://openai.com/codex/", ratio: 1604 / 718 },
@@ -34,6 +34,7 @@ export function WorksWith() {
         color="--foreground"
         effect="none"
         outline={false}
+        strength={0.12}
         fill={ditherSettings.fill}
         cell={ditherSettings.cell}
         className="max-w-300"

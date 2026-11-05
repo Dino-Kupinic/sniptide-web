@@ -54,7 +54,16 @@ export type LogoMarqueeProps = Omit<ComponentProps<"div">, "children"> &
   LogoLayout &
   Pick<
     DitheredLogoProps,
-    "color" | "tone" | "fill" | "outline" | "floor" | "matrix" | "cell" | "effect" | "period"
+    | "color"
+    | "tone"
+    | "fill"
+    | "outline"
+    | "floor"
+    | "matrix"
+    | "cell"
+    | "effect"
+    | "period"
+    | "strength"
   > & {
     /** The logos, in order. */
     logos: readonly MarqueeLogo[]
@@ -149,7 +158,7 @@ const LogoItem = ({
       href={logo.href}
       aria-label={logo.alt}
       tabIndex={hidden ? -1 : undefined}
-      className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-80 outline-none transition-opacity duration-150 ease-(--ease-out) hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
+      className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
     >
       {mark}
     </a>
@@ -349,6 +358,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
     tone,
     fill,
     outline,
+    strength,
     floor,
     matrix,
     cell,
@@ -386,6 +396,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
     floor,
     matrix,
     outline,
+    strength,
     period,
     tone,
   }

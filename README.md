@@ -198,8 +198,10 @@ When a browser exposes WebMCP, the site registers two read-only tools with canon
 ## Compatible tool marquee
 
 `components/works-with.tsx` lists the supported tools and their product links. The
-row uses official logo lockups and wordmarks with a hatched, one-pixel dither
-across the complete artwork, including lettering and edges. Soft edge fades frame
+row uses official logo lockups and wordmarks with a subtle hatched texture at
+12% contrast across the complete artwork, including lettering and edges. Source
+antialiasing and device-resolution rendering keep curves smooth, including while
+hovered. Hover does not change the logo opacity or texture. Soft edge fades frame
 the row. Hover or keyboard focus pauses it; reduced motion shows one wrapping row.
 There is no pause button. Tool names remain accessible link labels. Keep the local
 artwork and its sources in `public/logos` together when changing the list.
