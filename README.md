@@ -191,3 +191,11 @@ open-source core and hosted services.
 ## Browser agent tools
 
 When a browser exposes WebMCP, the site registers two read-only tools with canonical setup guide links and the product MCP endpoint. It prefers `document.modelContext` and falls back to `navigator.modelContext` for older hosts. Unsupported browsers and rejected registrations continue to render the site normally. These tools do not access account data or accept credentials. Registration ends when the site component unmounts; the navigator fallback also supports legacy `unregisterTool` hosts.
+
+## Compatible tool marquee
+
+`components/works-with.tsx` lists the supported tools and their product links. The
+row uses the local dithercn logo marquee with hatched, one-pixel logos, no bloom,
+and soft edge fades. Hover or keyboard focus pauses the row; its pause button
+also holds it still. Reduced motion shows one wrapping row. Keep the local SVG
+assets and their sources in `public/logos` together when changing the list.
