@@ -512,7 +512,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
       <div
         // Container queries size the row in CSS, so the phone layout applies
         // on first paint instead of after hydration measures the row.
-        className="overflow-hidden py-2 [--logo-scale:1] [--row-gap:var(--row-gap-wide)] [contain:inline-size] @max-[639px]:[--logo-scale:0.75] @max-[639px]:[--row-gap:var(--row-gap-narrow)]"
+        className="overflow-hidden py-2 [--logo-scale:1] [--row-gap:var(--row-gap-wide)] [contain:inline-size] [transform:translateZ(0)] @max-[639px]:[--logo-scale:0.75] @max-[639px]:[--row-gap:var(--row-gap-narrow)]"
         style={
           {
             ...fadeMask(layout.fade ?? "soft", fadeWidth),

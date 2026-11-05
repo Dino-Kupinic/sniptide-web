@@ -17,7 +17,9 @@ outlines across the complete logo, with the scan effect enabled. The source artw
 | `curl.svg` | [curl logos](https://curl.se/logo/), [SVG](https://curl.se/logo/curl-logo.svg) | curl wordmark |
 
 SVGs retain the original product paths and proportions, with accessible names
-added to the root elements. Claude uses the wordmark from the Claude Code
+and explicit `width` and `height` attributes added to the root elements. Safari
+reports no natural size for an SVG that has only a `viewBox`, so the dithered
+renderer cannot read it back from a canvas and the logo stays blank. Claude uses the wordmark from the Claude Code
 product page because the documentation header's thin lettering breaks up under
 the dither fill in light mode; its paths are unchanged, and the link still opens
 the Claude Code page. Slack's viewBox trims transparent export
