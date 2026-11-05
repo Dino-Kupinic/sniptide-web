@@ -197,11 +197,13 @@ When a browser exposes WebMCP, the site registers two read-only tools with canon
 
 ## Compatible tool marquee
 
-`components/works-with.tsx` lists the supported tools and their product links. The
-row uses official logo lockups and wordmarks with a subtle hatched texture at
-22% contrast across the complete artwork, including lettering and edges. Source
-antialiasing and device-resolution rendering keep curves smooth, including while
-hovered. Hover does not change the logo opacity or texture. Soft edge fades frame
-the row. Hover or keyboard focus pauses it; reduced motion shows one wrapping row.
-There is no pause button. Tool names remain accessible link labels. Keep the local
-artwork and its sources in `public/logos` together when changing the list.
+`components/works-with.tsx` follows the [first dithercn example](https://dithercn.dev/docs/images/logo-marquee):
+a looping row with the default gradient fill, solid outlines, one-pixel cells,
+28-pixel logo height, 64-pixel gaps, 32-pixel-per-second speed and soft edge fades.
+The scan effect passes through each logo in turn. Hover or keyboard focus coasts
+the row to a stop at its current position; leaving resumes from there. Reduced
+motion shows one still, wrapping row without the scan animation.
+
+Official artwork supplies the lettering, and tool names remain accessible link
+labels. There is no pause button. Keep the local artwork and its sources in
+`public/logos` together when changing the list.

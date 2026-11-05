@@ -1,5 +1,4 @@
 import { LogoMarquee } from "@/components/dithercn/logo-marquee"
-import { ditherSettings } from "@/lib/dither/settings"
 
 export const tools = [
   {
@@ -14,7 +13,7 @@ export const tools = [
     alt: "Codex",
     href: "https://openai.com/codex/",
     ratio: 1,
-    source: "dark",
+    tone: "original",
     height: 32,
   },
   { src: "/logos/github.svg", alt: "GitHub", href: "https://github.com", ratio: 416 / 95 },
@@ -33,17 +32,8 @@ export function WorksWith() {
       <LogoMarquee
         logos={tools}
         label="Compatible tools"
-        logoHeight={24}
-        gap={56}
-        speed={24}
-        fade="soft"
-        fadeWidth={80}
         color="--foreground"
-        effect="none"
-        outline={false}
-        strength={0.22}
-        fill={ditherSettings.fill}
-        cell={ditherSettings.cell}
+        effect="scan"
         className="max-w-300"
       />
     </section>

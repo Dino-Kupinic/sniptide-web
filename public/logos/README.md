@@ -2,8 +2,8 @@
 
 The marquee uses artwork from official sites and brand kits, retrieved on
 5 November 2026. Lettering is part of the artwork; no brand names are recreated
-with the site's font. The canvas applies a subtle hatched texture at 22%
-contrast to the complete logo, including its antialiased edges. The source artwork also serves as the loading fallback.
+with the site's font. The canvas uses dithercn's default gradient fill and solid
+outlines across the complete logo, with the scan effect enabled. The source artwork also serves as the loading fallback.
 
 | Local file | Official source | Artwork |
 | --- | --- | --- |
@@ -20,8 +20,8 @@ SVGs retain the original product paths and proportions, with accessible names
 added to the root elements. Claude Code omits the documentation-only suffix;
 its eleven product paths are unchanged. Slack's viewBox trims transparent export
 padding; its paths are unchanged. The renderer uses the source mask and the page's
-foreground color. Codex uses the actual product mark at 32 pixels high. Its dark-source mask retains
-the light terminal cutouts inside the colored cloud. Slack uses the official
+foreground color. Codex uses the actual product mark at 32 pixels high with
+`tone="original"`, retaining its blue cloud and light terminal details. Slack uses the official
 standalone monochrome SVG rather than the navigation lockup with Salesforce text.
 
 These are compatibility links. The marks belong to their respective owners.

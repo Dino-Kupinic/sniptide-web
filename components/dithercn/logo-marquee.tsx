@@ -18,6 +18,8 @@ export interface MarqueeLogo {
   height?: number
   /** Source mask, for artwork with light details inside a colored mark. */
   source?: DitheredLogoProps["source"]
+  /** Preserve a product mark's own colors when needed. */
+  tone?: DitheredLogoProps["tone"]
   /** Makes the logo a link. */
   href?: string
   /** This logo's ink, overriding `color`. */
@@ -58,16 +60,7 @@ export type LogoMarqueeProps = Omit<ComponentProps<"div">, "children"> &
   LogoLayout &
   Pick<
     DitheredLogoProps,
-    | "color"
-    | "tone"
-    | "fill"
-    | "outline"
-    | "floor"
-    | "matrix"
-    | "cell"
-    | "effect"
-    | "period"
-    | "strength"
+    "color" | "tone" | "fill" | "outline" | "floor" | "matrix" | "cell" | "effect" | "period"
   > & {
     /** The logos, in order. */
     logos: readonly MarqueeLogo[]
@@ -148,6 +141,7 @@ const LogoItem = ({
       phase={phase}
       lazy={false}
       source={logo.source}
+      tone={logo.tone ?? logoProps.tone}
       src={logo.src}
       alt={hidden || logo.href ? "" : logo.alt}
       ratio={logo.ratio}
@@ -184,9 +178,10 @@ const useRowSize = (
       return
     }
     const measure = () => {
+      // Ignore floating-point noise from the translating row.
       const next = {
-        group: group.getBoundingClientRect().width,
-        root: root.getBoundingClientRect().width,
+        group: Math.round(group.getBoundingClientRect().width * 64) / 64,
+        root: Math.round(root.getBoundingClientRect().width * 64) / 64,
       }
       setSize((current) =>
         current.group === next.group && current.root === next.root ? current : next,
@@ -223,6 +218,7 @@ const useCoasting = ({
 }) => {
   const animationRef = useRef<Animation | null>(null)
   const heldRef = useRef(held)
+  const phaseRef = useRef(0)
 
   useEffect(() => {
     const track = trackRef.current
@@ -231,17 +227,22 @@ const useCoasting = ({
     }
     const far = `translateX(${-distance}px)`
     const near = "translateX(0)"
+    const duration = (distance / speed) * 1000
     const animation = track.animate(
       [{ transform: reverse ? far : near }, { transform: reverse ? near : far }],
       {
-        duration: (distance / speed) * 1000,
+        duration,
         easing: "linear",
         iterations: Number.POSITIVE_INFINITY,
       },
     )
-    animation.playbackRate = heldRef.current ? 0 : 1
+    animation.currentTime = phaseRef.current * duration
+    animation.updatePlaybackRate(heldRef.current ? 0 : 1)
     animationRef.current = animation
     return () => {
+      if (typeof animation.currentTime === "number") {
+        phaseRef.current = (animation.currentTime / duration) % 1
+      }
       animation.cancel()
       animationRef.current = null
     }
@@ -256,13 +257,14 @@ const useCoasting = ({
     const target = held ? 0 : 1
     let frame = 0
     let last = performance.now()
+    let rate = animation.playbackRate
     const step = (now: number) => {
-      const rate = animation.playbackRate
       const delta = Math.min(0.1, (now - last) / 1000)
       last = now
       const next = rate + (target - rate) * Math.min(1, (delta / EASE_SECONDS) * 4)
-      animation.playbackRate = Math.abs(next - target) < 0.01 ? target : next
-      if (animation.playbackRate !== target) {
+      rate = Math.abs(next - target) < 0.01 ? target : next
+      animation.updatePlaybackRate(rate)
+      if (rate !== target) {
         frame = requestAnimationFrame(step)
       }
     }
@@ -363,7 +365,6 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
     tone,
     fill,
     outline,
-    strength,
     floor,
     matrix,
     cell,
@@ -401,7 +402,6 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
     floor,
     matrix,
     outline,
-    strength,
     period,
     tone,
   }
