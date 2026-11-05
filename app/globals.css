@@ -81,12 +81,6 @@ body {
   );
 }
 
-@keyframes marquee {
-  to {
-    transform: translateX(-100%);
-  }
-}
-
 /* The shared content frame of the landing sections: a 20px gutter on phones, 40px on tablets and
    120px on desktops, and never wider than 1280px, so every section lines up on wide screens. */
 @utility section-frame {
