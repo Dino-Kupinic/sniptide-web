@@ -444,8 +444,11 @@ export const DitheredLogo = (allProps: DitheredLogoProps) => {
         src={src}
         alt=""
         aria-hidden
+        // The loading fallback is a one-ink silhouette, like the dithered
+        // result, so no logo shows up faint or in artwork colors meanwhile.
         className={cn(
-          "size-full object-contain dark:invert",
+          "size-full object-contain",
+          tone === "original" ? "dark:invert" : "brightness-0 dark:invert",
           shape && colors ? "opacity-0" : "opacity-100",
         )}
       />

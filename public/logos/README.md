@@ -7,7 +7,7 @@ outlines across the complete logo, with the scan effect enabled. The source artw
 
 | Local file | Official source | Artwork |
 | --- | --- | --- |
-| `claude-code.svg` | [Claude Code documentation](https://code.claude.com/docs/en/overview), [SVG](https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/light.svg) | Product portion of the official header: the four “Docs” paths are removed, with the viewBox narrowed to 188 × 28 |
+| `claude.svg` | [Claude Code product page](https://claude.com/product/claude-code) | The Claude wordmark from the page's navigation, an inline SVG with `currentColor` set to `#141413` and the spark in `#D97757` |
 | `cursor.svg` | [Cursor brand kit](https://cursor.com/brand) | `General Logos/Lockup Horizontal/SVG/LOCKUP_HORIZONTAL_2D_DARK.svg` |
 | `openai.svg` | [OpenAI brand kit](https://cdn.openai.com/brand/OpenAI-Logos-2025.zip) | `OpenAI-logos(new)/SVGs/OpenAI-black-wordmark.svg`; transparent export padding trimmed to a 1127 × 305 viewBox |
 | `github.svg` | [GitHub logos](https://github.com/logos), [brand kit](https://brand.github.com/GitHub_Logos.zip) | `GitHub Logos/SVG/GitHub_Lockup_Black.svg` |
@@ -17,8 +17,12 @@ outlines across the complete logo, with the scan effect enabled. The source artw
 | `curl.svg` | [curl logos](https://curl.se/logo/), [SVG](https://curl.se/logo/curl-logo.svg) | curl wordmark |
 
 SVGs retain the original product paths and proportions, with accessible names
-added to the root elements. Claude Code omits the documentation-only suffix;
-its eleven product paths are unchanged. Slack's viewBox trims transparent export
+and explicit `width` and `height` attributes added to the root elements. Safari
+reports no natural size for an SVG that has only a `viewBox`, so the dithered
+renderer cannot read it back from a canvas and the logo stays blank. Claude uses the wordmark from the Claude Code
+product page because the documentation header's thin lettering breaks up under
+the dither fill in light mode; its paths are unchanged, and the link still opens
+the Claude Code page. Slack's viewBox trims transparent export
 padding; its paths are unchanged. The renderer uses the source mask and the page's
 foreground color. OpenAI uses the same 28-pixel logo height as the rest of the
 row; trimming transparent export padding gives the lettering comparable visual
