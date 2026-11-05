@@ -14,6 +14,12 @@ export interface MarqueeLogo {
   alt: string
   /** Width over height. Set it to reserve space before the logo loads. */
   ratio?: number
+  /** Override the common height for compact product marks. */
+  height?: number
+  /** Source mask, for artwork with light details inside a colored mark. */
+  source?: DitheredLogoProps["source"]
+  /** Preserve a product mark's own colors when needed. */
+  tone?: DitheredLogoProps["tone"]
   /** Makes the logo a link. */
   href?: string
   /** This logo's ink, overriding `color`. */
@@ -134,11 +140,13 @@ const LogoItem = ({
       color={logo.color ?? logoProps.color}
       phase={phase}
       lazy={false}
+      source={logo.source}
+      tone={logo.tone ?? logoProps.tone}
       src={logo.src}
       alt={hidden || logo.href ? "" : logo.alt}
       ratio={logo.ratio}
       className="max-w-full"
-      style={{ height }}
+      style={{ height: logo.height ?? height }}
     />
   )
   if (!logo.href) {
@@ -147,9 +155,11 @@ const LogoItem = ({
   return (
     <a
       href={logo.href}
-      aria-label={logo.alt}
+      aria-label={`${logo.alt} (opens in a new tab)`}
+      target="_blank"
+      rel="noopener noreferrer"
       tabIndex={hidden ? -1 : undefined}
-      className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-80 outline-none transition-opacity duration-150 ease-(--ease-out) hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
+      className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
     >
       {mark}
     </a>
@@ -166,13 +176,14 @@ const useRowSize = (
   useEffect(() => {
     const root = rootRef.current
     const group = groupRef.current
-    if (!(moving && root && group)) {
+    if (!root) {
       return
     }
     const measure = () => {
+      // Ignore floating-point noise from the translating row.
       const next = {
-        group: group.getBoundingClientRect().width,
-        root: root.getBoundingClientRect().width,
+        group: moving && group ? Math.round(group.getBoundingClientRect().width * 64) / 64 : 0,
+        root: Math.round(root.getBoundingClientRect().width * 64) / 64,
       }
       setSize((current) =>
         current.group === next.group && current.root === next.root ? current : next,
@@ -181,7 +192,9 @@ const useRowSize = (
     measure()
     const observer = new ResizeObserver(measure)
     observer.observe(root)
-    observer.observe(group)
+    if (moving && group) {
+      observer.observe(group)
+    }
     return () => observer.disconnect()
   }, [moving, rootRef, groupRef])
   return size
@@ -209,6 +222,7 @@ const useCoasting = ({
 }) => {
   const animationRef = useRef<Animation | null>(null)
   const heldRef = useRef(held)
+  const phaseRef = useRef(0)
 
   useEffect(() => {
     const track = trackRef.current
@@ -217,17 +231,22 @@ const useCoasting = ({
     }
     const far = `translateX(${-distance}px)`
     const near = "translateX(0)"
+    const duration = (distance / speed) * 1000
     const animation = track.animate(
       [{ transform: reverse ? far : near }, { transform: reverse ? near : far }],
       {
-        duration: (distance / speed) * 1000,
+        duration,
         easing: "linear",
         iterations: Number.POSITIVE_INFINITY,
       },
     )
-    animation.playbackRate = heldRef.current ? 0 : 1
+    animation.currentTime = phaseRef.current * duration
+    animation.updatePlaybackRate(heldRef.current ? 0 : 1)
     animationRef.current = animation
     return () => {
+      if (typeof animation.currentTime === "number") {
+        phaseRef.current = (animation.currentTime / duration) % 1
+      }
       animation.cancel()
       animationRef.current = null
     }
@@ -242,13 +261,14 @@ const useCoasting = ({
     const target = held ? 0 : 1
     let frame = 0
     let last = performance.now()
+    let rate = animation.playbackRate
     const step = (now: number) => {
-      const rate = animation.playbackRate
       const delta = Math.min(0.1, (now - last) / 1000)
       last = now
       const next = rate + (target - rate) * Math.min(1, (delta / EASE_SECONDS) * 4)
-      animation.playbackRate = Math.abs(next - target) < 0.01 ? target : next
-      if (animation.playbackRate !== target) {
+      rate = Math.abs(next - target) < 0.01 ? target : next
+      animation.updatePlaybackRate(rate)
+      if (rate !== target) {
         frame = requestAnimationFrame(step)
       }
     }
@@ -378,6 +398,9 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
   const layout: MarqueeLayout = props.variant === "wall" ? {} : props
   const moving = !(isWall || reducedMotion)
   const size = useRowSize(moving, rootRef, groupRef)
+  const compact = size.root > 0 && size.root < 640
+  const rowGap = compact ? gap / 2 : gap
+  const fadeWidth = compact ? Math.min(32, layout.fadeWidth ?? 96) : (layout.fadeWidth ?? 96)
   const logoProps = {
     cell,
     color,
@@ -395,7 +418,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
     enabled: moving,
     held: hovered || focused || !inView,
     reverse: layout.direction === "right",
-    speed: layout.speed ?? 32,
+    speed: (layout.speed ?? 32) * (compact ? 1.25 : 1),
     trackRef,
   })
 
@@ -417,7 +440,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
       <StillRow
         logos={logos}
         label={label}
-        gap={gap}
+        gap={rowGap}
         logoHeight={logoHeight}
         logoProps={logoProps}
         className={className}
@@ -463,7 +486,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
           into the box that decides how many copies it needs. */}
       <div
         className="overflow-hidden py-2 [contain:inline-size]"
-        style={fadeMask(layout.fade ?? "soft", layout.fadeWidth ?? 96)}
+        style={fadeMask(layout.fade ?? "soft", fadeWidth)}
       >
         <div ref={trackRef} className="flex w-max will-change-transform">
           {Array.from({ length: copies }, (_, copy) => (
@@ -474,7 +497,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
               aria-label={copy === 0 ? label : undefined}
               aria-hidden={copy === 0 ? undefined : true}
               className="flex shrink-0 items-center"
-              style={{ columnGap: gap, paddingRight: gap }}
+              style={{ columnGap: rowGap, paddingRight: rowGap }}
             >
               {logos.map((logo, index) => (
                 <li key={logo.src} className="flex shrink-0 items-center">

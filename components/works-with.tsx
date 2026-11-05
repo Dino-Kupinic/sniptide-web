@@ -1,18 +1,17 @@
 import { LogoMarquee } from "@/components/dithercn/logo-marquee"
-import { ditherSettings } from "@/lib/dither/settings"
 
 export const tools = [
   {
     src: "/logos/claude-code.svg",
     alt: "Claude Code",
     href: "https://claude.com/product/claude-code",
-    ratio: 254 / 28,
+    ratio: 188 / 28,
   },
   { src: "/logos/cursor.svg", alt: "Cursor", href: "https://cursor.com", ratio: 2238.7 / 532.09 },
-  { src: "/logos/codex.svg", alt: "Codex", href: "https://openai.com/codex/", ratio: 1604 / 718 },
+  { src: "/logos/openai.svg", alt: "OpenAI", href: "https://openai.com", ratio: 1127 / 305 },
   { src: "/logos/github.svg", alt: "GitHub", href: "https://github.com", ratio: 416 / 95 },
   { src: "/logos/docker.svg", alt: "Docker", href: "https://www.docker.com", ratio: 1250 / 268 },
-  { src: "/logos/slack.png", alt: "Slack", href: "https://slack.com", ratio: 201 / 75 },
+  { src: "/logos/slack.svg", alt: "Slack", href: "https://slack.com", ratio: 498 / 127 },
   { src: "/logos/discord.svg", alt: "Discord", href: "https://discord.com", ratio: 635.303 / 96 },
   { src: "/logos/curl.svg", alt: "curl", href: "https://curl.se", ratio: 2851 / 854 },
 ] as const
@@ -26,16 +25,8 @@ export function WorksWith() {
       <LogoMarquee
         logos={tools}
         label="Compatible tools"
-        logoHeight={24}
-        gap={56}
-        speed={24}
-        fade="soft"
-        fadeWidth={80}
         color="--foreground"
-        effect="none"
-        outline={false}
-        fill={ditherSettings.fill}
-        cell={ditherSettings.cell}
+        effect="scan"
         className="max-w-300"
       />
     </section>
