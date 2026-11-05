@@ -1,18 +1,14 @@
+import { ArrowUpRightIcon } from "lucide-react"
 import Image from "next/image"
 import grid from "@/assets/landing/footer-grid.png"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { ConsentSettingsButton } from "@/components/consent-banner"
 import { ThemeSwitch } from "@/components/theme-switch"
 import { legalLinks } from "@/lib/legal"
-import { links } from "@/lib/links"
+import { menuItems, navMenus } from "@/lib/nav"
 
-const nav = [
-  { label: "Features", href: "#features" },
-  { label: "Self-host", href: "#self-host" },
-  { label: "Docs", href: links.docs },
-  { label: "API", href: links.apiDocs },
-  { label: "GitHub", href: links.github },
-]
+// The header's menus as columns, with each menu's featured link last.
+const columns = navMenus.map((menu) => ({ label: menu.label, items: menuItems(menu) }))
 
 // Moonlit in dark mode; light mode inverts the grid and sets the logo in blue and black.
 const markStops: [number, string][] = [
@@ -31,7 +27,7 @@ export function SiteFooter() {
   return (
     <footer
       data-cta-location="footer"
-      className="@container relative h-145 overflow-clip bg-white text-black md:h-210 dark:bg-[#08080b] dark:text-[#d4d4dc]"
+      className="@container relative overflow-clip bg-white text-black dark:bg-[#08080b] dark:text-[#d4d4dc]"
     >
       {/* Dithered glow grid, cropped so its lower rows meet the tagline. From md up it stays at its
           1440px size, centered under the content, and past 1440px its sides fade into the footer
@@ -44,29 +40,52 @@ export function SiteFooter() {
         unoptimized
         className="pointer-events-none absolute top-[-440px] left-[-60px] max-md:[mask-image:linear-gradient(to_bottom,transparent_440px,black_600px)] h-205 w-360 max-w-none invert hue-rotate-180 md:top-[-231px] md:left-1/2 md:h-auto md:w-360 md:-translate-x-1/2 min-[90rem]:[mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)] dark:mix-blend-lighten dark:invert-0 dark:hue-rotate-0"
       />
-      <div className="pointer-events-none absolute top-95 left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:top-145 md:left-[calc(50%-600px)] md:h-80 md:w-300 dark:block" />
+      <div className="pointer-events-none absolute bottom-[-40px] left-[-100px] hidden h-60 w-147.5 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgb(42_38_236/0.35),transparent)] md:bottom-[-60px] md:left-[calc(50%-600px)] md:h-80 md:w-300 dark:block" />
 
       {/* The text, links and wordmark share the header's 1440px frame, so they stay centered on
-          wide screens while the grid above runs edge to edge. */}
-      <div className="absolute inset-y-0 right-0 left-0 mx-auto max-w-[1440px]">
-        <p className="absolute top-72 right-5 left-5 text-[15px] leading-5.5 md:top-112 md:right-auto md:left-6 md:w-120 md:text-base md:leading-5.75">
-          The pastebin for your agents. Keep the code you reuse in one library, on sniptide.com or
-          on your own server.
-        </p>
+          wide screens while the grid above runs edge to edge. The top padding leaves the grid's
+          lit rows clear. */}
+      <div className="relative mx-auto flex max-w-[1440px] flex-col px-5 pt-72 md:px-6 md:pt-112">
+        <div className="grid gap-10 md:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] md:gap-12">
+          <p className="max-w-120 text-[15px] leading-5.5 md:text-base md:leading-5.75">
+            The pastebin for your agents. Keep the code you reuse in one library, on sniptide.com or
+            on your own server.
+          </p>
 
-        <nav className="absolute top-93 right-5 left-5 flex flex-wrap gap-x-3 gap-y-2.5 font-mono text-[13px] leading-4 tracking-[0.5px] uppercase md:top-113 md:right-6 md:left-auto md:gap-6">
-          {nav.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="hover:text-[#2a26ec] dark:hover:text-white"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+          <nav
+            aria-label="Footer"
+            className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 md:justify-self-end md:gap-x-16"
+          >
+            {columns.map((column) => (
+              <div key={column.label} className="flex min-w-0 flex-col gap-3">
+                <h2 className="text-[13px] leading-[18px] text-[#6b6b6b] dark:text-[#8a8a93]">
+                  {column.label}
+                </h2>
+                <ul className="flex flex-col gap-2">
+                  {column.items.map((item) => (
+                    <li key={item.label}>
+                      <a
+                        href={item.href}
+                        {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className="inline-flex items-center gap-1 text-sm leading-5 transition-colors hover:text-[#2a26ec] dark:hover:text-white"
+                      >
+                        {item.label}
+                        {item.external && (
+                          <>
+                            <ArrowUpRightIcon aria-hidden="true" className="size-3.5 opacity-60" />
+                            <span className="sr-only">(opens in a new tab)</span>
+                          </>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+        </div>
 
-        <div className="absolute right-5 bottom-21.5 left-5 flex max-w-348 items-center gap-4 md:right-6 md:bottom-18.5 md:left-6 md:gap-[4.67%]">
+        <div className="mt-16 flex max-w-348 items-center gap-4 md:mt-20 md:gap-[4.67%]">
           <LogoMark className="aspect-[243/234] w-[17.4%] text-[#2a26ec] dark:hidden" />
           <LogoMark className="hidden aspect-[243/234] w-[17.4%] dark:block" stops={markStops} />
           <div className="flex-1 pt-[0.65%]">
@@ -79,7 +98,7 @@ export function SiteFooter() {
           <span className="sr-only">Sniptide</span>
         </div>
 
-        <div className="absolute right-5 bottom-5 left-5 flex flex-col-reverse gap-3 text-xs md:flex-row md:items-center md:justify-between leading-4 md:right-6 md:left-6 dark:text-[#8a8a93]">
+        <div className="mt-6 flex flex-col-reverse gap-3 pb-5 text-xs leading-4 md:mt-4 md:flex-row md:items-center md:justify-between dark:text-[#8a8a93]">
           <div className="flex items-center justify-between gap-4 md:justify-start">
             <p>© 2026 Sniptide</p>
             <ThemeSwitch />

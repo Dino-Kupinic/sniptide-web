@@ -6,10 +6,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return sitemapPaths.map((path) => ({
     url: path === "/" ? siteUrl : `${siteUrl}${path}`,
     lastModified:
-      path === "/about" || path === "/contact" || path.startsWith("/docs")
-        ? "2026-10-28"
-        : path === "/privacy"
-          ? "2026-10-25"
-          : "2026-10-23",
+      path === "/blog" || path === "/brand" || path === "/vision"
+        ? "2026-11-05"
+        : path === "/about" || path === "/contact" || path.startsWith("/docs")
+          ? "2026-10-28"
+          : path === "/privacy"
+            ? "2026-10-25"
+            : "2026-10-23",
   }))
 }

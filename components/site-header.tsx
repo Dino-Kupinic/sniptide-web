@@ -1,16 +1,21 @@
 "use client"
 
 import { cn } from "@sniptide/ui/lib/utils"
-import { ChevronRightIcon, StarIcon } from "lucide-react"
+import { ArrowUpRightIcon, ChevronRightIcon, StarIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { LogoMark, Wordmark } from "@/components/brand"
+import { GitHubMark } from "@/components/github-mark"
+import {
+  DesktopNav,
+  focusRing,
+  MobileNavMenus,
+  menuItem,
+  menuRow,
+  staggerStyle,
+} from "@/components/site-nav"
 import { links } from "@/lib/links"
-import { navLinks } from "@/lib/nav"
+import { navLinks, navMenus } from "@/lib/nav"
 
-const focusRing =
-  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
-const navLink =
-  "flex h-8 items-center rounded-md px-3 text-sm leading-5 font-medium text-[#4a4747] transition-colors hover:bg-[#f4f4f4] hover:text-[#0a0a0a] dark:text-[#b0b0b0] dark:hover:bg-[#1c1c1c] dark:hover:text-white"
 // The two calls to action share one slim size: 32px including the raised edge.
 const headerButton =
   "raised-button h-[30px] shrink-0 items-center whitespace-nowrap border px-3 text-sm leading-5 font-medium"
@@ -18,21 +23,6 @@ const secondaryButton =
   "border-[#d8d8d8] bg-white text-[#0a0a0a] [--button-depth:#d0d0d0] hover:bg-[#f7f7f7] dark:border-[#333333] dark:bg-[#111111] dark:text-white dark:[--button-depth:#383838] dark:hover:bg-[#1c1c1c]"
 const primaryButton =
   "border-[#2a26ec] bg-[#2a26ec] text-white hover:border-[#3a36ff] hover:bg-[#3a36ff]"
-// Mobile menu rows: 48px touch targets on a hairline, the label in ink.
-const menuRow =
-  "flex h-12 items-center gap-3 border-b border-[#e8e8e8] text-base leading-6 font-medium text-[#0a0a0a] transition-colors active:text-[#6b6b6b] dark:border-[#222222] dark:text-white dark:active:text-[#a3a3a3]"
-// Rows and actions rise 4px into place one after another as the menu opens.
-const menuItem =
-  "translate-y-1 opacity-0 transition-[opacity,translate] duration-200 ease-out group-data-open:translate-y-0 group-data-open:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
-
-function GitHubMark({ className }: { className: string }) {
-  return (
-    <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 .297a12 12 0 0 0-3.793 23.4c.6.111.82-.258.82-.577 0-.285-.011-1.04-.016-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.236 1.84 1.236 1.07 1.834 2.807 1.304 3.492.997.108-.776.418-1.305.762-1.604-2.665-.304-5.466-1.333-5.466-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 0 1 6.006 0c2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.873.12 3.176.77.84 1.233 1.91 1.233 3.221 0 4.61-2.806 5.624-5.479 5.921.43.372.823 1.102.823 2.221 0 1.604-.014 2.898-.014 3.293 0 .322.216.694.825.576A12.002 12.002 0 0 0 12 .297z" />
-    </svg>
-  )
-}
-
 // Two bars that cross into an X, so the toggle changes state in place.
 function MenuToggleIcon({ open }: { open: boolean }) {
   const bar =
@@ -142,16 +132,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             </span>
           </a>
 
-          <nav
-            aria-label="Main navigation"
-            className="-ml-3 hidden items-center gap-1 whitespace-nowrap lg:flex"
-          >
-            {navLinks.map((link) => (
-              <a key={link.label} href={link.href} className={cn(navLink, focusRing)}>
-                {link.label}
-              </a>
-            ))}
-          </nav>
+          <DesktopNav anchor={headerRef} stars={formattedStars} />
         </div>
 
         <div className="flex shrink-0 items-center justify-end gap-2">
@@ -222,21 +203,26 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           aria-label="Mobile navigation"
           className="mx-auto w-full max-w-[1440px] flex-1 overflow-y-auto px-5 pt-2 md:px-10"
         >
+          <MobileNavMenus open={mobileOpen} />
           <ul>
             {navLinks.map((link, index) => (
               <li
                 key={link.label}
                 className={menuItem}
-                style={{ transitionDelay: mobileOpen ? `${index * 30}ms` : "0ms" }}
+                style={staggerStyle(mobileOpen, navMenus.length + index)}
               >
                 <a href={link.href} className={cn(menuRow, focusRing)}>
                   {link.label}
+                  <ArrowUpRightIcon
+                    aria-hidden="true"
+                    className="size-4 text-[#6b6b6b] dark:text-[#a3a3a3]"
+                  />
                 </a>
               </li>
             ))}
             <li
               className={menuItem}
-              style={{ transitionDelay: mobileOpen ? `${navLinks.length * 30}ms` : "0ms" }}
+              style={staggerStyle(mobileOpen, navMenus.length + navLinks.length)}
             >
               <a
                 href={links.github}
@@ -262,7 +248,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             menuItem,
             "mx-auto grid w-full max-w-[1440px] grid-cols-2 gap-3 px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:px-10",
           )}
-          style={{ transitionDelay: mobileOpen ? `${(navLinks.length + 1) * 30}ms` : "0ms" }}
+          style={staggerStyle(mobileOpen, navMenus.length + navLinks.length + 1)}
         >
           <a
             href={links.signIn}
