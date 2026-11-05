@@ -155,7 +155,9 @@ const LogoItem = ({
   return (
     <a
       href={logo.href}
-      aria-label={logo.alt}
+      aria-label={`${logo.alt} (opens in a new tab)`}
+      target="_blank"
+      rel="noopener noreferrer"
       tabIndex={hidden ? -1 : undefined}
       className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
     >
@@ -174,13 +176,13 @@ const useRowSize = (
   useEffect(() => {
     const root = rootRef.current
     const group = groupRef.current
-    if (!(moving && root && group)) {
+    if (!root) {
       return
     }
     const measure = () => {
       // Ignore floating-point noise from the translating row.
       const next = {
-        group: Math.round(group.getBoundingClientRect().width * 64) / 64,
+        group: moving && group ? Math.round(group.getBoundingClientRect().width * 64) / 64 : 0,
         root: Math.round(root.getBoundingClientRect().width * 64) / 64,
       }
       setSize((current) =>
@@ -190,7 +192,9 @@ const useRowSize = (
     measure()
     const observer = new ResizeObserver(measure)
     observer.observe(root)
-    observer.observe(group)
+    if (moving && group) {
+      observer.observe(group)
+    }
     return () => observer.disconnect()
   }, [moving, rootRef, groupRef])
   return size
@@ -394,6 +398,9 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
   const layout: MarqueeLayout = props.variant === "wall" ? {} : props
   const moving = !(isWall || reducedMotion)
   const size = useRowSize(moving, rootRef, groupRef)
+  const compact = size.root > 0 && size.root < 640
+  const rowGap = compact ? gap / 2 : gap
+  const fadeWidth = compact ? Math.min(32, layout.fadeWidth ?? 96) : (layout.fadeWidth ?? 96)
   const logoProps = {
     cell,
     color,
@@ -411,7 +418,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
     enabled: moving,
     held: hovered || focused || !inView,
     reverse: layout.direction === "right",
-    speed: layout.speed ?? 32,
+    speed: (layout.speed ?? 32) * (compact ? 1.25 : 1),
     trackRef,
   })
 
@@ -433,7 +440,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
       <StillRow
         logos={logos}
         label={label}
-        gap={gap}
+        gap={rowGap}
         logoHeight={logoHeight}
         logoProps={logoProps}
         className={className}
@@ -479,7 +486,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
           into the box that decides how many copies it needs. */}
       <div
         className="overflow-hidden py-2 [contain:inline-size]"
-        style={fadeMask(layout.fade ?? "soft", layout.fadeWidth ?? 96)}
+        style={fadeMask(layout.fade ?? "soft", fadeWidth)}
       >
         <div ref={trackRef} className="flex w-max will-change-transform">
           {Array.from({ length: copies }, (_, copy) => (
@@ -490,7 +497,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
               aria-label={copy === 0 ? label : undefined}
               aria-hidden={copy === 0 ? undefined : true}
               className="flex shrink-0 items-center"
-              style={{ columnGap: gap, paddingRight: gap }}
+              style={{ columnGap: rowGap, paddingRight: rowGap }}
             >
               {logos.map((logo, index) => (
                 <li key={logo.src} className="flex shrink-0 items-center">

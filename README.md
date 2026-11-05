@@ -205,5 +205,11 @@ the row to a stop at its current position; leaving resumes from there. Reduced
 motion shows one still, wrapping row without the scan animation.
 
 Official artwork supplies the lettering, and tool names remain accessible link
-labels. There is no pause button. Keep the local artwork and its sources in
+labels. Logo links open in a new tab with `noopener noreferrer`; accessible labels
+announce this behavior. There is no pause button. Keep the local artwork and its sources in
 `public/logos` together when changing the list.
+
+Below 640 pixels of row width, logo gaps halve to 32 pixels, soft fades narrow to
+32 pixels, and scroll speed increases by 25% to 40 pixels per second. Desktop
+uses the reference defaults. OpenAI's export padding is trimmed so its wordmark
+has comparable visible height to the other logos.

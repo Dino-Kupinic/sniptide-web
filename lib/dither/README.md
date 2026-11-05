@@ -25,3 +25,8 @@ To update, compare the registry source with these adaptations, retain the licens
 run the repository checks, and inspect light/dark desktop and phone layouts plus
 reduced motion. Avoid the registry installer's `--overwrite` option because it can
 replace shared utilities and theme files.
+
+Below 640 pixels of row width, logo gaps halve to 32 pixels, soft fades narrow to
+32 pixels, and scroll speed increases by 25% to 40 pixels per second. Desktop
+uses the reference defaults. OpenAI's export padding is trimmed so its wordmark
+has comparable visible height to the other logos.

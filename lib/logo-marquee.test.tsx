@@ -7,9 +7,13 @@ describe("compatible tool artwork", () => {
   test("links expose tool names without adding typeset brand labels", () => {
     const markup = renderToStaticMarkup(<LogoMarquee logos={tools} />)
     for (const tool of tools) {
-      expect(markup).toContain(`aria-label="${tool.alt}"`)
+      expect(markup).toContain(`aria-label="${tool.alt} (opens in a new tab)"`)
       expect(markup).toContain(`href="${tool.href}"`)
       expect(markup).not.toContain(`>${tool.alt}</span>`)
+    }
+    for (const link of markup.match(/<a\b[^>]*>/g) ?? []) {
+      expect(link).toContain('target="_blank"')
+      expect(link).toContain('rel="noopener noreferrer"')
     }
     expect(markup).not.toContain("<button")
     expect(markup).not.toContain("hover:opacity-100")
