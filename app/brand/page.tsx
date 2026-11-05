@@ -93,7 +93,7 @@ export default function Page() {
 
       <h2>Questions</h2>
       <p>
-        For press, partnerships or a use not covered here, write to{" "}
+        For a use not covered here, write to{" "}
         <a href={`mailto:${operator.email}`}>{operator.email}</a>.
       </p>
     </LegalPage>

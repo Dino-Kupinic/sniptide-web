@@ -184,7 +184,7 @@ export const navMenus: NavMenu[] = [
     label: "Resources",
     groups: [
       {
-        label: "Company",
+        label: "About",
         items: [
           {
             label: "Vision",
@@ -194,7 +194,7 @@ export const navMenus: NavMenu[] = [
           },
           {
             label: "Blog",
-            description: "Product news and notes from the team.",
+            description: "Product news and notes on building Sniptide.",
             href: "/blog",
             icon: NewspaperIcon,
           },
@@ -207,11 +207,11 @@ export const navMenus: NavMenu[] = [
         ],
       },
       {
-        label: "Press and releases",
+        label: "Brand and releases",
         items: [
           {
             label: "Brand guidelines",
-            description: "Logos, colors and type for press and partners.",
+            description: "The logo, colors and type, and how to use them.",
             href: "/brand",
             icon: PaletteIcon,
           },

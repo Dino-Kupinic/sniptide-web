@@ -5,7 +5,7 @@ import { links } from "@/lib/links"
 export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
   title: "Blog",
-  description: "Product news and notes from the team behind Sniptide.",
+  description: "Product news and notes on building Sniptide.",
 }
 
 // No posts yet. The first one replaces this paragraph with a list of posts, newest first.
