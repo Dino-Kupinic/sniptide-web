@@ -1,19 +1,21 @@
 import {
   BookOpenIcon,
   BracesIcon,
-  FileTextIcon,
   FolderSyncIcon,
-  InfoIcon,
   KeyRoundIcon,
   LibraryBigIcon,
   Link2Icon,
   MailIcon,
   MonitorPlayIcon,
+  NewspaperIcon,
   PackageIcon,
+  PaletteIcon,
   PlugIcon,
   ServerIcon,
+  ShieldCheckIcon,
   SquareTerminalIcon,
   TagIcon,
+  TelescopeIcon,
 } from "lucide-react"
 import type { ComponentType } from "react"
 import { GitHubMark } from "@/components/github-mark"
@@ -94,10 +96,10 @@ export const navMenus: NavMenu[] = [
             icon: SquareTerminalIcon,
           },
           {
-            label: "llms.txt",
-            description: "Plain-text docs your agent can read.",
-            href: "/llms.txt",
-            icon: FileTextIcon,
+            label: "OAuth sign-in",
+            description: "Connect an agent without pasting a token.",
+            href: documentation.oauth.url,
+            icon: ShieldCheckIcon,
           },
         ],
       },
@@ -132,10 +134,22 @@ export const navMenus: NavMenu[] = [
       {
         items: [
           {
-            label: "About",
-            description: "Who builds Sniptide and why.",
+            label: "Vision",
+            description: "Why Sniptide exists and where it is going.",
             href: "/about",
-            icon: InfoIcon,
+            icon: TelescopeIcon,
+          },
+          {
+            label: "Blog",
+            description: "Product news and notes from the team.",
+            href: "/blog",
+            icon: NewspaperIcon,
+          },
+          {
+            label: "Brand guidelines",
+            description: "Logos, colors and type for press and partners.",
+            href: "/brand",
+            icon: PaletteIcon,
           },
           {
             label: "Contact",

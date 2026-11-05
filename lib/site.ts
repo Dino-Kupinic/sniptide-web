@@ -49,4 +49,13 @@ export const ogVideo = {
 }
 
 // Every page that belongs in sitemap.xml, as a path on siteUrl. Add a page here when it ships.
-export const sitemapPaths = ["/", "/about", "/contact", "/privacy", "/terms", "/impressum"]
+export const sitemapPaths = [
+  "/",
+  "/about",
+  "/blog",
+  "/brand",
+  "/contact",
+  "/privacy",
+  "/terms",
+  "/impressum",
+]
