@@ -37,11 +37,6 @@ interface MarqueeLayout {
   fade?: MarqueeFade
   /** Width of each end's fade in CSS pixels. Default 96. */
   fadeWidth?: number
-  /**
-   * A small pause button that appears on hover and keyboard focus, so
-   * anyone can stop the motion. Default `true`.
-   */
-  pauseButton?: boolean
 }
 
 interface WallLayout {
@@ -51,7 +46,6 @@ interface WallLayout {
   direction?: never
   fade?: never
   fadeWidth?: never
-  pauseButton?: never
 }
 
 export type LogoLayout = MarqueeLayout | WallLayout
@@ -155,15 +149,9 @@ const LogoItem = ({
       href={logo.href}
       aria-label={logo.alt}
       tabIndex={hidden ? -1 : undefined}
-      className="focus-visible:ring-ring flex max-w-full items-center gap-2.5 rounded-sm opacity-80 outline-none transition-opacity duration-150 ease-(--ease-out) hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
+      className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-80 outline-none transition-opacity duration-150 ease-(--ease-out) hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
     >
       {mark}
-      <span
-        aria-hidden="true"
-        className="text-lg leading-6 font-semibold tracking-[-0.01em] whitespace-nowrap"
-      >
-        {logo.alt}
-      </span>
     </a>
   )
 }
@@ -269,24 +257,6 @@ const useCoasting = ({
   }, [held])
 }
 
-const PauseButton = ({ paused, onToggle }: { paused: boolean; onToggle: () => void }) => (
-  <button
-    type="button"
-    aria-pressed={paused}
-    aria-label={paused ? "Play logos" : "Pause logos"}
-    onClick={onToggle}
-    className="bg-background/80 text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-1 z-10 flex size-7 -translate-y-1/2 items-center justify-center rounded-full border opacity-0 backdrop-blur-sm transition-opacity duration-150 ease-(--ease-out) outline-none group-hover/marquee:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 data-[paused=true]:opacity-100 motion-reduce:transition-none"
-    data-paused={paused}
-  >
-    <svg aria-hidden viewBox="0 0 8 8" className="size-2.5" shapeRendering="crispEdges">
-      <path
-        d={paused ? "M1 0h2v8h-2zM3 1h2v6h-2zM5 2h2v4h-2zM7 3h1v2h-1z" : "M1 0h2v8h-2zM5 0h2v8h-2z"}
-        fill="currentColor"
-      />
-    </svg>
-  </button>
-)
-
 const StillRow = ({
   logos,
   label,
@@ -389,7 +359,6 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
     direction: _direction,
     fade: _fade,
     fadeWidth: _fadeWidth,
-    pauseButton: _pauseButton,
     className,
     onPointerEnter,
     onPointerLeave,
@@ -404,7 +373,6 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
   const inView = useInView(rootRef)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
-  const [paused, setPaused] = useState(false)
 
   const isWall = props.variant === "wall"
   const layout: MarqueeLayout = props.variant === "wall" ? {} : props
@@ -425,7 +393,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
   useCoasting({
     distance: size.group,
     enabled: moving,
-    held: hovered || focused || paused || !inView,
+    held: hovered || focused || !inView,
     reverse: layout.direction === "right",
     speed: layout.speed ?? 32,
     trackRef,
@@ -469,8 +437,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
       aria-label={label}
       {...rest}
       ref={rootRef}
-      data-paused={paused || undefined}
-      className={cn("group/marquee relative w-full", className)}
+      className={cn("relative w-full", className)}
       onPointerEnter={(event) => {
         onPointerEnter?.(event)
         if (event.pointerType !== "touch") {
@@ -524,9 +491,6 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
           ))}
         </div>
       </div>
-      {(layout.pauseButton ?? true) && (
-        <PauseButton paused={paused} onToggle={() => setPaused((value) => !value)} />
-      )}
     </div>
   )
 }

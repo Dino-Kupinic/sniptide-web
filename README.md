@@ -195,7 +195,8 @@ When a browser exposes WebMCP, the site registers two read-only tools with canon
 ## Compatible tool marquee
 
 `components/works-with.tsx` lists the supported tools and their product links. The
-row uses the local dithercn logo marquee with hatched, one-pixel logos, no bloom,
-and soft edge fades. Hover or keyboard focus pauses the row; its pause button
-also holds it still. Reduced motion shows one wrapping row. Keep the local SVG
-assets and their sources in `public/logos` together when changing the list.
+row uses official logo lockups and wordmarks with a hatched, one-pixel dither
+across the complete artwork, including lettering and edges. Soft edge fades frame
+the row. Hover or keyboard focus pauses it; reduced motion shows one wrapping row.
+There is no pause button. Tool names remain accessible link labels. Keep the local
+artwork and its sources in `public/logos` together when changing the list.
