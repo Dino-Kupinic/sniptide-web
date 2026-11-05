@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     videos: [ogVideo],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", site: "@sniptide" },
   // Icons and the web manifest are the files in app/ and public/ from RealFaviconGenerator.
   appleWebApp: { title: siteName },
 }

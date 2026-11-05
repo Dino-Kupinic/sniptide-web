@@ -3,6 +3,7 @@
 export const siteUrl = "https://sniptide.com"
 export const appBase = "https://app.sniptide.com"
 export const repoUrl = "https://github.com/Dino-Kupinic/sniptide"
+export const xUrl = "https://x.com/sniptide"
 export const imageUrl = "ghcr.io/dino-kupinic/sniptide"
 
 export const siteName = "Sniptide"

@@ -9,6 +9,7 @@ import {
   siteName,
   siteTitle,
   siteUrl,
+  xUrl,
 } from "@/lib/site"
 
 const organizationId = `${siteUrl}/#organization`
@@ -20,7 +21,7 @@ export const screenshotCaption =
   "The Sniptide demo dashboard with connected coding agents, agent activity, and recent pastes."
 
 // Profiles Sniptide itself publishes. Personal profiles of the operator stay out, and Wikipedia,
-// Wikidata or social profiles join this list only once they exist.
+// Wikidata or other social profiles join this list only once they exist.
 const npmOrg = "https://www.npmjs.com/org/sniptide"
 const mcpRegistry =
   "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.Dino-Kupinic%2Fsniptide/versions/latest"
@@ -40,7 +41,7 @@ export const structuredData = {
       url: siteUrl,
       logo: logoUrl,
       description: siteDescription,
-      sameAs: [repoUrl, npmOrg],
+      sameAs: [repoUrl, xUrl, npmOrg],
       contactPoint: {
         "@type": "ContactPoint",
         email: operator.email,

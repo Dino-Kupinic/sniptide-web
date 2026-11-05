@@ -108,6 +108,9 @@ link to the canonical guides. The public documentation MCP at `/api/mcp`, A2A ag
 The llms files and robots.txt point to canonical documentation. About and contact pages
 remain in the sitemap; redirected documentation pages do not.
 
+`/api/status` reports whether the app's `/api/health` answers, cached for a minute, and the
+footer's status line reads it.
+
 The server card follows the [experimental MCP Server Card schema](https://github.com/modelcontextprotocol/ext-server-card).
 Its required `$schema` URL currently returns 404, so validate against that repository's generated
 `schema.json`, using `$defs.ServerCard`. The extension may change before it becomes part of MCP.
