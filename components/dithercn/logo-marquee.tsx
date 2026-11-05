@@ -78,6 +78,10 @@ const MAX_COPIES = 8
 const EASE_SECONDS = 0.45
 // Cell of the dithered fade, in CSS pixels.
 const FADE_CELL = 3
+// Row width, in CSS pixels, below which the row switches to its phone layout.
+const COMPACT_WIDTH = 640
+// Logo size in the phone layout, relative to `logoHeight`.
+const COMPACT_SCALE = 0.75
 
 /**
  * A mask for both ends of the row: transparent at the edges, opaque
@@ -124,12 +128,15 @@ const fadeMask = (fade: MarqueeFade, width: number): CSSProperties => {
 const LogoItem = ({
   logo,
   height,
+  scale = 1,
   hidden,
   phase,
   logoProps,
 }: {
   logo: MarqueeLogo
   height: number
+  /** Applied to a logo's own `height`, so overrides shrink with the row. */
+  scale?: number
   hidden: boolean
   phase: number
   logoProps: Omit<DitheredLogoProps, "src" | "alt">
@@ -146,7 +153,7 @@ const LogoItem = ({
       alt={hidden || logo.href ? "" : logo.alt}
       ratio={logo.ratio}
       className="max-w-full"
-      style={{ height: logo.height ?? height }}
+      style={{ height: logo.height === undefined ? height : logo.height * scale }}
     />
   )
   if (!logo.href) {
@@ -398,9 +405,12 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
   const layout: MarqueeLayout = props.variant === "wall" ? {} : props
   const moving = !(isWall || reducedMotion)
   const size = useRowSize(moving, rootRef, groupRef)
-  const compact = size.root > 0 && size.root < 640
+  // Phone widths: smaller logos and tighter gaps keep about three logos in
+  // view, and the fade stays wide enough to soften a logo cut by the edge.
+  const compact = size.root > 0 && size.root < COMPACT_WIDTH
   const rowGap = compact ? gap / 2 : gap
-  const fadeWidth = compact ? Math.min(32, layout.fadeWidth ?? 96) : (layout.fadeWidth ?? 96)
+  const rowHeight = compact ? Math.round(logoHeight * COMPACT_SCALE) : logoHeight
+  const fadeWidth = compact ? Math.min(48, layout.fadeWidth ?? 96) : (layout.fadeWidth ?? 96)
   const logoProps = {
     cell,
     color,
@@ -441,7 +451,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
         logos={logos}
         label={label}
         gap={rowGap}
-        logoHeight={logoHeight}
+        logoHeight={rowHeight}
         logoProps={logoProps}
         className={className}
         rootRef={rootRef}
@@ -473,7 +483,12 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
       }}
       onFocus={(event) => {
         onFocus?.(event)
-        setFocused(true)
+        // A tap focuses the link on some touch browsers. Holding the row
+        // for that would leave it stopped after the new tab opens, so only
+        // keyboard focus, which shows a ring, holds it.
+        if (event.target.matches(":focus-visible")) {
+          setFocused(true)
+        }
       }}
       onBlur={(event) => {
         onBlur?.(event)
@@ -503,7 +518,8 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
                 <li key={logo.src} className="flex shrink-0 items-center">
                   <LogoItem
                     logo={logo}
-                    height={logoHeight}
+                    height={rowHeight}
+                    scale={rowHeight / logoHeight}
                     hidden={copy !== 0}
                     phase={index / Math.max(1, logos.length)}
                     logoProps={logoProps}

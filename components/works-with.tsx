@@ -2,10 +2,10 @@ import { LogoMarquee } from "@/components/dithercn/logo-marquee"
 
 export const tools = [
   {
-    src: "/logos/claude-code.svg",
+    src: "/logos/claude.svg",
     alt: "Claude Code",
     href: "https://claude.com/product/claude-code",
-    ratio: 188 / 28,
+    ratio: 573 / 125,
   },
   { src: "/logos/cursor.svg", alt: "Cursor", href: "https://cursor.com", ratio: 2238.7 / 532.09 },
   { src: "/logos/openai.svg", alt: "OpenAI", href: "https://openai.com", ratio: 1127 / 305 },
