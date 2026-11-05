@@ -125,6 +125,29 @@ const fadeMask = (fade: MarqueeFade, width: number): CSSProperties => {
   }
 }
 
+/**
+ * Height and, when the logo has a ratio, an explicit width. Safari sizes a
+ * flex item with `aspect-ratio` from the artwork's own width instead, which
+ * stretches a logo and the gap around it.
+ */
+const logoSize = (
+  logo: MarqueeLogo,
+  height: number,
+  scale: number,
+  fluid: boolean,
+): CSSProperties => {
+  const base = logo.height ?? height
+  if (fluid) {
+    const tall = `calc(${base}px * var(--logo-scale))`
+    return {
+      height: tall,
+      width: logo.ratio ? `calc(${base * logo.ratio}px * var(--logo-scale))` : undefined,
+    }
+  }
+  const tall = logo.height === undefined ? height : logo.height * scale
+  return { height: tall, width: logo.ratio ? tall * logo.ratio : undefined }
+}
+
 /** One logo, wrapped in a link when it has one. */
 const LogoItem = ({
   logo,
@@ -157,13 +180,7 @@ const LogoItem = ({
       alt={hidden || logo.href ? "" : logo.alt}
       ratio={logo.ratio}
       className="max-w-full"
-      style={{
-        height: fluid
-          ? `calc(${logo.height ?? height}px * var(--logo-scale))`
-          : logo.height === undefined
-            ? height
-            : logo.height * scale,
-      }}
+      style={logoSize(logo, height, scale, fluid)}
     />
   )
   if (!logo.href) {
