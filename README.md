@@ -198,7 +198,7 @@ When a browser exposes WebMCP, the site registers two read-only tools with canon
 ## Compatible tool marquee
 
 `components/works-with.tsx` follows the [first dithercn example](https://dithercn.dev/docs/images/logo-marquee):
-a looping row with the default gradient fill, solid outlines, one-pixel cells,
+a looping row with a gradient fill that keeps 60% of its ink at the bottom (the example's default is 30%, which reads pale on white), solid outlines, one-pixel cells,
 28-pixel logo height, 64-pixel gaps, 32-pixel-per-second speed and soft edge fades.
 The scan effect passes through each logo in turn. Hover or keyboard focus coasts
 the row to a stop at its current position; leaving resumes from there. Reduced
@@ -211,7 +211,9 @@ announce this behavior. There is no pause button. Keep the local artwork and its
 
 Below 640 pixels of row width, logos shrink to 21 pixels tall, gaps halve to 32
 pixels, soft fades narrow to 48 pixels, and scroll speed increases by 25% to 40
-pixels per second, so about three logos stay in view on a phone. A tap that
-focuses a logo link does not hold the row; only keyboard focus does. Desktop
+pixels per second, so about three logos stay in view on a phone. Logo size and
+gaps come from container queries, so they apply on first paint before the page
+hydrates. A tap that focuses a logo link does not hold the row; only keyboard
+focus does. Desktop
 uses the reference defaults. OpenAI's export padding is trimmed so its wordmark
 has comparable visible height to the other logos.

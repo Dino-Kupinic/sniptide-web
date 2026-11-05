@@ -78,7 +78,8 @@ const MAX_COPIES = 8
 const EASE_SECONDS = 0.45
 // Cell of the dithered fade, in CSS pixels.
 const FADE_CELL = 3
-// Row width, in CSS pixels, below which the row switches to its phone layout.
+// Row width, in CSS pixels, below which the still row switches to its phone
+// layout. The moving row's `@max-[639px]` classes must use the same limit.
 const COMPACT_WIDTH = 640
 // Logo size in the phone layout, relative to `logoHeight`.
 const COMPACT_SCALE = 0.75
@@ -129,6 +130,7 @@ const LogoItem = ({
   logo,
   height,
   scale = 1,
+  fluid = false,
   hidden,
   phase,
   logoProps,
@@ -137,6 +139,8 @@ const LogoItem = ({
   height: number
   /** Applied to a logo's own `height`, so overrides shrink with the row. */
   scale?: number
+  /** Size by the `--logo-scale` CSS variable, which the row sets per width. */
+  fluid?: boolean
   hidden: boolean
   phase: number
   logoProps: Omit<DitheredLogoProps, "src" | "alt">
@@ -153,7 +157,13 @@ const LogoItem = ({
       alt={hidden || logo.href ? "" : logo.alt}
       ratio={logo.ratio}
       className="max-w-full"
-      style={{ height: logo.height === undefined ? height : logo.height * scale }}
+      style={{
+        height: fluid
+          ? `calc(${logo.height ?? height}px * var(--logo-scale))`
+          : logo.height === undefined
+            ? height
+            : logo.height * scale,
+      }}
     />
   )
   if (!logo.href) {
@@ -166,7 +176,7 @@ const LogoItem = ({
       target="_blank"
       rel="noopener noreferrer"
       tabIndex={hidden ? -1 : undefined}
-      className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
+      className="focus-visible:ring-ring flex max-w-full items-center rounded-sm opacity-100 outline-none dark:opacity-80 focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
     >
       {mark}
     </a>
@@ -470,7 +480,7 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
       aria-label={label}
       {...rest}
       ref={rootRef}
-      className={cn("relative w-full", className)}
+      className={cn("@container relative w-full", className)}
       onPointerEnter={(event) => {
         onPointerEnter?.(event)
         if (event.pointerType !== "touch") {
@@ -500,8 +510,16 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
       {/* Inline-size containment: the row's width must never feed back
           into the box that decides how many copies it needs. */}
       <div
-        className="overflow-hidden py-2 [contain:inline-size]"
-        style={fadeMask(layout.fade ?? "soft", fadeWidth)}
+        // Container queries size the row in CSS, so the phone layout applies
+        // on first paint instead of after hydration measures the row.
+        className="overflow-hidden py-2 [--logo-scale:1] [--row-gap:var(--row-gap-wide)] [contain:inline-size] @max-[639px]:[--logo-scale:0.75] @max-[639px]:[--row-gap:var(--row-gap-narrow)]"
+        style={
+          {
+            ...fadeMask(layout.fade ?? "soft", fadeWidth),
+            "--row-gap-narrow": `${gap / 2}px`,
+            "--row-gap-wide": `${gap}px`,
+          } as CSSProperties
+        }
       >
         <div ref={trackRef} className="flex w-max will-change-transform">
           {Array.from({ length: copies }, (_, copy) => (
@@ -512,14 +530,14 @@ export const LogoMarquee = (props: LogoMarqueeProps) => {
               aria-label={copy === 0 ? label : undefined}
               aria-hidden={copy === 0 ? undefined : true}
               className="flex shrink-0 items-center"
-              style={{ columnGap: rowGap, paddingRight: rowGap }}
+              style={{ columnGap: "var(--row-gap)", paddingRight: "var(--row-gap)" }}
             >
               {logos.map((logo, index) => (
                 <li key={logo.src} className="flex shrink-0 items-center">
                   <LogoItem
                     logo={logo}
-                    height={rowHeight}
-                    scale={rowHeight / logoHeight}
+                    height={logoHeight}
+                    fluid
                     hidden={copy !== 0}
                     phase={index / Math.max(1, logos.length)}
                     logoProps={logoProps}

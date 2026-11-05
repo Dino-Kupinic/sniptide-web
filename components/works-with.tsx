@@ -27,6 +27,7 @@ export function WorksWith() {
         label="Compatible tools"
         color="--foreground"
         effect="scan"
+        floor={0.6}
         className="max-w-300"
       />
     </section>

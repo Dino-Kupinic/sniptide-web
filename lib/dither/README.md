@@ -28,7 +28,9 @@ replace shared utilities and theme files.
 
 Below 640 pixels of row width, logos shrink to 21 pixels tall, gaps halve to 32
 pixels, soft fades narrow to 48 pixels, and scroll speed increases by 25% to 40
-pixels per second, so about three logos stay in view on a phone. A tap that
-focuses a logo link does not hold the row; only keyboard focus does. Desktop
+pixels per second, so about three logos stay in view on a phone. Logo size and
+gaps come from container queries, so they apply on first paint before the page
+hydrates. A tap that focuses a logo link does not hold the row; only keyboard
+focus does. Desktop
 uses the reference defaults. OpenAI's export padding is trimmed so its wordmark
 has comparable visible height to the other logos.
