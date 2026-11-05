@@ -23,7 +23,6 @@ import {
 import type { ComponentType } from "react"
 import { GitHubMark } from "@/components/github-mark"
 import { documentation, mcpEndpoint } from "./agent-docs"
-import { operator } from "./legal"
 import { docsPages, links } from "./links"
 
 export type NavItem = {
@@ -40,8 +39,11 @@ export type NavGroup = { label: string; items: NavItem[] }
 // The last column of a menu: one link with a picture, a sentence and a call to action.
 export type NavFeature = NavItem & { action: string; visual: "demo" | "terminal" | "github" }
 
-// The line under a menu's columns: one identifier worth copying, such as a command or an address.
-export type NavStrip = { label: string; value: string; href?: string }
+// The line under a menu's columns: an identifier worth copying, such as a command, or one link
+// worth reading next, such as the latest blog post.
+export type NavStrip =
+  | { kind: "copy"; label: string; value: string }
+  | { kind: "link"; label: string; title: string; href: string; note?: string }
 
 export type NavMenu = { label: string; groups: NavGroup[]; feature: NavFeature; strip: NavStrip }
 
@@ -113,6 +115,7 @@ export const navMenus: NavMenu[] = [
       visual: "demo",
     },
     strip: {
+      kind: "copy",
       label: "Run it on your own server",
       value: "curl -fsSL https://sniptide.com/install.sh | sh",
     },
@@ -175,7 +178,7 @@ export const navMenus: NavMenu[] = [
       icon: BookOpenIcon,
       visual: "terminal",
     },
-    strip: { label: "MCP endpoint", value: mcpEndpoint },
+    strip: { kind: "copy", label: "MCP endpoint", value: mcpEndpoint },
   },
   {
     label: "Resources",
@@ -232,10 +235,13 @@ export const navMenus: NavMenu[] = [
       external: true,
       visual: "github",
     },
+    // A placeholder until the first post ships. Point it at the newest post then, and drop the note.
     strip: {
-      label: "Press and partnerships",
-      value: operator.email,
-      href: `mailto:${operator.email}`,
+      kind: "link",
+      label: "From the blog",
+      title: "Why we built a pastebin for agents",
+      href: "/blog",
+      note: "Coming soon",
     },
   },
 ]
@@ -246,4 +252,5 @@ export function menuItems(menu: NavMenu): NavItem[] {
 }
 
 // Plain links that sit after the menus.
+// Docs lives on its own site, so it carries an arrow like the other links that leave this one.
 export const navLinks = [{ label: "Docs", href: links.docs }]

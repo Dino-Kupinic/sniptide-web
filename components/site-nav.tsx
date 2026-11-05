@@ -106,21 +106,48 @@ function FeatureCard({ feature, stars }: { feature: NavFeature; stars: string | 
 
 // The line under the columns: one identifier to copy, such as the install command.
 function MenuStrip({ strip }: { strip: NavStrip }) {
+  if (strip.kind === "link") {
+    return (
+      <NavigationMenu.Link
+        href={strip.href}
+        closeOnClick
+        className={cn(
+          "group/strip col-span-2 flex h-14 min-w-0 items-center gap-3 border-t px-4 outline-none transition-colors hover:bg-[#fafafa] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#2a26ec] dark:hover:bg-[#121111] dark:focus-visible:outline-[#8f8cff]",
+          hairline,
+        )}
+      >
+        <span className={cn("shrink-0 text-[13px] leading-[18px]", muted)}>{strip.label}</span>
+        <span className="min-w-0 truncate text-sm leading-5 font-medium text-[#0a0a0a] dark:text-white">
+          {strip.title}
+        </span>
+        {strip.note && (
+          <span
+            className={cn(
+              "flex h-6 shrink-0 items-center rounded-md border px-2 text-[13px] leading-[18px]",
+              hairline,
+              muted,
+            )}
+          >
+            {strip.note}
+          </span>
+        )}
+        <span className="ml-auto inline-flex shrink-0 items-center gap-1 text-sm leading-5 font-medium text-[#2a26ec] dark:text-[#8f8cff]">
+          Read
+          <ArrowRightIcon
+            aria-hidden="true"
+            className="size-3.5 transition-transform duration-200 ease-out group-hover/strip:translate-x-0.5 motion-reduce:transition-none"
+          />
+        </span>
+      </NavigationMenu.Link>
+    )
+  }
+
   return (
     <div className={cn("col-span-2 flex h-14 min-w-0 items-center gap-3 border-t px-4", hairline)}>
       <span className={cn("shrink-0 text-[13px] leading-[18px]", muted)}>{strip.label}</span>
-      {strip.href ? (
-        <a
-          href={strip.href}
-          className="min-w-0 truncate rounded-sm font-mono text-[13px] leading-[18px] text-[#2a26ec] underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2a26ec] dark:text-[#8f8cff] dark:focus-visible:outline-[#8f8cff]"
-        >
-          {strip.value}
-        </a>
-      ) : (
-        <code className="min-w-0 truncate rounded-md bg-[#f4f4f4] px-2 py-1 font-mono text-[13px] leading-[18px] text-[#0a0a0a] dark:bg-[#1c1c1c] dark:text-white">
-          {strip.value}
-        </code>
-      )}
+      <code className="min-w-0 truncate rounded-md bg-[#f4f4f4] px-2 py-1 font-mono text-[13px] leading-[18px] text-[#0a0a0a] dark:bg-[#1c1c1c] dark:text-white">
+        {strip.value}
+      </code>
       <CopyButton value={strip.value} label={strip.label.toLowerCase()} />
     </div>
   )
@@ -205,8 +232,9 @@ export function DesktopNav({
         ))}
         {navLinks.map((link) => (
           <NavigationMenu.Item key={link.label}>
-            <NavigationMenu.Link href={link.href} className={cn(navLink, focusRing)}>
+            <NavigationMenu.Link href={link.href} className={cn(navLink, "gap-1", focusRing)}>
               {link.label}
+              <ArrowUpRightIcon aria-hidden="true" className="size-3.5" strokeWidth={2} />
             </NavigationMenu.Link>
           </NavigationMenu.Item>
         ))}

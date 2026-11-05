@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@sniptide/ui/lib/utils"
-import { ChevronRightIcon, StarIcon } from "lucide-react"
+import { ArrowUpRightIcon, ChevronRightIcon, StarIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { GitHubMark } from "@/components/github-mark"
@@ -213,6 +213,10 @@ export function SiteHeader({ stars }: { stars: number | null }) {
               >
                 <a href={link.href} className={cn(menuRow, focusRing)}>
                   {link.label}
+                  <ArrowUpRightIcon
+                    aria-hidden="true"
+                    className="size-4 text-[#6b6b6b] dark:text-[#a3a3a3]"
+                  />
                 </a>
               </li>
             ))}
