@@ -14,6 +14,10 @@ export interface MarqueeLogo {
   alt: string
   /** Width over height. Set it to reserve space before the logo loads. */
   ratio?: number
+  /** Override the common height for compact product marks. */
+  height?: number
+  /** Source mask, for artwork with light details inside a colored mark. */
+  source?: DitheredLogoProps["source"]
   /** Makes the logo a link. */
   href?: string
   /** This logo's ink, overriding `color`. */
@@ -143,11 +147,12 @@ const LogoItem = ({
       color={logo.color ?? logoProps.color}
       phase={phase}
       lazy={false}
+      source={logo.source}
       src={logo.src}
       alt={hidden || logo.href ? "" : logo.alt}
       ratio={logo.ratio}
       className="max-w-full"
-      style={{ height }}
+      style={{ height: logo.height ?? height }}
     />
   )
   if (!logo.href) {

@@ -199,7 +199,7 @@ When a browser exposes WebMCP, the site registers two read-only tools with canon
 
 `components/works-with.tsx` lists the supported tools and their product links. The
 row uses official logo lockups and wordmarks with a subtle hatched texture at
-12% contrast across the complete artwork, including lettering and edges. Source
+22% contrast across the complete artwork, including lettering and edges. Source
 antialiasing and device-resolution rendering keep curves smooth, including while
 hovered. Hover does not change the logo opacity or texture. Soft edge fades frame
 the row. Hover or keyboard focus pauses it; reduced motion shows one wrapping row.

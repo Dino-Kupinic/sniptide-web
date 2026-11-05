@@ -20,8 +20,8 @@ describe("compatible tool artwork", () => {
     const marquee = section.props.children[1]
     expect(marquee.props.fill).toBe("hatched")
     expect(marquee.props.outline).toBe(false)
-    expect(marquee.props.strength).toBe(0.12)
+    expect(marquee.props.strength).toBe(0.22)
     expect(marquee.props.effect).toBe("none")
-    expect(tools.every((tool) => tool.ratio > 2)).toBe(true)
+    expect(tools.every((tool) => tool.ratio > 0)).toBe(true)
   })
 })

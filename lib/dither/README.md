@@ -10,7 +10,7 @@ Imports use the shared Sniptide utilities. Logos keep accessible link labels and
 fallback. Hook dependencies are explicit for Biome. No shader or WebGL is used.
 
 `settings.ts` supplies the hatched fill and one-pixel texture spacing, with bloom off.
-The marketing logos use 12% texture contrast, preserve source antialiasing and render
+The marketing logos use 22% texture contrast, preserve source antialiasing and render
 at device resolution with smooth image sampling. Hover/focus does not change logo
 opacity or texture. The marquee
 has soft fades, coasts to a stop on hover/focus, and wraps without moving under

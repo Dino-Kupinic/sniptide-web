@@ -9,10 +9,17 @@ export const tools = [
     ratio: 188 / 28,
   },
   { src: "/logos/cursor.svg", alt: "Cursor", href: "https://cursor.com", ratio: 2238.7 / 532.09 },
-  { src: "/logos/codex.svg", alt: "Codex", href: "https://openai.com/codex/", ratio: 1604 / 718 },
+  {
+    src: "/logos/codex.png",
+    alt: "Codex",
+    href: "https://openai.com/codex/",
+    ratio: 1,
+    source: "dark",
+    height: 32,
+  },
   { src: "/logos/github.svg", alt: "GitHub", href: "https://github.com", ratio: 416 / 95 },
   { src: "/logos/docker.svg", alt: "Docker", href: "https://www.docker.com", ratio: 1250 / 268 },
-  { src: "/logos/slack.png", alt: "Slack", href: "https://slack.com", ratio: 201 / 75 },
+  { src: "/logos/slack.svg", alt: "Slack", href: "https://slack.com", ratio: 498 / 127 },
   { src: "/logos/discord.svg", alt: "Discord", href: "https://discord.com", ratio: 635.303 / 96 },
   { src: "/logos/curl.svg", alt: "curl", href: "https://curl.se", ratio: 2851 / 854 },
 ] as const
@@ -34,7 +41,7 @@ export function WorksWith() {
         color="--foreground"
         effect="none"
         outline={false}
-        strength={0.12}
+        strength={0.22}
         fill={ditherSettings.fill}
         cell={ditherSettings.cell}
         className="max-w-300"
