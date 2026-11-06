@@ -41,7 +41,8 @@ describe("blog posts", () => {
     for (const file of files) expect(file).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*\.mdx$/)
     // /blog/md serves the Markdown twins, so no post can take that slug.
     expect(files).not.toContain("md.mdx")
-    expect(getPosts().map((entry) => entry.slug)).toEqual(
+    // Drafts count too, so a draft post in review still passes outside development.
+    expect(getPosts(true).map((entry) => entry.slug)).toEqual(
       expect.arrayContaining(files.map((file) => slugFromPath(file))),
     )
   })

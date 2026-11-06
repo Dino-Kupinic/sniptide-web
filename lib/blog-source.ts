@@ -26,8 +26,8 @@ const allPosts: Post[] = collection.entries.map((entry) => ({
 }))
 
 // Published posts, newest first. Drafts join them in development.
-export function getPosts(): Post[] {
-  return publishedPosts(allPosts)
+export function getPosts(includeDrafts?: boolean): Post[] {
+  return publishedPosts(allPosts, includeDrafts)
 }
 
 export function getPost(slug: string): Post | undefined {

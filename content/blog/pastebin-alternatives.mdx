@@ -1,0 +1,154 @@
+---
+title: Best Pastebin alternatives for code, private sharing and self-hosting
+description: Compare Pastebin alternatives for code snippets, private links and self-hosting, with clear trade-offs and tested developer workflows.
+date: 2026-11-07
+author: dino
+category: product
+tags: [comparison, pastebin, self-hosting]
+draft: true
+---
+
+{/* TODO(Dino): set the real publish date before flipping draft to false. */}
+{/* TODO(Dino): the description says "tested developer workflows". Keep it only once the hands-on section below has real results. */}
+
+If you only need a box that turns text into a link, Pastebin still works. The reasons to switch are usually more specific: you want the paste encrypted in the browser, you want it in Git, you want it on your own server, or you want a coding agent to find it again next week. Each of those needs points to a different tool.
+
+Here is the short answer, by job. Sniptide publishes this comparison, and Sniptide is one of the options, so the picks below say when another tool fits better.
+
+| If you want | Pick | Why |
+| --- | --- | --- |
+| A quick paste with no account | Pastebin.com, or MicroBin on your own server | Guests can paste on Pastebin.com, and MicroBin is a small self-hosted app with no sign-up step documented |
+| Encryption that happens in the browser | PrivateBin | The server only ever stores ciphertext, and the key lives in the link |
+| Snippets you clone, push and diff with Git | GitHub Gist, or Opengist to self-host | Every snippet is a Git repository with full history |
+| A snippet library your coding agent can search and reuse | Sniptide | Pastes are reachable over MCP and a CLI, alongside `.env` sync |
+
+The rest of this post shows how we compared them, what each tool documents, and where each one falls short.
+
+## How we compared them
+
+We use one small, harmless example in every tool: a three-file Express health check. Three files matter because multi-file support is where these tools differ most.
+
+```js title="server.js"
+import express from "express"
+import { health } from "./health.js"
+
+const app = express()
+app.get("/health", health)
+app.listen(process.env.PORT ?? 3000)
+```
+
+```js title="health.js"
+export function health(_req, res) {
+  res.json({ status: "ok", uptime: process.uptime() })
+}
+```
+
+```bash title=".env.example"
+PORT=3000
+APP_NAME=health-demo
+```
+
+The task in each product is the same four steps:
+
+<Steps>
+<Step>
+
+**Save** the three files as one paste, or as close to one as the tool allows.
+
+</Step>
+<Step>
+
+**Share** a link that a colleague without an account can open, then a link only a named person can open.
+
+</Step>
+<Step>
+
+**Revise** `health.js` and check whether the old version is still visible.
+
+</Step>
+<Step>
+
+**Retrieve** the files again from a terminal, without the browser.
+
+</Step>
+</Steps>
+
+Where a product doesn't support a step, the results say so instead of substituting something close. Feature facts in the matrix come from each project's own documentation or repository, checked on 6 November 2026, and the hands-on results are labeled separately.
+
+## The matrix
+
+| | Accounts | Several files per paste | Hosting | Export and retrieval | Privacy model |
+| --- | --- | --- | --- | --- | --- |
+| **Sniptide** | Required to create pastes | Yes, up to 10 | Hosted app, or self-host (AGPL-3.0) | Raw file URLs, a Markdown copy for agents, CLI `pull`, MCP | Private, unlisted or public; password; expiry; burn after read. Server-side storage |
+| **PrivateBin** | No accounts documented | File upload, off by default | Self-host | Not documented | Encrypted in the browser (AES-256-GCM), key in the URL fragment; password; expiry; burn after read |
+| **Opengist** | Yes, with OAuth, LDAP and passkeys. Anonymous snippets are an admin setting | Yes, with ZIP download | Self-host (AGPL-3.0) | Raw files, ZIP, JSON, Git clone and push over HTTP or SSH, an API | Public, unlisted or private. Server-side storage |
+| **MicroBin** | No accounts documented | Yes, multiple attachments | Self-host (BSD-3-Clause) | Raw text URLs | Private or public; expiring or permanent. The README lists both server-side and client-side encryption |
+| **GitHub Gist** | GitHub account required | Yes | Hosted by GitHub only | ZIP download, Git clone, `gh gist` | Public or secret. A secret gist is unlisted, and anyone with the URL can read it |
+| **Pastebin.com** | Optional. Guests are limited to 10 pastes a day | Not documented | Hosted only | Raw view, an API | Public or unlisted for guests, private with an account; expiry |
+
+{/* TODO(Dino): GitHub's "Creating gists" page implies several files per gist but doesn't say it outright. Find a first-party sentence or screenshot for that cell. */}
+{/* TODO(Dino): privatebin.info and microbin.eu/docs couldn't be fetched during research, so those rows rest on the GitHub READMEs. Re-check both sites, the PrivateBin license and MicroBin's default encryption mode before publishing. */}
+{/* TODO(Dino): record the version tested for each product (PrivateBin README showed 2.0.5, opengist.io showed 1.15.3; MicroBin and Pastebin.com showed none). */}
+
+Two cells deserve a closer look. "Encrypted" means different things in this table. PrivateBin encrypts in your browser, so the server can't read a paste even if it wanted to. Sniptide, Opengist and Gist store pastes on the server and protect them with access rules: who can open the link, whether it needs a password, and when it expires. Sniptide encrypts env group values at rest with a key the server holds, which protects the database but is still server-side encryption.
+
+The other is "secret". A secret gist and an unlisted paste on any of these tools work the same way: the link itself is the protection. Treat an unlisted link like a password you've already sent.
+
+## What happened when we ran the task
+
+{/* TODO(Dino): run the save, share, revise and retrieve task in each product and replace the placeholders below with what actually happened. Mark any step a product can't do as "Unavailable". One real screenshot per tested workflow, light and dark for Sniptide, saved in public/blog/pastebin-alternatives/. */}
+
+| Step | Sniptide | PrivateBin | Opengist | MicroBin | GitHub Gist |
+| --- | --- | --- | --- | --- | --- |
+| Save three files | TODO | TODO | TODO | TODO | TODO |
+| Share without an account | TODO | TODO | TODO | TODO | TODO |
+| Share with one named person | TODO | TODO | TODO | TODO | TODO |
+| Revise and see the old version | TODO | TODO | TODO | TODO | TODO |
+| Retrieve from a terminal | TODO | TODO | TODO | TODO | TODO |
+
+{/*
+<Figure
+  src="/blog/pastebin-alternatives/sniptide-three-files.webp"
+  darkSrc="/blog/pastebin-alternatives/sniptide-three-files-dark.webp"
+  alt="TODO"
+  caption="TODO: what the screenshot compares + what changed + the relevant qualification."
+/>
+*/}
+
+## When each tool is the better choice
+
+**Pastebin.com** is still the fastest route when the paste is public, short-lived and a single text. Nothing to install, and guests can post. It stops fitting once you need several files, a private link without an account, or your own server.
+
+**PrivateBin** is the right pick when the person running the server shouldn't be able to read the paste. That guarantee has a cost. Because the server only holds ciphertext, it can't search your pastes for you, and there is no account to collect them in. It's built for handing something over, and a library is outside that job.
+
+**Opengist** suits teams who already think in Git. Snippets clone and push like any repository, revisions come with diffs, and it runs on your own server under the same license as Sniptide. Its documentation doesn't list expiry, burn after read or per-paste passwords, so one-off handoffs need another tool.
+
+**MicroBin** is the lightest self-hosted option here: one small app for quick pastes, file uploads and raw links on your own domain. Check its encryption settings before you rely on them, because the README lists both a server-side and a client-side mode.
+
+**GitHub Gist** is where many developers already keep snippets, and it has full history and Git access with no setup. It lives only on GitHub, and secret gists are unlisted rather than private. There is no expiry, password or burn after read in the documentation we checked.
+
+**Sniptide** fits when pastes are more than handoffs. You can share a paste with a password, an expiry or a single read, then keep the good ones in collections that Claude Code or Cursor can search and read over MCP, and sync a project's `.env` from the same place. The trade-offs are real: you need an account to create pastes, paste content isn't encrypted in the browser, and it isn't a secrets manager with rotation or audit trails. If browser-side encryption is the requirement, PrivateBin is the better tool.
+
+## Moving from Pastebin or Gist
+
+Most of the work in switching is getting your existing snippets across. From Gist, Sniptide imports a public gist into a new paste, keeping its files. Secret gists can't be imported this way, so make a gist public first or copy its files by hand. From Pastebin.com, copy the raw text of each paste into a new paste.
+
+Before you share anything sensitive on any of these tools, check three things: whether the link alone opens it, when it expires, and who can read it on the server.
+
+{/* TODO(Dino): link Day 8 (code snippet managers), Day 10 (self-hosted pastebin), Day 5 (Claude Code MCP) and Day 6 (Cursor MCP) here as each goes live. */}
+
+## Try it with the same three files
+
+<Callout type="tip" title="Create your first paste">
+Paste `server.js`, `health.js` and `.env.example` into a [new Sniptide paste](https://app.sniptide.com), set it to unlisted, and open the link in a private window. If you'd rather keep it on your own server, the [self-hosting guide](https://docs.sniptide.com/getting-started/self-hosted) starts Sniptide and Postgres with `docker compose up -d`.
+</Callout>
+
+{/*
+Sources, checked 6 November 2026. TODO(Dino): decide whether to render these as a visible "Sources" list. The style guide asks for review dates on comparisons.
+- Sniptide: docs.sniptide.com pastes, sharing, burn after read, CLI, import gist, self-hosted; docs/positioning.md
+- PrivateBin: https://github.com/PrivateBin/PrivateBin
+- Opengist: https://opengist.io/ and https://github.com/thomiceli/opengist
+- MicroBin: https://github.com/szabodanika/microbin
+- GitHub Gist: https://docs.github.com/en/get-started/writing-on-github/editing-and-sharing-content-with-gists/creating-gists
+- Pastebin.com: https://pastebin.com/faq
+*/}
