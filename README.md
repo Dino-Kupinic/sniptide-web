@@ -106,6 +106,8 @@ keeps a post out of production builds, the sitemap and the feeds.
   (`components/blog/blog-index.tsx`). The filters live in the URL
   (`/blog?category=engineering&q=mcp`), so a filtered list can be shared.
 
+- **Style.** `docs/blog-style-guide.md` covers choosing a topic, titles, openings, article
+  structures, visuals and the next step a post asks for. Read it before drafting.
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
   code with a `title`. `content/blog/how-we-write-the-blog.mdx` uses all of them. Text sets at

@@ -15,3 +15,7 @@ Graphify is optional, and these steps apply when `graphify` is on your PATH. If 
 When the graph exists, run `graphify query "<question>"` before a broad search to find the files that matter, then read those files before you change them. `graphify path "<A>" "<B>"` shows how two symbols connect, and `graphify explain "<symbol>"` describes one. Use grep directly when you are looking for exact text.
 
 The graph can lag behind your branch, so the source files decide what is true. `graphify-out/` stays out of git.
+
+## Blog posts
+
+Before drafting or editing a post in `content/blog`, read `docs/blog-style-guide.md` and fill in its writing brief. Write from the notes, sources and product facts you are given, and mark missing evidence instead of inventing benchmarks, quotes, availability or personal experience. `content/blog/how-we-write-the-blog.mdx` shows every component a post can use.
