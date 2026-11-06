@@ -4,6 +4,7 @@ import { join } from "node:path"
 import sitemap from "@/app/sitemap"
 import { matchesQuery } from "@/components/blog/blog-index"
 import {
+  featuredPost,
   type PostMeta,
   postSchema,
   postStructuredData,
@@ -26,6 +27,7 @@ const post = (overrides: Partial<PostMeta> = {}): PostMeta => ({
   author: "dino",
   category: "product",
   tags: ["product"],
+  featured: false,
   draft: false,
   ...overrides,
 })
@@ -90,13 +92,28 @@ describe("feed and structured data", () => {
 })
 
 describe("index search", () => {
-  const indexed = { ...post({ tags: ["mcp"] }), searchText: "Collections act as recipes." }
+  const indexed = {
+    ...post({ tags: ["mcp"] }),
+    minutes: 3,
+    searchText: "Collections act as recipes.",
+  }
 
   test("every word has to match the title, description, tags or text", () => {
     expect(matchesQuery(indexed, "")).toBe(true)
     expect(matchesQuery(indexed, "FIRST recipes")).toBe(true)
     expect(matchesQuery(indexed, "mcp")).toBe(true)
     expect(matchesQuery(indexed, "first gist")).toBe(false)
+  })
+})
+
+describe("featured post", () => {
+  const newest = post({ slug: "newest", date: "2026-11-03" })
+  const older = post({ slug: "older", date: "2026-11-02" })
+
+  test("the newest post leads unless an older one is featured", () => {
+    expect(featuredPost([newest, older])?.slug).toBe("newest")
+    expect(featuredPost([newest, { ...older, featured: true }])?.slug).toBe("older")
+    expect(featuredPost([])).toBeUndefined()
   })
 })
 

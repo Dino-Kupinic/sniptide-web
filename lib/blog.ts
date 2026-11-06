@@ -27,6 +27,12 @@ export const postSchema = z.object({
   tags: z.array(z.string().regex(/^[a-z0-9-]+$/)).default([]),
   // A replacement for the generated Open Graph card, as a path under public/.
   image: z.string().startsWith("/").optional(),
+  // A picture for the top of the index, as a path under public/, with an optional dark version.
+  // Use a real screen from the product. Posts without one get a text-only hero.
+  cover: z.string().startsWith("/").optional(),
+  coverDark: z.string().startsWith("/").optional(),
+  // Pins the post to the top of the index in place of the newest one.
+  featured: z.boolean().default(false),
   // Drafts render in development and are left out of production builds, the sitemap and the feed.
   draft: z.boolean().default(false),
 })
@@ -74,6 +80,12 @@ export function publishedPosts<T extends PostMeta>(
   includeDrafts = process.env.NODE_ENV === "development",
 ): T[] {
   return sortPosts(includeDrafts ? posts : posts.filter((post) => !post.draft))
+}
+
+// The post at the top of the index: the newest featured post, or the newest post when none is
+// featured. Expects posts sorted newest first.
+export function featuredPost<T extends PostMeta>(posts: T[]): T | undefined {
+  return posts.find((post) => post.featured) ?? posts[0]
 }
 
 // Minutes at 230 words a minute, rounded up, from the post's Markdown.

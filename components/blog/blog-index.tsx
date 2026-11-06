@@ -5,10 +5,10 @@ import { RadioGroup } from "@base-ui/react/radio-group"
 import { SearchIcon, XIcon } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useMemo, useState } from "react"
-import { PostList } from "@/components/blog/post-list"
-import { type Category, categories, type PostMeta } from "@/lib/blog"
+import { type ListPost, PostList, UnfilteredIndex } from "@/components/blog/post-list"
+import { type Category, categories } from "@/lib/blog"
 
-export type IndexPost = PostMeta & { searchText: string }
+export type IndexPost = ListPost & { searchText: string }
 
 // Whether a post matches every word of the query, in its title, description, tags or text.
 export function matchesQuery(post: IndexPost, query: string) {
@@ -33,8 +33,8 @@ function writeParams(category: Category | null, query: string) {
   window.history.replaceState(null, "", search ? `?${search}` : window.location.pathname)
 }
 
-// The index with a search field and a category filter above the list. Only categories that have
-// posts are offered.
+// The index with a search field and a category filter on top. Only categories that have posts are
+// offered. Without a filter the featured post leads; with one, every match is a plain row.
 export function BlogIndex({ posts }: { posts: IndexPost[] }) {
   const params = useSearchParams()
   const initialCategory = params.get("category")
@@ -50,6 +50,7 @@ export function BlogIndex({ posts }: { posts: IndexPost[] }) {
       ),
     [posts],
   )
+  const filtering = category !== null || query.trim() !== ""
   const visible = posts.filter(
     (post) => (!category || post.category === category) && matchesQuery(post, query),
   )
@@ -71,7 +72,7 @@ export function BlogIndex({ posts }: { posts: IndexPost[] }) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="scrollbar-subtle -mx-5 flex overflow-x-auto px-5 md:mx-0 md:px-0">
           <RadioGroup
@@ -123,7 +124,9 @@ export function BlogIndex({ posts }: { posts: IndexPost[] }) {
         {visible.length === 1 ? "1 post" : `${visible.length} posts`}
       </p>
 
-      {visible.length > 0 ? (
+      {!filtering ? (
+        <UnfilteredIndex posts={posts} />
+      ) : visible.length > 0 ? (
         <PostList posts={visible} />
       ) : (
         <div className="flex flex-col items-start gap-3 border-y py-10">

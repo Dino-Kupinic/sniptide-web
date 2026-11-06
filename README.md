@@ -96,7 +96,8 @@ frontmatter schema in `lib/blog.ts` fails the build on a missing field or an aut
 `lib/authors.ts`. Every post has one `category` from `categories` in `lib/blog.ts`. `draft: true`
 keeps a post out of production builds, the sitemap and the feeds.
 
-- **Index.** `/blog` filters by category and searches titles, descriptions, tags and post text in
+- **Index.** `/blog` leads with the newest post, or the newest one with `featured: true`, as a panel
+  with its `cover` picture, and lists the rest as rows below. It filters by category and searches titles, descriptions, tags and post text in
   the browser (`components/blog/blog-index.tsx`). The filters live in the URL
   (`/blog?category=engineering&q=mcp`), so a filtered list can be shared.
 

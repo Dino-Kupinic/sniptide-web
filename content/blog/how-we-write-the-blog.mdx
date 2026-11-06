@@ -5,6 +5,8 @@ date: 2026-11-06
 author: dino
 category: engineering
 tags: [engineering, writing]
+cover: /blog/how-we-write-the-blog/dashboard-light.webp
+coverDark: /blog/how-we-write-the-blog/dashboard-dark.webp
 ---
 
 The Sniptide blog lives in the same repository as the marketing site. A post is one MDX file in
@@ -88,6 +90,13 @@ any other change, which matters for a product built around agents.
   </Param>
   <Param name="image" type="string">
     A path under `public/` that replaces the generated Open Graph card.
+  </Param>
+  <Param name="cover" type="string">
+    A picture under `public/` for the top of the index, best a real screen from the product. Add
+    `coverDark` for the dark theme. Without a cover, the post leads the index with text alone.
+  </Param>
+  <Param name="featured" type="boolean" default="false">
+    Pins the post to the top of the index in place of the newest one.
   </Param>
   <Param name="draft" type="boolean" default="false">
     Keeps the post out of production builds.
