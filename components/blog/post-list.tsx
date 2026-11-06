@@ -1,5 +1,6 @@
 import { Badge } from "@sniptide/ui/components/badge"
 import Image from "next/image"
+import { LifeBackground } from "@/components/blog/life-background"
 import {
   categories,
   featuredPost,
@@ -72,42 +73,54 @@ function Picture({
   )
 }
 
-// The one big post at the top of the index: its cover from the product, or its share picture,
-// beside the title, the description and the byline.
+// The one big post at the top of the index. The text sits on the left over a slow Game of Life,
+// and the cover (or the share picture) leans in from the lower right in a frame that bleeds off the
+// panel's edges. On phones the picture follows the text.
 export function FeaturedPost({ post }: { post: ListPost }) {
   const author = postAuthor(post)
   return (
-    <article className="group relative grid overflow-hidden rounded-lg border transition-colors hover:border-foreground/20 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-      <div className="relative aspect-[1200/630] overflow-hidden border-b bg-sidebar lg:aspect-auto lg:min-h-[400px] lg:border-r lg:border-b-0">
-        <Picture
-          src={post.cover ?? postImage(post)}
-          darkSrc={post.cover ? post.coverDark : undefined}
-          sizes="(min-width: 1024px) 60vw, 100vw"
-          priority
-          className={post.cover ? "object-cover object-left-top" : "object-cover"}
-        />
-      </div>
-      <div className="flex min-w-0 flex-col gap-6 p-6 md:p-8 lg:justify-between lg:p-10">
-        <div className="flex flex-col gap-4">
-          <CategoryDate post={post} />
-          <h2 className="font-heading text-[28px] leading-[34px] font-medium tracking-[-0.02em] text-balance md:text-4xl md:leading-[44px]">
-            <a
-              href={postPath(post.slug)}
-              className={`${coverLink} group-hover:text-link focus-visible:text-link`}
-            >
-              {post.title}
-            </a>
-          </h2>
-          <p className="max-w-[62ch] text-base leading-6.5 text-muted-foreground md:text-lg md:leading-7">
-            {post.description}
+    <article className="group relative isolate overflow-hidden rounded-lg border bg-sidebar transition-colors hover:border-foreground/20">
+      <LifeBackground className="absolute inset-0 -z-10 size-full opacity-[0.14] [mask-image:linear-gradient(to_right,transparent_0%,black_55%)] dark:opacity-[0.2] max-lg:[mask-image:linear-gradient(to_bottom,transparent_0%,black_60%)]" />
+      <div className="grid gap-10 pt-8 md:pt-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12 lg:pt-14">
+        <div className="flex min-w-0 flex-col gap-8 px-6 md:px-12 lg:pr-0 lg:pb-14">
+          <div className="flex flex-col gap-5">
+            <CategoryDate post={post} />
+            <h2 className="font-heading text-[32px] leading-[38px] font-medium tracking-[-0.03em] text-balance md:text-5xl md:leading-[52px]">
+              <a
+                href={postPath(post.slug)}
+                className={`${coverLink} group-hover:text-link focus-visible:text-link`}
+              >
+                {post.title}
+              </a>
+            </h2>
+            <p className="max-w-[48ch] text-base leading-6.5 text-muted-foreground md:text-lg md:leading-7">
+              {post.description}
+            </p>
+          </div>
+          <p className="mt-auto flex items-center gap-2.5 text-sm leading-5 text-muted-foreground tabular-nums">
+            <Image
+              src={author.avatar}
+              alt=""
+              width={24}
+              height={24}
+              className="size-6 rounded-md"
+            />
+            <span className="text-foreground">{author.name}</span>
+            <span aria-hidden="true">·</span>
+            <span>{post.minutes} min read</span>
           </p>
         </div>
-        <p className="flex items-center gap-2.5 text-sm leading-5 text-muted-foreground tabular-nums">
-          <Image src={author.avatar} alt="" width={24} height={24} className="size-6 rounded-md" />
-          <span className="text-foreground">{author.name}</span>
-          <span aria-hidden="true">·</span>
-          <span>{post.minutes} min read</span>
-        </p>
+        <div className="min-w-0 self-end pl-6 md:pl-12 lg:pl-0">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-tl-lg border-t border-l bg-background transition-transform duration-300 ease-out group-hover:-translate-y-1 motion-reduce:transition-none">
+            <Picture
+              src={post.cover ?? postImage(post)}
+              darkSrc={post.cover ? post.coverDark : undefined}
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              priority
+              className={post.cover ? "object-cover object-left-top" : "object-cover"}
+            />
+          </div>
+        </div>
       </div>
     </article>
   )

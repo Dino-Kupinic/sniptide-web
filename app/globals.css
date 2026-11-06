@@ -122,6 +122,8 @@ body {
 :root {
   --link: #2a26ec;
   --highlight: #e353ac;
+  /* Cells of the Game of Life behind the featured blog post (components/blog/life-background.tsx). */
+  --life: #2a26ec;
   --syntax-foreground: #1b1919;
   --syntax-keyword: #2a26ec;
   --syntax-string: #047857;
@@ -138,6 +140,7 @@ body {
 .dark {
   --link: #8f8cff;
   --highlight: #f6a9d3;
+  --life: #8f8cff;
   --syntax-foreground: #f4f4f4;
   --syntax-keyword: #8f8cff;
   --syntax-string: #5fd3a8;

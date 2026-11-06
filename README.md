@@ -97,7 +97,9 @@ frontmatter schema in `lib/blog.ts` fails the build on a missing field or an aut
 keeps a post out of production builds, the sitemap and the feeds.
 
 - **Index.** `/blog` opens with one big featured post: the newest, or the newest with
-  `featured: true`, shown with its `cover` picture or its share picture. Below it, a category filter
+  `featured: true`, shown with its `cover` picture or its share picture over a slow Game of Life
+  (`components/blog/life-background.tsx`), which pauses off screen and stays still under reduced
+  motion. Below it, a category filter
   and a search over titles, descriptions, tags and post text sit above a grid of cards, each with the
   post's share picture (`image`, or the generated Open Graph card), a category badge, the date, the
   title and the description. The grid shows nine cards and adds nine more as the reader scrolls
