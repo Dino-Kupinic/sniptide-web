@@ -2,6 +2,19 @@ import { z } from "zod"
 import { type Author, authorKeys, authors } from "@/lib/authors"
 import { siteName, siteUrl } from "@/lib/site"
 
+// The categories the index filters by. Every post has exactly one; tags stay finer-grained.
+export const categories = {
+  product: "Product",
+  engineering: "Engineering",
+  agents: "Agents",
+  "self-hosting": "Self-hosting",
+  company: "Company",
+} as const
+
+export type Category = keyof typeof categories
+
+const categoryKeys = Object.keys(categories) as [Category, ...Category[]]
+
 // Frontmatter of a post in content/blog. The file name (without .mdx) is the slug.
 export const postSchema = z.object({
   title: z.string().min(1).max(70),
@@ -10,6 +23,7 @@ export const postSchema = z.object({
   date: z.iso.date(),
   updated: z.iso.date().optional(),
   author: z.enum(authorKeys),
+  category: z.enum(categoryKeys),
   tags: z.array(z.string().regex(/^[a-z0-9-]+$/)).default([]),
   // A replacement for the generated Open Graph card, as a path under public/.
   image: z.string().startsWith("/").optional(),
@@ -23,6 +37,15 @@ export type PostMeta = PostFrontmatter & { slug: string }
 
 export const blogPath = "/blog"
 export const feedPath = "/blog/rss.xml"
+export const atomPath = "/blog/atom.xml"
+export const jsonFeedPath = "/blog/feed.json"
+
+// The feeds the index offers, in the order its subscribe menu lists them.
+export const feeds = [
+  { label: "RSS", path: feedPath, type: "application/rss+xml" },
+  { label: "Atom", path: atomPath, type: "application/atom+xml" },
+  { label: "JSON Feed", path: jsonFeedPath, type: "application/feed+json" },
+] as const
 
 export function postPath(slug: string) {
   return `${blogPath}/${slug}`
@@ -97,6 +120,7 @@ export function renderFeed(posts: PostMeta[]) {
         `      <description>${escapeXml(post.description)}</description>`,
         `      <pubDate>${new Date(`${post.date}T00:00:00Z`).toUTCString()}</pubDate>`,
         `      <dc:creator>${escapeXml(postAuthor(post).name)}</dc:creator>`,
+        `      <category>${escapeXml(categories[post.category])}</category>`,
         ...post.tags.map((tag) => `      <category>${escapeXml(tag)}</category>`),
         "    </item>",
       ].join("\n")
@@ -119,6 +143,69 @@ ${items}
 `
 }
 
+function feedUpdated(posts: PostMeta[]) {
+  const latest = posts[0]
+  return new Date(`${latest ? (latest.updated ?? latest.date) : "2026-11-06"}T00:00:00Z`)
+}
+
+// Atom 1.0 with the same 20 posts as the RSS feed.
+export function renderAtomFeed(posts: PostMeta[]) {
+  const latest = sortPosts(posts).slice(0, 20)
+  const entries = latest
+    .map((post) => {
+      const url = `${siteUrl}${postPath(post.slug)}`
+      return [
+        "  <entry>",
+        `    <title>${escapeXml(post.title)}</title>`,
+        `    <link href="${url}"/>`,
+        `    <id>${url}</id>`,
+        `    <published>${post.date}T00:00:00Z</published>`,
+        `    <updated>${post.updated ?? post.date}T00:00:00Z</updated>`,
+        `    <summary>${escapeXml(post.description)}</summary>`,
+        `    <author><name>${escapeXml(postAuthor(post).name)}</name></author>`,
+        `    <category term="${post.category}" label="${escapeXml(categories[post.category])}"/>`,
+        "  </entry>",
+      ].join("\n")
+    })
+    .join("\n")
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>${escapeXml(`${siteName} blog`)}</title>
+  <subtitle>Product news and notes on building Sniptide.</subtitle>
+  <link href="${siteUrl}${blogPath}"/>
+  <link rel="self" href="${siteUrl}${atomPath}"/>
+  <id>${siteUrl}${blogPath}</id>
+  <updated>${feedUpdated(latest).toISOString()}</updated>
+${entries}
+</feed>
+`
+}
+
+// JSON Feed 1.1 (jsonfeed.org) with the same 20 posts.
+export function renderJsonFeed(posts: PostMeta[]) {
+  const latest = sortPosts(posts).slice(0, 20)
+  return {
+    version: "https://jsonfeed.org/version/1.1",
+    title: `${siteName} blog`,
+    home_page_url: `${siteUrl}${blogPath}`,
+    feed_url: `${siteUrl}${jsonFeedPath}`,
+    description: "Product news and notes on building Sniptide.",
+    language: "en",
+    items: latest.map((post) => ({
+      id: `${siteUrl}${postPath(post.slug)}`,
+      url: `${siteUrl}${postPath(post.slug)}`,
+      title: post.title,
+      summary: post.description,
+      content_text: post.description,
+      date_published: `${post.date}T00:00:00Z`,
+      date_modified: `${post.updated ?? post.date}T00:00:00Z`,
+      authors: [{ name: postAuthor(post).name, url: postAuthor(post).url }],
+      tags: [categories[post.category], ...post.tags],
+    })),
+  }
+}
+
 // BlogPosting JSON-LD for a post page, tied to the organization graph on the home page.
 export function postStructuredData(post: PostMeta) {
   const url = `${siteUrl}${postPath(post.slug)}`
@@ -134,6 +221,7 @@ export function postStructuredData(post: PostMeta) {
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
     image: `${siteUrl}${post.image ?? `${postPath(post.slug)}/opengraph-image`}`,
+    articleSection: categories[post.category],
     keywords: post.tags,
     inLanguage: "en",
     author: { "@type": "Person", name: author.name, url: author.url },

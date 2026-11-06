@@ -3,6 +3,7 @@ title: How we write posts for the Sniptide blog
 description: Posts are MDX files in the sniptide-web repo, reviewed like code and written with the same prose components as the docs.
 date: 2026-11-06
 author: dino
+category: engineering
 tags: [engineering, writing]
 ---
 
@@ -44,7 +45,8 @@ any other change, which matters for a product built around agents.
     description: Collections give a coding agent an ordered set of snippets to follow.
     date: 2026-11-20
     author: dino
-    tags: [agents, product]
+    category: agents
+    tags: [collections, mcp]
     draft: true
     ---
     ```
@@ -77,8 +79,12 @@ any other change, which matters for a product built around agents.
   <Param name="author" type="string" required>
     A key from `lib/authors.ts`, which holds the name, role and avatar.
   </Param>
+  <Param name="category" type="string" required>
+    One of `product`, `engineering`, `agents`, `self-hosting` or `company`. The index filters by
+    it, and it sits next to the date.
+  </Param>
   <Param name="tags" type="string[]" default="[]">
-    Lowercase words that show at the end of the post and in the feed.
+    Lowercase words that show at the end of the post, in the feeds and in search.
   </Param>
   <Param name="image" type="string">
     A path under `public/` that replaces the generated Open Graph card.
@@ -145,24 +151,17 @@ tabs.
 ## Pictures
 
 A figure takes a caption that says what the reader should notice. Add a light and a dark version
-when the picture shows the product, so it matches the reader's theme.
+when the picture shows the product, so it matches the reader's theme. Every picture opens full
+screen when clicked, where readers can zoom in to 4x and drag to look around.
 
-<Figure caption="The demo dashboard lists connected agents next to the pastes they saved.">
-  <img
-    src="/blog/how-we-write-the-blog/dashboard-light.webp"
-    alt="The Sniptide dashboard with connected agents, agent activity and recent pastes"
-    width={1266}
-    height={793}
-    className="dark:hidden"
-  />
-  <img
-    src="/blog/how-we-write-the-blog/dashboard-dark.webp"
-    alt="The Sniptide dashboard with connected agents, agent activity and recent pastes"
-    width={1266}
-    height={793}
-    className="hidden dark:block"
-  />
-</Figure>
+<Figure
+  src="/blog/how-we-write-the-blog/dashboard-light.webp"
+  darkSrc="/blog/how-we-write-the-blog/dashboard-dark.webp"
+  alt="The Sniptide dashboard with connected agents, agent activity and recent pastes"
+  width={1266}
+  height={793}
+  caption="The demo dashboard lists connected agents next to the pastes they saved. Click it to zoom in."
+/>
 
 ## Tables, lists and quotes
 
@@ -171,7 +170,7 @@ Plain Markdown covers the rest. Numbers in tables use tabular figures and align 
 | Surface | Reads the post from | Updates |
 | --- | --- | --: |
 | The post page | The compiled MDX | Every deploy |
-| `/blog/rss.xml` | The frontmatter | Every deploy |
+| `/blog/rss.xml`, `atom.xml`, `feed.json` | The frontmatter | Every deploy |
 | `/blog/<slug>.md` | The processed Markdown | Every deploy |
 
 A few habits keep posts consistent:

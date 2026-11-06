@@ -1,6 +1,6 @@
-import { formatPostDate, type PostMeta, postPath } from "@/lib/blog"
+import { categories, formatPostDate, type PostMeta, postPath } from "@/lib/blog"
 
-// The index: one row per post, newest first, with the date in tabular numerals, the title as the
+// The index: one row per post, newest first, with the date in tabular numerals and the category, the title as the
 // link and its one-sentence description. A row's whole area is the link's hit target.
 export function PostList({ posts }: { posts: PostMeta[] }) {
   return (
@@ -8,12 +8,13 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
       {posts.map((post) => (
         <li key={post.slug} className="relative">
           <article className="grid gap-x-10 gap-y-1.5 py-6 md:grid-cols-[9rem_minmax(0,1fr)] md:py-7">
-            <time
-              dateTime={post.date}
-              className="text-sm leading-6 text-muted-foreground tabular-nums md:pt-0.5"
-            >
-              {formatPostDate(post.date)}
-            </time>
+            <p className="flex gap-2 text-sm leading-6 text-muted-foreground tabular-nums md:flex-col md:gap-0 md:pt-0.5">
+              <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+              <span aria-hidden="true" className="md:hidden">
+                ·
+              </span>
+              <span>{categories[post.category]}</span>
+            </p>
             <div className="flex min-w-0 flex-col gap-1.5">
               <h2 className="font-heading text-xl leading-7 font-medium tracking-[-0.02em] md:text-2xl md:leading-8">
                 <a

@@ -2,13 +2,16 @@ import { describe, expect, test } from "bun:test"
 import { readdirSync } from "node:fs"
 import { join } from "node:path"
 import sitemap from "@/app/sitemap"
+import { matchesQuery } from "@/components/blog/blog-index"
 import {
   type PostMeta,
   postSchema,
   postStructuredData,
   publishedPosts,
   readingMinutes,
+  renderAtomFeed,
   renderFeed,
+  renderJsonFeed,
   slugFromPath,
 } from "@/lib/blog"
 import { getPosts } from "@/lib/blog-source"
@@ -21,6 +24,7 @@ const post = (overrides: Partial<PostMeta> = {}): PostMeta => ({
   description: "A description long enough to pass the fifty character minimum of the schema.",
   date: "2026-11-01",
   author: "dino",
+  category: "product",
   tags: ["product"],
   draft: false,
   ...overrides,
@@ -81,6 +85,32 @@ describe("feed and structured data", () => {
       dateModified: "2026-11-03",
       image: `${siteUrl}/blog/first/opengraph-image`,
       author: { name: "Dino Kupinic" },
+    })
+  })
+})
+
+describe("index search", () => {
+  const indexed = { ...post({ tags: ["mcp"] }), searchText: "Collections act as recipes." }
+
+  test("every word has to match the title, description, tags or text", () => {
+    expect(matchesQuery(indexed, "")).toBe(true)
+    expect(matchesQuery(indexed, "FIRST recipes")).toBe(true)
+    expect(matchesQuery(indexed, "mcp")).toBe(true)
+    expect(matchesQuery(indexed, "first gist")).toBe(false)
+  })
+})
+
+describe("other feeds", () => {
+  test("Atom and JSON Feed list the same posts with their category", () => {
+    const posts = [post({ title: "A & B" })]
+    const atom = renderAtomFeed(posts)
+    expect(atom).toContain("<title>A &amp; B</title>")
+    expect(atom).toContain('<category term="product" label="Product"/>')
+    const json = renderJsonFeed(posts)
+    expect(json.version).toBe("https://jsonfeed.org/version/1.1")
+    expect(json.items[0]).toMatchObject({
+      id: `${siteUrl}/blog/first`,
+      tags: ["Product", "product"],
     })
   })
 })

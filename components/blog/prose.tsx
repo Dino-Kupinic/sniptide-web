@@ -7,6 +7,7 @@ import {
   TriangleAlert,
 } from "lucide-react"
 import type { HTMLAttributes, ReactNode } from "react"
+import { ZoomImage, type ZoomImageProps } from "@/components/blog/zoom-image"
 
 // Prose components for blog posts, ported from the docs (apps/docs/components/prose.tsx in the app
 // repo) so a post reads like a docs page. They render on the server, use the theme tokens, and keep
@@ -190,15 +191,31 @@ export function Step({ className, children, ...props }: HTMLAttributes<HTMLLIEle
   )
 }
 
-export type FigureProps = HTMLAttributes<HTMLElement> & { caption: ReactNode }
+export type FigureProps = HTMLAttributes<HTMLElement> &
+  Partial<ZoomImageProps> & { caption: ReactNode }
 
-// A picture or a block with a caption that says what the reader should notice. The caption sits
-// below in the secondary text colour at 14px.
-export function Figure({ caption, className, children, ...props }: FigureProps) {
+// A picture with a caption that says what the reader should notice. Given a src (and a darkSrc for
+// dark mode), it shows a picture that opens full screen with zoom; otherwise it frames its
+// children. The caption sits below in the secondary text colour at 14px.
+export function Figure({
+  caption,
+  src,
+  darkSrc,
+  alt = "",
+  width,
+  height,
+  className,
+  children,
+  ...props
+}: FigureProps) {
   return (
     <figure {...props} className={cn("not-prose", className)}>
       <div className="overflow-hidden rounded-lg border bg-card [&_img]:block [&_img]:w-full">
-        {children}
+        {src ? (
+          <ZoomImage src={src} darkSrc={darkSrc} alt={alt} width={width} height={height} />
+        ) : (
+          children
+        )}
       </div>
       <figcaption className="mt-2.5 text-sm leading-5 text-muted-foreground">{caption}</figcaption>
     </figure>

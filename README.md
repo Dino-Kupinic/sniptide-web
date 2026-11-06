@@ -93,13 +93,21 @@ the privacy policy says PostHog stores events in the EU or the US follows
 Posts are MDX files in `content/blog`, and the file name is the address (`content/blog/foo.mdx` is
 `/blog/foo`). fumadocs-mdx compiles them when the site builds (`lib/blog-source.ts`), and the
 frontmatter schema in `lib/blog.ts` fails the build on a missing field or an author that isn't in
-`lib/authors.ts`. `draft: true` keeps a post out of production builds, the sitemap and the feed.
+`lib/authors.ts`. Every post has one `category` from `categories` in `lib/blog.ts`. `draft: true`
+keeps a post out of production builds, the sitemap and the feeds.
+
+- **Index.** `/blog` filters by category and searches titles, descriptions, tags and post text in
+  the browser (`components/blog/blog-index.tsx`). The filters live in the URL
+  (`/blog?category=engineering&q=mcp`), so a filtered list can be shared.
 
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
   code with a `title`. `content/blog/how-we-write-the-blog.mdx` uses all of them.
 - **Images.** Pictures go in `public/blog/<slug>/`, and author avatars in `public/blog/authors/`.
-- **Feeds and previews.** `/blog/rss.xml` lists the latest 20 posts. Each post gets an Open Graph
+  Every picture, from `<Figure src darkSrc>` or a Markdown image, opens a full-screen viewer with
+  zoom up to 4x, panning and pinch (`components/blog/zoom-image.tsx`).
+- **Feeds and previews.** `/blog/rss.xml`, `/blog/atom.xml` and `/blog/feed.json` (JSON Feed 1.1)
+  list the latest 20 posts, and the Subscribe menu on the index offers all three. Each post gets an Open Graph
   card with its title (`renderPostOgImage` in `lib/og.tsx`), `BlogPosting` JSON-LD, a sitemap entry
   and a Markdown twin at its address plus `.md`. The newest post also fills the "From the blog" line
   in the Resources menu.

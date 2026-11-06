@@ -6,6 +6,7 @@ import { blogMdxComponents } from "@/components/blog/mdx"
 import { PostFooter } from "@/components/blog/post-footer"
 import {
   blogPath,
+  categories,
   feedPath,
   formatPostDate,
   postAuthor,
@@ -81,12 +82,21 @@ export default async function Page({ params }: Props) {
       />
       <article className="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-10 md:pt-16 md:pb-28 lg:px-30">
         <div className="mx-auto max-w-[42.5rem]">
-          <a
-            href={blogPath}
-            className="text-sm leading-5 font-medium text-muted-foreground transition-colors hover:text-foreground"
+          <nav
+            aria-label="Breadcrumb"
+            className="text-sm leading-5 font-medium text-muted-foreground"
           >
-            Blog
-          </a>
+            <a href={blogPath} className="transition-colors hover:text-foreground">
+              Blog
+            </a>
+            <span aria-hidden="true"> / </span>
+            <a
+              href={`${blogPath}?category=${post.category}`}
+              className="transition-colors hover:text-foreground"
+            >
+              {categories[post.category]}
+            </a>
+          </nav>
           <h1 className="mt-4 font-heading text-[34px] leading-10 font-medium tracking-[-0.03em] text-balance md:text-5xl md:leading-[3.5rem]">
             {post.title}
           </h1>

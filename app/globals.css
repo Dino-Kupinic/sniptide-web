@@ -159,6 +159,7 @@ body {
 .dark .blog {
   --background: #0a0a0a;
   --card: #1a1919;
+  --popover: #1a1919;
   --muted: #242222;
   --secondary: #242222;
   --accent: #242222;
