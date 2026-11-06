@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { Suspense } from "react"
 import { BlogIndex, type IndexPost } from "@/components/blog/blog-index"
 import { BlogShell } from "@/components/blog/blog-shell"
-import { UnfilteredIndex } from "@/components/blog/post-list"
+import { IndexFallback } from "@/components/blog/post-list"
 import { SubscribeMenu } from "@/components/blog/subscribe-menu"
 import { blogPath, feeds, readingMinutes } from "@/lib/blog"
 import { getPosts } from "@/lib/blog-source"
@@ -53,8 +53,8 @@ export default async function Page() {
           <SubscribeMenu />
         </div>
         {posts.length > 0 ? (
-          // The filters read the URL, so the unfiltered index renders until the page hydrates.
-          <Suspense fallback={<UnfilteredIndex posts={posts} />}>
+          // The filters read the URL, so the index without them renders until the page hydrates.
+          <Suspense fallback={<IndexFallback posts={posts} />}>
             <BlogIndex posts={posts} />
           </Suspense>
         ) : (

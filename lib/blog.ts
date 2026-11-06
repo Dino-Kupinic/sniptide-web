@@ -82,6 +82,11 @@ export function publishedPosts<T extends PostMeta>(
   return sortPosts(includeDrafts ? posts : posts.filter((post) => !post.draft))
 }
 
+// The post's share picture: its own image, or the generated Open Graph card (1200 by 630).
+export function postImage(post: Pick<PostMeta, "slug" | "image">) {
+  return post.image ?? `${postPath(post.slug)}/opengraph-image`
+}
+
 // The post at the top of the index: the newest featured post, or the newest post when none is
 // featured. Expects posts sorted newest first.
 export function featuredPost<T extends PostMeta>(posts: T[]): T | undefined {
@@ -232,7 +237,7 @@ export function postStructuredData(post: PostMeta) {
     mainEntityOfPage: url,
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
-    image: `${siteUrl}${post.image ?? `${postPath(post.slug)}/opengraph-image`}`,
+    image: `${siteUrl}${postImage(post)}`,
     articleSection: categories[post.category],
     keywords: post.tags,
     inLanguage: "en",

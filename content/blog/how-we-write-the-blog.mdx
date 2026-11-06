@@ -89,11 +89,13 @@ any other change, which matters for a product built around agents.
     Lowercase words that show at the end of the post, in the feeds and in search.
   </Param>
   <Param name="image" type="string">
-    A path under `public/` that replaces the generated Open Graph card.
+    A path under `public/` that replaces the generated Open Graph card, on social sites and on the
+    post's card in the index.
   </Param>
   <Param name="cover" type="string">
-    A picture under `public/` for the top of the index, best a real screen from the product. Add
-    `coverDark` for the dark theme. Without a cover, the post leads the index with text alone.
+    A picture under `public/` for when the post is the big one at the top of the index, best a real
+    screen from the product. Add `coverDark` for the dark theme. Without a cover, the post's share
+    picture takes its place.
   </Param>
   <Param name="featured" type="boolean" default="false">
     Pins the post to the top of the index in place of the newest one.
