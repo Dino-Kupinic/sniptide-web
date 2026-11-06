@@ -6,7 +6,7 @@ import { ConsentSettingsButton } from "@/components/consent-banner"
 import { StatusBadge } from "@/components/status-badge"
 import { ThemeSwitch } from "@/components/theme-switch"
 import { legalLinks } from "@/lib/legal"
-import { menuItems, navMenus } from "@/lib/nav"
+import { menuItems, navMenus, sectionHref } from "@/lib/nav"
 import { heroTitle, repoUrl, xUrl } from "@/lib/site"
 
 // The header's menus as columns, with each menu's featured link last, then the profiles.
@@ -34,7 +34,8 @@ const wordmarkStops: [number, string][] = [
   [1, "#8F8CFF"],
 ]
 
-export function SiteFooter() {
+// sectionBase prefixes the landing page's section links on other pages, as in the header.
+export function SiteFooter({ sectionBase = "" }: { sectionBase?: string }) {
   return (
     <footer
       data-cta-location="footer"
@@ -81,7 +82,7 @@ export function SiteFooter() {
                   {column.items.map((item) => (
                     <li key={item.label}>
                       <a
-                        href={item.href}
+                        href={sectionHref(item.href, sectionBase)}
                         {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                         className="inline-flex items-center gap-1 text-sm leading-5 text-[#6b6b6b] transition-colors hover:text-[#0a0a0a] dark:text-[#a3a3a3] dark:hover:text-white"
                       >

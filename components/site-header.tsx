@@ -2,7 +2,8 @@
 
 import { cn } from "@sniptide/ui/lib/utils"
 import { ArrowUpRightIcon, ChevronRightIcon, StarIcon } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { LogoMark, Wordmark } from "@/components/brand"
 import { GitHubMark } from "@/components/github-mark"
 import {
@@ -14,7 +15,7 @@ import {
   staggerStyle,
 } from "@/components/site-nav"
 import { links } from "@/lib/links"
-import { navLinks, navMenus } from "@/lib/nav"
+import { type LatestPost, navLinks, navMenus, resolveNavMenus } from "@/lib/nav"
 
 // The two calls to action share one slim size: 32px including the raised edge.
 const headerButton =
@@ -57,8 +58,20 @@ function StarCount({
   )
 }
 
-export function SiteHeader({ stars }: { stars: number | null }) {
+export function SiteHeader({
+  stars,
+  latestPost,
+}: {
+  stars: number | null
+  latestPost?: LatestPost | null
+}) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+  const onLanding = pathname === "/" || pathname === "/home"
+  const menus = useMemo(
+    () => resolveNavMenus({ sectionBase: onLanding ? "" : "/home", latestPost }),
+    [onLanding, latestPost],
+  )
   const headerRef = useRef<HTMLElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const formattedStars =
@@ -132,7 +145,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
             </span>
           </a>
 
-          <DesktopNav anchor={headerRef} stars={formattedStars} />
+          <DesktopNav anchor={headerRef} stars={formattedStars} menus={menus} />
         </div>
 
         <div className="flex shrink-0 items-center justify-end gap-2">
@@ -203,7 +216,7 @@ export function SiteHeader({ stars }: { stars: number | null }) {
           aria-label="Mobile navigation"
           className="mx-auto w-full max-w-[1440px] flex-1 overflow-y-auto px-5 pt-2 md:px-10"
         >
-          <MobileNavMenus open={mobileOpen} />
+          <MobileNavMenus open={mobileOpen} menus={menus} />
           <ul>
             {navLinks.map((link, index) => (
               <li

@@ -1,4 +1,6 @@
 @import "@sniptide/ui/globals.css";
+/* Blog posts set Tailwind classes in their MDX, such as dark:hidden on a light-mode picture. */
+@source "../content";
 
 :root {
   --radius: 0.375rem;
@@ -110,4 +112,215 @@ body {
   to {
     stroke-dashoffset: -10;
   }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Blog. The published @sniptide/ui 0.1.1 predates the link, highlight and syntax tokens, so they
+   are set here with the values from packages/ui globals.css in the app repo (DESIGN.md, Colors).
+   Inside .blog the dark surfaces follow the current palette, on the landing's #0a0a0a ground.
+   --------------------------------------------------------------------------------------------- */
+:root {
+  --link: #2a26ec;
+  --highlight: #e353ac;
+  --syntax-foreground: #1b1919;
+  --syntax-keyword: #2a26ec;
+  --syntax-string: #047857;
+  --syntax-constant: #b45309;
+  --syntax-function: #6d28d9;
+  --syntax-type: #0e7490;
+  --syntax-property: #be123c;
+  --syntax-comment: #6b6b6b;
+  --syntax-punctuation: #4a4747;
+  --syntax-link: #2a26ec;
+  --syntax-invalid: oklch(0.577 0.245 27.325);
+}
+
+.dark {
+  --link: #8f8cff;
+  --highlight: #f6a9d3;
+  --syntax-foreground: #f4f4f4;
+  --syntax-keyword: #8f8cff;
+  --syntax-string: #5fd3a8;
+  --syntax-constant: #f5b971;
+  --syntax-function: #c4b5fd;
+  --syntax-type: #67d4e8;
+  --syntax-property: #fb9fb1;
+  --syntax-comment: #8a8a8a;
+  --syntax-punctuation: #b0b0b0;
+  --syntax-link: #8f8cff;
+  --syntax-invalid: oklch(0.704 0.191 22.216);
+}
+
+@theme inline {
+  --color-link: var(--link);
+  --color-highlight: var(--highlight);
+}
+
+.dark .blog {
+  --background: #0a0a0a;
+  --card: #1a1919;
+  --muted: #242222;
+  --secondary: #242222;
+  --accent: #242222;
+  --border: #2f2c2c;
+  --input: #2f2c2c;
+  --foreground: #f4f4f4;
+  --muted-foreground: #a3a3a3;
+}
+
+/* The reading flow of a post: 17px body text on a 28px line, headings in Archivo, and the same
+   links, lists, quotes, tables and inline code as the docs. Components that bring their own layout
+   (callouts, parameters, file trees, tabs, steps) carry .not-prose. */
+.blog-prose {
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+  color: var(--foreground);
+}
+
+.blog-prose > * + * {
+  margin-top: 1.25rem;
+}
+
+.blog-prose :is(h2, h3):not(.not-prose, .not-prose *) {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 5rem;
+}
+
+.blog-prose h2:not(.not-prose, .not-prose *) {
+  margin-top: 3rem;
+  font-size: 1.625rem;
+  line-height: 2.125rem;
+}
+
+.blog-prose h3:not(.not-prose, .not-prose *) {
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.blog-prose :is(h2, h3) + *:not(.not-prose, .not-prose *) {
+  margin-top: 0.75rem;
+}
+
+.blog-prose a:not(.not-prose, .not-prose *) {
+  font-weight: 500;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklab, var(--link) 45%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 120ms;
+}
+
+.blog-prose a:not(.not-prose, .not-prose *):hover {
+  text-decoration-color: var(--link);
+}
+
+.blog-prose :not(pre) > code:not(.not-prose, .not-prose *) {
+  border-radius: calc(var(--radius) * 0.8);
+  background-color: var(--muted);
+  padding: 0.125rem 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125em;
+}
+
+.blog-prose strong {
+  font-weight: 600;
+}
+
+/* Bullets are small blue squares like the collection marks in the app; numbers are mono and muted,
+   so the items lead. */
+.blog-prose :is(ul, ol):not(.not-prose, .not-prose *) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-inline-start: 1.75rem;
+}
+
+.blog-prose ul:not(.not-prose, .not-prose *) > li {
+  position: relative;
+  padding-inline-start: 0.25rem;
+}
+
+.blog-prose ul:not(.not-prose, .not-prose *) > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -1rem;
+  top: 0.75em;
+  width: 0.3125rem;
+  height: 0.3125rem;
+  border-radius: 1px;
+  background-color: var(--link);
+}
+
+.blog-prose ol:not(.not-prose, .not-prose *) {
+  list-style: decimal;
+}
+
+.blog-prose ol:not(.not-prose, .not-prose *) > li {
+  padding-inline-start: 0.25rem;
+}
+
+.blog-prose ol:not(.not-prose, .not-prose *) > li::marker {
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.blog-prose blockquote:not(.not-prose, .not-prose *) {
+  border-inline-start: 2px solid var(--border);
+  padding-inline-start: 1rem;
+}
+
+.blog-prose hr:not(.not-prose, .not-prose *) {
+  margin-block: 2.5rem;
+  border-color: var(--border);
+}
+
+/* Tables scroll inside their own frame on narrow screens rather than the page. */
+.blog-prose .blog-table {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.blog-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.blog-prose thead th {
+  background-color: color-mix(in oklab, var(--muted) 60%, transparent);
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+}
+
+.blog-prose tbody td {
+  border-top: 1px solid var(--border);
+  padding: 0.625rem 0.75rem;
+  vertical-align: top;
+}
+
+.blog-prose :is(td, th)[align="right"] {
+  text-align: end;
+}
+
+/* Shiki writes each token's colour as --shiki-light and --shiki-dark, both pointing at the
+   --syntax-* variables (lib/code-theme.ts), so one rule covers both themes. */
+.blog-prose .shiki,
+.blog-prose .shiki span {
+  color: var(--shiki-light);
+}
+
+.blog-prose pre code {
+  display: grid;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.375rem;
 }

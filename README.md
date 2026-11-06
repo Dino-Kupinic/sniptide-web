@@ -88,6 +88,22 @@ the privacy policy says PostHog stores events in the EU or the US follows
 `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
 `privacy` or `impressum` is shadowed here; the app should reserve them.
 
+### Blog
+
+Posts are MDX files in `content/blog`, and the file name is the address (`content/blog/foo.mdx` is
+`/blog/foo`). fumadocs-mdx compiles them when the site builds (`lib/blog-source.ts`), and the
+frontmatter schema in `lib/blog.ts` fails the build on a missing field or an author that isn't in
+`lib/authors.ts`. `draft: true` keeps a post out of production builds, the sitemap and the feed.
+
+- **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
+  `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
+  code with a `title`. `content/blog/how-we-write-the-blog.mdx` uses all of them.
+- **Images.** Pictures go in `public/blog/<slug>/`, and author avatars in `public/blog/authors/`.
+- **Feeds and previews.** `/blog/rss.xml` lists the latest 20 posts. Each post gets an Open Graph
+  card with its title (`renderPostOgImage` in `lib/og.tsx`), `BlogPosting` JSON-LD, a sitemap entry
+  and a Markdown twin at its address plus `.md`. The newest post also fills the "From the blog" line
+  in the Resources menu.
+
 ### For agents and search engines
 
 `/llms.txt` and `/llms-full.txt` ([llmstxt.org](https://llmstxt.org)) describe Sniptide for AI

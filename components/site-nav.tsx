@@ -6,14 +6,7 @@ import { cn } from "@sniptide/ui/lib/utils"
 import { ArrowRightIcon, ArrowUpRightIcon, ChevronDownIcon } from "lucide-react"
 import type { CSSProperties, RefObject } from "react"
 import { CopyButton, FeatureVisual } from "@/components/nav-visuals"
-import {
-  type NavFeature,
-  type NavItem,
-  type NavMenu,
-  type NavStrip,
-  navLinks,
-  navMenus,
-} from "@/lib/nav"
+import { type NavFeature, type NavItem, type NavMenu, type NavStrip, navLinks } from "@/lib/nav"
 
 export const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2a26ec] dark:focus-visible:outline-[#8f8cff]"
@@ -204,14 +197,16 @@ const content =
 export function DesktopNav({
   anchor,
   stars,
+  menus,
 }: {
   anchor: RefObject<HTMLElement | null>
   stars: string | null
+  menus: NavMenu[]
 }) {
   return (
     <NavigationMenu.Root aria-label="Main navigation" className="-ml-3 hidden lg:block">
       <NavigationMenu.List className="flex items-center gap-1 whitespace-nowrap">
-        {navMenus.map((menu) => (
+        {menus.map((menu) => (
           <NavigationMenu.Item key={menu.label}>
             <NavigationMenu.Trigger
               className={cn(
@@ -298,10 +293,10 @@ function MobileRow({ item }: { item: NavItem }) {
 }
 
 // The same menus as the desktop header, as sections that fold open one at a time.
-export function MobileNavMenus({ open }: { open: boolean }) {
+export function MobileNavMenus({ open, menus }: { open: boolean; menus: NavMenu[] }) {
   return (
     <Accordion.Root>
-      {navMenus.map((menu, index) => (
+      {menus.map((menu, index) => (
         <Accordion.Item key={menu.label} className={menuItem} style={staggerStyle(open, index)}>
           <Accordion.Header className="m-0">
             <Accordion.Trigger

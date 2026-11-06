@@ -235,7 +235,8 @@ export const navMenus: NavMenu[] = [
       external: true,
       visual: "github",
     },
-    // A placeholder until the first post ships. Point it at the newest post then, and drop the note.
+    // Shown until the first post ships. Pages that know the newest post pass it to the header,
+    // which puts it here in place of this one (resolveNavMenus).
     strip: {
       kind: "link",
       label: "From the blog",
@@ -245,6 +246,36 @@ export const navMenus: NavMenu[] = [
     },
   },
 ]
+
+export type LatestPost = { title: string; href: string }
+
+// Section links ("#recipes") point at the landing page. On any other page they need the landing
+// page's path in front, and /home serves it to every visitor, signed in or not.
+export function sectionHref(href: string, sectionBase: string) {
+  return href.startsWith("#") ? `${sectionBase}${href}` : href
+}
+
+// The menus as a page shows them: section links prefixed for pages other than the landing page, and
+// the newest blog post in the strip that links to the blog.
+export function resolveNavMenus({
+  sectionBase = "",
+  latestPost,
+}: {
+  sectionBase?: string
+  latestPost?: LatestPost | null
+}): NavMenu[] {
+  return navMenus.map((menu) => ({
+    ...menu,
+    groups: menu.groups.map((group) => ({
+      ...group,
+      items: group.items.map((item) => ({ ...item, href: sectionHref(item.href, sectionBase) })),
+    })),
+    strip:
+      latestPost && menu.strip.kind === "link" && menu.strip.href === "/blog"
+        ? { kind: "link", label: menu.strip.label, title: latestPost.title, href: latestPost.href }
+        : menu.strip,
+  }))
+}
 
 // Every link in a menu, in the order the mobile menu and the footer list them.
 export function menuItems(menu: NavMenu): NavItem[] {
