@@ -1,0 +1,128 @@
+---
+title: Self-host a pastebin with Docker or Coolify
+description: Run Sniptide on your own server with one install script, Docker Compose or a Coolify template, and connect your agents to it.
+date: 2026-11-19
+author: dino
+category: self-hosting
+tags: [self-hosting, docker, coolify, pastebin]
+draft: true
+---
+
+{/*
+  Writing brief (docs/blog-style-guide.md)
+  Reader: a developer or small team that wants a pastebin they control.
+  Question: what is the shortest safe path from an empty server to a working instance?
+  Mode: Builder. Type: practical guide.
+  Central claim: one container next to Postgres is enough, and the install script gets you there with HTTPS.
+  Primary CTA: run the install script.
+  EVIDENCE NEEDED: the "10 minutes" claim is not yet measured. Time a clean install on a fresh server and put the result in the opening, or drop the claim. Everything else comes from docs.sniptide.com/self-hosting as of 2026-11-06.
+*/}
+
+Sniptide runs as one container next to a Postgres database. A self-hosted instance has the same app, API, CLI support and MCP server as the hosted one, and it sends nothing to outside services until you configure them: no product analytics, no OAuth sign-in providers and no email.
+
+{/* TODO(Dino): time a clean install on a fresh server and state the result here, for example "From an empty server to a working instance took N minutes." */}
+
+This post covers the shortest route, the install script, and then the two alternatives: Docker Compose by hand and a Coolify template.
+
+## What you need
+
+- A Linux server with Docker and the Docker Compose plugin. If you need both, `curl -fsSL https://get.docker.com | sh` installs them.
+- About 1 GB of memory for the script's Compose install. The app itself needs about 768 MB and Postgres a few hundred megabytes more.
+- A domain whose DNS points at the server, with ports 80 and 443 open, if you want HTTPS. You can skip the domain to try the instance on plain HTTP first.
+
+Sniptide has to be served at the root of a domain, such as `https://paste.example.com`. Serving it under a path such as `/sniptide` is not supported.
+
+## Option 1: the install script
+
+<Steps>
+<Step>
+
+Run this on the server:
+
+```bash title="terminal"
+curl -fsSL https://sniptide.com/install.sh | sh
+```
+
+If you would rather read the script first, download it with `-o install.sh` and run `sh install.sh`. It is `scripts/install.sh` in the repository.
+
+</Step>
+<Step>
+
+Enter your domain when the script asks, or leave it empty to start on plain HTTP at the server's address.
+
+</Step>
+<Step>
+
+Open the address the script prints and create your account.
+
+</Step>
+</Steps>
+
+For an unattended install, pass the options after `sh -s --`:
+
+```bash title="terminal"
+curl -fsSL https://sniptide.com/install.sh | sh -s -- --domain paste.example.com --yes
+```
+
+The script downloads `docker-compose.yml` and `.env.example` from the latest release into `./sniptide`, writes `.env` with a generated auth secret and database password, and starts Sniptide and Postgres. With a domain, the bundled Caddy proxy serves it over HTTPS. It also sets `ALLOW_SIGN_UP=first`, so sign-up closes once your own account exists.
+
+<Callout type="warning" title="Back up .env with your database">
+
+Changing or losing `BETTER_AUTH_SECRET` signs everyone out and makes stored env values unreadable.
+
+</Callout>
+
+To upgrade, take a backup and run the script again in the same folder. It keeps `.env` and pulls the newer image.
+
+## Option 2: Coolify
+
+If you already manage services in Coolify, a service template runs the app and its Postgres database together.
+
+<Steps>
+<Step>
+
+In a Coolify project, choose **Add Resource**, then **Docker Compose Empty**.
+
+</Step>
+<Step>
+
+Paste the contents of `deploy/coolify/sniptide.yaml` from the repository.
+
+</Step>
+<Step>
+
+Set the domain for the `sniptide` service, on port 3000, and deploy.
+
+</Step>
+</Steps>
+
+Coolify generates the database credentials and the auth secret and assigns the domain. Once the health check passes, open `https://<your-domain>/api/health`. It should return `{"ok":true}`. Then create your account at the domain itself.
+
+The template is not in Coolify's one-click list yet, so you paste it as described. It also does not schedule backups. Add the backup container from `deploy/coolify/backup-sidecar.yaml` and copy the files off the server.
+
+## Option 3: Docker Compose or plain Docker
+
+Use Docker Compose when you want to read every file the script would write. Use plain Docker when you already run Postgres and want only the app container. The image is `ghcr.io/dino-kupinic/sniptide`, for Linux AMD64 and ARM64, and Sniptide is built and tested against Postgres 17. The [self-hosting docs](https://docs.sniptide.com/self-hosting) walk through both.
+
+## Point your agents at it
+
+Clients default to the hosted app, so tell them where your instance is.
+
+```bash title="terminal"
+export SNIPTIDE_BASE_URL=https://paste.example.com
+claude mcp add --transport http sniptide https://paste.example.com/api/mcp
+```
+
+Create API tokens on your own instance, because a token from the hosted app does not work on it. OAuth sign-in for agents works without extra setup. The [MCP post](/blog/snippet-library-for-coding-agents) covers what an agent can do once it is connected.
+
+## What you take on
+
+Self-hosting is not free of work. You own the server, the TLS certificate renewals (Caddy handles these when you use the bundled proxy), backups, and upgrades. Copy buttons and password unlocks need HTTPS in the browser, and the CLI and the local MCP server refuse plain HTTP except on localhost.
+
+The hosted app on sniptide.com avoids all of that. Self-hosting makes sense when your snippets must stay on infrastructure you control, or when you want to read and change the code. The project is open source under AGPL-3.0.
+
+{/* TODO(Dino): confirm the AGPL-3.0 line against LICENSE and the pricing/limits page before publishing. */}
+
+## Next step
+
+Run the install script on a spare server and open the printed address. Configuration, reverse proxy, backups and upgrade pages are linked from the [self-hosting guide](https://docs.sniptide.com/self-hosting).

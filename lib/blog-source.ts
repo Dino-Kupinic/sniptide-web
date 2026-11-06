@@ -25,6 +25,11 @@ const allPosts: Post[] = collection.entries.map((entry) => ({
   entry,
 }))
 
+// Every post in content/blog, drafts included. The tests use it to check that each file is a post.
+export function getAllPosts(): Post[] {
+  return allPosts
+}
+
 // Published posts, newest first. Drafts join them in development.
 export function getPosts(): Post[] {
   return publishedPosts(allPosts)

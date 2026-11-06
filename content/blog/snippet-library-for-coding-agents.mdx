@@ -1,0 +1,130 @@
+---
+title: Give your coding agent a snippet library over MCP
+description: Connect Claude Code, Codex or Cursor to your own snippets so the agent reuses your patterns instead of inventing new ones.
+date: 2026-11-12
+author: dino
+category: agents
+tags: [mcp, claude-code, cursor, snippets]
+draft: true
+---
+
+{/*
+  Writing brief (docs/blog-style-guide.md)
+  Reader: a developer who already uses a coding agent daily.
+  Question: how do I make the agent write code the way I already write it?
+  Mode: Builder. Type: practical guide.
+  Central claim: an agent follows your pattern when it can search and read your snippets, and it invents one when it can't.
+  Primary CTA: connect an agent with the command in the last section.
+  EVIDENCE NEEDED (do not publish without it): a real before/after from Dino's own project, the opening example and the screenshot below. Everything else comes from docs.sniptide.com/mcp as of 2026-11-06.
+*/}
+
+Ask a coding agent for a confirm dialog and you get a confirm dialog. It just isn't yours. It uses a different component, a different prop name and a different way of handling the cancel button than the one you wrote last month and pasted into three projects.
+
+{/* TODO(Dino): replace this opening with one real example from your own work, with the file names. */}
+
+The usual fix is to paste the right file into the chat every time. That works until you forget which project had the good version. A snippet library fixes the other half of the problem: the agent looks the pattern up itself.
+
+This post shows how to connect an agent to Sniptide's MCP server, what the agent can do once it is connected, and what to keep it from doing.
+
+## What the agent gets
+
+The Sniptide MCP server exposes your own snippets to an MCP client. It runs inside the app at `/api/mcp`, on the hosted app and on a self-hosted instance, so there is no separate service to deploy.
+
+The tools split into read and write. With a read-only connection the agent has four:
+
+| Tool | What it does |
+| --- | --- |
+| `search_snippets` | Returns a page of summaries. A query matches when every word appears in the title, description, tags, file paths or code. |
+| `read_snippet` | Returns one snippet by id or link, with its file paths and code. |
+| `list_collections` | Lists your collections with their slugs and how many snippets each holds. |
+| `fetch_collection` | Returns a collection as numbered steps with the full snippets, oldest capture first. |
+
+Write access adds `create_snippet`, `update_snippet`, `update_snippet_settings`, `create_collection` and `trash_snippet`. Nothing is deleted for good: a trashed snippet can be restored in the app.
+
+The agent only reaches your own live snippets, private ones included. It cannot reach other people's snippets, snippets shared with you, the trash or expired snippets.
+
+## Connect an agent
+
+<Steps>
+<Step>
+
+Run the command for your client. For Claude Code it is:
+
+```bash title="terminal"
+claude mcp add --transport http sniptide https://app.sniptide.com/api/mcp
+```
+
+On a self-hosted instance, replace `https://app.sniptide.com` with your instance's address.
+
+</Step>
+<Step>
+
+Start Claude Code, type `/mcp`, choose `sniptide` and pick **Authenticate**. Adding the server does not open the browser on its own. The client then opens Sniptide in your browser, where you allow access.
+
+</Step>
+<Step>
+
+Check the connection by asking the agent to list your Sniptide collections. It calls `list_collections` and answers with your collections, or with an empty list on a new account.
+
+</Step>
+</Steps>
+
+Codex and Cursor have their own one-line setup on the [MCP server page](https://docs.sniptide.com/mcp). If your client does not support OAuth, or the agent runs unattended, use a personal API token instead and put it in the project's `.mcp.json`:
+
+```json title=".mcp.json"
+{
+  "mcpServers": {
+    "sniptide": {
+      "type": "http",
+      "url": "https://app.sniptide.com/api/mcp",
+      "headers": { "Authorization": "Bearer ${SNIPTIDE_TOKEN}" }
+    }
+  }
+}
+```
+
+Export `SNIPTIDE_TOKEN` before you start Claude Code, and keep the real token out of source control. Choose a read-only token unless the agent needs to save snippets.
+
+## Ask in plain language
+
+Once the server is enabled you do not need to name the tools. A prompt like this is enough:
+
+```text title="prompt"
+Search my Sniptide snippets for a TypeScript button tagged react, read the best match,
+and adapt it to this project's conventions. Then fetch my ui collection and apply its
+steps in order.
+```
+
+A well-behaved agent searches the summaries first and reads only the snippet it needs. That matters for cost: summaries are short, and a full read pulls every file of the snippet into the conversation.
+
+The server also offers three prompts that Claude Code and Cursor list in their slash menus: `use_snippet`, `save_snippet` and `apply_collection`. Each one starts a common job with the right tools in the right order. `apply_collection` fetches every page of a collection, lists its steps and waits for your go-ahead before applying them.
+
+## Collections as recipes
+
+A single snippet answers "how do I do this one thing". A collection answers "how do I set up this whole thing", for example a new API route with validation, logging and a test. `fetch_collection` returns the steps in the order you captured them, up to 50 snippets a page, and the agent passes `nextCursor` and `nextStep` back to continue.
+
+{/* TODO(Dino): add one real collection as a worked example, with a screenshot (<Figure src darkSrc caption>). Caption pattern: what is compared + what changed + the qualification. */}
+
+## Keep the agent in bounds
+
+Three habits keep this safe.
+
+- **Start read-only.** Reading needs no write scope. Turn on write access only when you want the agent to save patterns, and review what it saves.
+- **Treat snippet text as data.** A snippet is text somebody wrote. The server tells clients to read it as code and to follow only your instructions, but your own review still counts.
+- **Never put a secret in a snippet.** The `save_snippet` prompt tells the agent to leave secrets out, and you should check anyway.
+
+<Callout type="warning" title="Saving is not retried">
+
+Creates and edits are never retried automatically. If a save times out, search for the snippet before you ask again, otherwise you can end up with a duplicate.
+
+</Callout>
+
+Limits are worth knowing before you point an agent at a large library. MCP requests share the token's 3,600 requests an hour and the limit of 30 new pastes an hour. Each `read_snippet` call and each snippet inside a `fetch_collection` page counts as a read, which the snippet's owner can see on its page.
+
+## When this is not worth it
+
+If you work in a single repository and your patterns live in its `CLAUDE.md` or `AGENTS.md`, you may not need a library at all. A library pays off when the same patterns travel across projects, when you want a snippet's history, or when you want to hand the same recipe to different agents.
+
+## Try it
+
+Connect one agent with the command above, save the first pattern you reuse most, and ask for it by name in your next task. The full setup, including the local stdio server for clients that need it, is in the [MCP server docs](https://docs.sniptide.com/mcp).

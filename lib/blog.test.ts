@@ -15,7 +15,7 @@ import {
   renderJsonFeed,
   slugFromPath,
 } from "@/lib/blog"
-import { getPosts } from "@/lib/blog-source"
+import { getAllPosts, getPosts } from "@/lib/blog-source"
 import { resolveNavMenus, sectionHref } from "@/lib/nav"
 import { siteUrl } from "@/lib/site"
 
@@ -41,7 +41,7 @@ describe("blog posts", () => {
     for (const file of files) expect(file).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*\.mdx$/)
     // /blog/md serves the Markdown twins, so no post can take that slug.
     expect(files).not.toContain("md.mdx")
-    expect(getPosts().map((entry) => entry.slug)).toEqual(
+    expect(getAllPosts().map((entry) => entry.slug)).toEqual(
       expect.arrayContaining(files.map((file) => slugFromPath(file))),
     )
   })
