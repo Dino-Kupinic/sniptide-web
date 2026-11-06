@@ -11,6 +11,8 @@ import { Sharing } from "@/components/sharing"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { WorksWith } from "@/components/works-with"
+import { postPath } from "@/lib/blog"
+import { getPosts } from "@/lib/blog-source"
 import { getGithubStars } from "@/lib/github-stars"
 
 // The same page as /. The canonical link folds it into / for search engines; adding noindex as
@@ -21,10 +23,14 @@ export const revalidate = 3600
 
 export default async function Home() {
   const stars = await getGithubStars()
+  const latest = getPosts()[0]
   return (
     <div className="text-[#0a0a0a] dark:text-white">
       <JsonLd />
-      <SiteHeader stars={stars} />
+      <SiteHeader
+        stars={stars}
+        latestPost={latest ? { title: latest.title, href: postPath(latest.slug) } : null}
+      />
       <main>
         <Hero />
         <WorksWith />

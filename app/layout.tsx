@@ -15,9 +15,11 @@ const fontHeading = Archivo({
 })
 
 // Body text matches the app, so the site and the dashboard read the same.
+// The opsz axis gives text above 14px Inter's optical size for it (font-optical-sizing: auto).
 const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  axes: ["opsz"],
 })
 
 const fontMono = localFont({

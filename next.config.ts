@@ -1,3 +1,4 @@
+import { createMDX } from "fumadocs-mdx/next"
 import type { NextConfig } from "next"
 import { documentation } from "./lib/agent-docs"
 import { appUrl, installScriptUrl } from "./lib/links"
@@ -49,6 +50,8 @@ const nextConfig: NextConfig = {
     return {
       // PostHog, proxied so ad blockers don't drop events (lib/posthog.ts).
       beforeFiles: [
+        // A post's Markdown twin (/blog/<slug>.md), served by app/blog/md/[slug]/route.ts.
+        { source: "/blog/:slug([a-z0-9-]+)\\.md", destination: "/blog/md/:slug" },
         {
           source: `${posthogProxyPath}/static/:path*`,
           destination: `${posthogAssetsHost(posthogHost)}/static/:path*`,
@@ -64,4 +67,5 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+// fumadocs-mdx compiles the posts in content/blog (lib/blog-source.ts).
+export default createMDX()(nextConfig)

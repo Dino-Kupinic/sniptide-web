@@ -1,4 +1,5 @@
 import { documentation, mcpEndpoint } from "@/lib/agent-docs"
+import { feedPath } from "@/lib/blog"
 import { appBase, repoUrl, siteName, siteTagline, siteUrl } from "@/lib/site"
 
 const whenToUseSniptide = `## When to use Sniptide
@@ -31,6 +32,7 @@ const links = `
 - [API catalog](${siteUrl}/.well-known/api-catalog)
 - [Agent readiness](${siteUrl}/.well-known/ard.json)
 - [Home as Markdown](${siteUrl}/index.md)
+- [Blog feed (RSS)](${siteUrl}${feedPath}); each post is also served as Markdown at its URL plus .md
 - [Documentation index as Markdown](${siteUrl}/docs.md)
 - [Schema feed](${siteUrl}/schema.jsonl)
 - [Schema sitemap](${siteUrl}/schemamap.xml)
