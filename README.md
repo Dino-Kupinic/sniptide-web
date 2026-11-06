@@ -96,6 +96,23 @@ frontmatter schema in `lib/blog.ts` fails the build on a missing field or an aut
 `lib/authors.ts`. Every post has one `category` from `categories` in `lib/blog.ts`. `draft: true`
 keeps a post out of production builds, the sitemap and the feeds.
 
+```yaml
+---
+title: Teach your agent a recipe # at most 70 characters
+description: Collections give a coding agent an ordered set of snippets to follow. # 50 to 160
+date: 2026-11-20
+updated: 2026-11-24 # optional
+author: dino # a key in lib/authors.ts
+category: agents # product, engineering, agents, self-hosting or company
+tags: [collections, mcp] # optional
+cover: /blog/agent-recipes/cover-light.webp # optional, the featured panel on the index
+coverDark: /blog/agent-recipes/cover-dark.webp # optional
+image: /blog/agent-recipes/share.png # optional, replaces the generated share card
+featured: true # optional, pins the post to the top of the index
+draft: true # optional
+---
+```
+
 - **Index.** `/blog` opens with one big featured post: the newest, or the newest with
   `featured: true`, shown with its `cover` picture or its share picture. A faint Game of Life
   (`components/blog/life-background.tsx`) runs behind the title and the featured post, pauses off
@@ -110,9 +127,8 @@ keeps a post out of production builds, the sitemap and the feeds.
   structures, visuals and the next step a post asks for. Read it before drafting.
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
-  code with a `title`. `content/blog/how-we-write-the-blog.mdx` uses all of them. Text sets at
-  18px on a 30px line (17px on 28px on phones) in a 35rem column, about 68 characters to a line,
-  (`.blog-prose` in `app/globals.css`). Inter loads its optical size axis for the whole site.
+  code with a `title`. Text sets at 18px on a 30px line (17px on 28px on phones) in a 35rem
+  column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its optical size axis for the whole site.
 - **Images.** Pictures go in `public/blog/<slug>/`, and author avatars in `public/blog/authors/`.
   Every picture, from `<Figure src darkSrc>` or a Markdown image, opens a full-screen viewer with
   zoom up to 4x, panning and pinch (`components/blog/zoom-image.tsx`).

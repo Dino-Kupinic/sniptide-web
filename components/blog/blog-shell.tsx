@@ -22,7 +22,7 @@ export async function BlogShell({ children }: { children: ReactNode }) {
         stars={stars}
         latestPost={latest ? { title: latest.title, href: postPath(latest.slug) } : null}
       />
-      <main id="content" className="flex-1">
+      <main id="content" className="flex-1 pb-12 md:pb-20">
         {children}
       </main>
       <SiteFooter sectionBase="/home" />

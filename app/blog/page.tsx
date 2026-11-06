@@ -1,11 +1,13 @@
+import { RssIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import { BlogIndex, type IndexPost } from "@/components/blog/blog-index"
 import { BlogShell } from "@/components/blog/blog-shell"
+import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 import { LifeBackground } from "@/components/blog/life-background"
 import { IndexFallback } from "@/components/blog/post-list"
 import { SubscribeMenu } from "@/components/blog/subscribe-menu"
-import { blogPath, feeds, readingMinutes } from "@/lib/blog"
+import { blogPath, feedPath, feeds, readingMinutes } from "@/lib/blog"
 import { getPosts } from "@/lib/blog-source"
 import { links } from "@/lib/links"
 
@@ -62,16 +64,26 @@ export default async function Page() {
               <BlogIndex posts={posts} />
             </Suspense>
           ) : (
-            <p className="max-w-[62ch] border-y py-7 text-base leading-6.5 text-muted-foreground">
-              The first posts are on their way. Until then, the{" "}
-              <a
-                href={`${links.github}/releases`}
-                className="text-link underline underline-offset-4"
-              >
-                release notes on GitHub
-              </a>{" "}
-              list what changed in each version.
-            </p>
+            <section className="flex flex-col items-start gap-6 rounded-lg border bg-sidebar px-6 py-10 md:px-12 md:py-14">
+              <div className="flex max-w-[34rem] flex-col gap-3">
+                <h2 className="font-heading text-2xl leading-8 font-medium tracking-[-0.02em] text-balance md:text-[28px] md:leading-9">
+                  The first posts are on their way
+                </h2>
+                <p className="text-base leading-6.5 text-muted-foreground">
+                  Subscribe to read them when they land. The release notes cover each version until
+                  then.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <a href={feedPath} className={primaryButton}>
+                  <RssIcon className="size-4" />
+                  Subscribe by RSS
+                </a>
+                <a href={`${links.github}/releases`} className={secondaryButton}>
+                  Read the release notes
+                </a>
+              </div>
+            </section>
           )}
         </div>
       </div>

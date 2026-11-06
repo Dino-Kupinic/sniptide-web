@@ -34,8 +34,10 @@ const post = (overrides: Partial<PostMeta> = {}): PostMeta => ({
 
 describe("blog posts", () => {
   test("every file in content/blog is a post with a kebab-case slug", () => {
-    const files = readdirSync(join(import.meta.dir, "..", "content", "blog"))
-    expect(files.length).toBeGreaterThan(0)
+    // .gitkeep keeps the folder in git while the blog has no posts.
+    const files = readdirSync(join(import.meta.dir, "..", "content", "blog")).filter(
+      (file) => file !== ".gitkeep",
+    )
     for (const file of files) expect(file).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*\.mdx$/)
     // /blog/md serves the Markdown twins, so no post can take that slug.
     expect(files).not.toContain("md.mdx")
