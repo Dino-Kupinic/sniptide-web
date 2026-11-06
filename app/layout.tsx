@@ -15,9 +15,12 @@ const fontHeading = Archivo({
 })
 
 // Body text matches the app, so the site and the dashboard read the same.
+// The opsz axis lets long-form text (the blog) use Inter's optical sizes; everywhere else keeps the
+// default text cut through font-optical-sizing: none in globals.css.
 const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  axes: ["opsz"],
 })
 
 const fontMono = localFont({

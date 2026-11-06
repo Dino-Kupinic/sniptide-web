@@ -81,7 +81,7 @@ export default async function Page({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(postStructuredData(post)) }}
       />
       <article className="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-10 md:pt-16 md:pb-28 lg:px-30">
-        <div className="mx-auto max-w-[42.5rem]">
+        <div className="mx-auto max-w-[35rem]">
           <nav
             aria-label="Breadcrumb"
             className="text-sm leading-5 font-medium text-muted-foreground"
@@ -100,7 +100,9 @@ export default async function Page({ params }: Props) {
           <h1 className="mt-4 font-heading text-[34px] leading-10 font-medium tracking-[-0.03em] text-balance md:text-5xl md:leading-[3.5rem]">
             {post.title}
           </h1>
-          <p className="mt-5 text-lg leading-7 text-muted-foreground">{post.description}</p>
+          <p className="mt-5 text-lg leading-7 text-pretty text-muted-foreground md:text-xl md:leading-8">
+            {post.description}
+          </p>
           <div className="mt-8 flex items-center gap-3 border-b pb-8">
             <Image
               src={author.avatar}
