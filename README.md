@@ -110,7 +110,7 @@ keeps a post out of production builds, the sitemap and the feeds.
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
   code with a `title`. `content/blog/how-we-write-the-blog.mdx` uses all of them. Text sets at
   18px on a 30px line (17px on 28px on phones) in a 35rem column, about 68 characters to a line,
-  with Inter's optical sizes on (`.blog-prose` in `app/globals.css`).
+  (`.blog-prose` in `app/globals.css`). Inter loads its optical size axis for the whole site.
 - **Images.** Pictures go in `public/blog/<slug>/`, and author avatars in `public/blog/authors/`.
   Every picture, from `<Figure src darkSrc>` or a Markdown image, opens a full-screen viewer with
   zoom up to 4x, panning and pinch (`components/blog/zoom-image.tsx`).

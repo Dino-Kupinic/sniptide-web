@@ -172,21 +172,22 @@ body {
   --muted-foreground: #a3a3a3;
 }
 
-html {
-  font-optical-sizing: none;
+/* Paragraphs avoid a lone word on their last line across the site. Inter's optical sizes are on
+   everywhere (its opsz axis loads in app/layout.tsx): 14px interface text keeps the default text
+   cut, and larger running text such as leads and post bodies gets the tighter cut drawn for it. */
+p {
+  text-wrap: pretty;
 }
 
 /* The reading flow of a post, tuned for long-form reading: 18px body text on a 30px line (17px on
    28px on phones), about 68 characters to a line in a 35rem column, paragraphs a little under one
    line apart, and headings with more space above than below so they attach to their section.
-   Inter switches to the optical size of the text, and dark mode softens the text a little to cut
-   glare. Components that bring their own layout (callouts, parameters, file trees, tabs, steps)
-   carry .not-prose. */
+   Dark mode softens the text a little to cut glare. Components that bring their own layout
+   (callouts, parameters, file trees, tabs, steps) carry .not-prose. */
 .blog-prose {
   font-size: 1.0625rem;
   line-height: 1.75rem;
   color: var(--foreground);
-  font-optical-sizing: auto;
   font-kerning: normal;
   text-rendering: optimizeLegibility;
 }
