@@ -4,12 +4,12 @@ import { useEffect, useRef } from "react"
 
 const cell = 8
 const gap = 1
-const tickMs = 260
+const tickMs = 360
 // A board that settles into still lifes and blinkers looks frozen, so it reseeds on a timer.
 const reseedEvery = 240
 
 // Conway's Game of Life on a wrapping grid of small squares in the brand blue, drawn behind the
-// featured post. It runs only while on screen and the tab is visible, and shows a still frame when
+// top of the blog index. It runs only while on screen and the tab is visible, and shows a still frame when
 // the reader prefers reduced motion. A canvas with no content is skipped by assistive technology.
 export function LifeBackground({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)

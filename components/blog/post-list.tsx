@@ -1,6 +1,5 @@
 import { Badge } from "@sniptide/ui/components/badge"
 import Image from "next/image"
-import { LifeBackground } from "@/components/blog/life-background"
 import {
   categories,
   featuredPost,
@@ -73,14 +72,12 @@ function Picture({
   )
 }
 
-// The one big post at the top of the index. The text sits on the left over a slow Game of Life,
-// and the cover (or the share picture) leans in from the lower right in a frame that bleeds off the
+// The one big post at the top of the index. The text sits on the left, and the cover (or the share picture) leans in from the lower right in a frame that bleeds off the
 // panel's edges. On phones the picture follows the text.
 export function FeaturedPost({ post }: { post: ListPost }) {
   const author = postAuthor(post)
   return (
-    <article className="group relative isolate overflow-hidden rounded-lg border bg-sidebar transition-colors hover:border-foreground/20">
-      <LifeBackground className="absolute inset-0 -z-10 size-full opacity-[0.14] [mask-image:linear-gradient(to_right,transparent_0%,black_55%)] dark:opacity-[0.2] max-lg:[mask-image:linear-gradient(to_bottom,transparent_0%,black_60%)]" />
+    <article className="group relative overflow-hidden rounded-lg border bg-sidebar transition-colors hover:border-foreground/20">
       <div className="grid gap-10 pt-8 md:pt-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12 lg:pt-14">
         <div className="flex min-w-0 flex-col gap-8 px-6 md:px-12 lg:pr-0 lg:pb-14">
           <div className="flex flex-col gap-5">
