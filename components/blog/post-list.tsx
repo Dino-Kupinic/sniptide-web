@@ -108,7 +108,13 @@ export function FeaturedPost({ post }: { post: ListPost }) {
           </p>
         </div>
         <div className="min-w-0 self-end pl-6 md:pl-12 lg:pl-0">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-tl-lg border-t border-l bg-background transition-transform duration-300 ease-out group-hover:-translate-y-1 motion-reduce:transition-none">
+          {/* A cover is drawn for this frame and crops from its top-left corner. The share picture
+              is a finished 1200x630 card, so the frame takes its shape and nothing is cut off. */}
+          <div
+            className={`relative overflow-hidden rounded-tl-lg border-t border-l bg-background transition-transform duration-300 ease-out group-hover:-translate-y-1 motion-reduce:transition-none ${
+              post.cover ? "aspect-[16/10]" : "aspect-[1200/630]"
+            }`}
+          >
             <Picture
               src={post.cover ?? postImage(post)}
               darkSrc={post.cover ? post.coverDark : undefined}
