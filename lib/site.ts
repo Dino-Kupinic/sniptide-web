@@ -1,5 +1,4 @@
-// Facts about Sniptide that llms.txt and the JSON-LD both state. Wording follows
-// docs/positioning.md in Dino-Kupinic/sniptide; change it there first.
+// Facts about Sniptide that llms.txt and the JSON-LD both state.
 export const siteUrl = "https://sniptide.com"
 export const appBase = "https://app.sniptide.com"
 export const repoUrl = "https://github.com/Dino-Kupinic/sniptide"
