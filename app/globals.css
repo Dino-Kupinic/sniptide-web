@@ -426,6 +426,7 @@ p {
 }
 
 .blog-prose .blog-comparison thead th {
+  white-space: nowrap;
   background-color: var(--background);
   font-size: 0.8125rem;
 }
