@@ -5,9 +5,9 @@ date: 2026-11-08
 author: dino
 category: product
 tags: [comparison, pastebin, self-hosting, privatebin, gist]
-cover: /blog/pastebin-alternatives/cover.webp
+cover: /blog/pastebin-alternatives/cover-v2.webp
 coverAlt: A comparison table of Pastebin alternatives on a blue background, with Sniptide ticking password, burn after reading, collections, MCP for agents and self-hosting.
-image: /blog/pastebin-alternatives/share.png
+image: /blog/pastebin-alternatives/share-v2.png
 ---
 
 {/*
@@ -46,7 +46,7 @@ That's the real reason most developers go looking for a Pastebin alternative. Pa
 - **A paste the server can't read:** PrivateBin. It encrypts in your browser, and the key stays in the link.
 - **Snippets you clone, push and diff with Git:** GitHub Gist, or Opengist to self-host.
 - **The smallest possible pastebin on your own server:** MicroBin.
-- **A library you share from, search later and hand to your agents:** Sniptide.
+- **A library you share from, search later and hand to your agents:** [Sniptide](/blog/introducing-sniptide).
 
 ## How we compared them
 
@@ -173,7 +173,7 @@ The word covers three different guarantees, and mixing them up is how secrets le
 
 ## Everything Sniptide does
 
-Sniptide is built for the Discord problem from the top of this post: code you share today and need again in three months, from your browser, your terminal or your agent.
+Sniptide is built for the Discord problem from the top of this post: code you share today and need again in three months, from your browser, your terminal or your agent. The [launch post](/blog/introducing-sniptide) walks through it end to end.
 
 <FeatureGrid>
 
@@ -208,13 +208,13 @@ Sniptide is built for the Discord problem from the top of this post: code you sh
 
 ### Share it the way you mean to
 
-A paste holds up to 10 files, or a whole folder you paste in at once, under a short link or a custom one you choose. Make it private, unlisted or public, add a password, set it to expire after an hour or a year, or let it burn after the first read. To share with specific people, invite them by username or email with view or edit access. If the code looks like an API key, the editor warns you and switches the paste to private before you share it.
+A paste holds up to 10 files, or a whole folder you paste in at once, under a short link or a custom one you choose. Make it private, unlisted or public, add a password, set it to expire after an hour or a year, or let it burn after the first read. To share with specific people, invite them by username or email with view or edit access. The [sharing overview](/#sharing) shows every option. If the code looks like an API key, the editor warns you and switches the paste to private before you share it.
 
 Links look good where you post them. Public and unlisted pastes get a preview card with the title and the first lines of code, and you can post a paste straight to a Slack or Discord channel, embed it on a page or print it as a clean PDF.
 
 ### Find it again
 
-Every edit records a revision you can compare and restore, so a changed config never loses its old version. File pastes in collections, star the ones you reach for, and press <Kbd>⌘K</Kbd> to search by title or link. Each paste counts its views, copies and referrers, without cookies, so you can see whether the link you sent was ever opened. Deleted pastes wait in the trash for 30 days, and a public gist imports in one step.
+Every edit records a revision you can compare and restore, as the [snippet library](/#features) shows, so a changed config never loses its old version. File pastes in collections, star the ones you reach for, and press <Kbd>⌘K</Kbd> to search by title or link. Each paste counts its views, copies and referrers, without cookies, so you can see whether the link you sent was ever opened. Deleted pastes wait in the trash for 30 days, and a public gist imports in one step.
 
 ### Reuse it from your terminal and your agent
 
@@ -222,11 +222,11 @@ The CLI searches your pastes, pulls files back into a project and installs a col
 
 ### Hand off a project's .env
 
-Env groups hold a project's variables encrypted at rest. Sync them with `sniptide env`, reveal a value only when you need it, and share a group through a password link that expires after an hour, a day or a week.
+[Env groups](/#secrets) hold a project's variables encrypted at rest. Sync them with `sniptide env`, reveal a value only when you need it, and share a group through a password link that expires after an hour, a day or a week.
 
 ### Run it where you want
 
-Use it on [sniptide.com](https://sniptide.com), or run the same app on your own server with one command. The self-hosted version has the same editor, CLI support and MCP server.
+Use it on [sniptide.com](https://sniptide.com), or [run the same app on your own server](/#self-host) with one command. The self-hosted version has the same editor, CLI support and MCP server.
 
 Two gaps matter for this comparison. Nothing is encrypted in your browser, so PrivateBin is the better pick when the server must not read the paste. And env groups have no rotation or audit trail, so Sniptide doesn't replace a secrets manager.
 

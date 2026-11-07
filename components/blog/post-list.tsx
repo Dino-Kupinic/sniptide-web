@@ -83,7 +83,7 @@ export function FeaturedPost({ post }: { post: ListPost }) {
         <div className="flex min-w-0 flex-col gap-8 px-6 py-8 md:px-12 md:py-12 lg:py-14">
           <div className="flex flex-col gap-5">
             <CategoryDate post={post} />
-            <h2 className="font-heading text-[28px] leading-[34px] font-medium tracking-[-0.03em] text-balance md:text-[40px] md:leading-[46px]">
+            <h2 className="font-heading text-[26px] leading-[32px] font-medium tracking-[-0.025em] text-balance md:text-[32px] md:leading-[38px]">
               <a
                 href={postPath(post.slug)}
                 className={`${coverLink} group-hover:text-link focus-visible:text-link`}

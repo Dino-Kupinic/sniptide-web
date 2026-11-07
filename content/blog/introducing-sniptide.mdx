@@ -5,9 +5,9 @@ date: 2026-11-07
 author: dino
 category: product
 tags: [launch, pastes, mcp, collections, self-hosting]
-cover: /blog/introducing-sniptide/cover.webp
+cover: /blog/introducing-sniptide/cover-v2.webp
 coverAlt: The command claude mcp add sniptide, surrounded by two pastes, the Sniptide app icon and a terminal icon.
-image: /blog/introducing-sniptide/share.png
+image: /blog/introducing-sniptide/share-v2.png
 featured: true
 ---
 
@@ -32,10 +32,10 @@ Sniptide keeps that code in one place. You save it as a paste, share it with a l
 
 ## What you can do with Sniptide
 
-- **Share code with a link you control.** A paste holds up to 10 files, or a whole folder, under a short or custom link. Make it private, unlisted or public, add a password, let it expire, let it burn after the first read, or invite people to view or edit.
-- **Find it again.** Collections, stars and <Kbd>⌘K</Kbd> search keep your snippets in reach, and every edit records a revision you can compare and restore.
+- **[Share code with a link you control](/#sharing).** A paste holds up to 10 files, or a whole folder, under a short or custom link. Make it private, unlisted or public, add a password, let it expire, let it burn after the first read, or invite people to view or edit.
+- **[Find it again](/#features).** Collections, stars and <Kbd>⌘K</Kbd> search keep your snippets in reach, and every edit records a revision you can compare and restore.
 - **Keep patterns your agent can find.** Coding agents search and read your snippets over MCP, and the CLI installs a collection as a skill.
-- **Hand off a project's `.env`.** Env groups store a project's variables encrypted, sync with `sniptide env`, and share through a password link that expires.
+- **[Hand off a project's `.env`](/#secrets).** Env groups store a project's variables encrypted, sync with `sniptide env`, and share through a password link that expires.
 - **See what happened to a link.** Each paste counts views, copies and referrers, without cookies.
 - **Post it anywhere.** Links unfurl with a code preview, post straight to Slack or Discord, embed on a page or print as a PDF.
 
@@ -120,7 +120,7 @@ An agent only reaches your own pastes, and revoking a token or a connection cuts
 
 ## Where it runs
 
-Use Sniptide on [sniptide.com](https://sniptide.com), or run the same app on your own server. Self-hosting takes one command, and the [self-hosting guide](https://docs.sniptide.com/self-hosting) covers the rest.
+Use Sniptide on [sniptide.com](https://sniptide.com), or [run the same app on your own server](/#self-host). Self-hosting takes one command, and the [self-hosting guide](https://docs.sniptide.com/self-hosting) covers the rest.
 
 <Figure
   src="/blog/introducing-sniptide/self-host.webp"
@@ -134,8 +134,8 @@ curl -fsSL https://sniptide.com/install.sh | sh
 
 ## Why I built Sniptide
 
-I wasn't happy with the state of pastebins. Most of them look outdated, and they're missing features I expect from any modern tool. I also wanted one I could self-host without a weekend of setup, so the install is a single command.
+I wasn't happy with the state of pastebins, and [our comparison of Pastebin alternatives](/blog/pastebin-alternatives) shows why. Most of them look outdated, and they're missing features I expect from any modern tool. I also wanted one I could self-host without a weekend of setup, so the install is a single command.
 
-And I wanted a pastebin built for the way we write code now, with agents. Your agent should be able to find the snippet you saved last week as easily as you can. That's Sniptide: a pastebin that looks good, feels polished and works for you and your agents.
+And I wanted a pastebin built for the way we write code now, with agents. Your agent should be able to find the snippet you saved last week as easily as you can. That's Sniptide: a pastebin that looks good, feels polished and works for you and your agents. The [vision](/vision) covers where it goes next.
 
 [Try Sniptide](https://sniptide.com) with the snippet you share most often, then [connect your agent](https://docs.sniptide.com/mcp) and ask it to list your collections.
