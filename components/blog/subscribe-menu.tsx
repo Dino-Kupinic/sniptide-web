@@ -5,6 +5,7 @@ import { CheckIcon, ChevronDownIcon, CopyIcon, RssIcon } from "lucide-react"
 import { useState } from "react"
 import { feedPath, feeds } from "@/lib/blog"
 import { siteUrl } from "@/lib/site"
+import { track } from "@/lib/tracking"
 
 const row =
   "flex h-8 cursor-default items-center gap-2.5 rounded-md px-3 text-sm leading-5 outline-none select-none data-highlighted:bg-muted"
@@ -15,6 +16,7 @@ export function SubscribeMenu() {
   const [copied, setCopied] = useState(false)
 
   async function copy() {
+    track("blog_action", { action: "copy_rss", slug: "" })
     try {
       await navigator.clipboard.writeText(`${siteUrl}${feedPath}`)
       setCopied(true)
@@ -35,7 +37,12 @@ export function SubscribeMenu() {
         <Menu.Positioner sideOffset={6} align="end" className="z-40 outline-none">
           <Menu.Popup className="blog min-w-48 origin-(--transform-origin) rounded-lg border bg-popover p-1 text-foreground shadow-(--float-shadow) transition-[opacity,scale] duration-100 data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0 motion-reduce:transition-none">
             {feeds.map((feed) => (
-              <Menu.LinkItem key={feed.path} href={feed.path} className={row}>
+              <Menu.LinkItem
+                key={feed.path}
+                href={feed.path}
+                onClick={() => track("blog_action", { action: "subscribe", slug: feed.path })}
+                className={row}
+              >
                 <RssIcon aria-hidden="true" className="size-4 text-muted-foreground" />
                 {feed.label}
               </Menu.LinkItem>

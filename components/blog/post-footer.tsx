@@ -1,31 +1,11 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 import { type PostMeta, postPath } from "@/lib/blog"
 
-// The end of a post: its tags and the posts on either side of it. The way into the product is the
+// The end of a post: the posts on either side of it. The way into the product is the
 // wide call to action below the post (BlogShell).
-export function PostFooter({
-  post,
-  newer,
-  older,
-}: {
-  post: PostMeta
-  newer?: PostMeta
-  older?: PostMeta
-}) {
+export function PostFooter({ newer, older }: { newer?: PostMeta; older?: PostMeta }) {
   return (
     <footer className="mt-16 flex flex-col gap-10">
-      {post.tags.length > 0 && (
-        <p className="text-sm leading-5 text-muted-foreground">
-          Filed under{" "}
-          {post.tags.map((tag, index) => (
-            <span key={tag}>
-              <span className="font-mono text-[0.8125rem] text-foreground">{tag}</span>
-              {index < post.tags.length - 1 && ", "}
-            </span>
-          ))}
-        </p>
-      )}
-
       {(newer || older) && (
         <nav aria-label="More posts" className="grid gap-3 sm:grid-cols-2">
           {older ? <AdjacentLink post={older} direction="older" /> : <span />}

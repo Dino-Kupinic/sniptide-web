@@ -1,0 +1,149 @@
+---
+title: Introducing Sniptide, the pastebin for your agents
+description: Sniptide saves code as pastes you share with a link you control, and lets coding agents search, read and reuse them over MCP.
+date: 2026-11-07
+author: dino
+category: product
+tags: [launch, pastes, mcp, collections, self-hosting]
+cover: /blog/introducing-sniptide/cover-v3.webp
+coverAlt: The Sniptide logo and wordmark on a blue gradient with soft waves.
+image: /blog/introducing-sniptide/share-v3.png
+featured: true
+---
+
+{/*
+Writing brief (docs/blog-style-guide.md)
+Reader: a developer who shares code with people and works with a coding agent such as Claude Code, Codex or Cursor.
+Question or task: what is Sniptide, and why should I try it?
+Primary mode: Builder, with the founder's reason for building it
+Article type: product launch (500 to 900 words)
+Central claim: one polished place holds the code you share with people and the patterns your agent reuses, on our server or yours.
+Evidence and sources: docs.sniptide.com (pastes, sharing, collections, encrypted secrets, MCP, CLI, self-hosting), read 7 November 2026. Illustrations in the OG card style. The "why" section follows Dino's own words in the project thread.
+Opening move: problem
+Main sections: what you can do, one pattern from paste to agent, how agents reach your pastes, where it runs, why I built it, where it is going
+Running example: a retry helper and a React hook in a collection called Snippets
+Visuals: cover, a paste and its settings, the paste-to-agent flow, the skill file tree, the one-command install
+Primary CTA: try Sniptide (closing section). The footer carries the global sign-up prompt.
+*/}
+
+Sniptide is a pastebin built for how developers share code today. Paste a snippet or a whole folder, send a link you control, and find it again months later. Your coding agents can search and reuse the same library over MCP.
+
+Most pastebins haven't changed in a decade. You get one file, a random link, ads, and no way to find what you pasted last month. So the code worth keeping ends up scattered across chat threads and old gists: the retry helper, the auth setup, the button your team agreed on. When a colleague asks for it, you go digging. When your agent needs it, the agent writes it again from scratch, a little different each time.
+
+## What you can do with Sniptide
+
+- **[Share code with a link you control](/#sharing).** A paste holds up to 10 files, or a whole folder, under a short or custom link. Make it private, unlisted or public, add a password, let it expire, let it burn after the first read, or invite people to view or edit.
+- **[Find it again](/#features).** Collections, stars and <Kbd>⌘K</Kbd> search keep your snippets in reach, and every edit records a revision you can compare and restore.
+- **Keep patterns your agent can find.** Coding agents search and read your snippets over MCP, and the CLI installs a collection as a skill.
+- **[Hand off a project's `.env`](/#secrets).** Env groups store a project's variables encrypted, sync with `sniptide env`, and share through a password link that expires.
+- **See what happened to a link.** Each paste counts views, copies and referrers, without cookies.
+- **Post it anywhere.** Links unfurl with a code preview, post straight to Slack or Discord, embed on a page or print as a PDF.
+
+<Figure
+  src="/blog/introducing-sniptide/paste-v2.webp"
+  alt="A paste with three files, its link, revision number and view count, next to its settings: visibility set to unlisted, expiry after one week, a password, burn after reading and two people invited to edit."
+  caption="A paste and its sharing settings, side by side."
+/>
+
+## One pattern, from paste to agent
+
+Say your team keeps a retry helper and a debounce hook it reuses everywhere. Here is how they become something your agent works from.
+
+<Figure
+  src="/blog/introducing-sniptide/agents-v2.webp"
+  alt="Pastes and a collection called snippets flow into Sniptide's MCP endpoint, which serves Claude Code, Codex and Cursor."
+  caption="Pastes in a collection, served to your agents over MCP."
+/>
+
+<Steps>
+<Step>
+
+### Save them as pastes
+
+Paste each file into a new paste. The editor sets the language from the file name and warns you when the code looks like a key.
+
+</Step>
+<Step>
+
+### File them in a collection
+
+Add both pastes to a collection called `snippets`. Its slug is the name the CLI and agents use.
+
+</Step>
+<Step>
+
+### Connect your agent
+
+Add the MCP server to Claude Code, then type `/mcp`, choose `sniptide` and pick **Authenticate** to sign in through the browser.
+
+```bash title="Terminal"
+claude mcp add --transport http sniptide https://app.sniptide.com/api/mcp
+```
+
+</Step>
+<Step>
+
+### Ask for it
+
+Ask in plain language, such as "Use the retry helper from my Sniptide snippets for this fetch call." The agent calls `search_snippets`, reads the best match with `read_snippet` and works from your code instead of guessing.
+
+</Step>
+</Steps>
+
+Once an agent connects, the dashboard lists it with the time it last called Sniptide, and a chart shows how often your agents read from your library.
+
+If you would rather keep the patterns in the repository, the CLI installs the same collection as a skill:
+
+```bash title="Terminal"
+sniptide skill snippets
+```
+
+<Files label="What it writes for Claude Code">
+  <Folder name=".claude/skills/snippets">
+    <File name="SKILL.md" />
+    <Folder name="snippets/retry">
+      <File name="retry.ts" />
+    </Folder>
+    <Folder name="snippets/debounce">
+      <File name="use-debounced-value.ts" />
+    </Folder>
+  </Folder>
+</Files>
+
+`SKILL.md` describes each paste, and the agent reads only the files it needs. A skill is a local copy, so run the command again with `--force` after the collection changes.
+
+## How agents reach your pastes
+
+The MCP server runs inside the app at `/api/mcp`, on sniptide.com and on every self-hosted instance. An agent signs in with OAuth, or with a personal API token for unattended jobs. Read access is the default, and an agent can save or edit snippets only when you grant write access.
+
+An agent only reaches your own pastes, and revoking a token or a connection cuts off access at once. Agents that fetch a link directly can ask for Markdown with `Accept: text/markdown` and get the files as fenced code blocks, without the page around them.
+
+## Where it runs
+
+Use Sniptide on [sniptide.com](https://sniptide.com), or [run the same app on your own server](/#self-host). Self-hosting takes one command, and the [self-hosting guide](https://docs.sniptide.com/self-hosting) covers the rest.
+
+<Figure
+  src="/blog/introducing-sniptide/self-host-v2.webp"
+  alt="A terminal runs the Sniptide install script, which sets up Docker Compose and HTTPS, and starts Sniptide and Postgres on your server."
+  caption="One command installs Sniptide and Postgres on your server."
+/>
+
+```bash title="Terminal"
+curl -fsSL https://sniptide.com/install.sh | sh
+```
+
+## Why I built Sniptide
+
+I wasn't happy with the state of pastebins, and [our comparison of Pastebin alternatives](/blog/pastebin-alternatives) shows why. Most of them look outdated, and they're missing features I expect from any modern tool. I also wanted one I could self-host without a weekend of setup, so the install is a single command.
+
+And I wanted a pastebin built for the way we write code now, with agents. Your agent should be able to find the snippet you saved last week as easily as you can. That's Sniptide: a pastebin that looks good, feels polished and works for you and your agents.
+
+## Where Sniptide is going
+
+The goal is for Sniptide to be the best pastebin and the quickest way to share code. Beyond that, we want it to become a registry for your agents.
+
+Every project rebuilds the same pieces: auth, the database setup, your design patterns. Pull them out once, save them as building blocks in a collection, and your agent can snap them into the next product instead of starting over. Doing that through GitHub today means publishing packages and maintaining versioned registries just to share a few files. In Sniptide it's a paste.
+
+Extensions are planned too, so sharing a link with real content behind it gets even quicker. The [vision](/vision) has the longer version.
+
+[Try Sniptide](https://app.sniptide.com/sign-up) with the snippet you share most often, then [connect your agent](https://docs.sniptide.com/mcp) and ask it to list your collections.

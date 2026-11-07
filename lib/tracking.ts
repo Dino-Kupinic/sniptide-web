@@ -25,6 +25,7 @@ import { posthogHost, posthogKey, posthogProxyPath } from "@/lib/posthog"
 //   outbound_link_clicked  { location, host }     any other link that leaves Sniptide
 //   section_viewed         { section, position }  a landing section came into view
 //   scroll_depth_reached   { percent, path }      25, 50, 75 and 100% of a page
+//   blog_action            { action, slug }       share, copy, open with AI or subscribe on the blog
 //   consent_banner_shown   { trigger }            the banner or the settings appeared
 //   consent_updated        { action, analytics, replay, source }  the visitor answered
 // Every event carries surface=marketing and consent=pending|denied|analytics|analytics_replay.

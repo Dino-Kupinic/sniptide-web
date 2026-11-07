@@ -398,6 +398,204 @@ p {
   border-top: 1px solid var(--border);
 }
 
+/* The Comparison component (components/blog/comparison.tsx) styles a Markdown table: equal product
+   columns that fit the frame on wide screens, markers for yes and no, group rows and a tinted
+   column. */
+.blog-prose .blog-comparison {
+  margin-block: 2rem;
+}
+
+.blog-prose .blog-comparison table {
+  width: 100%;
+  min-width: 40rem;
+  table-layout: fixed;
+}
+
+.blog-prose .blog-comparison .blog-cell {
+  min-width: 0;
+}
+
+.blog-prose .blog-comparison :is(th, td) {
+  padding: 0.75rem 0.625rem;
+}
+
+.blog-prose .blog-comparison :is(th, td):first-child {
+  width: 8.5rem;
+  padding-inline-start: 0.875rem;
+  font-weight: 400;
+}
+
+.blog-prose .blog-comparison thead th {
+  white-space: nowrap;
+  background-color: var(--background);
+  font-size: 0.8125rem;
+}
+
+.blog-prose .blog-comparison td {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: var(--muted-foreground);
+}
+
+.blog-prose .blog-comparison td:first-child {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* A row with only a bold first cell is a group heading. */
+.blog-prose
+  .blog-comparison
+  tr:has(> td:first-child strong):has(> td:nth-child(2) .blog-cell:empty)
+  td {
+  padding-block: 0.5rem;
+  background-color: color-mix(in oklab, var(--muted) 60%, var(--background));
+  box-shadow: none;
+}
+
+.blog-prose
+  .blog-comparison
+  tr:has(> td:first-child strong):has(> td:nth-child(2) .blog-cell:empty)
+  strong {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.blog-prose .blog-comparison[data-highlight="2"] :is(th, td):nth-child(2),
+.blog-prose .blog-comparison[data-highlight="3"] :is(th, td):nth-child(3),
+.blog-prose .blog-comparison[data-highlight="4"] :is(th, td):nth-child(4),
+.blog-prose .blog-comparison[data-highlight="5"] :is(th, td):nth-child(5),
+.blog-prose .blog-comparison[data-highlight="6"] :is(th, td):nth-child(6),
+.blog-prose .blog-comparison[data-highlight="7"] :is(th, td):nth-child(7) {
+  background-color: color-mix(in oklab, var(--link) 7%, var(--background));
+}
+
+.blog-prose .blog-comparison[data-highlight="2"] thead th:nth-child(2),
+.blog-prose .blog-comparison[data-highlight="3"] thead th:nth-child(3),
+.blog-prose .blog-comparison[data-highlight="4"] thead th:nth-child(4),
+.blog-prose .blog-comparison[data-highlight="5"] thead th:nth-child(5),
+.blog-prose .blog-comparison[data-highlight="6"] thead th:nth-child(6),
+.blog-prose .blog-comparison[data-highlight="7"] thead th:nth-child(7) {
+  color: var(--link);
+  font-weight: 600;
+}
+
+.blog-prose .blog-mark-yes {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  background-color: color-mix(in oklab, var(--link) 12%, transparent);
+  color: var(--link);
+}
+
+.blog-prose .blog-mark-no {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in oklab, var(--muted-foreground) 60%, transparent);
+}
+
+.blog-prose .blog-mark-partial {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+}
+
+.blog-prose .blog-mark-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: 0.3125rem;
+  border: 1px solid var(--link);
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--link) 50%, transparent 50%);
+}
+
+/* The FeatureGrid component: a bold line and a list per card, laid out as three cards side by side
+   on wide screens and stacked on phones. Each card is a heading cell above a list cell. */
+.blog-prose .blog-feature-grid {
+  display: grid;
+  margin-block: 2rem;
+}
+
+@media (min-width: 768px) {
+  .blog-prose .blog-feature-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    grid-auto-flow: column;
+    column-gap: 0.75rem;
+  }
+}
+
+.blog-prose .blog-feature-grid > p {
+  margin: 0;
+  padding: 1.25rem 1.25rem 0.25rem;
+  border: 1px solid var(--border);
+  border-bottom: 0;
+  border-radius: 0.75rem 0.75rem 0 0;
+  background-color: var(--card);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: the comparison's group-row rule targets other elements. */
+.blog-prose .blog-feature-grid.blog-feature-grid > p > strong {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.blog-prose .blog-feature-grid > ul {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 1.25rem 1.25rem;
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 0.75rem 0.75rem;
+  background-color: var(--card);
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .blog-prose .blog-feature-grid > ul {
+    margin-bottom: 0;
+  }
+}
+
+.blog-prose .blog-feature-grid.blog-feature-grid ul > li {
+  position: relative;
+  margin: 0;
+  padding: 0.3125rem 0 0.3125rem 1.625rem;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  text-wrap: pretty;
+}
+
+.blog-prose .blog-feature-grid.blog-feature-grid ul > li::marker {
+  content: none;
+}
+
+.blog-prose .blog-feature-grid.blog-feature-grid ul > li::before {
+  content: "";
+  position: absolute;
+  top: 0.6875rem;
+  inset-inline-start: 0.125rem;
+  width: 0.875rem;
+  height: 0.5rem;
+  border-radius: 0;
+  background: none;
+  border-bottom: 2px solid var(--link);
+  border-left: 2px solid var(--link);
+  transform: rotate(-45deg);
+}
+
 /* Numbers line up in right-aligned columns. Inter's tabular figures also widen the hyphen, so
    text columns keep the default figures. */
 .blog-prose :is(td, th)[align="right"] {

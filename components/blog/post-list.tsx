@@ -72,17 +72,18 @@ function Picture({
   )
 }
 
-// The one big post at the top of the index. The text sits on the left, and the cover (or the share picture) leans in from the lower right in a frame that bleeds off the
-// panel's edges. On phones the picture follows the text.
+// The one big post at the top of the index. The text sits on the left, and the cover (or the share
+// picture) fills the right side from the top edge to the bottom. On phones the picture follows the
+// text.
 export function FeaturedPost({ post }: { post: ListPost }) {
   const author = postAuthor(post)
   return (
     <article className="group relative overflow-hidden rounded-lg border bg-sidebar transition-colors hover:border-foreground/20">
-      <div className="grid gap-10 pt-8 md:pt-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12 lg:pt-14">
-        <div className="flex min-w-0 flex-col gap-8 px-6 md:px-12 lg:pr-0 lg:pb-14">
+      <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <div className="flex min-w-0 flex-col gap-8 px-6 py-8 md:px-12 md:py-12 lg:py-14">
           <div className="flex flex-col gap-5">
             <CategoryDate post={post} />
-            <h2 className="font-heading text-[32px] leading-[38px] font-medium tracking-[-0.03em] text-balance md:text-5xl md:leading-[52px]">
+            <h2 className="font-heading text-[26px] leading-[32px] font-medium tracking-[-0.025em] text-balance md:text-[32px] md:leading-[38px]">
               <a
                 href={postPath(post.slug)}
                 className={`${coverLink} group-hover:text-link focus-visible:text-link`}
@@ -107,35 +108,31 @@ export function FeaturedPost({ post }: { post: ListPost }) {
             <span>{post.minutes} min read</span>
           </p>
         </div>
-        <div className="min-w-0 self-end pl-6 md:pl-12 lg:pl-0">
-          {/* A cover is drawn for this frame and crops from its top-left corner. The share picture
-              is a finished 1200x630 card, so the frame takes its shape and nothing is cut off. */}
-          <div
-            className={`relative overflow-hidden rounded-tl-lg border-t border-l bg-background transition-transform duration-300 ease-out group-hover:-translate-y-1 motion-reduce:transition-none ${
-              post.cover ? "aspect-[16/10]" : "aspect-[1200/630]"
-            }`}
-          >
-            <Picture
-              src={post.cover ?? postImage(post)}
-              darkSrc={post.cover ? post.coverDark : undefined}
-              sizes="(min-width: 1024px) 60vw, 100vw"
-              priority
-              className={post.cover ? "object-cover object-left-top" : "object-cover"}
-            />
-          </div>
+        {/* The frame runs the full height of the panel on wide screens and keeps the picture's shape
+            on phones. A cover is centered, and the share picture is a finished card. */}
+        <div className="relative aspect-[16/10] min-w-0 overflow-hidden border-t bg-background lg:aspect-auto lg:min-h-[26rem] lg:border-t-0 lg:border-l">
+          <Picture
+            src={post.cover ?? postImage(post)}
+            darkSrc={post.cover ? post.coverDark : undefined}
+            sizes="(min-width: 1024px) 60vw, 100vw"
+            priority
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
+          />
         </div>
       </div>
     </article>
   )
 }
 
-// Every other post: its share picture, the category and date, the title and its description.
+// Every other post: its cover illustration (or the share picture when it has none), the category and
+// date, the title and its description.
 function PostCard({ post }: { post: ListPost }) {
   return (
     <li className="group relative flex min-w-0 flex-col gap-4">
-      <div className="relative aspect-[1200/630] overflow-hidden rounded-lg border bg-sidebar transition-colors group-hover:border-foreground/20">
+      <div className="relative aspect-[16/9] overflow-hidden rounded-lg border bg-sidebar transition-colors group-hover:border-foreground/20">
         <Picture
-          src={postImage(post)}
+          src={post.cover ?? postImage(post)}
+          darkSrc={post.cover ? post.coverDark : undefined}
           sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
           className="object-cover"
         />

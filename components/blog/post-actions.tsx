@@ -11,6 +11,7 @@ import {
   Share2Icon,
 } from "lucide-react"
 import { type ReactNode, useRef, useState } from "react"
+import { track } from "@/lib/tracking"
 
 type Props = {
   title: string
@@ -43,6 +44,12 @@ function useCopy() {
     timer.current = setTimeout(() => setStatus("idle"), 2000)
   }
   return { status, copy }
+}
+
+// Reports a reader's action on a post as blog_action { action, slug } (lib/tracking.ts).
+function report(props: Props, action: string) {
+  const slug = new URL(props.url).pathname.split("/").filter(Boolean).pop() ?? ""
+  track("blog_action", { action, slug })
 }
 
 async function fetchMarkdown(path: string) {
@@ -80,15 +87,22 @@ export function PostRailActions(props: Props) {
         </h2>
         <ul className="-mx-2.5 flex flex-col">
           <RailRow
-            onClick={() => share.copy(props.url)}
+            onClick={() => {
+              report(props, "copy_link")
+              share.copy(props.url)
+            }}
             icon={<CopiedIcon status={share.status} icon={<LinkIcon aria-hidden="true" />} />}
           >
             {share.status === "copied" ? "Link copied" : "Copy link"}
           </RailRow>
-          <RailRow href={href.x} icon={<XMark />}>
+          <RailRow onClick={() => report(props, "share_x")} href={href.x} icon={<XMark />}>
             Share on X
           </RailRow>
-          <RailRow href={href.linkedIn} icon={<LinkedInMark />}>
+          <RailRow
+            onClick={() => report(props, "share_linkedin")}
+            href={href.linkedIn}
+            icon={<LinkedInMark />}
+          >
             Share on LinkedIn
           </RailRow>
         </ul>
@@ -99,18 +113,34 @@ export function PostRailActions(props: Props) {
         </h2>
         <ul className="-mx-2.5 flex flex-col">
           <RailRow
-            onClick={() => markdown.copy(() => fetchMarkdown(props.markdownPath))}
+            onClick={() => {
+              report(props, "copy_markdown")
+              markdown.copy(() => fetchMarkdown(props.markdownPath))
+            }}
             icon={<CopiedIcon status={markdown.status} icon={<CopyIcon aria-hidden="true" />} />}
           >
             {markdown.status === "copied" ? "Markdown copied" : "Copy as Markdown"}
           </RailRow>
-          <RailRow href={href.chatGpt} icon={<OpenAiLogo />}>
+          <RailRow
+            onClick={() => report(props, "open_chatgpt")}
+            href={href.chatGpt}
+            icon={<OpenAiLogo />}
+          >
             Open in ChatGPT
           </RailRow>
-          <RailRow href={href.claude} icon={<ClaudeLogo />}>
+          <RailRow
+            onClick={() => report(props, "open_claude")}
+            href={href.claude}
+            icon={<ClaudeLogo />}
+          >
             Open in Claude
           </RailRow>
-          <RailRow href={props.markdownPath} icon={<FileTextIcon aria-hidden="true" />} sameTab>
+          <RailRow
+            onClick={() => report(props, "view_markdown")}
+            href={props.markdownPath}
+            icon={<FileTextIcon aria-hidden="true" />}
+            sameTab
+          >
             View as Markdown
           </RailRow>
         </ul>
@@ -141,6 +171,7 @@ function RailRow({
       {href ? (
         <a
           href={href}
+          onClick={onClick}
           className={`${rowClass} group`}
           {...(sameTab ? {} : { target: "_blank", rel: "noopener noreferrer" })}
         >
@@ -202,13 +233,17 @@ export function PostActionsBar(props: Props) {
               <Menu.Item
                 className={itemClass}
                 closeOnClick={false}
-                onClick={() => share.copy(props.url)}
+                onClick={() => {
+                  report(props, "copy_link")
+                  share.copy(props.url)
+                }}
               >
                 <CopiedIcon status={share.status} icon={<LinkIcon aria-hidden="true" />} />
                 {share.status === "copied" ? "Link copied" : "Copy link"}
               </Menu.Item>
               <Menu.LinkItem
                 href={href.x}
+                onClick={() => report(props, "share_x")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={itemClass}
@@ -218,6 +253,7 @@ export function PostActionsBar(props: Props) {
               </Menu.LinkItem>
               <Menu.LinkItem
                 href={href.linkedIn}
+                onClick={() => report(props, "share_linkedin")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={itemClass}
@@ -241,13 +277,17 @@ export function PostActionsBar(props: Props) {
               <Menu.Item
                 className={itemClass}
                 closeOnClick={false}
-                onClick={() => markdown.copy(() => fetchMarkdown(props.markdownPath))}
+                onClick={() => {
+                  report(props, "copy_markdown")
+                  markdown.copy(() => fetchMarkdown(props.markdownPath))
+                }}
               >
                 <CopiedIcon status={markdown.status} icon={<CopyIcon aria-hidden="true" />} />
                 {markdown.status === "copied" ? "Markdown copied" : "Copy as Markdown"}
               </Menu.Item>
               <Menu.LinkItem
                 href={href.chatGpt}
+                onClick={() => report(props, "open_chatgpt")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={itemClass}
@@ -257,6 +297,7 @@ export function PostActionsBar(props: Props) {
               </Menu.LinkItem>
               <Menu.LinkItem
                 href={href.claude}
+                onClick={() => report(props, "open_claude")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={itemClass}
@@ -264,7 +305,11 @@ export function PostActionsBar(props: Props) {
                 <ClaudeLogo />
                 Open in Claude
               </Menu.LinkItem>
-              <Menu.LinkItem href={props.markdownPath} className={itemClass}>
+              <Menu.LinkItem
+                href={props.markdownPath}
+                onClick={() => report(props, "view_markdown")}
+                className={itemClass}
+              >
                 <FileTextIcon aria-hidden="true" />
                 View as Markdown
               </Menu.LinkItem>
