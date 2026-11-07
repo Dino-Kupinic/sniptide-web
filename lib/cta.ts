@@ -2,7 +2,7 @@ import { links } from "@/lib/links"
 
 // Which button was clicked: the destination says what it does, the closest section marked with
 // data-cta-location says where it sits (header, hero, product, features, recipes, secrets, sharing,
-// cta, footer).
+// cta, footer, and on the blog blog-post for links in an article and blog-inline for its InlineCta).
 export type CtaTarget =
   | "sign_up"
   | "sign_in"

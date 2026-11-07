@@ -96,7 +96,8 @@ export function FeatureGrid({ children }: { children: ReactNode }) {
 
 // A call to action inside a post, placed where the reader has enough context to act: a title, one
 // line on what to try, a primary link and an optional secondary one. Its props are plain strings,
-// so the Markdown twin still reads as a sentence and two links.
+// so the Markdown twin still reads as a sentence and two links. Clicks report as cta_clicked with
+// location blog-inline when the link is a known destination in lib/cta.ts, such as the sign-up page.
 export function InlineCta({
   title,
   description,
@@ -113,7 +114,10 @@ export function InlineCta({
   secondaryLabel?: string
 }) {
   return (
-    <aside className="not-prose relative my-8 overflow-hidden rounded-lg border bg-card px-5 py-5 md:px-6">
+    <aside
+      data-cta-location="blog-inline"
+      className="not-prose relative my-8 overflow-hidden rounded-lg border bg-card px-5 py-5 md:px-6"
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,color-mix(in_oklab,var(--link)_14%,transparent),transparent_55%)]"

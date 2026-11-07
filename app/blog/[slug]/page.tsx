@@ -11,6 +11,7 @@ import { PostActionsBar, PostRailActions } from "@/components/blog/post-actions"
 import { PostFooter } from "@/components/blog/post-footer"
 import { TableOfContents } from "@/components/blog/table-of-contents"
 import { ZoomImage } from "@/components/blog/zoom-image"
+import { FunnelTracking } from "@/components/funnel-tracking"
 import {
   blogPath,
   categories,
@@ -90,6 +91,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <BlogShell cta>
+      <FunnelTracking />
       <script
         type="application/ld+json"
         // Built from the post's frontmatter and escaped by serializeJsonLd.
@@ -101,7 +103,10 @@ export default async function Page({ params }: Props) {
         <LifeBackground className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] w-full opacity-[0.05] [mask-image:linear-gradient(to_bottom,black_0%,black_25%,transparent_90%)] dark:opacity-[0.09]" />
         {/* On wide screens the text keeps its 35rem column in the middle. The left rail holds the way
             back, the author and the actions, the right rail the contents, and both stay in view. */}
-        <article className="mx-auto grid w-full max-w-[1440px] px-5 pt-8 pb-12 md:px-10 md:pt-14 md:pb-16 lg:px-30 xl:grid-cols-[minmax(0,1fr)_35rem_minmax(0,1fr)] xl:gap-x-16">
+        <article
+          data-cta-location="blog-post"
+          className="mx-auto grid w-full max-w-[1440px] px-5 pt-8 pb-12 md:px-10 md:pt-14 md:pb-16 lg:px-30 xl:grid-cols-[minmax(0,1fr)_35rem_minmax(0,1fr)] xl:gap-x-16"
+        >
           <aside
             aria-label="About this post"
             className="hidden xl:col-start-1 xl:row-span-2 xl:row-start-1 xl:block xl:justify-self-end"
