@@ -90,51 +90,46 @@ For each tool we asked whether it can **save** all three files together, **share
 
 ## The comparison
 
-<Comparison
-  highlight="Sniptide"
-  columns={["Sniptide", "PrivateBin", "Opengist", "MicroBin", "GitHub Gist", "Pastebin"]}
-  groups={[
-    {
-      title: "Sharing",
-      rows: [
-        { label: "Several files per paste", values: ["Up to 10", "~Off by default", true, true, true, false] },
-        { label: "Password per paste", values: [true, true, false, false, false, false] },
-        { label: "Expiry", values: [true, true, false, true, false, true] },
-        { label: "Burn after reading", values: [true, true, false, false, false, true] },
-        { label: "Invite named people", values: ["View or edit", false, false, false, false, false] },
-        { label: "Encrypted in the browser", values: [false, true, false, "~Optional mode", false, false] },
-      ],
-    },
-    {
-      title: "Finding it again",
-      rows: [
-        { label: "Revision history", values: ["Compare and restore", false, true, false, true, false] },
-        { label: "Collections", values: [true, false, "~Topics", false, false, false] },
-        { label: "Search your snippets", values: [true, false, true, false, true, false] },
-        { label: "View analytics", values: ["Views, copies, referrers", false, false, false, false, "~View count"] },
-      ],
-    },
-    {
-      title: "Developer access",
-      rows: [
-        { label: "Raw file links", values: [true, false, true, true, true, true] },
-        { label: "Git clone and push", values: [false, false, true, false, true, false] },
-        { label: "CLI or API", values: ["CLI, SDKs, API", false, "~API", false, "gh, API", "API"] },
-        { label: "MCP for coding agents", values: [true, false, false, false, false, false] },
-        { label: "Sync .env files", values: [true, false, false, false, false, false] },
-      ],
-    },
-    {
-      title: "Hosting",
-      rows: [
-        { label: "Hosted service", values: [true, false, false, false, true, true] },
-        { label: "Self-host", values: ["One command", true, true, true, false, false] },
-        { label: "Open source", values: ["AGPL-3.0", true, "AGPL-3.0", "BSD-3-Clause", false, false] },
-      ],
-    },
-  ]}
-  caption="Sniptide publishes this comparison. From each project's docs, checked 7 November 2026. A dash means not supported or not documented."
-/>
+<Comparison highlight={1} caption="Sniptide publishes this comparison. From each project's docs, checked 7 November 2026. A dash means not supported or not documented.">
+
+| | Sniptide | PrivateBin | Opengist | MicroBin | GitHub Gist | Pastebin |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Sharing** | | | | | | |
+| Several files per paste | Up to 10 | ~Off by default | ✓ | ✓ | ✓ | – |
+| Custom link | ✓ | – | – | – | – | – |
+| Password per paste | ✓ | ✓ | – | – | – | – |
+| Expiry | ✓ | ✓ | – | ✓ | – | ✓ |
+| Burn after reading | ✓ | ✓ | – | – | – | ✓ |
+| Invite named people | View or edit | – | – | – | – | – |
+| Warns before you share a key | ✓ | – | – | – | – | – |
+| Encrypted in the browser | – | ✓ | – | ~Optional mode | – | – |
+| **Posting it** | | | | | | |
+| Code preview in link unfurls | ✓ | – | – | – | – | – |
+| Post to Slack or Discord | ✓ | – | – | – | – | – |
+| Embed on a page | ✓ | – | ✓ | – | ✓ | ✓ |
+| Print or save as PDF | ✓ | – | – | – | – | – |
+| **Finding it again** | | | | | | |
+| Revision history | Compare and restore | – | ✓ | – | ✓ | – |
+| Collections | ✓ | – | ~Topics | – | – | – |
+| Stars | ✓ | – | ✓ | – | ✓ | – |
+| Search your snippets | ✓ | – | ✓ | – | ✓ | – |
+| Trash with restore | 30 days | – | – | – | – | – |
+| Import from GitHub Gist | ✓ | – | – | – | – | – |
+| View analytics | Views, copies, referrers | – | – | – | – | ~View count |
+| **Agents and developers** | | | | | | |
+| MCP for coding agents | ✓ | – | – | – | – | – |
+| Install a collection as an agent skill | ✓ | – | – | – | – | – |
+| Markdown for agents | ✓ | – | – | – | – | – |
+| Sync .env files | ✓ | – | – | – | – | – |
+| CLI or API | CLI, SDKs, API | – | ~API | – | gh, API | API |
+| Raw file links | ✓ | – | ✓ | ✓ | ✓ | ✓ |
+| Git clone and push | – | – | ✓ | – | ✓ | – |
+| **Hosting** | | | | | | |
+| Hosted service | ✓ | – | – | – | ✓ | ✓ |
+| Self-host | One command | ✓ | ✓ | ✓ | – | – |
+| Open source | AGPL-3.0 | ✓ | AGPL-3.0 | BSD-3-Clause | – | – |
+
+</Comparison>
 
 {/* TODO(Dino): pastebin.com/faq refused automated fetches. Check the Pastebin.com column, especially burn after reading, before relying on it. */}
 
@@ -170,11 +165,36 @@ The word covers three different guarantees, and mixing them up is how secrets le
 
 Sniptide is built for the Discord problem from the top of this post: code you share today and need again in three months, from your browser, your terminal or your agent.
 
-<Figure
-  src="/blog/pastebin-alternatives/features.webp"
-  alt="Three cards. Share: up to 10 files per paste, custom links, private, unlisted or public, passwords and expiry, burn after reading, invite people to view or edit. Keep: collections and stars, revisions you can restore, search, import from Gist, trash for 30 days, views, copies and referrers. Reuse: MCP server for agents, CLI with search and pull, collections as skills, Markdown copy for agents, TypeScript and Python SDKs, encrypted .env groups."
-  caption="What Sniptide covers, on sniptide.com or your own server."
-/>
+<FeatureGrid>
+
+**Share**
+
+- Up to 10 files per paste
+- Short or custom links
+- Private, unlisted or public
+- Passwords and expiry
+- Burn after reading
+- Invite people to view or edit
+
+**Keep**
+
+- Collections and stars
+- Revisions you can restore
+- Search with ⌘K
+- Views, copies and referrers
+- Trash for 30 days
+- Import from Gist
+
+**Reuse**
+
+- MCP server for agents
+- CLI with search and pull
+- Collections as agent skills
+- Markdown copy for agents
+- TypeScript and Python SDKs
+- Encrypted .env groups
+
+</FeatureGrid>
 
 ### Share it the way you mean to
 

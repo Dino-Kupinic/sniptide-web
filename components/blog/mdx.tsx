@@ -2,7 +2,7 @@ import { Kbd } from "@sniptide/ui/components/kbd"
 import type { MDXComponents } from "mdx/types"
 import type { ComponentProps } from "react"
 import { CodeBlock } from "@/components/blog/code-block"
-import { Comparison } from "@/components/blog/comparison"
+import { Comparison, ComparisonCell, FeatureGrid } from "@/components/blog/comparison"
 import {
   Callout,
   Figure,
@@ -34,9 +34,12 @@ export const blogMdxComponents = {
       <div className="blog-cell">{children}</div>
     </th>
   ),
+  // A cell of "✓" or "–" draws as a marker, and "~note" as partial support (ComparisonCell).
   td: ({ children, ...props }: ComponentProps<"td">) => (
     <td {...props}>
-      <div className="blog-cell">{children}</div>
+      <div className="blog-cell">
+        <ComparisonCell>{children}</ComparisonCell>
+      </div>
     </td>
   ),
   // A Markdown picture (![alt](/blog/slug/picture.webp "Caption")) opens full screen with zoom,
@@ -64,6 +67,7 @@ export const blogMdxComponents = {
     ) : null,
   Callout,
   Comparison,
+  FeatureGrid,
   Figure,
   File,
   Files,

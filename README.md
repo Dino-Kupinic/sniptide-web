@@ -128,9 +128,11 @@ draft: true # optional
   structures, visuals and the next step a post asks for. Read it before drafting.
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
-  code with a `title`. `Comparison` (`components/blog/comparison.tsx`) draws a feature-by-product
-  table with grouped rows, check and dash markers, short notes and one tinted column, and breaks
-  out of the text column on wide screens. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
+  code with a `title`. `Comparison` (`components/blog/comparison.tsx`) wraps a plain Markdown table
+  and draws it as a feature-by-product comparison: bold rows become groups, `✓` and `–` cells become
+  markers, `~note` marks partial support and `highlight` tints one column. `FeatureGrid` lays out
+  bold lines with lists as dark feature cards. Both stay plain Markdown in the `.md` twin, so agents
+  read them. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
   sideways inside their frame, with the first column pinned.
@@ -203,9 +205,11 @@ draft: true # optional
   structures, visuals and the next step a post asks for. Read it before drafting.
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
-  code with a `title`. `Comparison` (`components/blog/comparison.tsx`) draws a feature-by-product
-  table with grouped rows, check and dash markers, short notes and one tinted column, and breaks
-  out of the text column on wide screens. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
+  code with a `title`. `Comparison` (`components/blog/comparison.tsx`) wraps a plain Markdown table
+  and draws it as a feature-by-product comparison: bold rows become groups, `✓` and `–` cells become
+  markers, `~note` marks partial support and `highlight` tints one column. `FeatureGrid` lays out
+  bold lines with lists as dark feature cards. Both stay plain Markdown in the `.md` twin, so agents
+  read them. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
   sideways inside their frame, with the first column pinned.
