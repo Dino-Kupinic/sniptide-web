@@ -223,8 +223,8 @@ draft: true # optional
 `/llms.txt` and `/llms-full.txt` ([llmstxt.org](https://llmstxt.org)) describe Sniptide for AI
 agents. Both are built from `lib/llms.ts`, so edit that file; they are real routes here, so the
 share-link fallback never proxies them to the app. The home page also carries JSON-LD
-(`Organization`, `WebSite`, `SoftwareApplication`) from `lib/structured-data.ts`. Wording comes from
-`docs/positioning.md` in the app repo: change claims there first, then here.
+(`Organization`, `WebSite`, `SoftwareApplication`) from `lib/structured-data.ts`. Shared product
+facts live in `lib/site.ts`.
 
 Documentation lives at https://docs.sniptide.com. Legacy `/docs`, `/docs/mcp`, and
 `/docs/auth` paths redirect to the canonical guides. `lib/agent-docs.ts` owns discovery links
