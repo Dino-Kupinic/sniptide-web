@@ -127,8 +127,16 @@ draft: true # optional
   structures, visuals and the next step a post asks for. Read it before drafting.
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
-  code with a `title`. Text sets at 18px on a 30px line (17px on 28px on phones) in a 35rem
-  column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its optical size axis for the whole site.
+  code with a `title`. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
+  column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
+  optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
+  sideways inside their frame, with the first column pinned.
+- **Post page.** The post's h2 and h3 headings form a table of contents
+  (`components/blog/table-of-contents.tsx`) beside the text from 1280px, where it marks the section
+  being read, and in a disclosure above the text on narrower screens. It shows once a post has two
+  headings. The byline holds share buttons for copying the link, X and LinkedIn
+  (`components/blog/share.tsx`), and every post ends with the landing page's closing call to
+  action above the footer (`BlogShell` with `cta`).
 - **Images.** Pictures go in `public/blog/<slug>/`, and author avatars in `public/blog/authors/`.
   Every picture, from `<Figure src darkSrc>` or a Markdown image, opens a full-screen viewer with
   zoom up to 4x, panning and pinch (`components/blog/zoom-image.tsx`).

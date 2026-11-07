@@ -4,6 +4,8 @@ import { notFound } from "next/navigation"
 import { BlogShell } from "@/components/blog/blog-shell"
 import { blogMdxComponents } from "@/components/blog/mdx"
 import { PostFooter } from "@/components/blog/post-footer"
+import { ShareButtons } from "@/components/blog/share"
+import { TableOfContents } from "@/components/blog/table-of-contents"
 import {
   blogPath,
   categories,
@@ -16,6 +18,7 @@ import {
   readingMinutes,
 } from "@/lib/blog"
 import { adjacentPosts, getPost, getPosts } from "@/lib/blog-source"
+import { siteUrl } from "@/lib/site"
 import { serializeJsonLd } from "@/lib/structured-data"
 
 type Props = { params: Promise<{ slug: string }> }
@@ -71,17 +74,21 @@ export default async function Page({ params }: Props) {
   const minutes = readingMinutes(await post.entry.getText("processed"))
   const Body = post.entry.body
   const { newer, older } = adjacentPosts(post.slug)
+  // The contents list needs at least two sections to be worth showing.
+  const hasToc = post.entry.toc.filter((item) => item.depth === 2 || item.depth === 3).length >= 2
 
   return (
-    <BlogShell>
+    <BlogShell cta>
       <script
         type="application/ld+json"
         // Built from the post's frontmatter and escaped by serializeJsonLd.
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be raw script text.
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(postStructuredData(post)) }}
       />
-      <article className="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-10 md:pt-16 md:pb-28 lg:px-30">
-        <div className="mx-auto max-w-[35rem]">
+      {/* On wide screens the text keeps its 35rem column in the middle and the table of contents
+          takes the right-hand track; the left track balances it. */}
+      <article className="mx-auto grid w-full max-w-[1440px] px-5 pt-10 pb-12 md:px-10 md:pt-16 md:pb-16 lg:px-30 xl:grid-cols-[minmax(0,1fr)_35rem_minmax(0,1fr)] xl:gap-x-16">
+        <header className="mx-auto w-full max-w-[35rem] xl:col-start-2">
           <nav
             aria-label="Breadcrumb"
             className="text-sm leading-5 font-medium text-muted-foreground"
@@ -111,23 +118,35 @@ export default async function Page({ params }: Props) {
               height={40}
               className="size-10 shrink-0 rounded-md"
             />
-            <div className="flex min-w-0 flex-col text-sm leading-5">
+            <div className="flex min-w-0 flex-1 flex-col text-sm leading-5">
               <a href={author.url} className="font-medium hover:underline">
                 {author.name}
               </a>
               <p className="text-muted-foreground tabular-nums">
-                <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+                <time dateTime={post.date} className="whitespace-nowrap">
+                  {formatPostDate(post.date)}
+                </time>
                 <span aria-hidden="true"> · </span>
-                {minutes} min read
+                <span className="whitespace-nowrap">{minutes} min read</span>
                 {post.draft && <span className="text-highlight"> · Draft</span>}
               </p>
             </div>
+            <ShareButtons title={post.title} url={`${siteUrl}${postPath(post.slug)}`} />
           </div>
+        </header>
 
+        {hasToc && (
+          <aside className="mx-auto mt-8 w-full max-w-[35rem] xl:col-start-3 xl:row-span-2 xl:row-start-2 xl:mx-0 xl:mt-10 xl:max-w-60">
+            <div className="xl:sticky xl:top-24">
+              <TableOfContents items={post.entry.toc} />
+            </div>
+          </aside>
+        )}
+
+        <div className="mx-auto w-full max-w-[35rem] min-w-0 xl:col-start-2 xl:row-start-2">
           <div className="blog-prose mt-10">
             <Body components={blogMdxComponents} />
           </div>
-
           <PostFooter post={post} newer={newer} older={older} />
         </div>
       </article>

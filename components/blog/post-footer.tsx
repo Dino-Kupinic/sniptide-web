@@ -1,9 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
-import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 import { type PostMeta, postPath } from "@/lib/blog"
-import { links } from "@/lib/links"
 
-// The end of a post: its tags, one way into the product, and the posts on either side of it.
+// The end of a post: its tags and the posts on either side of it. The way into the product is the
+// wide call to action below the post (BlogShell).
 export function PostFooter({
   post,
   newer,
@@ -26,31 +25,6 @@ export function PostFooter({
           ))}
         </p>
       )}
-
-      <section
-        aria-labelledby="post-cta"
-        className="flex flex-col gap-5 rounded-lg border bg-card p-6 md:flex-row md:items-center md:justify-between"
-      >
-        <div className="flex flex-col gap-1">
-          <h2
-            id="post-cta"
-            className="font-heading text-xl leading-7 font-medium tracking-[-0.02em]"
-          >
-            Give your agent a snippet library
-          </h2>
-          <p className="text-[0.9375rem] leading-6 text-muted-foreground">
-            Use the hosted app, or run Sniptide on your own server.
-          </p>
-        </div>
-        <div className="flex shrink-0 gap-3">
-          <a href={links.docs} className={secondaryButton}>
-            Read the docs
-          </a>
-          <a href={links.signUp} className={primaryButton}>
-            Get started
-          </a>
-        </div>
-      </section>
 
       {(newer || older) && (
         <nav aria-label="More posts" className="grid gap-3 sm:grid-cols-2">
