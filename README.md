@@ -131,7 +131,7 @@ draft: true # optional
   code with a `title`. `Comparison` (`components/blog/comparison.tsx`) wraps a plain Markdown table
   and draws it as a feature-by-product comparison: bold rows become groups, `✓` and `–` cells become
   markers, `~note` marks partial support and `highlight` tints one column. `FeatureGrid` lays out
-  bold lines with lists as dark feature cards. Both stay plain Markdown in the `.md` twin, so agents
+  bold lines with lists as feature cards, and `InlineCta` places a call to action inside a post. Both stay plain Markdown in the `.md` twin, so agents
   read them. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
@@ -208,7 +208,7 @@ draft: true # optional
   code with a `title`. `Comparison` (`components/blog/comparison.tsx`) wraps a plain Markdown table
   and draws it as a feature-by-product comparison: bold rows become groups, `✓` and `–` cells become
   markers, `~note` marks partial support and `highlight` tints one column. `FeatureGrid` lays out
-  bold lines with lists as dark feature cards. Both stay plain Markdown in the `.md` twin, so agents
+  bold lines with lists as feature cards, and `InlineCta` places a call to action inside a post. Both stay plain Markdown in the `.md` twin, so agents
   read them. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll

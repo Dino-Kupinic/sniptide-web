@@ -114,7 +114,6 @@ For each tool we asked whether it can **save** all three files together, **share
 | Stars | ✓ | – | ✓ | – | ✓ | – |
 | Search your snippets | ✓ | – | ✓ | – | ✓ | – |
 | Trash with restore | 30 days | – | – | – | – | – |
-| Import from GitHub Gist | ✓ | – | – | – | – | – |
 | View analytics | Views, copies, referrers | – | – | – | – | ~View count |
 | **Agents and developers** | | | | | | |
 | MCP for coding agents | ✓ | – | – | – | – | – |
@@ -149,7 +148,18 @@ The word covers three different guarantees, and mixing them up is how secrets le
 
 **The link is the secret.** An unlisted paste and a secret gist work the same way. GitHub's documentation says it directly: "Secret gists aren't private." Treat an unlisted link like a password you have already sent.
 
+<InlineCta
+  title="Try it with the same three files"
+  description="Paste server.js, health.js and .env.example into one Sniptide paste, set it to unlisted and open the link in a private window."
+  href="https://sniptide.com"
+  label="Try Sniptide"
+  secondaryHref="https://docs.sniptide.com/self-hosting"
+  secondaryLabel="Self-host it"
+/>
+
 ## When each tool is the better choice
+
+**Sniptide** fits when you'll need the code again. Multi-file pastes with passwords, expiry and invites cover the handoff, while collections, search and revisions keep it findable months later. It's also the only tool here your coding agent can search and read over MCP, on sniptide.com or on your own server.
 
 **PrivateBin** fits when the person running the server shouldn't be able to read the paste. With no accounts and only ciphertext on the server, there is nothing to search and nowhere to collect your pastes, so it's built for handing something over rather than keeping it.
 
@@ -229,12 +239,6 @@ Two gaps matter for this comparison. Nothing is encrypted in your browser, so Pr
 Before you share anything sensitive on any of these tools, check three things: whether the link alone opens it, when it expires, and who can read it on the server.
 
 {/* TODO(Dino): link Day 8 (code snippet managers), Day 10 (self-hosted pastebin), Day 5 (Claude Code MCP) and Day 6 (Cursor MCP) here as each goes live. */}
-
-## Try it with the same three files
-
-<Callout type="tip" title="Create your first paste">
-Paste `server.js`, `health.js` and `.env.example` into a [new Sniptide paste](https://sniptide.com), set it to unlisted and open the link in a private window. To run it on your own server, the [self-hosting guide](https://docs.sniptide.com/self-hosting) starts with one command.
-</Callout>
 
 ## Sources
 

@@ -2,7 +2,7 @@ import { Kbd } from "@sniptide/ui/components/kbd"
 import type { MDXComponents } from "mdx/types"
 import type { ComponentProps } from "react"
 import { CodeBlock } from "@/components/blog/code-block"
-import { Comparison, ComparisonCell, FeatureGrid } from "@/components/blog/comparison"
+import { Comparison, ComparisonCell, FeatureGrid, InlineCta } from "@/components/blog/comparison"
 import {
   Callout,
   Figure,
@@ -68,6 +68,7 @@ export const blogMdxComponents = {
   Callout,
   Comparison,
   FeatureGrid,
+  InlineCta,
   Figure,
   File,
   Files,

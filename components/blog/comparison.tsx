@@ -1,5 +1,6 @@
 import { CheckIcon, MinusIcon } from "lucide-react"
 import type { ReactNode } from "react"
+import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 
 // A feature-by-product comparison for posts that compare tools. The post writes it as a plain
 // Markdown table inside <Comparison>, so the Markdown twin and agents read an ordinary table:
@@ -30,7 +31,7 @@ export function Comparison({
 }) {
   return (
     <figure
-      className="blog-comparison lg:-mx-16"
+      className="blog-comparison lg:-mr-12 lg:-ml-16"
       data-highlight={highlight ? highlight + 1 : undefined}
     >
       {children}
@@ -90,5 +91,51 @@ export function ComparisonCell({ children }: { children: ReactNode }) {
 //
 // The styles live under .blog-feature-grid in app/globals.css.
 export function FeatureGrid({ children }: { children: ReactNode }) {
-  return <div className="blog-feature-grid lg:-mx-16">{children}</div>
+  return <div className="blog-feature-grid lg:-mr-12 lg:-ml-16">{children}</div>
+}
+
+// A call to action inside a post, placed where the reader has enough context to act: a title, one
+// line on what to try, a primary link and an optional secondary one. Its props are plain strings,
+// so the Markdown twin still reads as a sentence and two links.
+export function InlineCta({
+  title,
+  description,
+  href,
+  label,
+  secondaryHref,
+  secondaryLabel,
+}: {
+  title: string
+  description: string
+  href: string
+  label: string
+  secondaryHref?: string
+  secondaryLabel?: string
+}) {
+  return (
+    <aside className="not-prose relative my-8 overflow-hidden rounded-lg border bg-card px-5 py-5 md:px-6">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,color-mix(in_oklab,var(--link)_14%,transparent),transparent_55%)]"
+      />
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+        <div className="flex min-w-0 flex-col gap-1">
+          <p className="font-heading text-lg leading-6 font-medium tracking-[-0.02em]">{title}</p>
+          <p className="text-[0.9375rem] leading-6 text-pretty text-muted-foreground">
+            {description}
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <a href={href} className={primaryButton}>
+            {label}
+          </a>
+          {secondaryHref && secondaryLabel && (
+            <a href={secondaryHref} className={secondaryButton}>
+              {secondaryLabel}
+            </a>
+          )}
+        </div>
+      </div>
+    </aside>
+  )
 }
