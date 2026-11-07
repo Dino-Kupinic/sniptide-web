@@ -196,7 +196,7 @@ export type FigureProps = HTMLAttributes<HTMLElement> &
 
 // A picture with a caption that says what the reader should notice. Given a src (and a darkSrc for
 // dark mode), it shows a picture that opens full screen with zoom; otherwise it frames its
-// children. The caption sits below in the secondary text colour at 14px.
+// children. The caption sits centered below in the secondary text colour at 13px.
 export function Figure({
   caption,
   src,
@@ -210,14 +210,16 @@ export function Figure({
 }: FigureProps) {
   return (
     <figure {...props} className={cn("not-prose", className)}>
-      <div className="overflow-hidden rounded-lg border bg-card [&_img]:block [&_img]:w-full">
+      <div className="overflow-hidden rounded-lg border bg-card">
         {src ? (
           <ZoomImage src={src} darkSrc={darkSrc} alt={alt} width={width} height={height} />
         ) : (
           children
         )}
       </div>
-      <figcaption className="mt-2.5 text-sm leading-5 text-muted-foreground">{caption}</figcaption>
+      <figcaption className="mx-auto mt-3 max-w-[30rem] text-center text-[0.8125rem] leading-5 text-pretty text-muted-foreground">
+        {caption}
+      </figcaption>
     </figure>
   )
 }

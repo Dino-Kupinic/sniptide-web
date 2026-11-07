@@ -38,16 +38,27 @@ export const blogMdxComponents = {
       <div className="blog-cell">{children}</div>
     </td>
   ),
-  // A Markdown picture (![alt](/blog/slug/picture.webp)) opens full screen with zoom, like a Figure.
-  img: ({ src, alt = "", width, height }: ComponentProps<"img">) =>
+  // A Markdown picture (![alt](/blog/slug/picture.webp "Caption")) opens full screen with zoom,
+  // like a Figure, and shows its title (or its alt text) centered below as the caption.
+  img: ({ src, alt = "", title, width, height }: ComponentProps<"img">) =>
     typeof src === "string" ? (
-      <span className="block overflow-hidden rounded-lg border bg-card">
-        <ZoomImage
-          src={src}
-          alt={alt}
-          width={typeof width === "number" ? width : undefined}
-          height={typeof height === "number" ? height : undefined}
-        />
+      <span className="block">
+        <span className="block overflow-hidden rounded-lg border bg-card">
+          <ZoomImage
+            src={src}
+            alt={alt}
+            width={typeof width === "number" ? width : undefined}
+            height={typeof height === "number" ? height : undefined}
+          />
+        </span>
+        {(title || alt) && (
+          <span
+            aria-hidden={title ? undefined : true}
+            className="mx-auto mt-3 block max-w-[30rem] text-center text-[0.8125rem] leading-5 text-pretty text-muted-foreground"
+          >
+            {title || alt}
+          </span>
+        )}
       </span>
     ) : null,
   Callout,

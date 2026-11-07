@@ -10,6 +10,7 @@ import { blogMdxComponents } from "@/components/blog/mdx"
 import { PostActionsBar, PostRailActions } from "@/components/blog/post-actions"
 import { PostFooter } from "@/components/blog/post-footer"
 import { TableOfContents } from "@/components/blog/table-of-contents"
+import { ZoomImage } from "@/components/blog/zoom-image"
 import {
   blogPath,
   categories,
@@ -170,6 +171,11 @@ export default async function Page({ params }: Props) {
               <PostActionsBar {...actions} />
             </div>
             <div className="mt-10 hidden border-b xl:block" />
+            {post.cover && (
+              <div className="mt-10 overflow-hidden rounded-lg border bg-card">
+                <ZoomImage src={post.cover} darkSrc={post.coverDark} alt={post.coverAlt ?? ""} />
+              </div>
+            )}
           </header>
 
           {hasToc && (
@@ -184,7 +190,7 @@ export default async function Page({ params }: Props) {
             <div className="blog-prose mt-10">
               <Body components={blogMdxComponents} />
             </div>
-            <PostFooter post={post} newer={newer} older={older} />
+            <PostFooter newer={newer} older={older} />
           </div>
         </article>
       </div>

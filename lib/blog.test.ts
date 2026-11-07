@@ -46,6 +46,14 @@ describe("blog posts", () => {
     )
   })
 
+  test("every post has a main picture and a share picture", () => {
+    for (const entry of getAllPosts()) {
+      expect(entry.cover, entry.slug).toBeDefined()
+      expect(entry.coverAlt, entry.slug).toBeDefined()
+      expect(entry.image, entry.slug).toBeDefined()
+    }
+  })
+
   test("the schema rejects an unknown author and a short description", () => {
     expect(postSchema.safeParse({ ...post(), author: "nobody" }).success).toBe(false)
     expect(postSchema.safeParse({ ...post(), description: "Too short." }).success).toBe(false)

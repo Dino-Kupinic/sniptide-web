@@ -27,10 +27,12 @@ export const postSchema = z.object({
   tags: z.array(z.string().regex(/^[a-z0-9-]+$/)).default([]),
   // A replacement for the generated Open Graph card, as a path under public/.
   image: z.string().startsWith("/").optional(),
-  // A picture for the top of the index, as a path under public/, with an optional dark version.
-  // Use a real screen from the product. Posts without one get a text-only hero.
+  // The post's main picture, as a path under public/, with an optional dark version. It sits at
+  // the top of the post and of the index. Use a real screen from the product. Every post needs one
+  // (lib/blog.test.ts checks), and coverAlt describes it for screen readers.
   cover: z.string().startsWith("/").optional(),
   coverDark: z.string().startsWith("/").optional(),
+  coverAlt: z.string().optional(),
   // Pins the post to the top of the index in place of the newest one.
   featured: z.boolean().default(false),
   // Drafts render in development and are left out of production builds, the sitemap and the feed.

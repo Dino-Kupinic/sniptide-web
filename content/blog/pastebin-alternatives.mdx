@@ -5,7 +5,10 @@ date: 2026-11-08
 author: dino
 category: product
 tags: [comparison, pastebin, self-hosting, privatebin, gist]
-draft: true
+cover: /blog/pastebin-alternatives/cover.webp
+coverDark: /blog/pastebin-alternatives/cover-dark.webp
+coverAlt: A Sniptide paste with a TypeScript retry helper and its sharing panel open, showing visibility, expiry, password and burn after reading.
+image: /blog/pastebin-alternatives/share.png
 ---
 
 {/*
@@ -19,8 +22,8 @@ Evidence and sources: first-party READMEs and docs, checked 7 November 2026 (lis
 Opening move: position
 Main sections: quick pick, how we compared, matrix, what "private" means, best fit per tool, switching, first step
 Running example: a three-file Express health check with fake values
-Visuals: comparison tables now. Hands-on screenshots still missing (see TODO).
-Limitations: Sniptide needs an account, has no browser-side encryption and is not a secrets manager. Pastebin.com facts could not be fetched.
+Visuals: Sniptide screenshots from demo.sniptide.com, a diagram of the three privacy models. Competitor screenshots still missing (see TODO).
+Limitations: Sniptide has no browser-side encryption and is not a secrets manager. Pastebin.com facts could not be fetched.
 Primary CTA: create a first paste. Secondary: self-host.
 Facts to verify before publication: every matrix cell, versions, and Pastebin.com guest limits.
 Keyword: pastebin alternative (US 1K to 10K). Route: /blog/pastebin-alternatives.
@@ -71,7 +74,7 @@ The answers below come from each project's own README or documentation, checked 
 
 | | Accounts | Several files | Hosting | Getting files back | Privacy model |
 | --- | --- | --- | --- | --- | --- |
-| **Sniptide** | Needed to create pastes. Readers need none | Yes, up to 10 per paste | Hosted, or self-host (AGPL-3.0) | Raw file links, a Markdown copy for agents, CLI `pull`, MCP | Private, unlisted or public, with password, expiry and burn after read. Stored on the server |
+| **Sniptide** | Readers need no account | Yes, up to 10 per paste | Hosted, or self-host (AGPL-3.0) | Raw file links, a Markdown copy for agents, CLI `pull`, MCP | Private, unlisted or public, with password, expiry and burn after read. Stored on the server |
 | **PrivateBin** | None | File upload, off by default | Self-host | Not documented | Encrypted in the browser with 256-bit AES, key in the link. Password, expiry, burn after read |
 | **Opengist** | OAuth2 with GitHub, GitLab, Gitea or OpenID Connect | Yes, with ZIP download | Self-host (AGPL-3.0) | Raw files, ZIP, Git clone and push over HTTP or SSH | Public, unlisted or private. Stored on the server |
 | **MicroBin** | No user accounts documented | Yes, multiple attachments | Self-host (BSD-3-Clause) | Raw text links | Private or public, expiring or permanent. Server-side and client-side encryption modes |
@@ -90,6 +93,13 @@ The word covers three different guarantees here, and mixing them up is how secre
 
 **The link is the secret.** An unlisted paste and a secret gist work the same way. GitHub's documentation says it directly: "Secret gists aren't private." Treat an unlisted link like a password you have already sent.
 
+<Figure
+  src="/blog/pastebin-alternatives/privacy-models.svg"
+  darkSrc="/blog/pastebin-alternatives/privacy-models-dark.svg"
+  alt="Three columns. Encrypted in the browser: the browser encrypts, the server stores ciphertext, the reader decrypts with the key in the link. Access rules on the server: the server stores the code and checks who may open it. The link is the secret: anyone who has the link can read it."
+  caption="Where each privacy model draws the line. The highlighted step is the one that protects the paste."
+/>
+
 Sniptide also encrypts the values in its env groups at rest, with a key the server holds. That protects the database and its backups. It is still server-side encryption, so if you need a server that can't read your text, use PrivateBin.
 
 ## When each tool is the better choice
@@ -104,7 +114,14 @@ Sniptide also encrypts the values in its env groups at rest, with a key the serv
 
 **Pastebin.com** remains the fastest route for a short, public, single-file paste. It stops fitting once you need several files, your own server, or a private link for someone without an account.
 
-**Sniptide** fits when a paste is more than a handoff. You can share code with a password, an expiry or a single read, then keep the good pastes in collections that Claude Code, Codex or Cursor can search over MCP, and sync a project's `.env` from the same account. The gaps are real: you need an account to create pastes, nothing is encrypted in your browser, and env groups have no rotation or audit trail, so it isn't a secrets manager.
+**Sniptide** fits when a paste is more than a handoff. You can share code with a password, an expiry or a single read, then keep the good pastes in collections that Claude Code, Codex or Cursor can search over MCP, and sync a project's `.env` from the same place. Two gaps matter for this comparison: nothing is encrypted in your browser, and env groups have no rotation or audit trail, so it isn't a secrets manager.
+
+<Figure
+  src="/blog/pastebin-alternatives/sharing.webp"
+  darkSrc="/blog/pastebin-alternatives/sharing-dark.webp"
+  alt="A Sniptide paste with a TypeScript retry helper. The Sharing panel shows the link and the Private, Unlisted and Public options, and the Access panel shows expiry, password, burn after reading and raw access."
+  caption="Sniptide's sharing settings sit beside the code: visibility, expiry, password, burn after reading and raw access for one paste."
+/>
 
 ## Moving your snippets over
 
@@ -112,6 +129,13 @@ Most of the work in switching is getting existing snippets across.
 
 - **From Gist.** Sniptide's **Import gist** copies the files of a public gist into a new paste. It can't read secret gists, so make the gist public first or copy its files by hand. Opengist can take a gist with a plain `git clone` and push.
 - **From Pastebin.com.** Copy each paste's raw text into the new tool. A three-file project becomes one paste in Sniptide, Opengist or Gist.
+
+<Figure
+  src="/blog/pastebin-alternatives/library.webp"
+  darkSrc="/blog/pastebin-alternatives/library-dark.webp"
+  alt="The My pastes list in Sniptide with eight pastes in Shell, Markdown, TypeScript, Nginx, SQL and YAML, each with its visibility, views and expiry."
+  caption="Once your snippets are in, they form one searchable list with language, visibility and view counts. These are the demo's sample pastes."
+/>
 
 Before you share anything sensitive on any of these tools, check three things: whether the link alone opens it, when it expires, and who can read it on the server.
 

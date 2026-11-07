@@ -105,9 +105,10 @@ updated: 2026-11-24 # optional
 author: dino # a key in lib/authors.ts
 category: agents # product, engineering, agents, self-hosting or company
 tags: [collections, mcp] # optional
-cover: /blog/agent-recipes/cover-light.webp # optional, the featured panel on the index
+cover: /blog/agent-recipes/cover-light.webp # the main picture, at the top of the post and the index
 coverDark: /blog/agent-recipes/cover-dark.webp # optional
-image: /blog/agent-recipes/share.png # optional, replaces the generated share card
+coverAlt: The collection page with three snippets. # describes the cover for screen readers
+image: /blog/agent-recipes/share.png # the 1200 by 630 share card
 featured: true # optional, pins the post to the top of the index
 draft: true # optional
 ---
@@ -177,9 +178,10 @@ updated: 2026-11-24 # optional
 author: dino # a key in lib/authors.ts
 category: agents # product, engineering, agents, self-hosting or company
 tags: [collections, mcp] # optional
-cover: /blog/agent-recipes/cover-light.webp # optional, the featured panel on the index
+cover: /blog/agent-recipes/cover-light.webp # the main picture, at the top of the post and the index
 coverDark: /blog/agent-recipes/cover-dark.webp # optional
-image: /blog/agent-recipes/share.png # optional, replaces the generated share card
+coverAlt: The collection page with three snippets. # describes the cover for screen readers
+image: /blog/agent-recipes/share.png # the 1200 by 630 share card
 featured: true # optional, pins the post to the top of the index
 draft: true # optional
 ---
@@ -210,8 +212,12 @@ draft: true # optional
   (`components/blog/share.tsx`), and every post ends with the landing page's closing call to
   action above the footer (`BlogShell` with `cta`).
 - **Images.** Pictures go in `public/blog/<slug>/`, and author avatars in `public/blog/authors/`.
-  Every picture, from `<Figure src darkSrc>` or a Markdown image, opens a full-screen viewer with
-  zoom up to 4x, panning and pinch (`components/blog/zoom-image.tsx`).
+  Every post needs a `cover`, a `coverAlt` and an `image` (the blog tests check), so the post, the
+  index and link previews always show a picture. The cover sits at the top of the post under the
+  description. Every picture, from `<Figure src darkSrc>` or a Markdown image, opens a full-screen
+  viewer with zoom up to 4x, panning and pinch (`components/blog/zoom-image.tsx`), and shows its
+  caption centered below in smaller text. A Markdown image uses its title, or its alt text, as the
+  caption.
 - **Feeds and previews.** `/blog/rss.xml`, `/blog/atom.xml` and `/blog/feed.json` (JSON Feed 1.1)
   list the latest 20 posts, and the Subscribe menu on the index offers all three. Each post gets an Open Graph
   card with its title (`renderPostOgImage` in `lib/og.tsx`), `BlogPosting` JSON-LD, a sitemap entry
