@@ -71,7 +71,7 @@ function TocList({ items, active }: { items: TocItem[]; active?: string }) {
 }
 
 // The post's h2 and h3 headings. Wide screens keep the list beside the text and mark the section
-// being read; narrower screens fold it into a disclosure above the text.
+// being read; narrower screens fold it into a plain disclosure above the text.
 export function TableOfContents({ items }: { items: TocItem[] }) {
   const shown = useMemo(() => items.filter((item) => item.depth >= 2 && item.depth <= 3), [items])
   const ids = useMemo(() => shown.map((item) => item.url.slice(1)), [shown])
@@ -84,15 +84,15 @@ export function TableOfContents({ items }: { items: TocItem[] }) {
         <h2 className="mb-3 text-sm leading-5 font-medium">On this page</h2>
         <TocList items={shown} active={active} />
       </nav>
-      <details className="group rounded-lg border xl:hidden">
-        <summary className="flex h-11 cursor-pointer list-none items-center justify-between px-4 text-sm leading-5 font-medium select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link [&::-webkit-details-marker]:hidden">
+      <details className="group xl:hidden">
+        <summary className="flex h-10 cursor-pointer list-none items-center justify-between text-sm leading-5 font-medium select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link [&::-webkit-details-marker]:hidden">
           On this page
           <ChevronDownIcon
             aria-hidden="true"
             className="size-4 text-muted-foreground transition-transform group-open:rotate-180 motion-reduce:transition-none"
           />
         </summary>
-        <nav aria-label="On this page" className="px-4 pb-3">
+        <nav aria-label="On this page" className="pt-1 pb-2">
           <TocList items={shown} />
         </nav>
       </details>

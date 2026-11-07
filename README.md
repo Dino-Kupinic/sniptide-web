@@ -131,6 +131,78 @@ draft: true # optional
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
   sideways inside their frame, with the first column pinned.
+- **Post page.** From 1280px the text sits between two sticky rails. The left one holds an "All
+  posts" link, the author and two groups of actions (`components/blog/post-actions.tsx`): sharing
+  (copy link, X, LinkedIn) and reading with AI (copy the post's Markdown, open it in ChatGPT or
+  Claude, or view the `.md` twin). The right one lists the post's h2 and h3 headings and marks the
+  section being read (`components/blog/table-of-contents.tsx`); it shows once a post has two
+  headings. On narrower screens the back link sits above the title, the actions become a Share
+  menu and a Read with AI menu under the byline, and the contents fold into a disclosure. A fainter
+  copy of the index's Game of Life runs behind the top of the post, and every post ends with the
+  landing page's closing call to action above the footer (`BlogShell` with `cta`).
+- **Images.** `app/opengraph-image.tsx` and `app/twitter-image.tsx` render the 1200 by 630 card
+  with the large white logo in the middle of a black field (`lib/og.tsx`).
+  They are generated once at build time, and Next adds the tags to every page.
+- **Crawling.** `app/robots.ts` allows everything and links the sitemap, and `app/sitemap.ts` lists
+  the paths in `sitemapPaths` (`lib/site.ts`). Add a page's path there when it ships.
+- **Structured data.** See the next section.
+
+A route here shadows a paste link with the same name, because this site answers first and only
+unknown paths go to the app. When you add a route whose name could be a paste link (such as
+`/opengraph-image`), add it to `RESERVED` in `apps/web/lib/pastes/store.ts` in the app repo too.
+
+### Legal pages
+
+`/impressum`, `/privacy` and `/terms` are linked from the footer. They are templates, not legal
+advice. The operator's name, address, register entries, hosting provider and similar details live
+in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
+the privacy policy says PostHog stores events in the EU or the US follows
+`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
+`privacy` or `impressum` is shadowed here; the app should reserve them.
+
+### Blog
+
+Posts are MDX files in `content/blog`, and the file name is the address (`content/blog/foo.mdx` is
+`/blog/foo`). fumadocs-mdx compiles them when the site builds (`lib/blog-source.ts`), and the
+frontmatter schema in `lib/blog.ts` fails the build on a missing field or an author that isn't in
+`lib/authors.ts`. Every post has one `category` from `categories` in `lib/blog.ts`. `draft: true`
+keeps a post out of production builds, the sitemap and the feeds.
+
+```yaml
+---
+title: Teach your agent a recipe # at most 70 characters
+description: Collections give a coding agent an ordered set of snippets to follow. # 50 to 160
+date: 2026-11-20
+updated: 2026-11-24 # optional
+author: dino # a key in lib/authors.ts
+category: agents # product, engineering, agents, self-hosting or company
+tags: [collections, mcp] # optional
+cover: /blog/agent-recipes/cover-light.webp # optional, the featured panel on the index
+coverDark: /blog/agent-recipes/cover-dark.webp # optional
+image: /blog/agent-recipes/share.png # optional, replaces the generated share card
+featured: true # optional, pins the post to the top of the index
+draft: true # optional
+---
+```
+
+- **Index.** `/blog` opens with one big featured post: the newest, or the newest with
+  `featured: true`, shown with its `cover` picture or its share picture. A faint Game of Life
+  (`components/blog/life-background.tsx`) runs behind the title and the featured post, pauses off
+  screen and stays still under reduced motion. Below it, a category filter
+  and a search over titles, descriptions, tags and post text sit above a grid of cards, each with the
+  post's share picture (`image`, or the generated Open Graph card), a category badge, the date, the
+  title and the description. The grid shows nine cards and adds nine more as the reader scrolls
+  (`components/blog/blog-index.tsx`). The filters live in the URL
+  (`/blog?category=engineering&q=mcp`), so a filtered list can be shared.
+
+- **Style.** `docs/blog-style-guide.md` covers choosing a topic, titles, openings, article
+  structures, visuals and the next step a post asks for. Read it before drafting.
+- **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
+  `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
+  code with a `title`. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
+  column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
+  optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
+  sideways inside their frame, with the first column pinned.
 - **Post page.** The post's h2 and h3 headings form a table of contents
   (`components/blog/table-of-contents.tsx`) beside the text from 1280px, where it marks the section
   being read, and in a disclosure above the text on narrower screens. It shows once a post has two
