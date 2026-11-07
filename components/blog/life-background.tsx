@@ -33,7 +33,7 @@ export function LifeBackground({ className }: { className?: string }) {
 
     function seed() {
       for (let i = 0; i < board.length; i++) {
-        board[i] = Math.random() < 0.18 ? 1 : 0
+        board[i] = Math.random() < 0.07 ? 1 : 0
         age[i] = 0
       }
       generation = 0

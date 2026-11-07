@@ -30,6 +30,11 @@ export function getPosts(): Post[] {
   return publishedPosts(allPosts)
 }
 
+// Every post, drafts included, for checks that look at the files rather than the site.
+export function getAllPosts(): Post[] {
+  return publishedPosts(allPosts, true)
+}
+
 export function getPost(slug: string): Post | undefined {
   return getPosts().find((post) => post.slug === slug)
 }
