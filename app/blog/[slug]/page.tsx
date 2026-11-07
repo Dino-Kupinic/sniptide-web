@@ -119,7 +119,7 @@ export default async function Page({ params }: Props) {
                   <a href={author.url} className="font-medium hover:underline">
                     {author.name}
                   </a>
-                  <span className="text-muted-foreground tabular-nums">{minutes} min read</span>
+                  <span className="text-muted-foreground">{author.role}</span>
                 </div>
               </div>
               <PostRailActions {...actions} />
@@ -136,8 +136,14 @@ export default async function Page({ params }: Props) {
                   {categories[post.category]}
                 </Badge>
               </a>
-              <time dateTime={post.date}>{formatPostDate(post.date)}</time>
               {post.draft && <span className="text-highlight">Draft</span>}
+              <span className="ml-auto text-right">
+                <time dateTime={post.date} className="whitespace-nowrap">
+                  {formatPostDate(post.date)}
+                </time>
+                <span aria-hidden="true"> · </span>
+                <span className="whitespace-nowrap">{minutes} min read</span>
+              </span>
             </p>
             <h1 className="mt-5 font-heading text-[34px] leading-10 font-medium tracking-[-0.03em] text-balance md:text-5xl md:leading-[3.5rem]">
               {post.title}
@@ -158,7 +164,7 @@ export default async function Page({ params }: Props) {
                   <a href={author.url} className="font-medium hover:underline">
                     {author.name}
                   </a>
-                  <span className="text-muted-foreground tabular-nums">{minutes} min read</span>
+                  <span className="text-muted-foreground">{author.role}</span>
                 </div>
               </div>
               <PostActionsBar {...actions} />
