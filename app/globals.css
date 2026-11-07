@@ -398,6 +398,45 @@ p {
   border-top: 1px solid var(--border);
 }
 
+/* The Comparison component (components/blog/comparison.tsx) is a table with its own layout: equal
+   product columns that fit the frame on wide screens, a tinted highlight column and group rows. */
+.blog-prose .blog-comparison table {
+  width: 100%;
+  min-width: 40rem;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.blog-prose .blog-comparison :is(th, td) {
+  padding: 0.75rem 0.625rem;
+  border-top: 1px solid var(--border);
+}
+
+.blog-prose .blog-comparison thead th {
+  border-top: 0;
+  background-color: var(--background);
+}
+
+.blog-prose .blog-comparison :is(th, td):first-child {
+  padding-inline-start: 0.875rem;
+  font-weight: 400;
+}
+
+.blog-prose .blog-comparison th[scope="colgroup"] {
+  padding-block: 0.5rem;
+  background-color: color-mix(in oklab, var(--muted) 60%, var(--background));
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.blog-prose .blog-comparison [data-highlight] {
+  background-color: color-mix(in oklab, var(--link) 7%, var(--background));
+}
+
+.blog-prose .blog-comparison thead th[data-highlight] {
+  font-weight: 600;
+}
+
 /* Numbers line up in right-aligned columns. Inter's tabular figures also widen the hyphen, so
    text columns keep the default figures. */
 .blog-prose :is(td, th)[align="right"] {

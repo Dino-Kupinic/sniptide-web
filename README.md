@@ -128,7 +128,9 @@ draft: true # optional
   structures, visuals and the next step a post asks for. Read it before drafting.
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
-  code with a `title`. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
+  code with a `title`. `Comparison` (`components/blog/comparison.tsx`) draws a feature-by-product
+  table with grouped rows, check and dash markers, short notes and one tinted column, and breaks
+  out of the text column on wide screens. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
   sideways inside their frame, with the first column pinned.
@@ -138,7 +140,7 @@ draft: true # optional
   Claude, or view the `.md` twin). The right one lists the post's h2 and h3 headings and marks the
   section being read (`components/blog/table-of-contents.tsx`); it shows once a post has two
   headings. On narrower screens the back link sits above the title, the actions become a Share
-  menu and a Read with AI menu under the byline, and the contents fold into a disclosure. A fainter
+  menu and a Read with AI menu under the byline, and the contents sit in a disclosure that starts open. A fainter
   copy of the index's Game of Life runs behind the top of the post, and every post ends with the
   landing page's closing call to action above the footer (`BlogShell` with `cta`).
 - **Images.** `app/opengraph-image.tsx` and `app/twitter-image.tsx` render the 1200 by 630 card
@@ -201,13 +203,15 @@ draft: true # optional
   structures, visuals and the next step a post asks for. Read it before drafting.
 - **Writing.** Posts use the docs' prose components (`components/blog/prose.tsx`, `tabs.tsx` and
   `code-block.tsx`): `Callout`, `Steps`, `Tabs`, `Params`, `Files`, `Figure` and `Kbd`, plus fenced
-  code with a `title`. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
+  code with a `title`. `Comparison` (`components/blog/comparison.tsx`) draws a feature-by-product
+  table with grouped rows, check and dash markers, short notes and one tinted column, and breaks
+  out of the text column on wide screens. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
   sideways inside their frame, with the first column pinned.
 - **Post page.** The post's h2 and h3 headings form a table of contents
   (`components/blog/table-of-contents.tsx`) beside the text from 1280px, where it marks the section
-  being read, and in a disclosure above the text on narrower screens. It shows once a post has two
+  being read, and in a disclosure above the text on narrower screens, which starts open. It shows once a post has two
   headings. The byline holds share buttons for copying the link, X and LinkedIn
   (`components/blog/share.tsx`), and every post ends with the landing page's closing call to
   action above the footer (`BlogShell` with `cta`).

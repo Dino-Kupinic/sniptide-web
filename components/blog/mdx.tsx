@@ -2,6 +2,7 @@ import { Kbd } from "@sniptide/ui/components/kbd"
 import type { MDXComponents } from "mdx/types"
 import type { ComponentProps } from "react"
 import { CodeBlock } from "@/components/blog/code-block"
+import { Comparison } from "@/components/blog/comparison"
 import {
   Callout,
   Figure,
@@ -62,6 +63,7 @@ export const blogMdxComponents = {
       </span>
     ) : null,
   Callout,
+  Comparison,
   Figure,
   File,
   Files,
