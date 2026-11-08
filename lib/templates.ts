@@ -36,6 +36,23 @@ export const templateLogos = ["claude", "cursor", "openai", "github", "docker"] 
 
 export type TemplateLogo = (typeof templateLogos)[number]
 
+// Icons for templates whose tool has no logo, from Material Icon Theme in public/templates/icons.
+export const templateIcons = [
+  "authors",
+  "caddy",
+  "changelog",
+  "contributing",
+  "font",
+  "robot",
+  "robots",
+  "rocket",
+  "tune",
+] as const
+
+export type TemplateIcon = (typeof templateIcons)[number]
+
+export const templateIconPath = (icon: TemplateIcon) => `/templates/icons/${icon}.svg`
+
 const name = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
 
 // Frontmatter of content/templates/<name>/template.mdx. The folder name is the template's name and
@@ -51,9 +68,11 @@ export const templateSchema = z.object({
   answer: z.string().min(80).max(360),
   category: z.enum(categoryKeys),
   department: z.enum(departmentKeys),
-  // The logo on the card. Templates for a tool without artwork in public/logos leave it out, and
-  // their card shows the main file's name instead.
+  // Every card and share image shows a visual: the tool's logo from public/logos, or, for a tool
+  // without one, an icon with a short name beside it (mark), such as "robots.txt".
   logo: z.enum(templateLogos).optional(),
+  icon: z.enum(templateIcons).optional(),
+  mark: z.string().min(1).max(16).optional(),
   // The day the files or the explanation last changed. Review every template each quarter.
   updated: z.iso.date(),
   // Paths under files/, in the order the page shows them. A paste holds at most 10 files with

@@ -1,37 +1,29 @@
 import { SquarePenIcon } from "lucide-react"
 import type { CSSProperties, ReactNode } from "react"
 import { primaryButton } from "@/components/blog/buttons"
-import { tools } from "@/components/works-with"
+import { templateLogoArtwork } from "@/components/templates/template-visual"
 import {
   type TemplateLogo,
   type TemplateMeta,
   templateCategories,
   templateEditorUrl,
+  templateIconPath,
   templatePath,
 } from "@/lib/templates"
 
 export type TemplateCardData = Pick<
   TemplateMeta,
-  "name" | "title" | "description" | "category" | "department" | "files" | "logo"
+  "name" | "title" | "description" | "category" | "department" | "files" | "logo" | "icon" | "mark"
 > & {
   // The first lines of the first file, highlighted on the server (templatePreview).
   preview: ReactNode
-}
-
-// The artwork the "Works with" row already uses, so each mark has one source in public/logos.
-const logoArtwork: Record<TemplateLogo, (typeof tools)[number]["alt"]> = {
-  claude: "Claude Code",
-  cursor: "Cursor",
-  openai: "OpenAI",
-  github: "GitHub",
-  docker: "Docker",
 }
 
 // Logos share one height, so wordmarks of different widths read as peers.
 const logoHeight = 26
 
 function Logo({ logo }: { logo: TemplateLogo }) {
-  const artwork = tools.find((tool) => tool.alt === logoArtwork[logo])
+  const artwork = templateLogoArtwork(logo)
   if (!artwork) return null
   // The artwork is a mask filled with the foreground color, so it follows light and dark mode.
   const style: CSSProperties = {
@@ -45,8 +37,8 @@ function Logo({ logo }: { logo: TemplateLogo }) {
   return <span aria-hidden="true" className="block max-w-full bg-foreground" style={style} />
 }
 
-// A template in the directory and in a page's related list. The cover holds the tool's logo over a
-// blurred glimpse of the main file, so the card hints at what is inside and the page reveals it.
+// A template in the directory and in a page's related list. The cover holds the tool's logo, or an
+// icon and a short name, over a blurred glimpse of the main file, so the card hints at what is inside and the page reveals it.
 // The whole card opens the template's page, and Use template opens the editor directly.
 export function TemplateCard({ template }: { template: TemplateCardData }) {
   const [first, ...rest] = template.files
@@ -54,11 +46,25 @@ export function TemplateCard({ template }: { template: TemplateCardData }) {
     <li className="relative flex min-w-0 flex-col overflow-hidden rounded-lg border bg-background">
       <div className="relative flex h-44 items-center justify-center overflow-hidden border-b bg-sidebar">
         <div className="absolute inset-0 opacity-50 blur-[3px] select-none">{template.preview}</div>
-        <div className="relative flex h-14 max-w-[80%] items-center rounded-lg border bg-background px-5">
+        <div className="relative flex h-14 max-w-[80%] min-w-0 items-center gap-2.5 rounded-lg border bg-background px-5">
           {template.logo ? (
             <Logo logo={template.logo} />
           ) : (
-            <span className="truncate font-mono text-sm leading-5">{first?.split("/").pop()}</span>
+            <>
+              {template.icon && (
+                // biome-ignore lint/performance/noImgElement: a 28px static SVG needs no image optimization.
+                <img
+                  src={templateIconPath(template.icon)}
+                  alt=""
+                  width={28}
+                  height={28}
+                  className="size-7 shrink-0"
+                />
+              )}
+              <span className="truncate font-heading text-xl/7 font-bold tracking-[-0.02em]">
+                {template.mark ?? first?.split("/").pop()}
+              </span>
+            </>
           )}
         </div>
       </div>

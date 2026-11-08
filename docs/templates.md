@@ -17,9 +17,9 @@ content/templates/claude-md/
 | `/templates/<name>.md` | The Markdown twin for agents (`app/templates/md/[name]/route.ts`) |
 | `/templates/<name>.json` | The files as JSON, which the app's `/new?template=<name>` reads (`app/templates/json/[name]/route.ts`) |
 | `/templates/<name>/raw/<path>` | One file as plain text, behind each file's Raw link |
-| `/templates/<name>/opengraph-image` | The share card with the title |
+| `/templates/<name>/opengraph-image` | The share card with the title and the template's logo or icon |
 
-The page is also a card in `/templates`, which filters by department and searches titles, categories and file names. The card's cover shows the tool's logo over a blurred glimpse of the first file, or the first file's name when the template sets no `logo`. The page is also listed in the sitemap, `llms.txt` and the IndexNow submission after
+The page is also a card in `/templates`, which filters by department and searches titles, categories and file names. Every template needs a visual: the card's cover shows the tool's logo, or an icon with a short name, over a blurred glimpse of the first file, and the share image shows the same visual next to the title. `lib/templates.test.ts` fails when a template has neither. To add an icon, copy it from Material Icon Theme into `public/templates/icons` as that folder's README describes. The page is also listed in the sitemap, `llms.txt` and the IndexNow submission after
 deploy, with no further step.
 
 ## Add a template
@@ -36,7 +36,10 @@ deploy, with no further step.
    answer: Two sentences under the H1 that answer the query before the files.
    category: agents                 # agents, deploy, project, specs, discovery or writing
    department: engineering          # engineering, product or marketing
-   logo: claude                     # optional: claude, cursor, openai, github or docker
+   logo: claude                     # claude, cursor, openai, github or docker
+   # or, for a tool without a logo in public/logos:
+   # icon: robots                     # an icon from public/templates/icons
+   # mark: "robots.txt"               # the short name beside it, up to 16 characters
    updated: 2026-11-08
    files:
      - CLAUDE.md                    # paths under files/, in display order

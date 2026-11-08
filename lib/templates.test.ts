@@ -84,6 +84,13 @@ describe("template content", () => {
     expect(new Set(titles).size).toBe(titles.length)
   })
 
+  test("every template has a visual for its card and share image", () => {
+    for (const template of templates) {
+      const visual = template.logo ?? (template.icon && template.mark)
+      expect(visual, template.name).toBeTruthy()
+    }
+  })
+
   test("every department has a template", () => {
     const departments = new Set(templates.map((template) => template.department))
     expect([...departments].sort()).toEqual(["engineering", "marketing", "product"])

@@ -46,6 +46,8 @@ export async function templateCards(
         department: template.department,
         files: template.files,
         logo: template.logo,
+        icon: template.icon,
+        mark: template.mark,
         preview: first ? await templatePreview(first) : null,
       }
     }),
