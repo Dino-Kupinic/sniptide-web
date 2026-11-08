@@ -1,5 +1,12 @@
 import { unstable_cache } from "next/cache"
-import { type ChangelogEntry, type GithubRelease, releasesRepo, toEntries } from "./changelog"
+import {
+  type Announcement,
+  type ChangelogEntry,
+  type GithubRelease,
+  pickAnnouncement,
+  releasesRepo,
+  toEntries,
+} from "./changelog"
 
 const perPage = 100
 // A guard against a runaway loop: 50 pages is 5,000 releases.
@@ -39,4 +46,10 @@ export async function getChangelog(): Promise<ChangelogEntry[] | null> {
   } catch {
     return null
   }
+}
+
+// The bar above the header. Read through the same hourly cache as the changelog.
+export async function getAnnouncement(): Promise<Announcement | null> {
+  const entries = await getChangelog()
+  return entries ? pickAnnouncement(entries) : null
 }

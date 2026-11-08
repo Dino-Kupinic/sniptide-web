@@ -66,6 +66,9 @@ export function SiteHeader({
   latestPost?: LatestPost | null
 }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  // Where the open menu starts: the header's bottom edge, which sits lower while the announcement
+  // bar above it is still on screen.
+  const [menuTop, setMenuTop] = useState<number | null>(null)
   const pathname = usePathname()
   const onLanding = pathname === "/" || pathname === "/home"
   const menus = useMemo(
@@ -106,13 +109,16 @@ export function SiteHeader({
     // The menu covers the page below the header, so the page stops scrolling and leaves the
     // tab order until the menu closes.
     const root = document.documentElement
+    setMenuTop(headerRef.current?.getBoundingClientRect().bottom ?? null)
     const previousOverflow = root.style.overflow
     root.style.overflow = "hidden"
     const covered = Array.from(headerRef.current?.parentElement?.children ?? []).filter(
       (element): element is HTMLElement =>
         element instanceof HTMLElement &&
         element !== headerRef.current &&
-        (element.tagName === "MAIN" || element.tagName === "FOOTER"),
+        (element.tagName === "MAIN" ||
+          element.tagName === "FOOTER" ||
+          element.id === "announcement"),
     )
     for (const element of covered) element.inert = true
 
@@ -210,6 +216,7 @@ export function SiteHeader({
         id="mobile-navigation"
         data-open={mobileOpen ? "" : undefined}
         inert={!mobileOpen}
+        style={menuTop !== null ? { top: menuTop } : undefined}
         className="group invisible fixed inset-x-0 top-[57px] bottom-0 flex flex-col bg-white opacity-0 transition-[opacity,visibility] duration-200 ease-out data-open:visible data-open:opacity-100 motion-reduce:transition-none md:top-[65px] lg:hidden dark:bg-[#0a0a0a]"
       >
         <nav

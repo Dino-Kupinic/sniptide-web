@@ -260,6 +260,12 @@ the release on GitHub. Releases without the markers fall back to the semantic-re
 first feature or fix is the title, and releases with only CI, test or maintenance commits count as
 internal. Consecutive internal releases collapse into one row.
 
+The newest feature release from the last 14 days also fills a blue bar above the header on the
+landing page and every blog and changelog page (`components/announcement-bar.tsx`). It links to
+that release in the changelog and scrolls away with the page. Closing it stores the version in
+`localStorage`, and a small inline script hides it before the page paints, so it stays closed until
+a newer feature ships. Fixes and maintenance releases never take the bar.
+
 Set `GITHUB_TOKEN` to raise GitHub's rate limit from 60 requests an hour per address. The token
 needs no scopes. When GitHub cannot be reached, the page links to the releases on GitHub instead.
 

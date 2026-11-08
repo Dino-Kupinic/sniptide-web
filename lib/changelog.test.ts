@@ -4,6 +4,7 @@ import {
   type GithubRelease,
   groupEntries,
   parseRelease,
+  pickAnnouncement,
   toEntries,
 } from "./changelog"
 
@@ -153,5 +154,32 @@ describe("listing", () => {
         unit.type === "entry" ? unit.entry.tag : unit.entries.map((e) => e.tag).join(","),
       ),
     ).toEqual(["v0.5.0", "v0.4.2,v0.4.1", "v0.4.0", "v0.3.1"])
+  })
+})
+
+describe("announcement", () => {
+  const now = Date.parse("2026-11-10T00:00:00Z")
+
+  test("the newest recent feature takes the bar and links to its anchor", () => {
+    const entries = toEntries([
+      release("v0.77.1", ciList, "2026-11-09T00:00:00Z"),
+      release("v0.77.0", featureList, "2026-11-08T00:00:00Z"),
+    ])
+    expect(pickAnnouncement(entries, now)).toEqual({
+      version: "0.77.0",
+      title: "Move custom links under /@handle",
+      href: "/changelog#v0.77.0",
+    })
+  })
+
+  test("a feature older than two weeks shows nothing", () => {
+    const entries = toEntries([release("v0.70.0", featureList, "2026-10-20T00:00:00Z")])
+    expect(pickAnnouncement(entries, now)).toBeNull()
+  })
+
+  test("fixes and maintenance never take the bar", () => {
+    expect(
+      pickAnnouncement(toEntries([release("v0.75.2", ciList, "2026-11-09T00:00:00Z")]), now),
+    ).toBeNull()
   })
 })

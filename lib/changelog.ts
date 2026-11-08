@@ -177,3 +177,24 @@ export function formatReleaseDate(date: string) {
     timeZone: "UTC",
   }).format(new Date(date))
 }
+
+export type Announcement = { version: string; title: string; href: string }
+
+// Where the bar remembers the release a reader closed.
+export const announcementStorageKey = "sniptide-announcement-dismissed"
+
+// How long a feature release stays in the bar above the header.
+export const announcementDays = 14
+
+// The newest feature release from the last two weeks, or nothing. Fixes and maintenance never
+// take the bar, so it only speaks up when something new shipped.
+export function pickAnnouncement(entries: ChangelogEntry[], now = Date.now()): Announcement | null {
+  const cutoff = now - announcementDays * 24 * 60 * 60 * 1000
+  const entry = entries.find((item) => item.kind === "feature")
+  if (!entry || Date.parse(entry.date) < cutoff) return null
+  return {
+    version: entry.version,
+    title: entry.title,
+    href: `${changelogPath}#${releaseAnchor(entry.version)}`,
+  }
+}
