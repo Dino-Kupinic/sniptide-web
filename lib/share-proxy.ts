@@ -102,7 +102,7 @@ export function isPreviewBot(headers: Headers) {
 
 export type RevealBlock = { status: 403 } | { status: 405 }
 
-// Non-null when this site must answer /<slug>/reveal itself. Otherwise the POST is proxied, and
+// Non-null when this site must answer /<slug>/reveal or /<handle>/<name>/reveal itself. Otherwise the POST is proxied, and
 // that POST is what burns the paste.
 export function revealBlock(
   pathname: string,
@@ -118,8 +118,11 @@ export function revealBlock(
   return null
 }
 
+// A paste link is one segment (/k7Qe2x) or a custom link under its owner's handle
+// (/dino/notes), so both shapes get the same guard.
 function revealSlug(pathname: string) {
-  const slug = /^\/([^/]+)\/reveal\/?$/.exec(pathname)?.[1]
-  if (!slug || REDIRECTED_SECTIONS.has(slug.toLowerCase())) return null
-  return slug
+  const match = /^\/([^/]+)(?:\/([^/]+))?\/reveal\/?$/.exec(pathname)
+  const first = match?.[1]
+  if (!first || REDIRECTED_SECTIONS.has(first.toLowerCase())) return null
+  return match?.[2] ? `${first}/${match[2]}` : first
 }
