@@ -1,10 +1,26 @@
+import { readdirSync, readFileSync } from "node:fs"
+import { join } from "node:path"
 import { siteUrl } from "@/lib/site"
 
 // IndexNow tells Bing, Yandex, Naver, Seznam and Yep that a URL changed, so they recrawl it
 // without waiting for the next sitemap fetch. Google doesn't take part. The key isn't a secret:
-// search engines verify it by fetching public/<key>.txt, which holds the same value.
-export const indexNowKey = "9df9f25906dcbfea4183f5be5a17b8f8"
-export const indexNowKeyLocation = `${siteUrl}/${indexNowKey}.txt`
+// search engines verify it by fetching public/<key>.txt, which holds the same value. The file is
+// the only copy of the key, so secret scanners don't flag a key-shaped string in the source.
+export function indexNowKey(publicDir = "public") {
+  const files = readdirSync(publicDir).filter((name) => /^[a-f0-9]{32}\.txt$/.test(name))
+  const [file] = files
+  if (!file || files.length > 1)
+    throw new Error(`Expected one IndexNow key file in ${publicDir}, found ${files.length}.`)
+  const key = file.slice(0, -4)
+  if (readFileSync(join(publicDir, file), "utf8").trim() !== key)
+    throw new Error(`${file} must contain its own name without .txt.`)
+  return key
+}
+
+export function indexNowKeyLocation(key = indexNowKey()) {
+  return `${siteUrl}/${key}.txt`
+}
+
 export const indexNowEndpoint = "https://api.indexnow.org/indexnow"
 
 // IndexNow accepts at most 10,000 URLs in one request.
@@ -66,12 +82,12 @@ export function isLive(changes: Changes, live: SitemapEntry[]) {
   )
 }
 
-export function submission(urls: string[]) {
+export function submission(urls: string[], key = indexNowKey()) {
   const urlList = [...new Set(urls)]
   const host = new URL(siteUrl).host
   for (const url of urlList)
     if (new URL(url).host !== host) throw new Error(`${url} isn't on ${host}.`)
   if (urlList.length > maxUrls)
     throw new Error(`IndexNow takes at most ${maxUrls} URLs, not ${urlList.length}.`)
-  return { host, key: indexNowKey, keyLocation: indexNowKeyLocation, urlList }
+  return { host, key, keyLocation: indexNowKeyLocation(key), urlList }
 }

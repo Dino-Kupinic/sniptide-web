@@ -79,8 +79,9 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
   Seznam and Yep read. Google doesn't, so Search Console still covers Google. A page counts as
   changed when its `lastModified` in `app/sitemap.ts` changes, so bump that date when you edit a
   page. To submit every URL, run the workflow by hand with **all** checked, or run
-  `bun run indexnow --all`. `--dry` prints the list without sending it. The key in
-  `lib/indexnow.ts` must match `public/<key>.txt`, and `lib/indexnow.test.ts` checks that.
+  `bun run indexnow --all`. `--dry` prints the list without sending it. The key lives
+  only in `public/<key>.txt`, which contains its own name, and `lib/indexnow.ts` reads it from
+  there so secret scanners don't flag a key in the source.
 - **Structured data.** See the next section.
 
 A route here shadows a paste link with the same name, because this site answers first and only

@@ -1,5 +1,4 @@
 import { describe, expect, test } from "bun:test"
-import { readFileSync } from "node:fs"
 import sitemap from "@/app/sitemap"
 import {
   findChanges,
@@ -16,10 +15,10 @@ const now = new Date("2026-11-08T10:00:00Z")
 const post = `${siteUrl}/blog/introducing-sniptide`
 
 describe("IndexNow", () => {
-  test("the key file holds the key and sits at the site root", () => {
-    expect(indexNowKey).toMatch(/^[a-f0-9]{32}$/)
-    expect(readFileSync(`public/${indexNowKey}.txt`, "utf8").trim()).toBe(indexNowKey)
-    expect(indexNowKeyLocation).toBe(`${siteUrl}/${indexNowKey}.txt`)
+  test("public/ holds one key file that contains its own name", () => {
+    const key = indexNowKey()
+    expect(key).toMatch(/^[a-f0-9]{32}$/)
+    expect(indexNowKeyLocation(key)).toBe(`${siteUrl}/${key}.txt`)
   })
 
   test("reads the URLs and days from a sitemap", () => {
@@ -64,10 +63,11 @@ describe("IndexNow", () => {
   })
 
   test("submits only URLs on the site, each once", () => {
+    const key = indexNowKey()
     expect(submission([post, post])).toEqual({
       host: "sniptide.com",
-      key: indexNowKey,
-      keyLocation: indexNowKeyLocation,
+      key,
+      keyLocation: indexNowKeyLocation(key),
       urlList: [post],
     })
     expect(() => submission(["https://example.com/page"])).toThrow()
