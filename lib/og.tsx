@@ -97,7 +97,7 @@ export async function renderPostOgImage({ title }: { title: string }) {
   )
 }
 
-// What a template's share card shows on its white panel: the tool's logo, or an icon with a name.
+// What a template's share card shows over its code: the tool's logo, or an icon with a name.
 export type TemplateOgVisual =
   | { kind: "logo"; src: string; ratio: number }
   | { kind: "icon"; src: string; mark: string }
@@ -107,22 +107,62 @@ async function dataUrl(publicPath: string) {
   return `data:image/svg+xml;base64,${svg.toString("base64")}`
 }
 
-// The card for a template: the post card's black field, logo and Archivo title, with the template's
-// visual on a white panel to the right, like the cover of its card in the directory. The artwork
-// keeps its own colors on the panel. Rendered once per template at build time.
+// The dark syntax colors from DESIGN.md, applied by a small line-based guess: share images can't
+// run the highlighter, and a glimpse only needs headings, keys and values to read as code.
+const syntax = {
+  foreground: "#f4f4f4",
+  keyword: "#8f8cff",
+  property: "#fb9fb1",
+  string: "#5fd3a8",
+  comment: "#8a8a8a",
+}
+
+function codeLine(line: string) {
+  const text = line.length > 46 ? `${line.slice(0, 45)}…` : line
+  if (/^\s*(#|\/\/|<!--|---$)/.test(text)) {
+    const heading = /^#{1,6} /.test(text)
+    return [{ text, color: heading ? syntax.keyword : syntax.comment }]
+  }
+  const pair = /^(\s*-?\s*)([\w."@/-]+)(:\s?)(.*)$/.exec(text)
+  if (pair) {
+    const [, indent = "", key = "", colon = "", value = ""] = pair
+    return [
+      { text: indent, color: syntax.foreground },
+      { text: key, color: syntax.property },
+      { text: colon, color: syntax.foreground },
+      { text: value, color: /^["'\d]/.test(value) ? syntax.string : syntax.foreground },
+    ]
+  }
+  return [{ text, color: syntax.foreground }]
+}
+
+const deep = "#0c0b0b"
+const raised = "#1a1919"
+const hairline = "#2f2c2c"
+const ash = "#a3a3a3"
+
+// The card for a template, drawn like its card in the directory: the main file's first lines on a
+// raised panel that runs off the right edge, the tool's logo or icon on a white chip over it, and
+// the title on the left. Rendered once per template at build time.
 export async function renderTemplateOgImage({
   title,
+  file,
+  code,
   visual,
 }: {
   title: string
+  file: string
+  code: string
   visual: TemplateOgVisual
 }) {
-  const [heading, image] = await Promise.all([
+  const [heading, mono, image] = await Promise.all([
     readFile(join(process.cwd(), "assets/fonts/Archivo-500.woff")),
+    readFile(join(process.cwd(), "assets/fonts/PaperMono-400.ttf")),
     dataUrl(visual.src),
   ])
-  const logoHeight = 60
-  const logoWidth = visual.kind === "logo" ? Math.min(logoHeight * visual.ratio, 300) : 0
+  const lines = code.split("\n").slice(0, 14)
+  const logoHeight = 58
+  const logoWidth = visual.kind === "logo" ? Math.min(logoHeight * visual.ratio, 280) : 0
 
   return new ImageResponse(
     <div
@@ -131,78 +171,166 @@ export async function renderTemplateOgImage({
         height: "100%",
         display: "flex",
         position: "relative",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        padding: 72,
-        background,
+        background: deep,
         color: white,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <svg width={41} height={40} viewBox="2 2 20 19.27" role="img" aria-label={siteName}>
-          <g fill={white}>
-            {bars.map((points) => (
-              <polygon key={points} points={points} />
-            ))}
-          </g>
-        </svg>
-        <svg width={184} height={29} viewBox="1341 238 4340 683" role="img" aria-label={siteName}>
-          <g transform="translate(0,1080) scale(0.1,-0.1)" fill={white}>
-            <path d={wordmark} />
-          </g>
-        </svg>
-      </div>
       <div
         style={{
+          position: "absolute",
+          left: 620,
+          top: 72,
+          width: 640,
+          height: 640,
           display: "flex",
-          fontFamily: "Archivo",
-          // One size for every template: titles up to 50 characters take three lines at most.
-          fontSize: 68,
-          lineHeight: 1.05,
-          letterSpacing: -2.2,
-          maxWidth: 600,
+          flexDirection: "column",
+          borderRadius: 20,
+          border: `2px solid ${hairline}`,
+          background: raised,
+          overflow: "hidden",
         }}
       >
-        {title}
+        <div
+          style={{
+            display: "flex",
+            padding: "18px 28px",
+            borderBottom: `2px solid ${hairline}`,
+            fontFamily: "Paper Mono",
+            fontSize: 20,
+            color: ash,
+          }}
+        >
+          {file}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            padding: "18px 28px",
+            fontFamily: "Paper Mono",
+            fontSize: 21,
+            lineHeight: 1.6,
+            opacity: 0.55,
+          }}
+        >
+          {lines.map((line, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: lines repeat, and the list never reorders.
+            <div key={index} style={{ display: "flex", whiteSpace: "pre", height: 34 }}>
+              <span style={{ width: 44, color: "#5c5959" }}>{index + 1}</span>
+              {codeLine(line).map((part, partIndex) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: parts of one line never reorder.
+                <span key={partIndex} style={{ color: part.color }}>
+                  {part.text}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
       <div
         style={{
           position: "absolute",
-          right: 72,
-          top: 175,
-          width: 400,
-          height: 280,
+          left: 620,
+          top: 72,
+          width: 640,
+          height: 640,
+          display: "flex",
+          background: `linear-gradient(to bottom, rgba(12,11,11,0) 45%, ${deep} 100%)`,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          // Centered on the part of the panel inside the card.
+          left: 620,
+          top: 351,
+          width: 580,
+          height: 0,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: 20,
-          borderRadius: 20,
-          background: white,
-          color: "#1b1919",
         }}
       >
-        {visual.kind === "logo" ? (
-          // biome-ignore lint/performance/noImgElement: next/og renders plain img elements only.
-          <img src={image} alt="" width={logoWidth} height={logoHeight} />
-        ) : (
-          <>
-            {/* biome-ignore lint/performance/noImgElement: next/og renders plain img elements only. */}
-            <img src={image} alt="" width={72} height={72} />
-            <div
-              style={{
-                display: "flex",
-                fontFamily: "Archivo",
-                fontSize: 48,
-                letterSpacing: -1.4,
-                maxWidth: 240,
-              }}
-            >
-              {visual.mark}
-            </div>
-          </>
-        )}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 18,
+            height: 120,
+            padding: "0 44px",
+            borderRadius: 18,
+            background: white,
+            color: "#1b1919",
+            boxShadow: "0 24px 48px -12px rgba(0,0,0,0.7)",
+          }}
+        >
+          {visual.kind === "logo" ? (
+            // biome-ignore lint/performance/noImgElement: next/og renders plain img elements only.
+            <img src={image} alt="" width={logoWidth} height={logoHeight} />
+          ) : (
+            <>
+              {/* biome-ignore lint/performance/noImgElement: next/og renders plain img elements only. */}
+              <img src={image} alt="" width={56} height={56} />
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: "Archivo",
+                  fontSize: 44,
+                  letterSpacing: -1.2,
+                }}
+              >
+                {visual.mark}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          left: 72,
+          top: 72,
+          bottom: 72,
+          width: 480,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <svg width={41} height={40} viewBox="2 2 20 19.27" role="img" aria-label={siteName}>
+            <g fill={white}>
+              {bars.map((points) => (
+                <polygon key={points} points={points} />
+              ))}
+            </g>
+          </svg>
+          <svg width={184} height={29} viewBox="1341 238 4340 683" role="img" aria-label={siteName}>
+            <g transform="translate(0,1080) scale(0.1,-0.1)" fill={white}>
+              <path d={wordmark} />
+            </g>
+          </svg>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "Archivo",
+            // One size for every template: titles up to 50 characters take four lines at most.
+            fontSize: 64,
+            lineHeight: 1.06,
+            letterSpacing: -2,
+          }}
+        >
+          {title}
+        </div>
       </div>
     </div>,
-    { ...ogSize, fonts: [{ name: "Archivo", data: heading, style: "normal", weight: 500 }] },
+    {
+      ...ogSize,
+      fonts: [
+        { name: "Archivo", data: heading, style: "normal", weight: 500 },
+        { name: "Paper Mono", data: mono, style: "normal", weight: 400 },
+      ],
+    },
   )
 }
