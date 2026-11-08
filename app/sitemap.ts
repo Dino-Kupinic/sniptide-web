@@ -11,13 +11,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified:
       path === "/blog"
         ? (posts[0]?.date ?? "2026-11-06")
-        : path === "/brand" || path === "/vision"
-          ? "2026-11-05"
-          : path === "/about" || path === "/contact" || path.startsWith("/docs")
-            ? "2026-10-28"
-            : path === "/privacy"
-              ? "2026-10-25"
-              : "2026-10-23",
+        : // The changelog changes with every release, which the sitemap cannot know in advance.
+          path === "/changelog"
+          ? undefined
+          : path === "/brand" || path === "/vision"
+            ? "2026-11-05"
+            : path === "/about" || path === "/contact" || path.startsWith("/docs")
+              ? "2026-10-28"
+              : path === "/privacy"
+                ? "2026-10-25"
+                : "2026-10-23",
   }))
   // Posts follow their index, each dated by its last update.
   const postEntries = posts.map((post) => ({
