@@ -5,11 +5,11 @@ import { codeTheme } from "@/lib/code-theme"
 import { readTemplateFiles, type Template } from "@/lib/template-source"
 import type { TemplateFile } from "@/lib/templates"
 
-// Lines a template card shows before its code panel runs off the bottom edge.
+// Lines a template card's cover holds before it runs off the bottom edge.
 const previewLines = 10
 
-// The first lines of a template's first file, highlighted, for its card. The panel clips them,
-// like a paste card in the app, so the card reads as a peek at the file rather than a code block.
+// The first lines of a template's first file, highlighted, for its card. The cover blurs them
+// behind the tool's logo, so they read as a glimpse of the file rather than a code block.
 export async function templatePreview(file: TemplateFile): Promise<ReactNode> {
   const code = file.content.split("\n").slice(0, previewLines).join("\n")
   return highlight(code, {
@@ -45,6 +45,7 @@ export async function templateCards(
         category: template.category,
         department: template.department,
         files: template.files,
+        logo: template.logo,
         preview: first ? await templatePreview(first) : null,
       }
     }),

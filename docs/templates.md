@@ -19,7 +19,7 @@ content/templates/claude-md/
 | `/templates/<name>/raw/<path>` | One file as plain text, behind each file's Raw link |
 | `/templates/<name>/opengraph-image` | The share card with the title |
 
-The page is also a card in `/templates`, which filters by department and searches titles, categories and file names. The card shows the first lines of the first file, so put the most recognizable file first. The page is also listed in the sitemap, `llms.txt` and the IndexNow submission after
+The page is also a card in `/templates`, which filters by department and searches titles, categories and file names. The card's cover shows the tool's logo over a blurred glimpse of the first file, or the first file's name when the template sets no `logo`. The page is also listed in the sitemap, `llms.txt` and the IndexNow submission after
 deploy, with no further step.
 
 ## Add a template
@@ -36,6 +36,7 @@ deploy, with no further step.
    answer: Two sentences under the H1 that answer the query before the files.
    category: agents                 # agents, deploy, project, specs or discovery
    department: engineering          # engineering, product or marketing
+   logo: claude                     # optional: claude, cursor, openai, github or docker
    updated: 2026-11-08
    files:
      - CLAUDE.md                    # paths under files/, in display order

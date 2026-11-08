@@ -30,6 +30,11 @@ export type TemplateCategory = keyof typeof templateCategories
 
 const categoryKeys = Object.keys(templateCategories) as [TemplateCategory, ...TemplateCategory[]]
 
+// The tool whose logo a template's card shows, from the artwork in public/logos.
+export const templateLogos = ["claude", "cursor", "openai", "github", "docker"] as const
+
+export type TemplateLogo = (typeof templateLogos)[number]
+
 const name = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
 
 // Frontmatter of content/templates/<name>/template.mdx. The folder name is the template's name and
@@ -45,6 +50,9 @@ export const templateSchema = z.object({
   answer: z.string().min(80).max(360),
   category: z.enum(categoryKeys),
   department: z.enum(departmentKeys),
+  // The logo on the card. Templates for a tool without artwork in public/logos leave it out, and
+  // their card shows the main file's name instead.
+  logo: z.enum(templateLogos).optional(),
   // The day the files or the explanation last changed. Review every template each quarter.
   updated: z.iso.date(),
   // Paths under files/, in the order the page shows them. A paste holds at most 10 files with
