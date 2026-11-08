@@ -262,7 +262,7 @@ internal. Consecutive internal releases collapse into one row.
 
 The newest feature release from the last 14 days also fills a blue bar above the header on the
 landing page and every blog and changelog page (`components/announcement-bar.tsx`). It links to
-that release in the changelog and scrolls away with the page. The message sits on a glass pill
+that release in the changelog and scrolls away with the page. The bar is a pane of blue glass
 over a faint Game of Life, like the window on the pink sharing section; its colors keep white text
 above 4.5:1 even over a lit cell. Closing it stores the version in
 `localStorage`, and a small inline script hides it before the page paints, so it stays closed until
