@@ -1,0 +1,4 @@
+# The IndexNow key is public by design: search engines verify it by fetching
+# https://sniptide.com/<key>.txt. This commit put it in lib/indexnow.ts; the next commit moved it
+# to public/<key>.txt only, so this is the one place the scanner sees it.
+5f1b1329e45620f82753137abadc603eabd25e37:lib/indexnow.ts:generic-api-key:6

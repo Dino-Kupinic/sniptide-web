@@ -1,0 +1,39 @@
+name: IndexNow
+
+# After a push to main, waits until Coolify serves the new build and submits the URLs whose sitemap
+# entry changed to IndexNow (Bing, Yandex, Naver, Seznam and Yep). Run it by hand with "all" to
+# submit every sitemap URL, for example after a change that doesn't touch any sitemap date.
+on:
+  push:
+    branches: [main]
+    paths: ["app/**", "content/**", "lib/**"]
+  workflow_dispatch:
+    inputs:
+      all:
+        description: Submit every sitemap URL now instead of only the changed ones
+        type: boolean
+        default: false
+
+# A newer push supersedes a run that is still waiting, and its comparison includes the older
+# changes because the live site hasn't served them yet.
+concurrency:
+  group: indexnow
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    name: Submit changed URLs
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - run: bun install --frozen-lockfile
+      - run: bun run indexnow ${{ inputs.all && '--all' || '' }}
