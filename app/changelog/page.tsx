@@ -14,8 +14,10 @@ export const metadata: Metadata = {
   description: "Every Sniptide release, newest first, with what changed for you in each one.",
 }
 
-// Releases are read from GitHub and refreshed hourly, so a new release shows up without a deploy.
-export const revalidate = 3600
+// Rendered per request from the hourly release cache in lib/changelog-source.ts, so a new release
+// shows up without a deploy. A prerendered page would keep a failed GitHub fetch (for example during
+// the Docker build) for a full revalidation period; here the next request simply tries again.
+export const dynamic = "force-dynamic"
 
 const releasesUrl = `${links.github}/releases`
 
@@ -61,7 +63,7 @@ export default async function Page() {
               <p className="text-base leading-6.5 text-muted-foreground">
                 {units
                   ? "The first release will be listed here when it ships."
-                  : "GitHub did not answer in time. The same notes are on the releases page there."}
+                  : "GitHub did not answer. Try again in a minute, or read the same notes on the releases page there."}
               </p>
             </div>
             <a href={releasesUrl} className={secondaryButton}>

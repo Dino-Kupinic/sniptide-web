@@ -268,8 +268,11 @@ above 4.5:1 even over a lit cell. Closing it stores the version in
 `localStorage`, and a small inline script hides it before the page paints, so it stays closed until
 a newer feature ships. Fixes and maintenance releases never take the bar.
 
-Set `GITHUB_TOKEN` to raise GitHub's rate limit from 60 requests an hour per address. The token
-needs no scopes. When GitHub cannot be reached, the page links to the releases on GitHub instead.
+Set `GITHUB_TOKEN` to raise GitHub's rate limit from 60 requests an hour per address, which builds
+and other services on the same server share. The token needs no scopes. The changelog renders on
+each request from an hourly cache of the releases, so a failed fetch is retried on the next visit
+instead of staying in a prerendered page. Until GitHub answers, the page links to the releases on
+GitHub and the server logs the reason.
 
 ### For agents and search engines
 
