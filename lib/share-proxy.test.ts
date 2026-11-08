@@ -164,6 +164,27 @@ describe("reveal", () => {
     expect(revealBlock("/k7Qe2x/reveal/", "GET", new Headers(chrome))).toEqual({ status: 405 })
   })
 
+  test("guards custom links under a handle the same way", () => {
+    expect(revealBlock("/@dino/notes/reveal", "POST", new Headers(chrome))).toBeNull()
+    expect(revealBlock("/@dino/notes/reveal", "GET", new Headers(chrome))).toEqual({ status: 405 })
+    expect(
+      revealBlock(
+        "/@dino/notes/reveal",
+        "POST",
+        new Headers({ ...chrome, "sec-fetch-site": "cross-site" }),
+      ),
+    ).toEqual({ status: 403 })
+    expect(
+      revealBlock("/@dino/notes/reveal", "POST", new Headers({ "user-agent": "Twitterbot/1.0" })),
+    ).toEqual({ status: 403 })
+    expect(revealBlock("/%40dino/notes/reveal", "GET", new Headers(chrome))).toEqual({
+      status: 405,
+    })
+    expect(revealBlock("/dino/notes/reveal", "GET", new Headers(chrome))).toBeNull()
+    expect(revealBlock("/pastes/notes/reveal", "GET", new Headers(chrome))).toBeNull()
+    expect(revealBlock("/a/b/c/reveal", "GET", new Headers(chrome))).toBeNull()
+  })
+
   test("refuses known preview bots", () => {
     const agents = [
       "Slackbot-LinkExpanding 1.0",

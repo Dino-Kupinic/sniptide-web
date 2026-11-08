@@ -85,8 +85,9 @@ to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" poin
 - **Structured data.** See the next section.
 
 A route here shadows a paste link with the same name, because this site answers first and only
-unknown paths go to the app. When you add a route whose name could be a paste link (such as
-`/opengraph-image`), add it to `RESERVED` in `apps/web/lib/pastes/store.ts` in the app repo too.
+unknown paths go to the app. Generated links are eight random characters and custom links start
+with `@` (`/@dino/notes`), so a new top-level route (such as `/opengraph-image`) needs no
+reservation in the app.
 
 ### Legal pages
 
@@ -94,8 +95,8 @@ unknown paths go to the app. When you add a route whose name could be a paste li
 advice. The operator's name, address, register entries, hosting provider and similar details live
 in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
 the privacy policy says PostHog stores events in the EU or the US follows
-`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
-`privacy` or `impressum` is shadowed here; the app should reserve them.
+`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, and custom links
+start with `@`, so no new paste link can take `terms`, `privacy` or `impressum`.
 
 ### Blog
 
@@ -162,8 +163,9 @@ draft: true # optional
 - **Structured data.** See the next section.
 
 A route here shadows a paste link with the same name, because this site answers first and only
-unknown paths go to the app. When you add a route whose name could be a paste link (such as
-`/opengraph-image`), add it to `RESERVED` in `apps/web/lib/pastes/store.ts` in the app repo too.
+unknown paths go to the app. Generated links are eight random characters and custom links start
+with `@` (`/@dino/notes`), so a new top-level route (such as `/opengraph-image`) needs no
+reservation in the app.
 
 ### Legal pages
 
@@ -171,8 +173,8 @@ unknown paths go to the app. When you add a route whose name could be a paste li
 advice. The operator's name, address, register entries, hosting provider and similar details live
 in `lib/legal.ts`; anything in [square brackets] on the live pages is still a placeholder. Whether
 the privacy policy says PostHog stores events in the EU or the US follows
-`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, so a paste with the custom link `terms`,
-`privacy` or `impressum` is shadowed here; the app should reserve them.
+`NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, and custom links
+start with `@`, so no new paste link can take `terms`, `privacy` or `impressum`.
 
 ### Blog
 
