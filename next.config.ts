@@ -28,6 +28,9 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@sniptide/ui"],
   // PostHog's API paths end in a slash; redirecting them would break ingestion.
   skipTrailingSlashRedirect: true,
+  // The template pages read their files from content/templates when the site builds. Tracing them
+  // into the standalone server keeps them readable if a page is ever rendered at run time.
+  outputFileTracingIncludes: { "/templates/**": ["./content/templates/**/*"] },
 
   async redirects() {
     return [
@@ -52,6 +55,9 @@ const nextConfig: NextConfig = {
       beforeFiles: [
         // A post's Markdown twin (/blog/<slug>.md), served by app/blog/md/[slug]/route.ts.
         { source: "/blog/:slug([a-z0-9-]+)\\.md", destination: "/blog/md/:slug" },
+        // A template's Markdown twin and its files as JSON (app/templates/md and app/templates/json).
+        { source: "/templates/:name([a-z0-9-]+)\\.md", destination: "/templates/md/:name" },
+        { source: "/templates/:name([a-z0-9-]+)\\.json", destination: "/templates/json/:name" },
         {
           source: `${posthogProxyPath}/static/:path*`,
           destination: `${posthogAssetsHost(posthogHost)}/static/:path*`,

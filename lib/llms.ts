@@ -33,6 +33,7 @@ const links = `
 - [Agent readiness](${siteUrl}/.well-known/ard.json)
 - [Home as Markdown](${siteUrl}/index.md)
 - [Blog feed (RSS)](${siteUrl}${feedPath}); each post is also served as Markdown at its URL plus .md
+- [Templates](${siteUrl}/templates): copy-ready agent files and config; each template is also served as Markdown and as JSON at its URL plus .md or .json
 - [Documentation index as Markdown](${siteUrl}/docs.md)
 - [Schema feed](${siteUrl}/schema.jsonl)
 - [Schema sitemap](${siteUrl}/schemamap.xml)

@@ -1,0 +1,60 @@
+name: Bug report
+description: Something doesn't work the way the docs say it should.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Please search open issues first, since
+        someone may have reported it already.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected and what you saw instead.
+      placeholder: I exported invoices to CSV with a date filter, and the file included every invoice.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Invoices
+        2. Set the date filter to October
+        3. Choose Export
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Shown under Settings > About, or the package version you use.
+      placeholder: "2.4.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Browsers
+      description: Where you see the problem. Leave it empty if it isn't browser-specific.
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Paste any error output. It's formatted as code automatically.
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched the open issues and this isn't a duplicate.
+          required: true

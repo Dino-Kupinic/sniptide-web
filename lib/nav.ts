@@ -6,6 +6,7 @@ import {
   FolderSyncIcon,
   HistoryIcon,
   KeyRoundIcon,
+  LayoutTemplateIcon,
   LibraryBigIcon,
   Link2Icon,
   MailIcon,
@@ -197,6 +198,12 @@ export const navMenus: NavMenu[] = [
             description: "Product news and notes on building Sniptide.",
             href: "/blog",
             icon: NewspaperIcon,
+          },
+          {
+            label: "Templates",
+            description: "Copy agent files and config, from CLAUDE.md to Compose.",
+            href: "/templates",
+            icon: LayoutTemplateIcon,
           },
           {
             label: "Contact",

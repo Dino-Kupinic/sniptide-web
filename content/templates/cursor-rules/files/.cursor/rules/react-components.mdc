@@ -1,0 +1,17 @@
+---
+description: How to write React components in this project
+globs: components/**/*.tsx, app/**/*.tsx
+alwaysApply: false
+---
+
+# React components
+
+- Server Components by default. Add `"use client"` only for state, effects or browser APIs.
+- One component per file, named export, file name in kebab-case: `order-table.tsx`.
+- Props get a `type`, not an `interface`, declared above the component.
+- Style with Tailwind classes. Merge conditional classes with `cn()` from `@/lib/utils`.
+- Build on the primitives in `components/ui` before writing new markup.
+
+Follow the structure of this example:
+
+@components/ui/empty-state.tsx

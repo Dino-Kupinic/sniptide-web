@@ -2,20 +2,22 @@
 
 import { cn } from "@sniptide/ui/lib/utils"
 import { CheckIcon, CopyIcon } from "lucide-react"
-import { type ComponentProps, useRef, useState } from "react"
+import { type ComponentProps, type ReactNode, useRef, useState } from "react"
 
 // A code block from a fenced block in a post: a hairline panel on the card surface, an optional
 // file name in a 36px mono title row (```ts title="sniptide.config.ts"), and a copy button. Shiki
 // colours the tokens with the --syntax-* variables, so light and dark switch with the page.
-// Fumadocs adds a language icon as an `icon` attribute, which this block doesn't show.
+// Fumadocs adds a language icon as an `icon` attribute, which this block doesn't show. `actions`
+// adds links before the copy button in the title row, such as a template file's raw link.
 export function CodeBlock({
   title,
+  actions,
   className,
   children,
   style,
   icon: _icon,
   ...props
-}: ComponentProps<"pre"> & { icon?: unknown }) {
+}: ComponentProps<"pre"> & { icon?: unknown; actions?: ReactNode }) {
   const ref = useRef<HTMLPreElement>(null)
   const [copied, setCopied] = useState(false)
 
@@ -49,7 +51,10 @@ export function CodeBlock({
       {title ? (
         <figcaption className="flex h-9 items-center justify-between gap-3 border-b pr-1.5 pl-4 font-mono text-xs text-muted-foreground">
           <span className="truncate">{title}</span>
-          {button}
+          <span className="flex shrink-0 items-center gap-1">
+            {actions}
+            {button}
+          </span>
         </figcaption>
       ) : (
         <div className="absolute top-1.5 right-1.5 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">

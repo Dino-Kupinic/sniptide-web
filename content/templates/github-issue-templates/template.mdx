@@ -1,0 +1,59 @@
+---
+title: GitHub issue templates
+query: GitHub issue template, bug report template
+description: GitHub issue form templates for bug reports and feature requests, plus a config.yml that sends questions and security reports elsewhere.
+answer: GitHub issue templates are YAML issue forms in .github/ISSUE_TEMPLATE that turn a blank issue into required fields. Copy the three files below into that folder on your default branch, change the labels and links, and the next person who opens an issue picks a form.
+category: project
+department: product
+logo: github
+updated: 2026-11-08
+files:
+  - .github/ISSUE_TEMPLATE/bug_report.yml
+  - .github/ISSUE_TEMPLATE/feature_request.yml
+  - .github/ISSUE_TEMPLATE/config.yml
+related: [user-stories, release-notes, github-actions-node-ci, prd-for-agents]
+---
+
+## Why forms instead of Markdown templates
+
+GitHub supports two kinds of issue template. A Markdown template pre-fills the issue body, and people delete it. An issue form, the `.yml` files here, shows labeled fields and refuses to submit until the required ones are filled, so every bug arrives with steps and a version. GitHub [documents the syntax](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms) for both.
+
+The files only take effect on the repository's default branch.
+
+## What each file does
+
+| File | What it does |
+| --- | --- |
+| `bug_report.yml` | Asks what happened, how to reproduce it and which version, and adds the `bug` and `triage` labels. |
+| `feature_request.yml` | Asks for the problem before the solution, and how often it happens, which is what you need to prioritize. |
+| `config.yml` | Turns off blank issues and links to Discussions for questions and to a private page for security reports. |
+
+## The fields you'll change
+
+| Key | What it does | Note |
+| --- | --- | --- |
+| `name`, `description` | The choice people see on the New issue page. | Keep the description to the one case the form is for. |
+| `title` | Pre-fills the issue title. | A prefix such as `[Bug]: ` makes the list scannable. |
+| `labels` | Labels added on submit. | Create the labels in the repository first. |
+| `type` | The field: `markdown`, `textarea`, `input`, `dropdown` or `checkboxes`. | `markdown` shows text and collects nothing. |
+| `render` | Formats a `textarea` as a code block. | Use it for logs, so nobody has to add the fences. |
+| `validations.required` | Blocks submit until the field is filled. | Require only what you can't triage without. Every extra required field loses reports. |
+
+## Ask for the problem first
+
+The feature form asks "What problem would this solve?" before "What would you like to happen?". Requests that start with a solution tend to describe one person's workaround. The problem tells you whether other users share it and whether something you already planned would cover it.
+
+Once an issue is accepted, rewrite it as a [user story](/templates/user-stories) with acceptance criteria before anyone builds it.
+
+## Variant: a pull request template
+
+Pull requests use a Markdown file rather than a form. Put it at `.github/pull_request_template.md`:
+
+```md title=".github/pull_request_template.md"
+## What this changes
+
+## How I tested it
+
+- [ ] Tests added or updated
+- [ ] Docs updated
+```

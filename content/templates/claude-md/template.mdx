@@ -1,0 +1,78 @@
+---
+title: CLAUDE.md template
+query: CLAUDE.md template
+description: A CLAUDE.md template for Claude Code with commands, layout, code style and rules, plus monorepo and AGENTS.md variants you can copy.
+answer: CLAUDE.md is the Markdown file Claude Code reads at the start of every session in your project, so it knows your commands, layout and rules without being told again. Copy the file below into the root of your repository and replace each section with the facts of your own project.
+category: agents
+department: engineering
+logo: claude
+updated: 2026-11-08
+files:
+  - CLAUDE.md
+related: [agents-md, claude-code-skill, mcp-json, cursor-rules]
+post: claude-code-skills
+---
+
+## How Claude Code uses it
+
+Claude Code loads `CLAUDE.md` from the directory you start it in, and from every directory above it, at the start of a session. A `CLAUDE.md` in a subdirectory loads when Claude works with files in that directory. Your personal file at `~/.claude/CLAUDE.md` applies to every project on your machine.
+
+Everything in the file takes up context in every session, so keep it to facts Claude can't work out from the code. Running `/init` in Claude Code writes a first draft from your repository, which you can then trim against this template.
+
+## What each section does
+
+| Section | What to put there | When to change it |
+| --- | --- | --- |
+| Overview | Two sentences on what the app is and what it runs on. | When the stack changes. |
+| Commands | The exact commands to install, run, test one file and check types. | Whenever a script in `package.json` changes. |
+| Project layout | The handful of folders that matter and what lives in each. | When you add or move a top-level folder. |
+| Code style | Rules a linter doesn't enforce, such as where database code may live. | When review keeps catching the same thing. |
+| Workflow | How a change is finished: tests, commit format, what needs a question first. | When the team's process changes. |
+| Never | The few actions that would cause real damage. | Rarely. Keep this list short. |
+
+Write each rule as an instruction with a reason or a path. "Components never query the database" is easier to follow than "keep a clean architecture".
+
+## Variant: a monorepo
+
+Keep the root file about the whole repository, and put package rules next to the package. Claude reads the package file only when it works there.
+
+```md title="CLAUDE.md"
+# Acme monorepo
+
+pnpm workspaces with Turborepo. Run commands from the root.
+
+## Commands
+
+- Everything: `pnpm turbo run build test lint`
+- One package: `pnpm --filter @acme/api test`
+
+## Packages
+
+- `apps/web`: the Next.js dashboard. See apps/web/CLAUDE.md.
+- `apps/api`: the Hono API. See apps/api/CLAUDE.md.
+- `packages/db`: the Drizzle schema, shared by both apps.
+
+Change `packages/db` only together with a migration, and run both apps' tests after.
+```
+
+```md title="apps/api/CLAUDE.md"
+# API
+
+- Routes live in `src/routes`, one file per resource.
+- Validate every request body with the Zod schemas in `src/schemas`.
+- Tests: `pnpm --filter @acme/api test`. They need `DATABASE_URL` from `.env.test`.
+```
+
+## Variant: share one file with other agents
+
+If your team also uses Codex, Cursor or another agent that reads `AGENTS.md`, keep the instructions there and import them. A line starting with `@` pulls another file into `CLAUDE.md`.
+
+```md title="CLAUDE.md"
+@AGENTS.md
+
+## Claude Code
+
+- Use plan mode for changes that touch more than three files.
+```
+
+The [AGENTS.md template](/templates/agents-md) has a starting point for the shared file.

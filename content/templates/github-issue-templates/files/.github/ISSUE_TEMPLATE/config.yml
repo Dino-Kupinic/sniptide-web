@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and help
+    url: https://github.com/acme/acme/discussions
+    about: Ask how to do something in Discussions, where answers stay findable.
+  - name: Security issues
+    url: https://acme.com/security
+    about: Report vulnerabilities privately. Please don't open a public issue.
