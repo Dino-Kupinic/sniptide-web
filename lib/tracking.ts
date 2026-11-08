@@ -9,7 +9,7 @@ import {
 } from "@/lib/consent"
 import { ctaEvent } from "@/lib/cta"
 import { isSectionSeen, newMilestones, outboundHost, scrollPercent } from "@/lib/funnel"
-import { posthogHost, posthogKey, posthogProxyPath } from "@/lib/posthog"
+import { deploymentEnvironment, posthogHost, posthogKey, posthogProxyPath } from "@/lib/posthog"
 
 // PostHog on sniptide.com, gated by the cookie banner (components/consent-banner.tsx).
 //
@@ -28,7 +28,8 @@ import { posthogHost, posthogKey, posthogProxyPath } from "@/lib/posthog"
 //   blog_action            { action, slug }       share, copy, open with AI or subscribe on the blog
 //   consent_banner_shown   { trigger }            the banner or the settings appeared
 //   consent_updated        { action, analytics, replay, source }  the visitor answered
-// Every event carries surface=marketing and consent=pending|denied|analytics|analytics_replay.
+// Every event carries surface=marketing, consent=pending|denied|analytics|analytics_replay and
+// environment=production|preview|development (lib/posthog.ts).
 
 let started = false
 let consent: ConsentState = null
@@ -38,6 +39,7 @@ export function startTracking() {
   started = true
   consent = readConsent()
   const analytics = consent?.analytics ?? false
+  const environment = deploymentEnvironment(window.location.hostname)
 
   posthog.init(posthogKey, {
     api_host: posthogProxyPath,
@@ -58,6 +60,7 @@ export function startTracking() {
       if (!event || isAnalyticsExcluded()) return null
       event.properties.surface = "marketing"
       event.properties.consent = consentLabel(consent)
+      event.properties.environment = environment
       return event
     },
   })

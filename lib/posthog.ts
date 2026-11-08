@@ -10,6 +10,17 @@ export const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://eu.i
 // /_site because every other unknown path is a share link proxied to the app.
 export const posthogProxyPath = "/_site/ph"
 
+// Pull request previews are served at <number>.sniptide.com and report to the same project, so
+// every event says where it came from. Reports about real visitors filter on
+// environment=production.
+export type DeploymentEnvironment = "production" | "preview" | "development"
+
+export function deploymentEnvironment(hostname: string): DeploymentEnvironment {
+  if (hostname === "sniptide.com") return "production"
+  if (/^\d+\.sniptide\.com$/.test(hostname)) return "preview"
+  return "development"
+}
+
 // The region's static assets host: eu.i.posthog.com -> eu-assets.i.posthog.com.
 export function posthogAssetsHost(host: string) {
   return host.replace(/^(https?:\/\/)(\w+)\.i\.posthog\.com/, "$1$2-assets.i.posthog.com")
