@@ -31,6 +31,7 @@ describe("template content", () => {
   test("every template is published", () => {
     expect(templates.map((template) => template.name).sort()).toEqual([
       "agents-md",
+      "brand-voice-guide",
       "caddyfile-reverse-proxy",
       "claude-code-skill",
       "claude-md",
@@ -38,10 +39,15 @@ describe("template content", () => {
       "docker-compose-postgres",
       "env-example",
       "github-actions-node-ci",
+      "github-issue-templates",
+      "launch-announcement",
       "llms-txt",
       "mcp-json",
       "nextjs-dockerfile",
       "prd-for-agents",
+      "release-notes",
+      "robots-txt-ai-crawlers",
+      "user-stories",
     ])
   })
 

@@ -34,7 +34,7 @@ deploy, with no further step.
    query: CLAUDE.md template        # the target query, for upkeep
    description: One sentence of 50 to 160 characters for search results and the directory.
    answer: Two sentences under the H1 that answer the query before the files.
-   category: agents                 # agents, deploy, project, specs or discovery
+   category: agents                 # agents, deploy, project, specs, discovery or writing
    department: engineering          # engineering, product or marketing
    logo: claude                     # optional: claude, cursor, openai, github or docker
    updated: 2026-11-08

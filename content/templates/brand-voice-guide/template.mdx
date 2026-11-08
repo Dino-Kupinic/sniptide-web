@@ -1,0 +1,49 @@
+---
+title: Brand voice guide template
+query: brand voice guide template, brand voice guidelines template
+description: A one-page brand voice guide with tone traits, writing rules, a word list and before and after examples that people and AI writing tools can follow.
+answer: A brand voice guide says who you write for, how you sound and which rules and words every piece of copy follows, with examples of each. Copy the example below into your repository or wiki, replace the traits, rules and words with yours, and point every writer and AI tool at the file.
+category: writing
+department: marketing
+updated: 2026-11-08
+files:
+  - docs/brand/voice.md
+related: [launch-announcement, llms-txt, agents-md, release-notes]
+---
+
+## Why keep it as a file
+
+A voice guide in a slide deck gets read once at onboarding. A Markdown file in the repository or the wiki gets read every time, by the people writing copy and by the AI tools drafting it. Claude, ChatGPT and coding agents all follow a short, concrete guide far better than a request to "sound like us", so the same file that keeps your team consistent also keeps the machines consistent.
+
+Keep it to one page. A guide nobody finishes reading doesn't change the copy.
+
+## What each section does
+
+| Section | What it settles | How to write it |
+| --- | --- | --- |
+| Who we write for | The reader every choice is made for. | One concrete group, with what they know and where they read. |
+| How we sound | Three or four traits, each with what it means and what it rules out. | A trait without a "we avoid" column is a wish, not a rule. |
+| Rules | Decisions people would otherwise make differently each time. | Numbered, checkable and short. Capitalization, numbers, dates and buttons cover most disagreements. |
+| Words | The vocabulary that makes you sound like you. | Pairs of "use" and "instead of", plus a short banned list. |
+| Examples | What the rules look like together. | Real situations from your product, with the version you'd reject next to it. |
+
+The examples do the most work. A writer or a model can copy a pattern from three good examples faster than it can apply ten abstract rules.
+
+## Use it with an AI writing tool
+
+Paste the file into the tool's project instructions, or attach it to the conversation, and ask for a draft that follows it. Then ask the tool to check its own draft against the rules and list any it broke. In a repository, link the guide from your [AGENTS.md](/templates/agents-md) so coding agents follow it when they write interface copy and error messages.
+
+## Variant: a voice section inside AGENTS.md
+
+When the full guide is too long for agent instructions, keep the rules that catch the most mistakes:
+
+```md title="AGENTS.md"
+## Interface copy
+
+- Follow docs/brand/voice.md. In short:
+- Sentence case for headings and buttons. Buttons name the action ("Send invoice").
+- Errors say what failed and what to do next, in full sentences.
+- Never use: revolutionary, seamless, supercharge, leverage.
+```
+
+For a launch, the [launch announcement template](/templates/launch-announcement) shows the voice applied to a post and its social copy.

@@ -67,23 +67,27 @@ export function TemplateIndex({ templates }: { templates: IndexTemplate[] }) {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="scrollbar-subtle -mx-5 flex overflow-x-auto px-5 md:mx-0 md:px-0">
+        {/* On phones the tabs share the full width and drop their counts, so all four fit at 360px
+            without scrolling. */}
+        <div className="flex min-w-0">
           <RadioGroup
             aria-label="Department"
             value={department ?? "all"}
             onValueChange={(value) =>
               pick(isDepartment(value as string) ? (value as TemplateDepartment) : null)
             }
-            className="flex shrink-0 gap-0.5 rounded-lg bg-muted p-[3px]"
+            className="flex w-full gap-0.5 rounded-lg bg-muted p-[3px] md:w-auto"
           >
             {(["all", ...departments] as const).map((key) => (
               <Radio.Root
                 key={key}
                 value={key}
-                className="inline-flex h-[30px] shrink-0 items-center gap-1.5 rounded-md px-3 text-[13px] leading-[18px] whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-link data-checked:bg-background data-checked:font-medium data-checked:text-foreground data-checked:shadow-[0_1px_2px_rgb(0_0_0/0.08)]"
+                className="inline-flex h-[34px] flex-auto items-center justify-center gap-1.5 rounded-md px-2 text-[13px] md:h-[30px] md:flex-none md:px-3 leading-[18px] whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-link data-checked:bg-background data-checked:font-medium data-checked:text-foreground data-checked:shadow-[0_1px_2px_rgb(0_0_0/0.08)]"
               >
                 {key === "all" ? "All" : templateDepartments[key]}
-                <span className="font-normal text-muted-foreground tabular-nums">{count(key)}</span>
+                <span className="hidden font-normal text-muted-foreground tabular-nums sm:inline">
+                  {count(key)}
+                </span>
               </Radio.Root>
             ))}
           </RadioGroup>

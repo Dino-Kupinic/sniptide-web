@@ -1,0 +1,48 @@
+---
+title: Product launch announcement template
+query: product launch announcement template, feature announcement template
+description: A feature launch announcement template with a blog post, social posts for X, Bluesky and LinkedIn, and an email subject and preview.
+answer: A launch announcement says what is new in the first sentence, shows it, explains what people can do with it and ends with one way to try it. Copy the blog post and the social posts below, replace the feature with yours, and publish the post first so every social post links to it.
+category: writing
+department: marketing
+updated: 2026-11-08
+files:
+  - launch-post.md
+  - social-posts.md
+related: [brand-voice-guide, release-notes, robots-txt-ai-crawlers, llms-txt]
+---
+
+## Lead with what changed
+
+Most readers see the title and the first sentence, in a feed, an inbox or a search result. Put the change there: "Owners can now invite their team" beats "We're excited to share a big update". Then show it, with a screenshot of the real screen, because a picture of the feature answers "what does it look like" faster than a paragraph.
+
+## What each part of the post does
+
+| Part | What it does | How to write it |
+| --- | --- | --- |
+| Title | Names the change from the reader's side. | A verb and the feature: "Invite your team to Acme". |
+| Opening paragraph | Says what was true before and what is true now. | Two or three sentences. A reader who stops here should know what shipped. |
+| Screenshot | Shows the feature. | The real screen with realistic data, and alt text that describes it. |
+| What you can do | The capabilities, one per line. | Bold the action, then one sentence of detail. |
+| Why we built it | The problem in customers' words. | Short and specific. It makes the feature believable. |
+| Pricing | Who gets it and what it costs. | Say it plainly, even when the answer is "every plan". |
+| Try it | One next step. | Where to click, plus a link to the docs. One call to action, not three. |
+
+Leave out the history of the project and the team's feelings about it. Readers care about what they can do now.
+
+## Write each social post for its place
+
+The file `social-posts.md` adapts the same announcement three ways. The short post fits X and Bluesky and states the change and its benefit in one breath. The LinkedIn post opens with the customer problem, because that audience reads further and responds to the story. The email gets a subject that names the feature and a preview line that adds the benefit, since those two lines decide whether it is opened.
+
+Each post links to the blog post, so the full detail lives in one place you can update.
+
+## Variant: a short in-app announcement
+
+For a smaller feature, a banner or a what's-new item is enough:
+
+```md title="whats-new.md"
+**Export invoices to CSV.** The export on the Invoices page now keeps your filters.
+[See how](https://acme.com/docs/export)
+```
+
+Follow your [brand voice guide](/templates/brand-voice-guide) for the wording, and add the change to your [changelog](/templates/release-notes) in the same release.

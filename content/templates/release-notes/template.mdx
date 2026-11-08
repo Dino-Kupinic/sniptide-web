@@ -1,0 +1,54 @@
+---
+title: Changelog and release notes template
+query: release notes template, changelog template
+description: A CHANGELOG.md template in the Keep a Changelog format, with a summary per release, the six change types and comparison links you can copy.
+answer: A changelog lists each release with its date, a short summary and its changes grouped as Added, Changed, Deprecated, Removed, Fixed and Security. Copy the example below as CHANGELOG.md, add new entries under Unreleased as you merge, and move them under a version heading when you ship.
+category: writing
+department: product
+updated: 2026-11-08
+files:
+  - CHANGELOG.md
+related: [user-stories, github-issue-templates, launch-announcement, prd-for-agents]
+---
+
+## Who reads a changelog
+
+Two readers open this file. A customer wants to know what is new and whether anything they rely on changed. A developer upgrading a dependency wants to know what breaks. Both skim, so the order of each release matters more than the prose: a one-paragraph summary for the first reader, then grouped lines for the second.
+
+Write for those readers rather than from the commit log. "Totals on invoices with a 0% tax line no longer show NaN" tells a customer whether their bug is fixed. "fix: handle zero tax in calc" doesn't.
+
+## What each part does
+
+| Part | What it does | How to write it |
+| --- | --- | --- |
+| `## [Unreleased]` | Collects changes as they merge, so release day is a rename. | Add a line in the same pull request as the change. |
+| `## [2.4.0] - 2026-11-04` | One heading per release, newest first. | The version and an ISO date, which reads the same in every country. |
+| Summary paragraph | The one thing a customer should know about the release. | Optional. Use it when a release has a headline feature. |
+| Added, Changed, Fixed | New features, changes to existing behavior and bug fixes. | One line per change, written as the result the user sees. |
+| Deprecated, Removed | What will stop working and what already has. | Say what to use instead and the date, as in the endpoint line. |
+| Security | Fixes people need to act on. | Always its own group, so nobody misses it. |
+| Links at the bottom | Each version links to its diff. | Update them when you add a version. |
+
+Leave out groups a release doesn't need. An empty "Removed" heading is noise.
+
+## Changelog or release notes
+
+The changelog is the complete record and lives in the repository. Release notes are the customer-facing version of one release, on a page, in an email or in the app. Write the changelog first, then build the notes from its summary and its Added and Changed lines, and leave out internal fixes nobody noticed.
+
+## Variant: release notes for an email or a page
+
+```md title="release-notes-2.4.md"
+# Invite your team to Acme
+
+Owners can now invite teammates from Settings > Members. Each person joins as an Owner,
+Editor or Viewer, so you decide who can send invoices and who can only look.
+
+Also in this release:
+
+- Export invoices to CSV from the Invoices page, with your filters applied.
+- The Invoices list shows 50 rows at a time.
+
+Full details are in the [changelog](https://acme.com/changelog#240).
+```
+
+For a release big enough to announce, the [launch announcement template](/templates/launch-announcement) covers the post and the social copy.

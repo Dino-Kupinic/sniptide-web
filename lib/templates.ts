@@ -10,6 +10,7 @@ export const templateCategories = {
   project: "Project setup",
   specs: "Specs",
   discovery: "Discovery",
+  writing: "Writing",
 } as const
 
 // Who the template is for. The directory filters by it, in this order.

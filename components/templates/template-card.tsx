@@ -58,7 +58,7 @@ export function TemplateCard({ template }: { template: TemplateCardData }) {
           {template.logo ? (
             <Logo logo={template.logo} />
           ) : (
-            <span className="truncate font-mono text-sm leading-5">{first}</span>
+            <span className="truncate font-mono text-sm leading-5">{first?.split("/").pop()}</span>
           )}
         </div>
       </div>
