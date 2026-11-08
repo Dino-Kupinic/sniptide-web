@@ -14,6 +14,7 @@ import {
   renderFeed,
   renderJsonFeed,
   slugFromPath,
+  stripMdxComments,
 } from "@/lib/blog"
 import { getAllPosts, getPosts } from "@/lib/blog-source"
 import { resolveNavMenus, sectionHref } from "@/lib/nav"
@@ -98,6 +99,13 @@ describe("feed and structured data", () => {
       image: `${siteUrl}/blog/first/opengraph-image`,
       author: { name: "Dino Kupinic" },
     })
+  })
+})
+
+describe("markdown twin", () => {
+  test("drops MDX comments such as the writing brief", () => {
+    const text = "{/*\nWriting brief\n*/}\n\nIntro.\n\n{/* TODO: link */}\n\n## Next"
+    expect(stripMdxComments(text)).toBe("Intro.\n\n## Next")
   })
 })
 

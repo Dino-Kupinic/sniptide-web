@@ -7,7 +7,7 @@ import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 import { LifeBackground } from "@/components/blog/life-background"
 import { IndexFallback } from "@/components/blog/post-list"
 import { SubscribeMenu } from "@/components/blog/subscribe-menu"
-import { blogPath, feedPath, feeds, readingMinutes } from "@/lib/blog"
+import { blogPath, feedPath, feeds, readingMinutes, stripMdxComments } from "@/lib/blog"
 import { getPosts } from "@/lib/blog-source"
 import { links } from "@/lib/links"
 
@@ -41,7 +41,7 @@ function plainText(markdown: string) {
 export default async function Page() {
   const posts: IndexPost[] = await Promise.all(
     getPosts().map(async ({ entry, ...post }) => {
-      const markdown = await entry.getText("processed")
+      const markdown = stripMdxComments(await entry.getText("processed"))
       return { ...post, minutes: readingMinutes(markdown), searchText: plainText(markdown) }
     }),
   )

@@ -22,6 +22,7 @@ import {
   postPath,
   postStructuredData,
   readingMinutes,
+  stripMdxComments,
 } from "@/lib/blog"
 import { adjacentPosts, getPost, getPosts } from "@/lib/blog-source"
 import { siteUrl } from "@/lib/site"
@@ -77,7 +78,7 @@ export default async function Page({ params }: Props) {
   if (!post) notFound()
 
   const author = postAuthor(post)
-  const minutes = readingMinutes(await post.entry.getText("processed"))
+  const minutes = readingMinutes(stripMdxComments(await post.entry.getText("processed")))
   const Body = post.entry.body
   const { newer, older } = adjacentPosts(post.slug)
   // The contents list needs at least two sections to be worth showing.

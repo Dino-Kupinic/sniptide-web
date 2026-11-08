@@ -1,4 +1,4 @@
-import { formatPostDate, postAuthor, postPath } from "@/lib/blog"
+import { formatPostDate, postAuthor, postPath, stripMdxComments } from "@/lib/blog"
 import { getPost, getPosts } from "@/lib/blog-source"
 import { siteUrl } from "@/lib/site"
 
@@ -15,7 +15,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
   const post = getPost((await params).slug)
   if (!post) return new Response("Not found", { status: 404 })
   const canonical = `${siteUrl}${postPath(post.slug)}`
-  const body = await post.entry.getText("processed")
+  const body = stripMdxComments(await post.entry.getText("processed"))
   const markdown = `# ${post.title}\n\n> ${post.description}\n\nBy ${postAuthor(post).name}, ${formatPostDate(post.date)}. Canonical: ${canonical}\n\n${body.trim()}\n`
   return new Response(markdown, {
     headers: {

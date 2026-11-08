@@ -248,3 +248,9 @@ export function postStructuredData(post: PostMeta) {
     isPartOf: { "@type": "Blog", "@id": `${siteUrl}${blogPath}#blog`, name: `${siteName} blog` },
   }
 }
+
+// A post's MDX source without its {/* … */} comments: the writing brief and notes to the editor
+// stay in the file but out of the Markdown twin, the search text and the reading time.
+export function stripMdxComments(text: string) {
+  return text.replace(/\{\/\*[\s\S]*?\*\/\}\n*/g, "").replace(/\n{3,}/g, "\n\n")
+}
