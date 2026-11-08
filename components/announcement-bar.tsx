@@ -14,20 +14,16 @@ export function AnnouncementBar({ announcement }: { announcement: Announcement }
   const safeVersion = version.replace(/[^\w.-]/g, "")
   return (
     // The whole bar is a pane of blue glass over the landing page's Game of Life: the cells drift
-    // underneath, softened by the blur, with a light edge along the top like the window on the pink
-    // sharing section. Contrast is set for the worst case, a lit cell straight under a letter:
-    // white text stays above 4.5:1 there and above 7:1 over the plain band.
+    // underneath, softened by a light blur. Contrast is set for the worst case, a lit cell straight
+    // under a letter: white text stays above 4.5:1 there and at 8:1 over the plain band.
     <div id="announcement" className="relative isolate overflow-hidden bg-[#2a26ec] text-white">
       <script
         // biome-ignore lint/security/noDangerouslySetInnerHtml: a fixed script with a JSON-encoded key.
         dangerouslySetInnerHTML={{ __html: dismissedScript }}
       />
       <style>{`html[data-dismissed-announcement="${safeVersion}"] #announcement{display:none}`}</style>
-      <LifeField live="#6a66ff" trail="#3f3bf5" density={0.1} className="-z-20 opacity-60" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 border-b border-white/15 bg-linear-to-b from-white/10 to-white/[0.04] shadow-[inset_0_1px_0_rgb(255_255_255/0.3),inset_0_-1px_0_rgb(12_10_90/0.25)] backdrop-blur-[3px]"
-      />
+      <LifeField live="#6a66ff" trail="#4541f8" density={0.14} className="-z-20 opacity-90" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 backdrop-blur-[2px]" />
       <a
         href={href}
         className="group mx-auto flex min-h-10 max-w-[1440px] items-center justify-center gap-3 py-2.5 pr-12 pl-5 text-center text-sm leading-5 font-medium outline-none focus-visible:underline md:px-14"
