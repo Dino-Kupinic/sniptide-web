@@ -15,8 +15,6 @@ export const metadata: Metadata = {
   alternates: { canonical: templatesPath },
 }
 
-export const dynamic = "force-static"
-
 // The public directory of templates: a department filter and search above a grid of cards, each
 // with a peek at the template's main file.
 export default async function Page() {
