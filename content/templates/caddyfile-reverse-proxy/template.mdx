@@ -1,0 +1,100 @@
+---
+title: Caddyfile reverse proxy
+query: Caddyfile reverse proxy
+description: A Caddyfile that reverse proxies a domain to your app with automatic HTTPS, compression and security headers, plus Docker, path and load balancing variants.
+answer: This Caddyfile puts your app on example.com with an automatic HTTPS certificate, compression, security headers and a www redirect. Replace example.com with your domain and localhost:3000 with your app's address, point the domain's DNS at the server, and reload Caddy.
+category: deploy
+updated: 2026-11-08
+files:
+  - Caddyfile
+related: [nextjs-dockerfile, docker-compose-postgres, env-example, github-actions-node-ci]
+---
+
+## Run it
+
+Caddy reads `/etc/caddy/Caddyfile` when it runs as a system service. Check the file, then reload without dropping connections:
+
+```bash title="Terminal"
+caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+Ports 80 and 443 must be open on the server and the domain's A or AAAA record must point at it. Caddy then gets a certificate from Let's Encrypt on its own and renews it before it expires.
+
+## What each part does
+
+| Part | What it does | When to change it |
+| --- | --- | --- |
+| Global options | The block at the top without a site name. `email` is the address for certificate notices. | Add options such as `admin off` here. |
+| `example.com` | A site block. A domain name as the address turns on HTTPS and the redirect from HTTP. | Use your domain. List several, separated by commas, to serve them the same way. |
+| `encode` | Compresses responses with zstd or gzip, whichever the browser accepts. | Rarely. |
+| `reverse_proxy` | Sends every request to your app. Caddy sets `X-Forwarded-For` and `X-Forwarded-Proto` for it. | Point it at your app's address and port. |
+| `header` | Adds security headers. `-Server` removes Caddy's own `Server` header. | Add a `Content-Security-Policy` once you know which sources your app loads. |
+| `log` | Writes an access log for the site. Without it, Caddy logs no requests. | Remove it, or log to `stdout` in a container. |
+| `www.example.com` | Redirects the www name to the bare domain, keeping the path. | Swap the two if you prefer www. |
+
+Only add `Strict-Transport-Security` once HTTPS works for the domain and every subdomain, because browsers then refuse plain HTTP for a year.
+
+## Variant: Caddy in Docker Compose
+
+In Compose, the app is reached by its service name. The `caddy_data` volume keeps certificates across restarts, which matters because Let's Encrypt limits how often you can request new ones.
+
+```yaml title="compose.yaml"
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  app:
+    build: .
+
+volumes:
+  caddy_data:
+  caddy_config:
+```
+
+```text title="Caddyfile"
+example.com {
+	reverse_proxy app:3000
+}
+```
+
+## Variant: an API and a front end on one domain
+
+`handle_path` strips the matched prefix before proxying, so the API sees `/users` instead of `/api/users`. Use `handle` to keep the prefix.
+
+```text title="Caddyfile"
+example.com {
+	handle_path /api/* {
+		reverse_proxy localhost:4000
+	}
+
+	handle {
+		reverse_proxy localhost:3000
+	}
+}
+```
+
+## Variant: several app servers
+
+List more than one upstream and Caddy balances between them, skipping any that fail their health check.
+
+```text title="Caddyfile"
+example.com {
+	reverse_proxy app1:3000 app2:3000 {
+		lb_policy round_robin
+		health_uri /api/health
+		health_interval 10s
+	}
+}
+```
+
+To run Sniptide on your own server behind Caddy, follow the [reverse proxy guide](https://docs.sniptide.com/self-hosting/reverse-proxy).

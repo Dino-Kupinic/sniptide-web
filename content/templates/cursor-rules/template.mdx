@@ -1,0 +1,54 @@
+---
+title: Cursor rules examples
+query: cursor rules examples
+description: Two Cursor rules examples in .cursor/rules, one always applied and one scoped to React files, with every rule type and its frontmatter explained.
+answer: Cursor rules are Markdown files in .cursor/rules that give Cursor's agent standing instructions for your project. Copy the two rules below, one that applies to every request and one that applies only when you work on React components, and adjust them to your code.
+category: agents
+updated: 2026-11-08
+files:
+  - .cursor/rules/project.mdc
+  - .cursor/rules/react-components.mdc
+related: [agents-md, claude-md, claude-code-skill, mcp-json]
+---
+
+## How Cursor picks a rule
+
+Each rule is an `.mdc` file: YAML frontmatter that decides when the rule applies, then Markdown instructions. Commit the folder and everyone on the project gets the same rules. The frontmatter gives four ways to apply a rule:
+
+| Type | Frontmatter | When it applies |
+| --- | --- | --- |
+| Always | `alwaysApply: true` | In every request in the project. Keep these short. |
+| Auto attached | `globs` with `alwaysApply: false` | When a file matching the globs is in the conversation. |
+| Agent requested | `description` only | When the agent decides from the description that it needs the rule. |
+| Manual | No `description`, no `globs` | Only when you mention it, such as `@react-components`. |
+
+A line like `@components/ui/empty-state.tsx` inside a rule attaches that file whenever the rule applies. One real example in your codebase teaches more than a paragraph of style rules.
+
+## What each rule does
+
+**project.mdc** is the always-on rule. It holds what every request needs: the stack in one line, the commands and a few rules. Change it when a script or a team rule changes.
+
+**react-components.mdc** applies only while Cursor works on `.tsx` files in `components/` or `app/`. Rules scoped by globs cost nothing in other requests, so this is where detailed conventions belong. Add a rule like it for each area with its own conventions, such as API routes or tests.
+
+Older projects keep their rules in a single `.cursorrules` file at the root. Cursor still reads it, but it is deprecated, so move its contents into `.cursor/rules` and split them by area as you go.
+
+## Variant: a rule the agent requests
+
+A rule with only a description stays out of context until a task matches it. This suits instructions for a task that comes up now and then, such as writing a migration.
+
+```md title=".cursor/rules/database-migrations.mdc"
+---
+description: Use when creating or changing database tables, columns or indexes
+---
+
+# Database migrations
+
+1. Change the schema in `db/schema.ts`.
+2. Run `pnpm db:generate` and read the generated SQL in `db/migrations/`.
+3. Never edit a migration that is already merged. Write a new one.
+4. Add a column as nullable or with a default, so the migration runs on a live table.
+```
+
+## Variant: one file for every agent
+
+If your team also uses Claude Code or Codex, Cursor reads an `AGENTS.md` at the root of the repository as well. Put shared rules there and keep `.cursor/rules` for what only Cursor needs. The [AGENTS.md template](/templates/agents-md) is a starting point.

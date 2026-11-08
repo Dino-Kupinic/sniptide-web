@@ -2,11 +2,13 @@ import { links } from "@/lib/links"
 
 // Which button was clicked: the destination says what it does, the closest section marked with
 // data-cta-location says where it sits (header, hero, product, features, recipes, secrets, sharing,
-// cta, footer, and on the blog blog-post for links in an article and blog-inline for its InlineCta).
+// cta, footer, and on the blog blog-post for links in an article and blog-inline for its InlineCta,
+// and template on a template page).
 export type CtaTarget =
   | "sign_up"
   | "sign_in"
   | "new_paste"
+  | "use_template"
   | "dashboard"
   | "import_gist"
   | "collections"
@@ -36,6 +38,8 @@ const targets: Record<string, CtaTarget> = {
 export function ctaTarget(href: string | null): CtaTarget | null {
   if (!href || href === "#") return null
   if (href.startsWith("#")) return "anchor"
+  // A template's Use template button opens the editor filled in (/new?template=<name>).
+  if (href.startsWith(`${links.newPaste}?template=`)) return "use_template"
   return targets[href] ?? null
 }
 

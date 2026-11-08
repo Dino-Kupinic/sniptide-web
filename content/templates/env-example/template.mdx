@@ -1,0 +1,70 @@
+---
+title: .env.example template
+query: .env.example template
+description: A .env.example template with grouped variables, safe defaults and empty secrets, plus how to keep it in sync with your code and share the real values.
+answer: A .env.example file lists every environment variable your app needs, with safe defaults and empty secrets, so a new clone knows what to fill in. Copy the template below to the root of your repository, commit it, and keep the real values in an uncommitted .env file.
+category: project
+updated: 2026-11-08
+files:
+  - .env.example
+related: [docker-compose-postgres, nextjs-dockerfile, github-actions-node-ci, mcp-json]
+---
+
+## How the file works
+
+A new teammate or an agent runs `cp .env.example .env`, fills in the blanks and starts the app. The example file is committed and the real `.env` is not. Add this line to `.gitignore` before anything else:
+
+```bash title=".gitignore"
+.env
+.env*.local
+```
+
+## What each part does
+
+| Part | Rule | Why |
+| --- | --- | --- |
+| Header comment | Says how to copy the file and what not to commit. | It is the first thing someone opens on a fresh clone. |
+| Groups | One `# --- Name ---` comment per service. | Long files stay scannable, and a missing group stands out. |
+| Defaults | Real values that work on a laptop, such as `localhost` URLs. | The app starts with only the secrets filled in. |
+| Secrets | Left empty, with a comment saying where to get one. | An empty value fails loudly. A fake one fails in confusing ways. |
+| Optional | Grouped last, with what happens when they are empty. | People know which blanks they can skip. |
+
+Quote a value that contains spaces, as `EMAIL_FROM` does. Comments go on their own line, because some parsers read a `#` after a value as part of the value.
+
+## Keep it in sync with the code
+
+The file goes stale the day someone reads a new variable without adding it here. Validate the environment when the app starts, so a missing variable stops the app with a clear message:
+
+```ts title="lib/env.ts"
+import { z } from "zod"
+
+const schema = z.object({
+  NODE_ENV: z.enum(["development", "test", "production"]),
+  APP_URL: z.url(),
+  DATABASE_URL: z.string().min(1),
+  AUTH_SECRET: z.string().min(32),
+  SENTRY_DSN: z.string().optional(),
+})
+
+export const env = schema.parse(process.env)
+```
+
+## Variant: a Next.js app
+
+Next.js loads `.env.local` and sends variables that start with `NEXT_PUBLIC_` to the browser. Mark those clearly, because anything with the prefix is public.
+
+```bash title=".env.example"
+# Server only
+DATABASE_URL=postgres://app:app@localhost:5432/app
+AUTH_SECRET=
+
+# Sent to the browser. Never put a secret here.
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_POSTHOG_KEY=
+```
+
+Copy it with `cp .env.example .env.local` in a Next.js project.
+
+## Share the real values
+
+The example file shows what is needed, and the values still have to reach each person. Sending a `.env` over chat leaves a copy in every thread. Sniptide stores the variables as an encrypted env group. You upload yours with `sniptide env push my-app`, and a new teammate writes their `.env` with `sniptide env pull my-app` instead of asking for keys. The [secrets guide](https://docs.sniptide.com/core-concepts/secrets) covers the setup.

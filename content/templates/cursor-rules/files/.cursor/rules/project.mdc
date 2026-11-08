@@ -1,0 +1,22 @@
+---
+description: Project overview, commands and rules that apply to every task
+alwaysApply: true
+---
+
+# Acme Dashboard
+
+Next.js App Router, TypeScript, Tailwind CSS and Drizzle on Postgres.
+
+## Commands
+
+- Dev server: `pnpm dev`
+- Tests: `pnpm test`
+- Lint and types: `pnpm lint && pnpm typecheck`
+
+Run the tests and the type check before you finish a task.
+
+## Rules
+
+- TypeScript strict mode. Use `unknown` and narrow it instead of `any`.
+- Database access only in `lib/db`. Components call functions from there.
+- Ask before you add a dependency.

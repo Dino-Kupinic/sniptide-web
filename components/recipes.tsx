@@ -93,6 +93,17 @@ export function Recipes() {
               Read the CLI guide
             </a>
           </p>
+          <p className="pl-10 text-base leading-6.5 text-[#6b6b6b] dark:text-[#a3a3a3]">
+            For a new project, start from one of the{" "}
+            <a
+              href="/templates"
+              className="font-medium text-[#2a26ec] underline-offset-4 hover:underline dark:text-[#8f8cff]"
+            >
+              templates
+            </a>
+            , such as a CLAUDE.md or a Docker Compose file for Postgres, and save it to your
+            library.
+          </p>
         </div>
       </div>
     </section>

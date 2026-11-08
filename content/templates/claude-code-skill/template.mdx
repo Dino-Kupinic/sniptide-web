@@ -1,0 +1,81 @@
+---
+title: Claude Code skill template
+query: Claude Code skill template, SKILL.md example
+description: A Claude Code skill template with a SKILL.md example and a supporting file, plus the frontmatter fields, scopes and two variants explained.
+answer: A Claude Code skill is a folder with a SKILL.md file that tells Claude when to use it and what to do, plus any files it points to. Copy the review skill below into .claude/skills in your project, then change the description and steps to fit your own task.
+category: agents
+updated: 2026-11-08
+files:
+  - .claude/skills/review-pr/SKILL.md
+  - .claude/skills/review-pr/checklist.md
+related: [claude-md, mcp-json, agents-md, cursor-rules]
+post: claude-code-skills
+---
+
+## How the skill loads
+
+Claude keeps only the `name` and `description` of every skill in context. When a request matches the description, or you type `/review-pr`, Claude reads the body of `SKILL.md`. Other files in the folder, such as `checklist.md`, load only when the instructions point to them. That makes a long checklist cheap to keep around.
+
+Where you put the folder decides who gets it:
+
+| Scope | Path | Use it for |
+| --- | --- | --- |
+| Project | `.claude/skills/review-pr/SKILL.md` | Workflows for this codebase. Commit it and your team gets it. |
+| Personal | `~/.claude/skills/review-pr/SKILL.md` | Your own workflows, in every project on your machine. |
+
+Skills follow the [Agent Skills](https://agentskills.io) open standard, so the same folder also works in other tools that read it.
+
+## What each part does
+
+**name** is the command you type, `/review-pr`. Use lowercase letters, numbers and hyphens. It defaults to the folder name.
+
+**description** is what Claude reads to decide whether to use the skill. Start with what the skill does, then say when to use it in the words people actually type: "review", "check a PR", "look over a diff". A vague description is the most common reason a skill never runs.
+
+**Steps** give the order of work with exact commands. Claude follows numbered steps closely, so put the checks it must run here rather than in prose.
+
+**Report format** makes the output the same every time, which matters when several people read the reviews.
+
+**checklist.md** holds the detail. Split anything long or rarely needed into its own file and link it, so the main file stays short.
+
+## Variant: a skill only you can start
+
+Add `disable-model-invocation: true` for a skill with side effects, such as a release. Claude then never runs it on its own, and it starts only when you type `/release`.
+
+```md title=".claude/skills/release/SKILL.md"
+---
+name: release
+description: Cut a release. Bumps the version, writes the changelog and tags the commit.
+disable-model-invocation: true
+---
+
+# Release
+
+1. Make sure the working tree is clean and `main` is up to date.
+2. Run `pnpm test`. Stop if anything fails.
+3. Bump the version with `pnpm version <patch|minor|major>`, as given after the command.
+4. Add the merged pull requests since the last tag to `CHANGELOG.md`.
+5. Push the commit and the tag: `git push --follow-tags`.
+```
+
+## Variant: background knowledge for some files
+
+A skill can carry knowledge rather than a task. With `user-invocable: false` it doesn't show up as a command, and `paths` limits it to the files it is about.
+
+```md title=".claude/skills/design-system/SKILL.md"
+---
+name: design-system
+description: The project's UI conventions. Use when writing or changing React components or styles.
+user-invocable: false
+paths:
+  - components/**
+  - app/**/*.tsx
+---
+
+# Design system
+
+- Use the components in `components/ui` before writing new markup.
+- Colors and spacing come from the Tailwind theme. Never write hex values in components.
+- Every interactive element needs a visible focus style.
+```
+
+To keep a skill's code current across many projects, the [Claude Code skills tutorial](/blog/claude-code-skills) shows how to generate the folder from a Sniptide collection.

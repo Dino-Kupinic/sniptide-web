@@ -1,0 +1,83 @@
+---
+title: AGENTS.md template
+query: AGENTS.md template, AGENTS.md example
+description: An AGENTS.md template and example with setup, checks, code style, testing and PR rules, plus a monorepo layout. Copy it into your repo.
+answer: AGENTS.md is a plain Markdown file at the root of a repository that tells coding agents how to set up, test and change the project. Copy the example below, keep the sections that apply, and replace the commands and rules with your own.
+category: agents
+updated: 2026-11-08
+files:
+  - AGENTS.md
+related: [claude-md, cursor-rules, claude-code-skill, github-actions-node-ci]
+---
+
+## Who reads it
+
+AGENTS.md is an open format described at [agents.md](https://agents.md). OpenAI Codex, Cursor and many other coding agents read it on their own. Claude Code reads `CLAUDE.md` instead, and a `CLAUDE.md` that contains the line `@AGENTS.md` imports it, so one file can serve every agent your team uses.
+
+The format has no required fields or headings. It is a README for agents: the things a new teammate would need on day one that don't belong in the human README.
+
+## What each section does
+
+| Section | What it tells the agent | When to change it |
+| --- | --- | --- |
+| Project | What the code is and what it runs on, in two sentences. | When the stack changes. |
+| Setup | The commands that take a fresh clone to a running app, in order. | When a step stops working on a fresh clone. |
+| Checks | What must pass before a task is done. Agents run these to check their own work. | When CI changes. Keep it in step with your workflow file. |
+| Code style | Rules a formatter doesn't enforce, with paths. | When review keeps catching the same thing. |
+| Testing | Where tests go and how to write one for this codebase. | When you add a test helper or a new kind of test. |
+| Pull requests | Title format and what a description includes. | When the team's review process changes. |
+| Security | What an agent must never do without asking. | Rarely. Keep it short. |
+
+Commands are the most valuable part of the file. Write them exactly as they run, in backticks, so an agent can copy them.
+
+## Variant: a monorepo
+
+Agents use the `AGENTS.md` closest to the file they are editing, so each package can carry its own rules. Keep the root file about the whole repository.
+
+```md title="AGENTS.md"
+# Acme monorepo
+
+pnpm workspaces with Turborepo. Run commands from the root.
+
+## Checks
+
+- `pnpm turbo run lint typecheck test`
+- One package: `pnpm --filter @acme/api test`
+
+## Packages
+
+- `apps/web`: Next.js dashboard
+- `apps/api`: Hono API
+- `packages/db`: Drizzle schema and migrations, shared by both apps
+
+Each package has its own AGENTS.md with its rules.
+```
+
+```md title="apps/api/AGENTS.md"
+# API
+
+- Routes live in `src/routes`, one file per resource.
+- Validate request bodies with the Zod schemas in `src/schemas`.
+- Tests need `DATABASE_URL` from `.env.test`.
+```
+
+## Variant: a small library
+
+A package with no app to run needs only three sections.
+
+```md title="AGENTS.md"
+# date-range
+
+A dependency-free TypeScript library for parsing and formatting date ranges.
+
+## Checks
+
+- `npm test`
+- `npm run build` must produce `dist/` without type errors.
+
+## Rules
+
+- No runtime dependencies.
+- Every exported function has a JSDoc comment and a test in `test/`.
+- Public API changes need an entry in `CHANGELOG.md`.
+```

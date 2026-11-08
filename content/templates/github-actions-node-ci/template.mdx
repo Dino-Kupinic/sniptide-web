@@ -1,0 +1,104 @@
+---
+title: GitHub Actions Node CI
+query: GitHub Actions Node CI
+description: A GitHub Actions workflow for Node.js that lints, type checks, tests and builds on every push and pull request, with pnpm, matrix and Postgres variants.
+answer: This workflow runs your lint, type check, tests and build on every pull request and every push to main, with npm's cache so repeat runs install fast. Save it as .github/workflows/ci.yml, make sure the four npm scripts exist in package.json, and push.
+category: project
+updated: 2026-11-08
+files:
+  - .github/workflows/ci.yml
+related: [nextjs-dockerfile, docker-compose-postgres, env-example, agents-md]
+---
+
+## What each part does
+
+| Part | What it does | When to change it |
+| --- | --- | --- |
+| `on` | Runs on pull requests and on pushes to `main`. Pushes to other branches run through their pull request, so nothing runs twice. | Add `workflow_dispatch:` to start runs by hand. |
+| `concurrency` | Cancels a run that is still going when a newer push arrives on the same branch. | Rarely. |
+| `permissions` | Gives the job read access to the code and nothing else. | Only when a step needs more, such as writing a comment. |
+| `timeout-minutes` | Stops a stuck job after 15 minutes instead of the default 6 hours. | When your build legitimately takes longer. |
+| `setup-node` | Installs the Node version named in `.nvmrc` and caches npm's download cache by the lockfile. | Use `node-version: 24` if you don't keep an `.nvmrc`. |
+| `npm ci` | Installs exactly what the lockfile says, and fails if the lockfile is out of date. | Use the variant below for pnpm. |
+| Checks | One step per script, so the log shows which one failed. | Remove the scripts your project doesn't have. |
+
+To block merging when a check fails, open the repository's settings, add a branch ruleset for `main` and require the `test` job.
+
+## Variant: pnpm
+
+pnpm has to be installed before `setup-node` can cache it. `pnpm/action-setup` reads the version from `packageManager` in `package.json`.
+
+```yaml title=".github/workflows/ci.yml"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+```
+
+## Variant: several Node versions
+
+A library that supports more than one Node version can test them all with a matrix. Each version runs as its own job.
+
+```yaml title=".github/workflows/ci.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+```
+
+`fail-fast: false` keeps the other versions running when one fails, so you see every failure at once.
+
+## Variant: tests that need Postgres
+
+A service container starts Postgres next to the job. The health check makes the steps wait until it accepts connections.
+
+```yaml title=".github/workflows/ci.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U app"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://app:app@localhost:5432/app_test
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+```
+
+The same database runs on your machine with the [Docker Compose Postgres template](/templates/docker-compose-postgres).

@@ -6,6 +6,7 @@ test("names the destination of each button", () => {
   expect(ctaTarget(links.signUp)).toBe("sign_up")
   expect(ctaTarget(links.signIn)).toBe("sign_in")
   expect(ctaTarget(links.newPaste)).toBe("new_paste")
+  expect(ctaTarget(`${links.newPaste}?template=claude-md`)).toBe("use_template")
   expect(ctaTarget(links.dashboard)).toBe("dashboard")
   expect(ctaTarget(links.importGist)).toBe("import_gist")
   expect(ctaTarget(links.apiDocs)).toBe("api_docs")
