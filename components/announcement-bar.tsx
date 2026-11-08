@@ -22,11 +22,18 @@ export function AnnouncementBar({ announcement }: { announcement: Announcement }
         dangerouslySetInnerHTML={{ __html: dismissedScript }}
       />
       <style>{`html[data-dismissed-announcement="${safeVersion}"] #announcement{display:none}`}</style>
-      <LifeField live="#6a66ff" trail="#4541f8" density={0.14} className="-z-20 opacity-90" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 backdrop-blur-[2px]" />
+      <LifeField
+        live="#6a66ff"
+        trail="#4541f8"
+        density={0.12}
+        cellSize={4}
+        generationsPerSecond={2}
+        className="-z-20 opacity-85"
+      />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 backdrop-blur-[1px]" />
       <a
         href={href}
-        className="group mx-auto flex min-h-10 max-w-[1440px] items-center justify-center gap-3 py-2.5 pr-12 pl-5 text-center text-sm leading-5 font-medium outline-none focus-visible:underline md:px-14"
+        className="group mx-auto flex min-h-8 max-w-[1440px] items-center justify-center gap-3 py-1.5 pr-12 pl-5 text-center text-sm leading-5 font-medium outline-none focus-visible:underline md:px-14"
       >
         <span className="min-w-0 text-pretty">{title}</span>
         <span aria-hidden className="hidden h-3.5 w-px shrink-0 bg-white/40 sm:block" />
