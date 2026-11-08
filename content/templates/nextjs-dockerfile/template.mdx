@@ -4,6 +4,7 @@ query: Next.js Dockerfile
 description: A multi-stage Next.js Dockerfile that builds the standalone output into a small image running as a non-root user, with .dockerignore and variants.
 answer: This Dockerfile builds a Next.js app in three stages and ships only the standalone server, which keeps the image small and runs it as a non-root user. Set output to standalone in next.config.ts, save both files below in your project root, and run docker build -t my-app . to build it.
 category: deploy
+department: engineering
 updated: 2026-11-08
 files:
   - Dockerfile

@@ -1,0 +1,28 @@
+# Acme
+
+> Acme is an invoicing API for small businesses. This file lists the pages an AI assistant needs to answer questions about Acme and to write code against its API.
+
+The API is REST over HTTPS with JSON bodies. Every request needs an API key in the `Authorization` header. Amounts are integers in the smallest currency unit, so 1999 means 19.99.
+
+## Docs
+
+- [Quickstart](https://acme.dev/docs/quickstart.md): Create an API key and send your first invoice in five minutes
+- [Authentication](https://acme.dev/docs/authentication.md): API keys, test and live mode, and key rotation
+- [Invoices](https://acme.dev/docs/invoices.md): Create, send, void and list invoices
+- [Webhooks](https://acme.dev/docs/webhooks.md): Event types, payloads and how to verify signatures
+- [Errors](https://acme.dev/docs/errors.md): Error codes and which ones are safe to retry
+
+## API reference
+
+- [OpenAPI specification](https://acme.dev/openapi.json): Every endpoint, parameter and response schema
+- [Node SDK](https://github.com/acme/acme-node): Official TypeScript client with examples
+
+## Product
+
+- [Pricing](https://acme.dev/pricing.md): Plans, limits and what counts as an invoice
+- [Security](https://acme.dev/security.md): Data storage, encryption and compliance
+
+## Optional
+
+- [Changelog](https://acme.dev/changelog.md): API changes by version
+- [Blog](https://acme.dev/blog.md): Guides and product news

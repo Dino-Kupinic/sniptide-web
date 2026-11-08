@@ -3,12 +3,28 @@ import { formatPostDate, postPath } from "@/lib/blog"
 import { links } from "@/lib/links"
 import { siteName, siteUrl } from "@/lib/site"
 
-// The groups the /templates directory lists, in this order. Every template has exactly one.
+// What kind of file a template is, shown on its card. Every template has exactly one.
 export const templateCategories = {
   agents: "Agent files",
   deploy: "Docker and deploy",
   project: "Project setup",
+  specs: "Specs",
+  discovery: "Discovery",
 } as const
+
+// Who the template is for. The directory filters by it, in this order.
+export const templateDepartments = {
+  engineering: "Engineering",
+  product: "Product",
+  marketing: "Marketing",
+} as const
+
+export type TemplateDepartment = keyof typeof templateDepartments
+
+const departmentKeys = Object.keys(templateDepartments) as [
+  TemplateDepartment,
+  ...TemplateDepartment[],
+]
 
 export type TemplateCategory = keyof typeof templateCategories
 
@@ -28,6 +44,7 @@ export const templateSchema = z.object({
   // Two sentences under the H1 that answer the query before the files start.
   answer: z.string().min(80).max(360),
   category: z.enum(categoryKeys),
+  department: z.enum(departmentKeys),
   // The day the files or the explanation last changed. Review every template each quarter.
   updated: z.iso.date(),
   // Paths under files/, in the order the page shows them. A paste holds at most 10 files with
@@ -91,25 +108,41 @@ export function languageFor(path: string) {
   return byExtension[extension] ?? "text"
 }
 
-// Directory order: by category as templateCategories lists them, then by title, ignoring a leading
-// dot so .mcp.json sorts with the m's.
+// Directory order: by department, then category, as their tables list them, then by title,
+// ignoring a leading dot so .mcp.json sorts with the m's.
 export function sortTemplates<T extends TemplateMeta>(templates: T[]): T[] {
-  const order = Object.keys(templateCategories)
+  const departments = Object.keys(templateDepartments)
+  const categories = Object.keys(templateCategories)
   return [...templates].sort(
     (a, b) =>
-      order.indexOf(a.category) - order.indexOf(b.category) ||
+      departments.indexOf(a.department) - departments.indexOf(b.department) ||
+      categories.indexOf(a.category) - categories.indexOf(b.category) ||
       a.title.replace(/^\./, "").localeCompare(b.title.replace(/^\./, "")),
   )
 }
 
-export function groupTemplates<T extends TemplateMeta>(templates: T[]) {
-  return categoryKeys
-    .map((category) => ({
-      category,
-      label: templateCategories[category],
-      templates: sortTemplates(templates).filter((template) => template.category === category),
-    }))
-    .filter((group) => group.templates.length > 0)
+// Whether a template matches every word of a search, in its title, description, query, category
+// or file names.
+export function matchesTemplateQuery(
+  template: Pick<
+    TemplateMeta,
+    "title" | "description" | "query" | "category" | "department" | "files"
+  >,
+  query: string,
+) {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean)
+  if (words.length === 0) return true
+  const haystack = [
+    template.title,
+    template.description,
+    template.query,
+    templateCategories[template.category],
+    templateDepartments[template.department],
+    ...template.files,
+  ]
+    .join(" ")
+    .toLowerCase()
+  return words.every((word) => haystack.includes(word))
 }
 
 // Template dates read like post dates.

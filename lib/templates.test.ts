@@ -9,8 +9,8 @@ import { siteUrl } from "@/lib/site"
 import { getTemplates, readTemplateFiles, templatesDir } from "@/lib/template-source"
 import {
   fence,
-  groupTemplates,
   languageFor,
+  matchesTemplateQuery,
   nameFromPath,
   templateEditorUrl,
   templateStructuredData,
@@ -28,7 +28,7 @@ function filesIn(dir: string): string[] {
 const params = (name: string) => ({ params: Promise.resolve({ name }) })
 
 describe("template content", () => {
-  test("the first wave is published", () => {
+  test("every template is published", () => {
     expect(templates.map((template) => template.name).sort()).toEqual([
       "agents-md",
       "caddyfile-reverse-proxy",
@@ -38,8 +38,10 @@ describe("template content", () => {
       "docker-compose-postgres",
       "env-example",
       "github-actions-node-ci",
+      "llms-txt",
       "mcp-json",
       "nextjs-dockerfile",
+      "prd-for-agents",
     ])
   })
 
@@ -76,9 +78,9 @@ describe("template content", () => {
     expect(new Set(titles).size).toBe(titles.length)
   })
 
-  test("the directory lists every template once, grouped", () => {
-    const listed = groupTemplates(templates).flatMap((group) => group.templates)
-    expect(listed).toHaveLength(templates.length)
+  test("every department has a template", () => {
+    const departments = new Set(templates.map((template) => template.department))
+    expect([...departments].sort()).toEqual(["engineering", "marketing", "product"])
   })
 
   test("the sitemap lists the directory and every template", () => {
@@ -90,6 +92,15 @@ describe("template content", () => {
 })
 
 describe("template helpers", () => {
+  test("search matches every word across title, category and file names", () => {
+    const template = templates.find((item) => item.name === "docker-compose-postgres")
+    if (!template) throw new Error("Missing template")
+    expect(matchesTemplateQuery(template, "compose.yaml")).toBe(true)
+    expect(matchesTemplateQuery(template, "docker deploy")).toBe(true)
+    expect(matchesTemplateQuery(template, "docker cursor")).toBe(false)
+    expect(matchesTemplateQuery(template, "  ")).toBe(true)
+  })
+
   test("names come from the folder", () => {
     expect(nameFromPath("claude-md/template.mdx")).toBe("claude-md")
   })

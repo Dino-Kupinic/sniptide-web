@@ -13,13 +13,13 @@ content/templates/claude-md/
 
 | URL | Source |
 | --- | --- |
-| `/templates/<name>` | The page: answer, files, "Save with your agent", explanation, related links |
+| `/templates/<name>` | The page: answer, files, "Save with your agent", explanation, related template cards |
 | `/templates/<name>.md` | The Markdown twin for agents (`app/templates/md/[name]/route.ts`) |
 | `/templates/<name>.json` | The files as JSON, which the app's `/new?template=<name>` reads (`app/templates/json/[name]/route.ts`) |
 | `/templates/<name>/raw/<path>` | One file as plain text, behind each file's Raw link |
 | `/templates/<name>/opengraph-image` | The share card with the title |
 
-The page is also listed in `/templates`, the sitemap, `llms.txt` and the IndexNow submission after
+The page is also a card in `/templates`, which filters by department and searches titles, categories and file names. The card shows the first lines of the first file, so put the most recognizable file first. The page is also listed in the sitemap, `llms.txt` and the IndexNow submission after
 deploy, with no further step.
 
 ## Add a template
@@ -34,7 +34,8 @@ deploy, with no further step.
    query: CLAUDE.md template        # the target query, for upkeep
    description: One sentence of 50 to 160 characters for search results and the directory.
    answer: Two sentences under the H1 that answer the query before the files.
-   category: agents                 # agents, deploy or project
+   category: agents                 # agents, deploy, project, specs or discovery
+   department: engineering          # engineering, product or marketing
    updated: 2026-11-08
    files:
      - CLAUDE.md                    # paths under files/, in display order
@@ -45,7 +46,7 @@ deploy, with no further step.
 3. Write the explanation: what each section does and when to change it, then one or two variants.
    That part is what makes the page worth ranking. Follow the copy rules in `DESIGN.md`.
 4. Run `bun test`. `lib/templates.test.ts` fails when `files/` and the frontmatter disagree, or
-   when a related template or post doesn't exist. Update the first-wave list in that test when
+   when a related template or post doesn't exist. Update the list of names in that test when
    you add or remove a template.
 
 A template holds at most 10 files with names up to 120 characters, the same limits as a paste, so

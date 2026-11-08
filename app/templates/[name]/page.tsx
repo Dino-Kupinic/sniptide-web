@@ -6,7 +6,9 @@ import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 import { blogMdxComponents } from "@/components/blog/mdx"
 import { TableOfContents, type TocItem } from "@/components/blog/table-of-contents"
 import { FunnelTracking } from "@/components/funnel-tracking"
+import { TemplateGrid } from "@/components/templates/template-card"
 import { TemplateCode } from "@/components/templates/template-code"
+import { templateCards } from "@/components/templates/template-preview"
 import { mcpEndpoint } from "@/lib/agent-docs"
 import { postPath } from "@/lib/blog"
 import { getPost } from "@/lib/blog-source"
@@ -21,6 +23,7 @@ import {
 import {
   formatTemplateDate,
   templateCategories,
+  templateDepartments,
   templateEditorUrl,
   templateJsonPath,
   templateMarkdownPath,
@@ -74,7 +77,7 @@ export default async function Page({ params }: Props) {
   if (!template) notFound()
 
   const files = readTemplateFiles(template)
-  const related = relatedTemplates(template)
+  const related = await templateCards(relatedTemplates(template).slice(0, 3))
   const post = template.post ? getPost(template.post) : undefined
   const Body = template.entry.body
   const jsonUrl = `${siteUrl}${templateJsonPath(template.name)}`
@@ -115,7 +118,18 @@ export default async function Page({ params }: Props) {
                 </li>
                 <li>
                   <a
-                    href={`${templatesPath}#${template.category}`}
+                    href={`${templatesPath}?department=${template.department}`}
+                    className="hover:text-foreground"
+                  >
+                    {templateDepartments[template.department]}
+                  </a>
+                </li>
+                <li aria-hidden="true">
+                  <ChevronRightIcon className="size-3.5" />
+                </li>
+                <li>
+                  <a
+                    href={`${templatesPath}?department=${template.department}&q=${encodeURIComponent(templateCategories[template.category])}`}
                     className="hover:text-foreground"
                   >
                     {templateCategories[template.category]}
@@ -195,49 +209,20 @@ export default async function Page({ params }: Props) {
             <Body components={blogMdxComponents} />
           </div>
 
-          {(related.length > 0 || post) && (
-            <footer className="mt-16 flex flex-col gap-10 border-t pt-10">
-              {related.length > 0 && (
-                <nav aria-labelledby="related-templates" className="flex flex-col gap-4">
-                  <h2
-                    id="related-templates"
-                    className="font-heading text-xl leading-7 font-medium tracking-[-0.02em]"
-                  >
-                    Related templates
-                  </h2>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {related.map((item) => (
-                      <li key={item.name} className="flex min-w-0">
-                        <a
-                          href={templatePath(item.name)}
-                          className="flex w-full flex-col gap-1 rounded-lg border p-4 transition-colors hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
-                        >
-                          <span className="text-sm leading-5 font-medium">{item.title}</span>
-                          <span className="text-sm leading-5 text-muted-foreground">
-                            {item.files.join(", ")}
-                          </span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              )}
-              {post && (
-                <a
-                  href={postPath(post.slug)}
-                  className="group flex flex-col gap-1 rounded-lg border bg-sidebar p-5 transition-colors hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
-                >
-                  <span className="text-sm leading-5 text-muted-foreground">From the blog</span>
-                  <span className="inline-flex items-center gap-1.5 text-base leading-6 font-medium">
-                    {post.title}
-                    <ArrowRightIcon
-                      aria-hidden="true"
-                      className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
-                    />
-                  </span>
-                </a>
-              )}
-            </footer>
+          {post && (
+            <a
+              href={postPath(post.slug)}
+              className="group mt-16 flex flex-col gap-1 rounded-lg border bg-sidebar p-5 transition-colors hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
+            >
+              <span className="text-sm leading-5 text-muted-foreground">From the blog</span>
+              <span className="inline-flex items-center gap-1.5 text-base leading-6 font-medium">
+                {post.title}
+                <ArrowRightIcon
+                  aria-hidden="true"
+                  className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+                />
+              </span>
+            </a>
           )}
         </div>
 
@@ -247,6 +232,30 @@ export default async function Page({ params }: Props) {
           </div>
         </aside>
       </article>
+
+      {related.length > 0 && (
+        <section
+          aria-labelledby="related-templates"
+          data-cta-location="template"
+          className="mx-auto w-full max-w-[1440px] border-t px-5 pt-12 pb-4 md:px-10 md:pt-16 lg:px-30"
+        >
+          <div className="flex items-end justify-between gap-4 pb-6">
+            <h2
+              id="related-templates"
+              className="font-heading text-2xl leading-8 font-medium tracking-[-0.02em]"
+            >
+              Related templates
+            </h2>
+            <a
+              href={templatesPath}
+              className="text-sm leading-5 font-medium text-link underline-offset-4 hover:underline"
+            >
+              All templates
+            </a>
+          </div>
+          <TemplateGrid templates={related} />
+        </section>
+      )}
     </BlogShell>
   )
 }

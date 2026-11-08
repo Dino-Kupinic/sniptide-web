@@ -4,6 +4,7 @@ query: docker compose postgres
 description: A Docker Compose file for Postgres with a persistent volume, a health check and init scripts, plus variants with an app service and pgAdmin.
 answer: This Compose file runs Postgres 17 with its data in a named volume, a health check and a port that only your machine can reach. Save it as compose.yaml, run docker compose up -d, and connect with postgres://app:app@localhost:5432/app.
 category: deploy
+department: engineering
 updated: 2026-11-08
 files:
   - compose.yaml
