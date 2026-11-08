@@ -60,7 +60,9 @@ needs nothing else. If the chosen header is missing, no address is forwarded.
 Build-time settings: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point, defaults
 to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" points, defaults to
 `https://demo.sniptide.com/demo` (an app instance running with `DEMO_MODE=true`).
-`SHARE_PROXY_SECRET` and `CLIENT_IP_HEADER` are read at runtime.
+`SHARE_PROXY_SECRET`, `CLIENT_IP_HEADER` and `GITHUB_TOKEN` are read at runtime. `GITHUB_TOKEN` is
+optional and raises the GitHub rate limit for the changelog, described under
+[Changelog](#changelog).
 
 ### Search engines and link previews
 
@@ -243,6 +245,32 @@ draft: true # optional
   and a Markdown twin at its address plus `.md`. The newest post also fills the "From the blog" line
   in the Resources menu.
 
+### Changelog
+
+`/changelog` lists every release of the app repo, newest first, read from the GitHub API
+(`lib/changelog-source.ts`) and refreshed hourly, so a release appears without a deploy. The list
+shows 20 rows and loads 20 more as the reader scrolls. Each release has an anchor such as
+`/changelog#v0.77.0`, and a link to an older one loads the page that holds it.
+
+The app repo's release workflow asks Claude to turn the merged pull request into a short post and
+writes it to the top of the release body between `<!-- sniptide-notes:start kind="…" -->` and
+`<!-- sniptide-notes:end -->`. `kind` is `feature`, `fix` or `internal`. The first heading inside
+the markers is the title, and the rest renders as Markdown without raw HTML. To correct a post, edit
+the release on GitHub. Releases without the markers fall back to the semantic-release list: the
+first feature or fix is the title, and releases with only CI, test or maintenance commits count as
+internal. Consecutive internal releases collapse into one row.
+
+The newest feature release from the last 14 days also fills a blue bar above the header on the
+landing page and every blog and changelog page (`components/announcement-bar.tsx`). It links to
+that release in the changelog and scrolls away with the page. The bar is a pane of blue glass
+over the Game of Life, like the window on the pink sharing section; its colors keep white text
+above 4.5:1 even over a lit cell. Closing it stores the version in
+`localStorage`, and a small inline script hides it before the page paints, so it stays closed until
+a newer feature ships. Fixes and maintenance releases never take the bar.
+
+Set `GITHUB_TOKEN` to raise GitHub's rate limit from 60 requests an hour per address. The token
+needs no scopes. When GitHub cannot be reached, the page links to the releases on GitHub instead.
+
 ### For agents and search engines
 
 `/llms.txt` and `/llms-full.txt` ([llmstxt.org](https://llmstxt.org)) describe Sniptide for AI
@@ -283,6 +311,10 @@ scan. The script checks response bodies, content types, canonical URLs, and loca
 Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud) as build variables to
 send events to PostHog. Requests go through `/_site/ph` on this site so ad blockers don't drop them.
 The app reports to the same project; filter on the `surface` property (`marketing` or `app`).
+Pull request previews at `<number>.sniptide.com` report to the same project too, so every marketing
+event carries `environment`: `production` on `sniptide.com`, `preview` on a numbered preview host
+and `development` anywhere else. Filter marketing reports on `environment` = `production`. Events
+from before this property existed have none; filter them on `$host` = `sniptide.com`.
 Without a key nothing loads and the cookie banner stays hidden.
 
 A cookie banner (`components/consent-banner.tsx`) asks whether PostHog may use cookies, with

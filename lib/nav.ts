@@ -223,11 +223,10 @@ export const navMenus: NavMenu[] = [
             icon: PaletteIcon,
           },
           {
-            label: "Releases",
+            label: "Changelog",
             description: "See what changed in each version.",
-            href: `${links.github}/releases`,
+            href: "/changelog",
             icon: TagIcon,
-            external: true,
           },
         ],
       },

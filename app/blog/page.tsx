@@ -9,7 +9,7 @@ import { IndexFallback } from "@/components/blog/post-list"
 import { SubscribeMenu } from "@/components/blog/subscribe-menu"
 import { blogPath, feedPath, feeds, readingMinutes, stripMdxComments } from "@/lib/blog"
 import { getPosts } from "@/lib/blog-source"
-import { links } from "@/lib/links"
+import { changelogPath } from "@/lib/changelog"
 
 export const metadata: Metadata = {
   alternates: {
@@ -79,7 +79,7 @@ export default async function Page() {
                   <RssIcon className="size-4" />
                   Subscribe by RSS
                 </a>
-                <a href={`${links.github}/releases`} className={secondaryButton}>
+                <a href={changelogPath} className={secondaryButton}>
                   Read the release notes
                 </a>
               </div>

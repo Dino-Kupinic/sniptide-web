@@ -44,6 +44,7 @@ export const sitemapPaths = [
   "/about",
   "/blog",
   "/brand",
+  "/changelog",
   "/contact",
   "/privacy",
   "/templates",

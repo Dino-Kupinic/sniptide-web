@@ -80,14 +80,15 @@ export default function Privacy() {
         PostHog&apos;s cookie and local storage.
       </p>
       <p>
-        {analyticsStorage} PostHog acts as our processor under a data processing agreement. Session
-        recordings are kept for [replay retention set in PostHog, for example 30 days], and events
-        for [event retention set in PostHog].
+        {analyticsStorage} PostHog acts as our processor under a data processing agreement. It keeps
+        session recordings for 30 days and analytics events for up to one year.
       </p>
       <p>
-        The app reports to the same PostHog project in the same way, with explicit events such as
-        signing up or signing in, and without autocapture. These events never contain paste content,
-        titles, file names or links.
+        The app sends selected events, such as signing up or signing in, to the same PostHog
+        project. When you allow analytics, the app can read the website&apos;s visitor identifier
+        and use it in memory to connect those events to your website visit. Otherwise, the app
+        measures use without an analytics cookie. The app does not record sessions or automatically
+        capture clicks. App events do not contain paste content, titles, file names or paste links.
       </p>
       <p>
         Events sent without cookies cannot be tied to you, so we cannot look up or delete yours on
@@ -144,7 +145,7 @@ export default function Privacy() {
       </p>
 
       <h2 id="cookies">Cookies</h2>
-      <p>The website sets one cookie on its own and two more only if you allow analytics:</p>
+      <p>The website saves your cookie choice and uses analytics cookies if you allow them.</p>
       <ul>
         <li>
           <code>sniptide_consent</code> saves which categories you allowed for six months, so the
@@ -158,7 +159,7 @@ export default function Privacy() {
           current session in local storage.
         </li>
       </ul>
-      <p>The app sets only cookies that the service needs, so there is nothing to consent to:</p>
+      <p>The app sets these cookies to provide the service:</p>
       <ul>
         <li>
           A session cookie keeps you signed in. It is valid for sniptide.com and its subdomains so

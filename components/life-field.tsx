@@ -9,8 +9,8 @@ import * as React from "react"
 // reduced motion it draws one generation and sowing only adds cells. Keep it faint with the
 // wrapper's opacity so it never competes with text.
 
-const cellSize = 8
-const generationsPerSecond = 4
+const defaultCellSize = 8
+const defaultGenerationsPerSecond = 4
 const decay = 0.55
 const sparse = 0.012
 
@@ -18,11 +18,16 @@ export function LifeField({
   live: liveColor,
   trail: trailColor,
   density = 0.11,
+  cellSize = defaultCellSize,
+  generationsPerSecond = defaultGenerationsPerSecond,
   className,
 }: {
   live: string
   trail: string
   density?: number
+  // A short strip needs smaller cells, or the few rows it holds read as bars instead of life.
+  cellSize?: number
+  generationsPerSecond?: number
   className?: string
 }) {
   const ref = React.useRef<HTMLCanvasElement>(null)
@@ -182,7 +187,7 @@ export function LifeField({
       visibility.disconnect()
       window.removeEventListener("pointermove", onPointerMove)
     }
-  }, [liveColor, trailColor, density])
+  }, [liveColor, trailColor, density, cellSize, generationsPerSecond])
 
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0", className)}>
