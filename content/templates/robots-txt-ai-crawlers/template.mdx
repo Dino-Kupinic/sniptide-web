@@ -1,0 +1,74 @@
+---
+title: robots.txt for AI crawlers
+query: robots.txt AI crawlers, block AI crawlers robots.txt
+description: A robots.txt that lets AI search and assistants read your site while blocking crawlers that collect training data, with the user agent of each.
+answer: A robots.txt can treat AI search and AI training differently, because each company uses separate user agents for each. Copy the file below to the root of your site, move each agent into the group that matches your policy, and keep your normal search engines under the catch-all group.
+category: discovery
+department: marketing
+icon: robots
+mark: "robots.txt"
+updated: 2026-11-08
+files:
+  - robots.txt
+related: [llms-txt, launch-announcement, brand-voice-guide, caddyfile-reverse-proxy]
+---
+
+## Search, assistants and training are separate choices
+
+Most AI companies now run more than one crawler. One collects pages to train models, another builds an index for AI search answers, and a third fetches a page when a person asks an assistant about it. Blocking every AI agent also removes you from ChatGPT search and Perplexity answers, which for many products are now a source of visitors. The file above makes the common choice: be found and cited, but don't feed training sets.
+
+## What each user agent is
+
+| User agent | Company | What it does |
+| --- | --- | --- |
+| `OAI-SearchBot` | OpenAI | Indexes pages for ChatGPT search results. |
+| `ChatGPT-User` | OpenAI | Fetches a page when a ChatGPT user or GPT asks for it. |
+| `GPTBot` | OpenAI | Collects pages to train models. |
+| `Claude-SearchBot` | Anthropic | Indexes pages for search inside Claude. |
+| `Claude-User` | Anthropic | Fetches a page when a Claude user asks for it. |
+| `ClaudeBot` | Anthropic | Collects pages to train models. |
+| `PerplexityBot` | Perplexity | Indexes pages for Perplexity answers. |
+| `Perplexity-User` | Perplexity | Fetches a page when a Perplexity user asks for it. |
+| `Google-Extended` | Google | Not a crawler. A token that controls whether Googlebot's pages train Gemini, without affecting Google Search. |
+| `Applebot-Extended` | Apple | A token that controls whether Applebot's pages train Apple's models, without affecting Siri and Spotlight search. |
+| `CCBot` | Common Crawl | Builds the open Common Crawl dataset, which many models train on. |
+| `Bytespider` | ByteDance | Collects pages, widely reported as training data. |
+
+Companies add and rename agents, so check each company's crawler documentation when you review this file.
+
+## What robots.txt can't do
+
+robots.txt is a request, not access control. The companies above say their crawlers follow it, but nothing enforces that, and agents that fetch a page on a user's behalf may treat it differently from crawlers. Pages you need to keep private belong behind a login, not in a `Disallow` line. Blocking a crawler also doesn't remove what it collected before.
+
+Changes can take a day or more to apply, since crawlers cache the file.
+
+## How the groups work
+
+A crawler follows the most specific group that names it and ignores the rest, which is why the training group can say `Disallow: /` while the catch-all allows everything. Several `User-agent` lines in a row share the rules below them. Each group repeats the `/app/` and `/api/` rules because a crawler in a named group never reads the `*` group.
+
+## Variant: block all AI agents
+
+To opt out of AI search as well as training, move every agent into one group:
+
+```text title="robots.txt"
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bytespider
+Disallow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://acme.com/sitemap.xml
+```
+
+To help the agents you allow read the site well, publish an [llms.txt](/templates/llms-txt) next to this file.

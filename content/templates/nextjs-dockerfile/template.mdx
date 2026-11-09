@@ -1,0 +1,97 @@
+---
+title: Next.js Dockerfile
+query: Next.js Dockerfile
+description: A multi-stage Next.js Dockerfile that builds the standalone output into a small image running as a non-root user, with .dockerignore and variants.
+answer: This Dockerfile builds a Next.js app in three stages and ships only the standalone server, which keeps the image small and runs it as a non-root user. Set output to standalone in next.config.ts, save both files below in your project root, and run docker build -t my-app . to build it.
+category: deploy
+department: engineering
+logo: docker
+updated: 2026-11-08
+files:
+  - Dockerfile
+  - .dockerignore
+related: [docker-compose-postgres, caddyfile-reverse-proxy, github-actions-node-ci, env-example]
+---
+
+## Turn on standalone output
+
+The Dockerfile copies `.next/standalone`, which Next.js only writes when you ask for it:
+
+```ts title="next.config.ts"
+import type { NextConfig } from "next"
+
+const nextConfig: NextConfig = {
+  output: "standalone",
+}
+
+export default nextConfig
+```
+
+The standalone folder holds a `server.js` and only the parts of `node_modules` the server needs, so the final image doesn't carry your dev dependencies or the build cache.
+
+```bash title="Terminal"
+docker build -t my-app .
+docker run --rm -p 3000:3000 --env-file .env my-app
+```
+
+## What each stage does
+
+| Stage | What it does | When to change it |
+| --- | --- | --- |
+| `base` | Node 24 on Alpine with Corepack, which provides the pnpm version from `packageManager` in `package.json`. | When you move to a new Node version. |
+| `deps` | Installs dependencies from the lockfile alone, so Docker reuses this layer until the lockfile changes. The cache mount keeps pnpm's store between builds. | When you switch package managers, as in the variant below. |
+| `build` | Copies the source and runs `pnpm build`. | When the build needs variables, as described below. |
+| `runner` | A fresh image with only the standalone server, the static files and `public`. It runs as the `nextjs` user. | Rarely. |
+
+`HOSTNAME=0.0.0.0` makes the server listen on every interface inside the container. Without it, the server binds to the container's own host name and `docker run -p` can't reach it.
+
+The `.dockerignore` file keeps `node_modules`, `.next` and your `.env` files out of the build context. That makes builds faster and stops secrets from ending up in an image layer.
+
+## Variables at build time and run time
+
+Server-side variables such as `DATABASE_URL` are read when the server runs, so pass them with `docker run --env-file` or your platform's settings.
+
+Variables that start with `NEXT_PUBLIC_` are written into the JavaScript bundle during `pnpm build`. They must exist in the build stage:
+
+```dockerfile title="Dockerfile"
+FROM base AS build
+ARG NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN pnpm build
+```
+
+Then build with `docker build --build-arg NEXT_PUBLIC_APP_URL=https://example.com -t my-app .`. Only public values belong in a build argument, because anyone can read them from the image.
+
+## Variant: npm
+
+Replace the `base` and `deps` stages, and run `npm run build` in the build stage.
+
+```dockerfile title="Dockerfile"
+FROM node:24-alpine AS base
+WORKDIR /app
+
+FROM base AS deps
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci
+```
+
+## Variant: Bun
+
+Bun can install and build, while the standalone server still runs on Node.
+
+```dockerfile title="Dockerfile"
+FROM oven/bun:1 AS deps
+WORKDIR /app
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+FROM oven/bun:1 AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN bun run build
+```
+
+Keep the `runner` stage from the template as it is. To run the app with Docker Compose next to a database, use the [Docker Compose Postgres template](/templates/docker-compose-postgres).

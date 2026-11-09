@@ -1,0 +1,72 @@
+---
+title: PRD template for AI coding agents
+query: PRD template, PRD for AI coding agents
+description: A PRD template written so a coding agent can build from it, with numbered requirements, scope limits, technical notes and checkable acceptance criteria.
+answer: A PRD for a coding agent states the problem, numbered requirements, what is out of scope and acceptance criteria the agent can check on its own. Copy the example below into your repository, fill in each section for your feature, and hand the file to Claude Code, Cursor or Codex as the task.
+category: specs
+department: product
+icon: contributing
+mark: "PRD"
+updated: 2026-11-08
+files:
+  - docs/specs/csv-export.md
+related: [user-stories, agents-md, claude-md, release-notes]
+---
+
+## Why a PRD for an agent reads differently
+
+A person reading a PRD fills gaps with context from meetings and Slack. An agent fills them by guessing, and its guesses look plausible enough to pass a quick review. The fix is to write down what a teammate would have asked: which columns, in what order, what happens at 10,001 rows, which function to reuse. Every vague line in the spec becomes a decision the agent makes for you.
+
+Keep the file in the repository, such as `docs/specs/`, so the agent can read it next to the code and the spec changes in the same pull request as the feature.
+
+## What each section does
+
+| Section | What it gives the agent | How to write it |
+| --- | --- | --- |
+| Problem | The reason behind the feature, which settles small choices the spec doesn't cover. | Who hurts, how often, what it costs today. |
+| Goal | One sentence of the outcome, and how you'll know it worked. | A user-visible result, not a list of tasks. |
+| Users and stories | Who the feature is for and which permissions matter. | One story per role that behaves differently. |
+| Requirements | The behavior, one checkable statement per number. | Exact names, formats, limits and orders. Numbers let you say "requirement 6 is wrong" in review. |
+| Out of scope | The work the agent must not start. | Name the features people will assume come along. Agents tend to add them. |
+| Technical notes | Where the change goes and what to reuse. | File paths and function names. This stops a second copy of logic that already exists. |
+| Acceptance criteria | The tests the agent writes and runs before it says it's done. | Concrete inputs and expected results, including the awkward ones. |
+| Open questions | Decisions still pending, with the current answer. | Give a default so the agent isn't blocked. |
+
+The acceptance criteria do the most work. An agent that can run a check knows when it is finished; an agent told to "make sure it works" decides for itself.
+
+## Hand it to the agent
+
+Point the agent at the file and ask for a plan before code, so you can correct a misunderstanding while it is cheap:
+
+```text title="Prompt"
+Read docs/specs/csv-export.md. Before you write code, list the files you'll change and how you'll
+test each acceptance criterion. Wait for my go-ahead.
+```
+
+Rules that apply to every task, such as commands and code style, belong in your [AGENTS.md](/templates/agents-md) or [CLAUDE.md](/templates/claude-md) rather than in each spec.
+
+## Variant: a one-page spec for a small change
+
+A bug fix or a small feature needs only three sections. Keep the acceptance criteria even when everything else goes.
+
+```md title="docs/specs/empty-state.md"
+# Empty state on the Invoices page
+
+## Requirements
+
+1. When a workspace has no invoices, the list shows the `EmptyState` component from
+   `components/ui/empty-state.tsx` instead of an empty table.
+2. Title: "No invoices yet". Help text: "Create your first invoice to see it here."
+   Action: a **New invoice** button that opens `/invoices/new`.
+3. With filters set and no matches, show "No invoices match these filters" and a
+   **Clear filters** button instead.
+
+## Out of scope
+
+- Illustrations or animation.
+
+## Acceptance criteria
+
+- [ ] A new workspace shows the empty state with the button.
+- [ ] A workspace with invoices but no matches shows the filter message.
+```

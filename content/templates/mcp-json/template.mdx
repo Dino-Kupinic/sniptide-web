@@ -1,0 +1,70 @@
+---
+title: .mcp.json example
+query: .mcp.json example, Claude MCP config
+description: An .mcp.json example for Claude Code with a remote HTTP server, a token from an environment variable and a local stdio server, each field explained.
+answer: An .mcp.json file at the root of a project lists the MCP servers Claude Code connects to there, so everyone who clones the repository gets the same tools. Copy the example below, keep the servers you use, and put tokens in environment variables instead of the file.
+category: agents
+department: engineering
+logo: claude
+updated: 2026-11-08
+files:
+  - .mcp.json
+related: [claude-md, claude-code-skill, env-example, cursor-rules]
+---
+
+## Where the file goes
+
+Claude Code reads `.mcp.json` from the root of the project. Servers in it are project scoped: commit the file and your team gets them on the next pull. Claude Code asks each person to approve a project's servers before it uses them for the first time.
+
+You can also write the file from the command line. `claude mcp add --scope project` adds a server to `.mcp.json` instead of your personal settings:
+
+```bash title="Terminal"
+claude mcp add --scope project --transport http sniptide https://app.sniptide.com/api/mcp
+```
+
+## What each server shows
+
+Every key under `mcpServers` is a server name you'll see in `/mcp`. The fields decide how Claude Code connects.
+
+| Server | Transport | Fields |
+| --- | --- | --- |
+| `sniptide` | Remote over HTTP | `type: "http"` and a `url`. Servers that support OAuth need nothing else. You sign in once from the `/mcp` menu. |
+| `github` | Remote over HTTP with a token | `headers` sends the token. `${GITHUB_TOKEN}` is read from your environment when Claude Code starts, so the token never lands in the repository. |
+| `filesystem` | Local over stdio | `command` and `args` start a process on your machine. `${DOCS_DIR:-./docs}` uses the variable when it is set and `./docs` when it isn't. |
+
+Claude Code expands `${VAR}` and `${VAR:-default}` in `command`, `args`, `env`, `url` and `headers`. If a variable has no value and no default, Claude Code reports the file as invalid, so list the variables your team needs in your [.env.example](/templates/env-example).
+
+## Variant: a local server with environment variables
+
+A stdio server that reads its settings from the environment takes an `env` block. The values are passed to the process and stay out of `args`.
+
+```json title=".mcp.json"
+{
+  "mcpServers": {
+    "sentry": {
+      "command": "npx",
+      "args": ["-y", "@sentry/mcp-server"],
+      "env": {
+        "SENTRY_ACCESS_TOKEN": "${SENTRY_ACCESS_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+## Variant: Claude Desktop
+
+Claude Desktop uses the same `mcpServers` shape in its own settings file, `claude_desktop_config.json`, which you open from Settings, Developer, Edit Config. It is a personal file rather than part of a project, so it holds stdio servers with their full command:
+
+```json title="claude_desktop_config.json"
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/you/Documents"]
+    }
+  }
+}
+```
+
+Remote servers such as Sniptide are added in Claude Desktop under Settings, Connectors instead.

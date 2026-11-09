@@ -19,7 +19,7 @@ import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 // "✓" and "–" turn into markers (see ComparisonCell), and a note starting with "~" marks partial
 // support. `highlight` is the product column to tint, counted from 1, such as the publisher's own.
 // The styles live under .blog-comparison in app/globals.css. On wide screens the table breaks out
-// of the text column so six products fit, and on phones it scrolls with the first column pinned.
+// of the text column so eight products fit, and on phones it scrolls with the first column pinned.
 export function Comparison({
   highlight,
   caption,

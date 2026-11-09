@@ -1,0 +1,100 @@
+---
+title: Docker Compose Postgres
+query: docker compose postgres
+description: A Docker Compose file for Postgres with a persistent volume, a health check and init scripts, plus variants with an app service and pgAdmin.
+answer: This Compose file runs Postgres 17 with its data in a named volume, a health check and a port that only your machine can reach. Save it as compose.yaml, run docker compose up -d, and connect with postgres://app:app@localhost:5432/app.
+category: deploy
+department: engineering
+logo: docker
+updated: 2026-11-08
+files:
+  - compose.yaml
+related: [env-example, nextjs-dockerfile, caddyfile-reverse-proxy, github-actions-node-ci]
+---
+
+## Run it
+
+```bash title="Terminal"
+docker compose up -d
+docker compose ps        # wait until db shows "healthy"
+docker compose exec db psql -U app -d app
+```
+
+`docker compose down` stops the container and keeps the data. Adding `-v` deletes the volume too, which wipes the database.
+
+## What each part does
+
+| Line | What it does | When to change it |
+| --- | --- | --- |
+| `image: postgres:17` | Pins the major version, so an upgrade never happens by accident. | When you upgrade. A new major version can't read the old data directory without a dump and restore. |
+| `environment` | Creates the user, password and database on the first start. `${POSTGRES_USER:-app}` reads your `.env` and falls back to `app`. | Set real values in `.env` for anything beyond your laptop. |
+| `ports` | `127.0.0.1:5432:5432` publishes the port to your machine only. A bare `5432:5432` opens it on every network interface. | Change the first `5432` if another Postgres already uses that port. |
+| `pgdata` volume | Keeps the data when the container is recreated. | Rarely. |
+| `docker-entrypoint-initdb.d` | Runs the `.sql` and `.sh` files in `db/init` on the first start, in name order. | Add files for extensions or seed data. |
+| `healthcheck` | `pg_isready` reports when Postgres accepts connections. `$$` passes a literal `$` to the container's shell. | Rarely. Other services wait on it, as the next variant shows. |
+
+Postgres 18 images keep their data in a versioned folder under `/var/lib/postgresql`, so when you move to `postgres:18`, mount the volume at `/var/lib/postgresql` instead of its `data` folder.
+
+The `environment` values and init scripts apply only while the volume is empty. After the first start, changing `POSTGRES_PASSWORD` does nothing until you delete the volume or change the password in SQL.
+
+## Variant: with your app
+
+Add the app as a second service. `condition: service_healthy` makes Compose start it only after Postgres passes its health check, and the app reaches the database by its service name, `db`.
+
+```yaml title="compose.yaml"
+services:
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://app:app@db:5432/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
+```
+
+The database has no `ports` here: the app reaches it over the Compose network, and nothing outside needs to. The [Next.js Dockerfile](/templates/nextjs-dockerfile) builds a matching app image.
+
+## Variant: with pgAdmin
+
+pgAdmin gives you a browser interface to the database. Add it under `services`, next to `db`, open http://localhost:5050 and register a server with the host name `db`.
+
+```yaml title="compose.yaml"
+services:
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "127.0.0.1:5050:80"
+    depends_on:
+      - db
+```
+
+## Variant: extensions on the first start
+
+An init script can enable extensions such as pgvector. Switch the image to `pgvector/pgvector:pg17`, which ships the extension, and add this file:
+
+```sql title="db/init/01-extensions.sql"
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+```

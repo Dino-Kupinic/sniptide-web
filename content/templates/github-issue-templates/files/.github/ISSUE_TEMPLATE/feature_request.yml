@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest something Acme should do that it doesn't yet.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation and what it costs you today. This helps more than a proposed solution.
+      placeholder: Every month I export invoices and delete half the rows by hand, because the export ignores my filters.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What do you do today instead?
+      description: Workarounds you use or other tools you've tried.
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often do you run into this?
+      options:
+        - Every day
+        - Every week
+        - Every month
+        - Rarely
+    validations:
+      required: true

@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "sniptide": {
+      "type": "http",
+      "url": "https://app.sniptide.com/api/mcp"
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_TOKEN}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${DOCS_DIR:-./docs}"]
+    }
+  }
+}

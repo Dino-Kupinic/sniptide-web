@@ -1,0 +1,82 @@
+---
+title: llms.txt example
+query: llms.txt example, llms.txt template
+description: An llms.txt example for a product site with a summary, grouped links to Markdown pages and an Optional section, plus how to generate it in Next.js.
+answer: An llms.txt file at the root of your site gives AI assistants a short Markdown map of the pages that explain your product. Copy the example below to /llms.txt, replace the summary and links with your own, and point each link at a Markdown version of the page where you can.
+category: discovery
+department: marketing
+icon: robot
+mark: "llms.txt"
+updated: 2026-11-08
+files:
+  - llms.txt
+related: [robots-txt-ai-crawlers, brand-voice-guide, agents-md, prd-for-agents]
+---
+
+## What the file is for
+
+An assistant that answers a question about your product, or writes code against your API, does better with clean text than with your rendered pages full of navigation and scripts. `llms.txt` is a proposed standard, described at [llmstxt.org](https://llmstxt.org), for handing it that text: one Markdown file at a known address that says what you are and links to the pages worth reading.
+
+Be clear about what it does. Coding agents and AI tools read the file when someone points them at your site or when they look for it, and many documentation platforms now publish one. No major search engine has said it uses the file for ranking, so treat it as a way to be read well by agents, not as an SEO lever.
+
+## What each part does
+
+| Part | Rule | What to write |
+| --- | --- | --- |
+| `# Acme` | The one required part: an H1 with the name of the site or product. | Your product name, exactly as people search for it. |
+| `> Summary` | A blockquote right after the title. | One or two sentences on what the product is and what the file covers. |
+| Free text | Optional paragraphs before the first section. | Facts an assistant gets wrong without help, such as units, auth or naming. |
+| `## Docs` and other sections | H2 sections, each a list of links. | `- [Name](url): what the page answers`. Group them the way a reader would ask. |
+| `## Optional` | A section with this exact name. | Links a tool can skip when it needs a shorter context, such as the blog. |
+
+Write each link note as the question the page answers. "Event types, payloads and how to verify signatures" helps an assistant pick the right page; "Webhooks documentation" doesn't.
+
+## Serve Markdown versions of your pages
+
+The proposal suggests serving each page as Markdown at the same URL with `.md` added, and linking to those versions from `llms.txt`. A Markdown page costs an agent a fraction of the tokens of the HTML one and keeps code blocks intact. Documentation tools such as Mintlify, Fumadocs and Docusaurus plugins can generate these for you. Sniptide's own pages work this way: every blog post and template is also served as Markdown at its URL plus `.md`.
+
+## Variant: generate it in Next.js
+
+A route handler keeps the file in step with your content, so a new docs page shows up without anyone editing the file.
+
+```ts title="app/llms.txt/route.ts"
+import { getDocs } from "@/lib/docs"
+
+export const dynamic = "force-static"
+
+export function GET() {
+  const links = getDocs()
+    .map((page) => `- [${page.title}](https://acme.dev${page.url}.md): ${page.description}`)
+    .join("\n")
+
+  const body = `# Acme
+
+> Acme is an invoicing API for small businesses.
+
+## Docs
+
+${links}
+`
+  return new Response(body, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  })
+}
+```
+
+## Variant: llms-full.txt
+
+Many sites also publish `/llms-full.txt`, with the full text of every linked page in one file, so a tool can load everything in a single request. It is a convention rather than part of the proposal. Keep it for documentation small enough to fit in a context window, and keep `llms.txt` as the short index next to it.
+
+```text title="llms-full.txt"
+# Acme
+
+> Acme is an invoicing API for small businesses.
+
+## Quickstart
+
+Create an API key in the dashboard under Settings, API keys...
+
+## Authentication
+
+Send the key in the Authorization header as a bearer token...
+```

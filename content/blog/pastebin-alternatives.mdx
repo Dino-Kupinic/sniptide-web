@@ -4,7 +4,7 @@ description: Compare Pastebin alternatives for code, private links and self-host
 date: 2026-11-07
 author: dino
 category: product
-tags: [comparison, pastebin, self-hosting, privatebin, gist]
+tags: [comparison, pastebin, self-hosting, privatebin, gist, hastebin]
 cover: /blog/pastebin-alternatives/cover-v2.webp
 coverAlt: A comparison table of Pastebin alternatives on a blue background, with Sniptide ticking password, burn after reading, collections, MCP for agents and self-hosting.
 image: /blog/pastebin-alternatives/share-v2.png
@@ -17,12 +17,12 @@ Question or task: which Pastebin alternative fits the way I share code?
 Primary mode: Operator
 Article type: practical guide, comparison
 Central claim: the right replacement depends on the job (browser encryption, Git, a tiny self-hosted box, or a library you and your agents reuse), and each tool here wins one of them.
-Evidence and sources: first-party READMEs and docs, checked 7 November 2026 (Sources section). Sniptide facts from docs.sniptide.com. The Discord example is Dino's own habit, from the project thread.
+Evidence and sources: first-party READMEs and docs, checked 7 November 2026, with Hastebin and Pastes.io checked 9 November 2026 (Sources section). Sniptide facts from docs.sniptide.com. The Discord example is Dino's own habit, from the project thread.
 Opening move: problem
 Main sections: why people switch, quick picks, comparison, what "private" means, best fit per tool, everything Sniptide does, moving over, first step
 Running example: a three-file Express health check with fake values
 Visuals: illustrations in the OG card style, the Comparison component
-Limitations: Sniptide has no browser-side encryption and is not a secrets manager.
+Limitations: Sniptide has no browser-side encryption, needs an account to paste, takes code and text only, and is not a secrets manager. The table shows these rows too.
 Primary CTA: create a first paste. Secondary: self-host.
 Facts to verify before publication: every comparison cell, and the Pastebin.com column.
 Keyword: pastebin alternative (US 1K to 10K). Route: /blog/pastebin-alternatives.
@@ -46,6 +46,8 @@ That's the real reason most developers go looking for a Pastebin alternative. Pa
 - **A paste the server can't read:** PrivateBin. It encrypts in your browser, and the key stays in the link.
 - **Snippets you clone, push and diff with Git:** GitHub Gist, or Opengist to self-host.
 - **The smallest possible pastebin on your own server:** MicroBin.
+- **A screenshot, log or file shared without an account:** Pastes.io.
+- **A throwaway text link with nothing to set up:** Hastebin.
 - **A library you share from, search later and hand to your agents:** [Sniptide](/blog/introducing-sniptide).
 
 ## How we compared them
@@ -84,49 +86,52 @@ APP_NAME=health-demo
 </Tab>
 </Tabs>
 
-For each tool we asked whether it can **save** all three files together, **share** them with the right people, keep the **old version** when a file changes, and get the files **back** later, from the browser, a terminal or an agent. The answers come from each project's README or documentation, checked on 7 November 2026.
+For each tool we asked whether it can **save** all three files together, **share** them with the right people, keep the **old version** when a file changes, and get the files **back** later, from the browser, a terminal or an agent. The answers come from each project's README or documentation, checked on 7 November 2026, or on 9 November 2026 for Hastebin and Pastes.io.
 
 {/* TODO(Dino): the plan asks for this task run by hand in each product, with a dated screenshot per workflow. Add a short "What happened when we ran it" note once done. */}
 
 ## The comparison
 
-<Comparison highlight={1} caption="Sniptide publishes this comparison. From each project's docs, checked 7 November 2026. A dash means not supported or not documented.">
+<Comparison highlight={1} caption="Sniptide publishes this comparison. From each project's docs, checked 7 November 2026 and 9 November 2026 for Hastebin and Pastes.io. A dash means not supported or not documented.">
 
-| | Sniptide | PrivateBin | Opengist | MicroBin | GitHub Gist | Pastebin |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Sharing** | | | | | | |
-| Several files per paste | Up to 10 | ~Off by default | ✓ | ✓ | ✓ | – |
-| Custom link | ✓ | – | – | – | – | – |
-| Password per paste | ✓ | ✓ | – | – | – | – |
-| Expiry | ✓ | ✓ | – | ✓ | – | ✓ |
-| Burn after reading | ✓ | ✓ | – | – | – | ✓ |
-| Invite named people | View or edit | – | – | – | – | – |
-| Warns before you share a key | ✓ | – | – | – | – | – |
-| Encrypted in the browser | – | ✓ | – | ~Optional mode | – | – |
-| **Posting it** | | | | | | |
-| Code preview in link unfurls | ✓ | – | – | – | – | – |
-| Post to Slack or Discord | ✓ | – | – | – | – | – |
-| Embed on a page | ✓ | – | ✓ | – | ✓ | ✓ |
-| Print or save as PDF | ✓ | – | – | – | – | ✓ |
-| **Finding it again** | | | | | | |
-| Revision history | Compare and restore | – | ✓ | – | ✓ | – |
-| Collections | ✓ | – | ~Topics | – | – | – |
-| Stars | ✓ | – | ✓ | – | ✓ | – |
-| Search your snippets | ✓ | – | ✓ | – | ✓ | – |
-| Trash with restore | 30 days | – | – | – | – | – |
-| View analytics | Views, copies, referrers | – | – | – | – | ~View count |
-| **Agents and developers** | | | | | | |
-| MCP for coding agents | ✓ | – | – | – | – | – |
-| Install a collection as an agent skill | ✓ | – | – | – | – | – |
-| Markdown for agents | ✓ | – | – | – | – | – |
-| Sync .env files | ✓ | – | – | – | – | – |
-| CLI or API | CLI, SDKs, API | – | ~API | – | gh, API | API |
-| Raw file links | ✓ | – | ✓ | ✓ | ✓ | ✓ |
-| Git clone and push | – | – | ✓ | – | ✓ | – |
-| **Hosting** | | | | | | |
-| Hosted service | ✓ | – | – | – | ✓ | ✓ |
-| Self-host | One command | ✓ | ✓ | ✓ | – | – |
-| Open source | AGPL-3.0 | ✓ | AGPL-3.0 | BSD-3-Clause | – | – |
+| | Sniptide | PrivateBin | Opengist | MicroBin | GitHub Gist | Pastebin | Hastebin | Pastes.io |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **Sharing** | | | | | | | | |
+| Paste without an account | – | ✓ | – | ✓ | – | ✓ | ✓ | ✓ |
+| Several files per paste | Up to 10 | ~Off by default | ✓ | ✓ | ✓ | – | – | ~One text plus files |
+| Images and file uploads | – | ~Off by default | – | ✓ | – | – | – | ✓ |
+| Screen capture and recording | – | – | – | – | – | – | – | ✓ |
+| Custom link | ✓ | – | – | – | – | – | – | – |
+| Password per paste | ✓ | ✓ | – | – | – | – | – | ~Pro |
+| Expiry | ✓ | ✓ | – | ✓ | – | ✓ | ~7 or 30 days | ~1 month on Free |
+| Burn after reading | ✓ | ✓ | – | – | – | ✓ | – | ~Pro |
+| Invite named people | View or edit | – | – | – | – | – | – | – |
+| Warns before you share a key | ✓ | – | – | – | – | – | – | – |
+| Encrypted in the browser | – | ✓ | – | ~Optional mode | – | – | – | – |
+| **Posting it** | | | | | | | | |
+| Code preview in link unfurls | ✓ | – | – | – | – | – | – | – |
+| Post to Slack or Discord | ✓ | – | – | – | – | – | – | – |
+| Embed on a page | ✓ | – | ✓ | – | ✓ | ✓ | – | – |
+| Print or save as PDF | ✓ | – | – | – | – | ✓ | – | – |
+| **Finding it again** | | | | | | | | |
+| Revision history | Compare and restore | – | ✓ | – | ✓ | – | – | – |
+| Collections | ✓ | – | ~Topics | – | – | – | – | ~Folders (Pro) |
+| Stars | ✓ | – | ✓ | – | ✓ | – | – | – |
+| Search your snippets | ✓ | – | ✓ | – | ✓ | – | – | ~Titles on Free |
+| Trash with restore | 30 days | – | – | – | – | – | – | – |
+| View analytics | Views, copies, referrers | – | – | – | – | ~View count | – | ~View count |
+| **Agents and developers** | | | | | | | | |
+| MCP for coding agents | ✓ | – | – | – | – | – | – | ✓ |
+| Install a collection as an agent skill | ✓ | – | – | – | – | – | – | – |
+| Markdown for agents | ✓ | – | – | – | – | – | – | – |
+| Sync .env files | ✓ | – | – | – | – | – | – | – |
+| CLI or API | CLI, SDKs, API | – | ~API | – | gh, API | API | API | CLI, API |
+| Raw file links | ✓ | – | ✓ | ✓ | ✓ | ✓ | ✓ | ~Pro |
+| Git clone and push | – | – | ✓ | – | ✓ | – | – | – |
+| **Hosting** | | | | | | | | |
+| Hosted service | ✓ | – | – | – | ✓ | ✓ | ✓ | ✓ |
+| Self-host | One command | ✓ | ✓ | ✓ | – | – | ~Community fork | – |
+| Open source | AGPL-3.0 | ✓ | AGPL-3.0 | BSD-3-Clause | – | – | ~MIT fork | ~CLI only |
 
 </Comparison>
 
@@ -146,7 +151,7 @@ The word covers three different guarantees, and mixing them up is how secrets le
 
 **Access rules on the server.** Sniptide, Opengist and Gist store your code and decide who may open it. In Sniptide that means private pastes for you and the people you invite, plus passwords, expiry and burn after reading. The operator of the server can read the content.
 
-**The link is the secret.** An unlisted paste and a secret gist work the same way. GitHub's documentation says it directly: "Secret gists aren't private." Treat an unlisted link like a password you have already sent.
+**The link is the secret.** An unlisted paste, a Hastebin link and a secret gist work the same way. GitHub's documentation says it directly: "Secret gists aren't private." Treat an unlisted link like a password you have already sent.
 
 <InlineCta
   title="Try it with the same three files"
@@ -159,7 +164,7 @@ The word covers three different guarantees, and mixing them up is how secrets le
 
 ## When each tool is the better choice
 
-**Sniptide** fits when you'll need the code again. Multi-file pastes with passwords, expiry and invites cover the handoff, while collections, search and revisions keep it findable months later. It's also the only tool here your coding agent can search and read over MCP, on sniptide.com or on your own server.
+**Sniptide** fits when you'll need the code again. Multi-file pastes with passwords, expiry and invites cover the handoff, while collections, search and revisions keep it findable months later. Pastes.io also has an MCP server, but Sniptide is the only tool here whose MCP server runs on your own server too. The trade-off is an account: Sniptide has no anonymous pastes, and it holds code and text, not screenshots or files.
 
 **PrivateBin** fits when the person running the server shouldn't be able to read the paste. With no accounts and only ciphertext on the server, there is nothing to search and nowhere to collect your pastes, so it's built for handing something over rather than keeping it.
 
@@ -168,6 +173,10 @@ The word covers three different guarantees, and mixing them up is how secrets le
 **MicroBin** is the lightest self-hosted option here: one small app for text, file uploads and raw links. Check which encryption mode your instance uses, because the README lists both a server-side and a client-side mode.
 
 **GitHub Gist** is where many developers already keep snippets, with Git history and no setup. It only runs on GitHub, and it has no expiry, password or burn after reading.
+
+**Pastes.io** is the better pick when the problem is visual. It captures and annotates a screenshot or records your screen, attaches files and needs no account, and it has a CLI and an MCP server. Passwords, burn after reading, raw links and longer expiry need the Pro plan, a paste holds one text body rather than several files, and it only runs as a hosted service.
+
+**Hastebin** is a blank page that turns text into a link, with no account and no options. Toptal runs it now, pastes expire after 7 days, or 30 when the API is used with a token, and there are no passwords or private pastes. The original haste-server repository is no longer on GitHub, so self-hosting means a community fork whose last npm release dates from 2022.
 
 **Pastebin.com** is still the fastest route for a short, public, single-file paste. It stops fitting once you need several files, your own server or real control over who reads it.
 
@@ -228,7 +237,7 @@ The CLI searches your pastes, pulls files back into a project and installs a col
 
 Use it on [sniptide.com](https://sniptide.com), or [run the same app on your own server](/#self-host) with one command. The self-hosted version has the same editor, CLI support and MCP server.
 
-Two gaps matter for this comparison. Nothing is encrypted in your browser, so PrivateBin is the better pick when the server must not read the paste. And env groups have no rotation or audit trail, so Sniptide doesn't replace a secrets manager.
+Some gaps matter for this comparison. Nothing is encrypted in your browser, so PrivateBin is the better pick when the server must not read the paste. Every paste needs an account and holds code or text only, so Hastebin, Pastebin and Pastes.io are quicker for an anonymous one-off, and Pastes.io is the one for screenshots and files. Snippets don't clone or push over Git the way Gist and Opengist do. And env groups have no rotation or audit trail, so Sniptide doesn't replace a secrets manager.
 
 ## Moving your snippets over
 
@@ -242,7 +251,7 @@ Before you share anything sensitive on any of these tools, check three things: w
 
 ## Sources
 
-Checked on 7 November 2026.
+Checked on 7 November 2026, and on 9 November 2026 for Hastebin and Pastes.io.
 
 - Sniptide: [pastes](https://docs.sniptide.com/core-concepts/pastes), [sharing](https://docs.sniptide.com/core-concepts/sharing), [revisions](https://docs.sniptide.com/core-concepts/revisions), [encrypted secrets](https://docs.sniptide.com/core-concepts/secrets), [MCP server](https://docs.sniptide.com/mcp), [CLI](https://docs.sniptide.com/cli), [import a gist](https://docs.sniptide.com/getting-started/import-gist)
 - [PrivateBin README](https://github.com/PrivateBin/PrivateBin)
@@ -250,3 +259,5 @@ Checked on 7 November 2026.
 - [MicroBin README](https://github.com/szabodanika/microbin)
 - [GitHub Docs: Creating gists](https://docs.github.com/en/get-started/writing-on-github/editing-and-sharing-content-with-gists/creating-gists)
 - [Pastebin.com FAQ](https://pastebin.com/faq)
+- [Hastebin API documentation](https://www.toptal.com/developers/hastebin/documentation) and the [haste-server community fork](https://github.com/jirutka/haste-server)
+- Pastes.io: [pricing and plan comparison](https://pastes.io/pricing), [API documentation](https://pastes.io/docs), [MCP server](https://pastes.io/docs/mcp)
