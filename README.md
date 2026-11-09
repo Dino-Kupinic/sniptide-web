@@ -73,8 +73,9 @@ optional and raises the GitHub rate limit for the changelog, described under
 - **Images.** `app/opengraph-image.tsx` and `app/twitter-image.tsx` render the 1200 by 630 card
   with the large white logo in the middle of a black field (`lib/og.tsx`).
   They are generated once at build time, and Next adds the tags to every page.
-- **Crawling.** `app/robots.ts` allows everything and links the sitemap, and `app/sitemap.ts` lists
-  the paths in `sitemapPaths` (`lib/site.ts`). Add a page's path there when it ships.
+- **Crawling.** `app/robots.ts` allows everything except Cloudflare's `/cdn-cgi/` and links the
+  sitemap, and `app/sitemap.ts` lists the paths in `sitemapPaths` (`lib/site.ts`). Add a page's
+  path there when it ships.
 - **IndexNow.** After a push to `main`, `.github/workflows/indexnow.yml` runs `bun run indexnow`.
   It compares this checkout's sitemap with the live one, waits until sniptide.com serves the new
   build, and submits the new, re-dated and removed URLs to IndexNow, which Bing, Yandex, Naver,
@@ -160,8 +161,9 @@ draft: true # optional
 - **Images.** `app/opengraph-image.tsx` and `app/twitter-image.tsx` render the 1200 by 630 card
   with the large white logo in the middle of a black field (`lib/og.tsx`).
   They are generated once at build time, and Next adds the tags to every page.
-- **Crawling.** `app/robots.ts` allows everything and links the sitemap, and `app/sitemap.ts` lists
-  the paths in `sitemapPaths` (`lib/site.ts`). Add a page's path there when it ships.
+- **Crawling.** `app/robots.ts` allows everything except Cloudflare's `/cdn-cgi/` and links the
+  sitemap, and `app/sitemap.ts` lists the paths in `sitemapPaths` (`lib/site.ts`). Add a page's
+  path there when it ships.
 - **Structured data.** See the next section.
 
 A route here shadows a paste link with the same name, because this site answers first and only

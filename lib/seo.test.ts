@@ -10,9 +10,10 @@ describe("search engine basics", () => {
     expect(siteDescription.length).toBeLessThanOrEqual(160)
   })
 
-  test("robots.txt allows crawling and points at the sitemap", () => {
+  test("robots.txt allows crawling except /cdn-cgi and points at the sitemap", () => {
     expect(robots()).toMatchObject({
-      rules: { userAgent: "*", allow: "/" },
+      // /_next and /_site/_next stay open so search engines can render the pages.
+      rules: { userAgent: "*", allow: "/", disallow: "/cdn-cgi/" },
       sitemap: `${siteUrl}/sitemap.xml`,
     })
   })
