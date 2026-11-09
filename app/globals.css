@@ -411,6 +411,11 @@ p {
   table-layout: fixed;
 }
 
+/* With eight products the columns get too narrow for their notes, so the table scrolls sideways. */
+.blog-prose .blog-comparison table:has(th:nth-child(9)) {
+  min-width: 56rem;
+}
+
 .blog-prose .blog-comparison .blog-cell {
   min-width: 0;
 }
