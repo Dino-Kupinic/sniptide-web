@@ -17,6 +17,8 @@ export type ChangelogEntry = {
   pulls: number[]
   // True when the release-notes workflow wrote the post; false for the commit-list fallback.
   written: boolean
+  // Set by featured="true" on the notes marker. Only featured releases take the announcement bar.
+  featured: boolean
 }
 
 export type GithubRelease = {
@@ -98,6 +100,10 @@ function parseWritten(attributes: string, content: string) {
   return { kind: isKind(kindAttribute) ? kindAttribute : "feature", title, body }
 }
 
+function isFeatured(attributes: string) {
+  return parseAttributes(attributes).featured === "true"
+}
+
 // The semantic-release list, for releases the workflow has not rewritten: the most user-facing
 // section names the kind, its first item the title, and any other user-facing items the body.
 function parseCommitList(body: string) {
@@ -138,6 +144,7 @@ export function parseRelease(release: GithubRelease): ChangelogEntry {
     ...parsed,
     pulls: pullNumbers(raw),
     written: Boolean(block),
+    featured: block ? isFeatured(block[1] ?? "") : false,
   }
 }
 
@@ -186,11 +193,12 @@ export const announcementStorageKey = "sniptide-announcement-dismissed"
 // How long a feature release stays in the bar above the header.
 export const announcementDays = 14
 
-// The newest feature release from the last two weeks, or nothing. Fixes and maintenance never
-// take the bar, so it only speaks up when something new shipped.
+// The newest featured release from the last two weeks, or nothing. A release is featured only when
+// its notes marker says so (the app repo's release-notes workflow sets it from a `featured` PR
+// label), so the bar speaks up for launches and stays quiet for routine releases.
 export function pickAnnouncement(entries: ChangelogEntry[], now = Date.now()): Announcement | null {
   const cutoff = now - announcementDays * 24 * 60 * 60 * 1000
-  const entry = entries.find((item) => item.kind === "feature")
+  const entry = entries.find((item) => item.kind === "feature" && item.featured)
   if (!entry || Date.parse(entry.date) < cutoff) return null
   return {
     version: entry.version,
