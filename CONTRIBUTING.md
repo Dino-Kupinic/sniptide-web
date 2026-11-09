@@ -1,6 +1,6 @@
 # Contributing
 
-Setup and the checks live in the [README](README.md). This page covers how we write commits and
+Setup and the checks live in the [development guide](docs/development.md). This page covers how we write commits and
 pull requests. The app ([Dino-Kupinic/sniptide](https://github.com/Dino-Kupinic/sniptide)) follows
 the same rules.
 
@@ -46,4 +46,4 @@ and open PRs.
 ## Pull requests
 
 - Keep a PR to one change, and say in the description what it does and why.
-- Run the checks from the README before pushing; CI runs the same ones.
+- Run the checks from the [development guide](docs/development.md) before pushing; CI runs the same ones.
