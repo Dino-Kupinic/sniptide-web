@@ -47,3 +47,6 @@ and open PRs.
 
 - Keep a PR to one change, and say in the description what it does and why.
 - Run the checks from the [development guide](docs/development.md) before pushing; CI runs the same ones.
+- Fill in every section of the template. Screenshots shows the change before and after, with a
+  recording when it is interactive, as [Open a pull request](docs/pull-requests.md) describes.
+- Open the pull request ready for review. Agents never open drafts.
