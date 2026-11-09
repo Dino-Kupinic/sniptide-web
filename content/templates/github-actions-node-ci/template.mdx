@@ -1,40 +1,48 @@
 ---
 title: GitHub Actions Node CI
 query: GitHub Actions Node CI
-description: A GitHub Actions workflow for Node.js that lints, type checks, tests and builds on every push and pull request, with pnpm, matrix and Postgres variants.
-answer: This workflow runs your lint, type check, tests and build on every pull request and every push to main, with npm's cache so repeat runs install fast. Save it as .github/workflows/ci.yml, make sure the four npm scripts exist in package.json, and push.
+description: A GitHub Actions workflow for Node.js that lints, type checks, tests and builds on pushes to main and pull requests, with pnpm, matrix and Postgres variants.
+answer: This workflow runs your lint, type check, tests and build on every pull request and every push to main, with npm's cache so repeat runs install fast. Save it as .github/workflows/ci.yml, commit the Node version and npm lockfile, then open a pull request to see each check.
 category: project
 department: engineering
 logo: github
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - .github/workflows/ci.yml
 related: [nextjs-dockerfile, docker-compose-postgres, env-example, agents-md]
 ---
 
+## Run it
+
+From the repository root, commit a `.nvmrc` containing the Node version you support, such as `24`, and a matching `package-lock.json`. The workflow expects `lint`, `typecheck`, `test` and `build` scripts in `package.json`. Keep tests in single-run mode so CI exits.
+
+Run `npm ci` and the four scripts locally, then push the workflow and open a pull request. Look for the `test` job in the **Checks** tab. Once the workflow is on the default branch, you can also run it from **Actions → CI → Run workflow**.
+
 ## What each part does
 
 | Part | What it does | When to change it |
 | --- | --- | --- |
-| `on` | Runs on pull requests and on pushes to `main`. Pushes to other branches run through their pull request, so nothing runs twice. | Add `workflow_dispatch:` to start runs by hand. |
+| `on` | Runs on pull requests and on pushes to `main`. A feature branch runs when it has an open pull request. | Change `main` if your default branch uses a different name. `workflow_dispatch` enables manual runs. |
 | `concurrency` | Cancels a run that is still going when a newer push arrives on the same branch. | Rarely. |
-| `permissions` | Gives the job read access to the code and nothing else. | Only when a step needs more, such as writing a comment. |
+| `permissions` | Gives checkout read access to repository contents. Checkout also disables credential persistence for later steps. | Keep CI read-only. Give other jobs their own permissions when they need to publish or write. |
 | `timeout-minutes` | Stops a stuck job after 15 minutes instead of the default 6 hours. | When your build legitimately takes longer. |
 | `setup-node` | Installs the Node version named in `.nvmrc` and caches npm's download cache by the lockfile. | Use `node-version: 24` if you don't keep an `.nvmrc`. |
 | `npm ci` | Installs exactly what the lockfile says, and fails if the lockfile is out of date. | Use the variant below for pnpm. |
-| Checks | One step per script, so the log shows which one failed. | Remove the scripts your project doesn't have. |
+| Checks | One step per script, so the log shows which one failed. | Remove steps for scripts your project doesn't use. |
 
 To block merging when a check fails, open the repository's settings, add a branch ruleset for `main` and require the `test` job.
 
 ## Variant: pnpm
 
-pnpm has to be installed before `setup-node` can cache it. `pnpm/action-setup` reads the version from `packageManager` in `package.json`.
+Replace the `steps` in the `test` job. Commit `pnpm-lock.yaml` and a `packageManager` entry such as `pnpm@<your-version>` in `package.json`. The pnpm action reads that entry and installs pnpm before `setup-node` locates its cache.
 
 ```yaml title=".github/workflows/ci.yml"
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -47,7 +55,7 @@ pnpm has to be installed before `setup-node` can cache it. `pnpm/action-setup` r
 
 ## Variant: several Node versions
 
-A library that supports more than one Node version can test them all with a matrix. Each version runs as its own job.
+A library that supports more than one Node version can test them all with a matrix. Replace the `jobs` block to run tests on each version. Set the matrix to the versions you support, then update any required checks in your branch ruleset. [Node.js release schedule](https://nodejs.org/en/about/previous-releases)
 
 ```yaml title=".github/workflows/ci.yml"
 jobs:
@@ -56,10 +64,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22, 24]
+        node: [22, 24]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -71,7 +81,7 @@ jobs:
 
 ## Variant: tests that need Postgres
 
-A service container starts Postgres next to the job. The health check makes the steps wait until it accepts connections.
+Replace the `jobs` block to run tests on the Ubuntu runner with a disposable Postgres service. The job runs outside containers, so it connects on `127.0.0.1`. Run your migration command before the tests if the test runner expects an initialized schema.
 
 ```yaml title=".github/workflows/ci.yml"
 jobs:
@@ -87,17 +97,19 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U app"
+          --health-cmd "pg_isready -h 127.0.0.1 -U app -d app_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
-      DATABASE_URL: postgres://app:app@localhost:5432/app_test
+      DATABASE_URL: postgres://app:app@127.0.0.1:5432/app_test
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
         with:
-          node-version: 24
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
           cache: npm
       - run: npm ci
       - run: npm test

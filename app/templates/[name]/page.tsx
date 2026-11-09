@@ -188,17 +188,17 @@ export default async function Page({ params }: Props) {
           <section aria-labelledby={agentHeadingId} className="blog-prose mt-12">
             <h2 id={agentHeadingId}>Save with your agent</h2>
             <p>
-              Connect the Sniptide MCP server once, then ask your agent to keep this template in
-              your library. It reads the files from the JSON version of this page and saves them as
-              a private snippet you can edit and file into a collection.
+              Run this command to add Sniptide to Claude Code in the current project. Open{" "}
+              <code>/mcp</code> in Claude Code and sign in to Sniptide. Once the server shows as
+              connected, use the prompt below to save a private copy in your library.
             </p>
             <TemplateCode
-              code={`claude mcp add --transport http sniptide ${mcpEndpoint}`}
+              code={`claude mcp add --scope local --transport http sniptide ${mcpEndpoint}`}
               language="bash"
               title="Terminal"
             />
             <TemplateCode
-              code={`Read ${jsonUrl} and save its files as a private Sniptide snippet titled "${template.title}".`}
+              code={`Read ${jsonUrl} and use create_snippet to save its files as a private Sniptide snippet titled "${template.title}". Keep the file names and contents from the JSON.`}
               language="text"
               title="Prompt"
               wrap

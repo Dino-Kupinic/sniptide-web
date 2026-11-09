@@ -1,35 +1,32 @@
 ---
 title: Invite your team to Acme
-description: Owners can now invite teammates as Owners, Editors or Viewers, so a whole agency can work on its invoices together.
+description: Workspace owners can invite teammates to view or edit invoices with their own accounts.
 date: 2026-11-04
 ---
 
+<!-- Fictional example. Verify the rollout, role permissions, plan limits, dates and links. -->
+
 # Invite your team to Acme
 
-Until today, an Acme workspace had one login, and agencies shared it. Starting today, owners can
-invite their team, and each person signs in as themselves with a role that decides what they can
-change.
+Workspace owners can now invite teammates to Acme. Each teammate signs in with their own
+account and gets access to the invoices they need for their role.
 
-![Settings > Members with two teammates and a pending invite](./members.png)
+<!-- Add a screenshot of Settings > Members with sample data and descriptive alt text. -->
 
 ## What you can do
 
-- **Invite by email.** Open Settings > Members, enter an email and choose a role. The invite link
-  works for 7 days.
-- **Choose a role.** Owners manage billing and members, Editors create and send invoices, and
-  Viewers can look without changing anything.
-- **See who did what.** Every invoice shows who created it and who sent it.
+- **Invite by email.** Open **Settings → Members**, enter an email address and choose a role.
+  An invite expires after 7 days.
+- **Choose access for each teammate.** Editors can create and send invoices. Viewers can
+  read invoices. Owners manage members and billing.
 
-## Why we built it
+## Who can use it
 
-Agencies told us they were sharing one password among three or four people, which meant no record
-of who sent what and a password reset every time someone left. Invites fix both.
+Team invites are available to Team workspaces. The Team plan includes 3 seats, including
+the owner. Check the seat count under **Settings → Billing** before inviting someone.
 
-## Pricing
+## Send your first invite
 
-Every plan includes 3 members. Each extra member is €5 a month on the Team plan.
-
-## Try it
-
-Team invites are live for every workspace now. Open **Settings > Members** to send your first
-invite, or read the [members guide](https://acme.com/docs/members) for the details.
+Open **Settings → Members → Invite teammate**. After sending an invite, check the **Pending**
+list. For help with permissions and expired invites, read the
+[members guide](https://example.com/docs/members).

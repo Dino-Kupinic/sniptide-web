@@ -6,8 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report this. Please search open issues first, since
-        someone may have reported it already.
+        Thanks for taking the time to report this. Search open issues for the same problem. Remove account details, tokens and customer data before posting.
   - type: textarea
     id: what-happened
     attributes:
@@ -48,9 +47,8 @@ body:
   - type: textarea
     id: logs
     attributes:
-      label: Logs or screenshots
-      description: Paste any error output. It's formatted as code automatically.
-      render: shell
+      label: Logs and screenshots
+      description: Paste relevant error output with secrets and personal data removed. Attach a redacted screenshot if it helps.
   - type: checkboxes
     id: terms
     attributes:

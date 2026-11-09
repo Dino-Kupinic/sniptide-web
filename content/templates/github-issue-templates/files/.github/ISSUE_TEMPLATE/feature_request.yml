@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest something Acme should do that it doesn't yet.
+description: Describe a problem or suggest an improvement.
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
@@ -7,7 +7,7 @@ body:
     id: problem
     attributes:
       label: What problem would this solve?
-      description: Describe the situation and what it costs you today. This helps more than a proposed solution.
+      description: Describe the situation and what it costs you today.
       placeholder: Every month I export invoices and delete half the rows by hand, because the export ignores my filters.
     validations:
       required: true
@@ -15,8 +15,7 @@ body:
     id: solution
     attributes:
       label: What would you like to happen?
-    validations:
-      required: true
+      description: Share an idea if you have one.
   - type: textarea
     id: alternatives
     attributes:
@@ -31,5 +30,4 @@ body:
         - Every week
         - Every month
         - Rarely
-    validations:
-      required: true
+        - First time

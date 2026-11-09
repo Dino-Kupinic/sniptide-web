@@ -2,11 +2,11 @@
 title: GitHub issue templates
 query: GitHub issue template, bug report template
 description: GitHub issue form templates for bug reports and feature requests, plus a config.yml that sends questions and security reports elsewhere.
-answer: GitHub issue templates are YAML issue forms in .github/ISSUE_TEMPLATE that turn a blank issue into required fields. Copy the three files below into that folder on your default branch, change the labels and links, and the next person who opens an issue picks a form.
+answer: GitHub issue forms use YAML to collect structured bug reports and feature requests. Copy the three files into .github/ISSUE_TEMPLATE, configure labels and contact links, then check the issue chooser on your default branch.
 category: project
 department: product
 logo: github
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - .github/ISSUE_TEMPLATE/bug_report.yml
   - .github/ISSUE_TEMPLATE/feature_request.yml
@@ -14,11 +14,13 @@ files:
 related: [user-stories, release-notes, github-actions-node-ci, prd-for-agents]
 ---
 
-## Why forms instead of Markdown templates
+## Set up the issue chooser
 
-GitHub supports two kinds of issue template. A Markdown template pre-fills the issue body, and people delete it. An issue form, the `.yml` files here, shows labeled fields and refuses to submit until the required ones are filled, so every bug arrives with steps and a version. GitHub [documents the syntax](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms) for both.
+1. Enable Issues. Create the `bug`, `triage` and `enhancement` labels, or replace them in the forms.
+2. In `config.yml`, replace `YOUR-OWNER/YOUR-REPO`. Keep the Discussions link if you have enabled Discussions. Keep the advisory link if private vulnerability reporting is enabled, or point it to your private reporting channel.
+3. Merge the files into the default branch. Open **Issues → New issue**, confirm both forms and each contact link appear, and try submitting a form with a required field left blank.
 
-The files only take effect on the repository's default branch.
+GitHub enforces the required fields in the form UI. [Issue form syntax](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms)
 
 ## What each file does
 
@@ -26,7 +28,7 @@ The files only take effect on the repository's default branch.
 | --- | --- |
 | `bug_report.yml` | Asks what happened, how to reproduce it and which version, and adds the `bug` and `triage` labels. |
 | `feature_request.yml` | Asks for the problem before the solution, and how often it happens, which is what you need to prioritize. |
-| `config.yml` | Turns off blank issues and links to Discussions for questions and to a private page for security reports. |
+| `config.yml` | Turns off blank issues and links to Discussions for questions and to GitHub's private vulnerability reporting flow. |
 
 ## The fields you'll change
 
@@ -41,7 +43,7 @@ The files only take effect on the repository's default branch.
 
 ## Ask for the problem first
 
-The feature form asks "What problem would this solve?" before "What would you like to happen?". Requests that start with a solution tend to describe one person's workaround. The problem tells you whether other users share it and whether something you already planned would cover it.
+The feature form asks "What problem would this solve?" before "What would you like to happen?". Keep the proposed solution optional so someone can report a problem even when they have no fix in mind.
 
 Once an issue is accepted, rewrite it as a [user story](/templates/user-stories) with acceptance criteria before anyone builds it.
 

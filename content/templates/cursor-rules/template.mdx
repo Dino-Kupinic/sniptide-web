@@ -6,7 +6,7 @@ answer: Cursor rules are Markdown files in .cursor/rules that give Cursor's agen
 category: agents
 department: engineering
 logo: cursor
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - .cursor/rules/project.mdc
   - .cursor/rules/react-components.mdc
@@ -15,22 +15,22 @@ related: [agents-md, claude-md, claude-code-skill, mcp-json]
 
 ## How Cursor picks a rule
 
-Each rule is an `.mdc` file: YAML frontmatter that decides when the rule applies, then Markdown instructions. Commit the folder and everyone on the project gets the same rules. The frontmatter gives four ways to apply a rule:
+Put the two files under `.cursor/rules/` in the project and update their commands, globs and component paths. Open Cursor Settings → Rules and verify the rule types. In a new Agent chat, reference a matching `.tsx` file and check that Cursor applies the React rule. [Cursor rules](https://cursor.com/docs/rules)
 
 | Type | Frontmatter | When it applies |
 | --- | --- | --- |
-| Always | `alwaysApply: true` | In every request in the project. Keep these short. |
-| Auto attached | `globs` with `alwaysApply: false` | When a file matching the globs is in the conversation. |
-| Agent requested | `description` only | When the agent decides from the description that it needs the rule. |
-| Manual | No `description`, no `globs` | Only when you mention it, such as `@react-components`. |
+| Always Apply | `alwaysApply: true` | In every request in the project. Keep these short. |
+| Apply to Specific Files | `globs` with `alwaysApply: false` | When a file matching the globs is in the conversation. |
+| Apply Intelligently | `description` only | When the agent decides from the description that it needs the rule. |
+| Apply Manually | No `description`, no `globs` | Only when you mention it, such as `@react-components`. |
 
-A line like `@components/ui/empty-state.tsx` inside a rule attaches that file whenever the rule applies. One real example in your codebase teaches more than a paragraph of style rules.
+Reference an existing file with `@components/ui/empty-state.tsx` if you have a component that demonstrates the convention. Replace the path with one that resolves in your repository.
 
 ## What each rule does
 
 **project.mdc** is the always-on rule. It holds what every request needs: the stack in one line, the commands and a few rules. Change it when a script or a team rule changes.
 
-**react-components.mdc** applies only while Cursor works on `.tsx` files in `components/` or `app/`. Rules scoped by globs cost nothing in other requests, so this is where detailed conventions belong. Add a rule like it for each area with its own conventions, such as API routes or tests.
+**react-components.mdc** applies only while Cursor works on `.tsx` files in `components/` or `app/`. Keep detailed conventions in file-scoped rules so the always-on rule stays short. Add a rule like it for each area with its own conventions, such as API routes or tests.
 
 Older projects keep their rules in a single `.cursorrules` file at the root. Cursor still reads it, but it is deprecated, so move its contents into `.cursor/rules` and split them by area as you go.
 

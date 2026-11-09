@@ -1,74 +1,42 @@
 ---
 title: robots.txt for AI crawlers
 query: robots.txt AI crawlers, block AI crawlers robots.txt
-description: A robots.txt that lets AI search and assistants read your site while blocking crawlers that collect training data, with the user agent of each.
-answer: A robots.txt can treat AI search and AI training differently, because each company uses separate user agents for each. Copy the file below to the root of your site, move each agent into the group that matches your policy, and keep your normal search engines under the catch-all group.
+description: A robots.txt example that separates AI search, training and dataset crawls, with checks for public paths and crawler behavior.
+answer: Use robots.txt to tell supported crawlers which pages they may fetch and to express provider-specific data-use preferences. Start with the sample policy, then choose the user-agent tokens and paths that match your site.
 category: discovery
 department: marketing
 icon: robots
 mark: "robots.txt"
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - robots.txt
 related: [llms-txt, launch-announcement, brand-voice-guide, caddyfile-reverse-proxy]
 ---
 
-## Search, assistants and training are separate choices
+## Publish and check the policy
 
-Most AI companies now run more than one crawler. One collects pages to train models, another builds an index for AI search answers, and a third fetches a page when a person asks an assistant about it. Blocking every AI agent also removes you from ChatGPT search and Perplexity answers, which for many products are now a source of visitors. The file above makes the common choice: be found and cited, but don't feed training sets.
+Serve the file as plain text at `https://your-domain/robots.txt`. Replace the sample sitemap URL and choose the public paths each crawler may fetch. Use a separate file on each host that needs a policy, such as your docs subdomain.
 
-## What each user agent is
+Open the live URL after deployment. Check that it returns HTTP 200 and shows the intended rules. Try a public docs URL and a restricted path in your crawler's testing tool. The rule `/app/` matches URLs starting with `/app/`, so test bare `/app` separately if your site serves it.
 
-| User agent | Company | What it does |
-| --- | --- | --- |
-| `OAI-SearchBot` | OpenAI | Indexes pages for ChatGPT search results. |
-| `ChatGPT-User` | OpenAI | Fetches a page when a ChatGPT user or GPT asks for it. |
-| `GPTBot` | OpenAI | Collects pages to train models. |
-| `Claude-SearchBot` | Anthropic | Indexes pages for search inside Claude. |
-| `Claude-User` | Anthropic | Fetches a page when a Claude user asks for it. |
-| `ClaudeBot` | Anthropic | Collects pages to train models. |
-| `PerplexityBot` | Perplexity | Indexes pages for Perplexity answers. |
-| `Perplexity-User` | Perplexity | Fetches a page when a Perplexity user asks for it. |
-| `Google-Extended` | Google | Not a crawler. A token that controls whether Googlebot's pages train Gemini, without affecting Google Search. |
-| `Applebot-Extended` | Apple | A token that controls whether Applebot's pages train Apple's models, without affecting Siri and Spotlight search. |
-| `CCBot` | Common Crawl | Builds the open Common Crawl dataset, which many models train on. |
-| `Bytespider` | ByteDance | Collects pages, widely reported as training data. |
+## Choose which uses to allow
 
-Companies add and rename agents, so check each company's crawler documentation when you review this file.
+| Token | What the sample policy requests |
+| --- | --- |
+| `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot` | Allow crawling of public pages for AI search. |
+| `GPTBot`, `ClaudeBot` | Decline crawling for model training. |
+| `CCBot` | Keep pages out of new Common Crawl crawls. |
+| `Google-Extended` | Decline the Gemini training and grounding uses Google describes. This token is separate from Google Search inclusion. |
+| `Applebot-Extended` | Decline Apple foundation model training on pages Applebot crawls. |
 
-## What robots.txt can't do
+Allowing a search crawler makes a page available to that crawler. Each provider decides what to index or show. Check the provider policies as part of each review. [OpenAI](https://developers.openai.com/api/docs/bots) · [Anthropic](https://privacy.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler) · [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers) · [Common Crawl](https://commoncrawl.org/ccbot) · [Google](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) · [Apple](https://support.apple.com/en-us/119829)
 
-robots.txt is a request, not access control. The companies above say their crawlers follow it, but nothing enforces that, and agents that fetch a page on a user's behalf may treat it differently from crawlers. Pages you need to keep private belong behind a login, not in a `Disallow` line. Blocking a crawler also doesn't remove what it collected before.
+## Keep private pages behind access control
 
-Changes can take a day or more to apply, since crawlers cache the file.
+Enforce authentication or network restrictions on private resources. Some fetches initiated by a person, such as `ChatGPT-User` and `Perplexity-User` requests, may bypass crawler rules. Changes also take time to reach cached copies of the policy. [Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html)
 
-## How the groups work
+## Block the named AI search crawlers too
 
-A crawler follows the most specific group that names it and ignores the rest, which is why the training group can say `Disallow: /` while the catch-all allows everything. Several `User-agent` lines in a row share the rules below them. Each group repeats the `/app/` and `/api/` rules because a crawler in a named group never reads the `*` group.
+Move the three search tokens into the `Disallow: /` group. Keep the wildcard group for general search and other crawlers. Named groups use their own path rules, so repeat any shared exclusions in each group that permits some crawling.
 
-## Variant: block all AI agents
-
-To opt out of AI search as well as training, move every agent into one group:
-
-```text title="robots.txt"
-User-agent: GPTBot
-User-agent: OAI-SearchBot
-User-agent: ChatGPT-User
-User-agent: ClaudeBot
-User-agent: Claude-SearchBot
-User-agent: Claude-User
-User-agent: PerplexityBot
-User-agent: Perplexity-User
-User-agent: CCBot
-User-agent: Google-Extended
-User-agent: Applebot-Extended
-User-agent: Bytespider
-Disallow: /
-
-User-agent: *
-Allow: /
-
-Sitemap: https://acme.com/sitemap.xml
-```
-
-To help the agents you allow read the site well, publish an [llms.txt](/templates/llms-txt) next to this file.
+To give tools a short map of your public documentation, publish an [llms.txt](/templates/llms-txt).

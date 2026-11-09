@@ -1,70 +1,64 @@
 ---
 title: .mcp.json example
 query: .mcp.json example, Claude MCP config
-description: An .mcp.json example for Claude Code with a remote HTTP server, a token from an environment variable and a local stdio server, each field explained.
-answer: An .mcp.json file at the root of a project lists the MCP servers Claude Code connects to there, so everyone who clones the repository gets the same tools. Copy the example below, keep the servers you use, and put tokens in environment variables instead of the file.
+description: An .mcp.json example for Claude Code with project-scoped OAuth and variants for a token-authenticated HTTP server and local stdio.
+answer: Use .mcp.json to share MCP server definitions with your project in Claude Code. Start with an OAuth connection to Sniptide, then add a token-based or local server only if your project needs it.
 category: agents
 department: engineering
 logo: claude
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - .mcp.json
 related: [claude-md, claude-code-skill, env-example, cursor-rules]
 ---
 
-## Where the file goes
+## Connect and check the server
 
-Claude Code reads `.mcp.json` from the root of the project. Servers in it are project scoped: commit the file and your team gets them on the next pull. Claude Code asks each person to approve a project's servers before it uses them for the first time.
+Save `.mcp.json` in the repository root. Open Claude Code from the project, approve the server if prompted, then run `/mcp` and sign in to Sniptide. Check that the server shows as connected. Commit the file if everyone on the project should see the entry.
 
-You can also write the file from the command line. `claude mcp add --scope project` adds a server to `.mcp.json` instead of your personal settings:
+You can create the same project configuration from the terminal and inspect it before opening Claude Code.
 
 ```bash title="Terminal"
 claude mcp add --scope project --transport http sniptide https://app.sniptide.com/api/mcp
+claude mcp list
 ```
 
-## What each server shows
+Use `--scope local` for a connection just for you in this project, or `--scope user` for your own connections across projects. [Claude Code MCP configuration](https://code.claude.com/docs/en/mcp)
 
-Every key under `mcpServers` is a server name you'll see in `/mcp`. The fields decide how Claude Code connects.
+## Variant for a remote server with a token
 
-| Server | Transport | Fields |
-| --- | --- | --- |
-| `sniptide` | Remote over HTTP | `type: "http"` and a `url`. Servers that support OAuth need nothing else. You sign in once from the `/mcp` menu. |
-| `github` | Remote over HTTP with a token | `headers` sends the token. `${GITHUB_TOKEN}` is read from your environment when Claude Code starts, so the token never lands in the repository. |
-| `filesystem` | Local over stdio | `command` and `args` start a process on your machine. `${DOCS_DIR:-./docs}` uses the variable when it is set and `./docs` when it isn't. |
-
-Claude Code expands `${VAR}` and `${VAR:-default}` in `command`, `args`, `env`, `url` and `headers`. If a variable has no value and no default, Claude Code reports the file as invalid, so list the variables your team needs in your [.env.example](/templates/env-example).
-
-## Variant: a local server with environment variables
-
-A stdio server that reads its settings from the environment takes an `env` block. The values are passed to the process and stay out of `args`.
+Add the `github` entry under `mcpServers` if you need GitHub tools. Use a token scoped to the repositories and read permissions you need. Supply `GITHUB_TOKEN` to the environment that launches Claude Code. A value stored in a project `.env` file is only available here if your launcher loads it.
 
 ```json title=".mcp.json"
 {
   "mcpServers": {
-    "sentry": {
-      "command": "npx",
-      "args": ["-y", "@sentry/mcp-server"],
-      "env": {
-        "SENTRY_ACCESS_TOKEN": "${SENTRY_ACCESS_TOKEN}"
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/readonly",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_TOKEN}"
       }
     }
   }
 }
 ```
 
-## Variant: Claude Desktop
+If the connection fails, check the token's scope and whether the variable is present in the launching shell. Keep the token out of the JSON and command history. [GitHub MCP setup for Claude](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md)
 
-Claude Desktop uses the same `mcpServers` shape in its own settings file, `claude_desktop_config.json`, which you open from Settings, Developer, Edit Config. It is a personal file rather than part of a project, so it holds stdio servers with their full command:
+## Variant for a local stdio server
 
-```json title="claude_desktop_config.json"
+A stdio entry launches a process on your machine. This example requires Node.js and npm. Set `MCP_DOCS_DIR` to an absolute path to an existing directory you want the server to access. Pin a reviewed version of the package in a shared config before approving it.
+
+```json title=".mcp.json"
 {
   "mcpServers": {
     "filesystem": {
+      "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/you/Documents"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${MCP_DOCS_DIR}"]
     }
   }
 }
 ```
 
-Remote servers such as Sniptide are added in Claude Desktop under Settings, Connectors instead.
+This server can read and write files. Check the allowed directories and the client's approval settings before using it. For a quick test, ask it to list the files in your docs directory. [Filesystem MCP server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)

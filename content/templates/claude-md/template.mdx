@@ -6,7 +6,7 @@ answer: CLAUDE.md is the Markdown file Claude Code reads at the start of every s
 category: agents
 department: engineering
 logo: claude
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - CLAUDE.md
 related: [agents-md, claude-code-skill, mcp-json, cursor-rules]
@@ -15,9 +15,9 @@ post: claude-code-skills
 
 ## How Claude Code uses it
 
-Claude Code loads `CLAUDE.md` from the directory you start it in, and from every directory above it, at the start of a session. A `CLAUDE.md` in a subdirectory loads when Claude works with files in that directory. Your personal file at `~/.claude/CLAUDE.md` applies to every project on your machine.
+Claude Code loads applicable `CLAUDE.md` files from your working directory and its ancestors. It discovers nested instructions when it reads files in those directories. Keep machine-wide preferences in `~/.claude/CLAUDE.md`. [Claude Code project instructions](https://code.claude.com/docs/en/memory)
 
-Everything in the file takes up context in every session, so keep it to facts Claude can't work out from the code. Running `/init` in Claude Code writes a first draft from your repository, which you can then trim against this template.
+After saving the file, start Claude Code in the project and run `/memory` to confirm which files loaded. Ask it which command runs a single test, then check that the command works. Use `/init` to generate a draft from your repository if you prefer to start there.
 
 ## What each section does
 
@@ -28,7 +28,7 @@ Everything in the file takes up context in every session, so keep it to facts Cl
 | Project layout | The handful of folders that matter and what lives in each. | When you add or move a top-level folder. |
 | Code style | Rules a linter doesn't enforce, such as where database code may live. | When review keeps catching the same thing. |
 | Workflow | How a change is finished: tests, commit format, what needs a question first. | When the team's process changes. |
-| Never | The few actions that would cause real damage. | Rarely. Keep this list short. |
+| Data and secrets | Rules for released migrations and credentials. | When the data or secrets workflow changes. |
 
 Write each rule as an instruction with a reason or a path. "Components never query the database" is easier to follow than "keep a clean architecture".
 
@@ -72,7 +72,7 @@ If your team also uses Codex, Cursor or another agent that reads `AGENTS.md`, ke
 
 ## Claude Code
 
-- Use plan mode for changes that touch more than three files.
+- Use Plan Mode before changing authentication or database migrations.
 ```
 
 The [AGENTS.md template](/templates/agents-md) has a starting point for the shared file.

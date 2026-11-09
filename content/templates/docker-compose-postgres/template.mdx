@@ -1,12 +1,12 @@
 ---
 title: Docker Compose Postgres
 query: docker compose postgres
-description: A Docker Compose file for Postgres with a persistent volume, a health check and init scripts, plus variants with an app service and pgAdmin.
-answer: This Compose file runs Postgres 17 with its data in a named volume, a health check and a port that only your machine can reach. Save it as compose.yaml, run docker compose up -d, and connect with postgres://app:app@localhost:5432/app.
+description: A Docker Compose file for Postgres with a persistent volume, a health check and optional init scripts, plus variants with an app service and pgAdmin.
+answer: This Compose file runs Postgres 17 with its data in a named volume, a health check and a port that only your machine can reach. Save it as compose.yaml, run docker compose up -d --wait, and connect using the local development credentials.
 category: deploy
 department: engineering
 logo: docker
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - compose.yaml
 related: [env-example, nextjs-dockerfile, caddyfile-reverse-proxy, github-actions-node-ci]
@@ -14,11 +14,14 @@ related: [env-example, nextjs-dockerfile, caddyfile-reverse-proxy, github-action
 
 ## Run it
 
+Use Docker with Compose v2. Run these commands from the folder containing `compose.yaml`.
+
 ```bash title="Terminal"
-docker compose up -d
-docker compose ps        # wait until db shows "healthy"
-docker compose exec db psql -U app -d app
+docker compose up -d --wait
+docker compose exec db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1;"'
 ```
+
+With the defaults, connect from the host at `postgres://app:app@127.0.0.1:5432/app`. The SQL command should return one row with the value `1`. Update the URL if you change the credentials or host port. These defaults are for local development.
 
 `docker compose down` stops the container and keeps the data. Adding `-v` deletes the volume too, which wipes the database.
 
@@ -26,16 +29,15 @@ docker compose exec db psql -U app -d app
 
 | Line | What it does | When to change it |
 | --- | --- | --- |
-| `image: postgres:17` | Pins the major version, so an upgrade never happens by accident. | When you upgrade. A new major version can't read the old data directory without a dump and restore. |
+| `image: postgres:17` | Pins the major version, so an upgrade never happens by accident. | When you upgrade. Plan a major upgrade with a dump and restore or `pg_upgrade`. |
 | `environment` | Creates the user, password and database on the first start. `${POSTGRES_USER:-app}` reads your `.env` and falls back to `app`. | Set real values in `.env` for anything beyond your laptop. |
 | `ports` | `127.0.0.1:5432:5432` publishes the port to your machine only. A bare `5432:5432` opens it on every network interface. | Change the first `5432` if another Postgres already uses that port. |
 | `pgdata` volume | Keeps the data when the container is recreated. | Rarely. |
-| `docker-entrypoint-initdb.d` | Runs the `.sql` and `.sh` files in `db/init` on the first start, in name order. | Add files for extensions or seed data. |
-| `healthcheck` | `pg_isready` reports when Postgres accepts connections. `$$` passes a literal `$` to the container's shell. | Rarely. Other services wait on it, as the next variant shows. |
+| `healthcheck` | `pg_isready` checks TCP so the temporary socket-only server used by init scripts does not report ready. `$$` defers variable expansion to the container. | Rarely. Other services wait on it, as the next variant shows. |
 
-Postgres 18 images keep their data in a versioned folder under `/var/lib/postgresql`, so when you move to `postgres:18`, mount the volume at `/var/lib/postgresql` instead of its `data` folder.
+For a fresh Postgres 18 database, mount its volume at `/var/lib/postgresql`. To upgrade existing data, follow the [official image's upgrade and volume guidance](https://hub.docker.com/_/postgres).
 
-The `environment` values and init scripts apply only while the volume is empty. After the first start, changing `POSTGRES_PASSWORD` does nothing until you delete the volume or change the password in SQL.
+The `environment` values and init scripts apply only while the volume is empty. After the first start, rotate the role's password in Postgres and update your client configuration. Recreating the container with a different environment value leaves the original password in the database.
 
 ## Variant: with your app
 
@@ -62,7 +64,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U app -d app"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -75,24 +77,30 @@ The database has no `ports` here: the app reaches it over the Compose network, a
 
 ## Variant: with pgAdmin
 
-pgAdmin gives you a browser interface to the database. Add it under `services`, next to `db`, open http://localhost:5050 and register a server with the host name `db`.
+Add this under `services` for local development. Set a local `PGADMIN_PASSWORD` in `.env`, then run `docker compose up -d --wait`. Sign in at http://localhost:5050 and register Postgres with host `db`, port `5432`, and the database user and password from `db`.
 
 ```yaml title="compose.yaml"
-services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:?Set PGADMIN_PASSWORD in .env}
     ports:
       - "127.0.0.1:5050:80"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 ```
 
 ## Variant: extensions on the first start
 
-An init script can enable extensions such as pgvector. Switch the image to `pgvector/pgvector:pg17`, which ships the extension, and add this file:
+For a new volume, an init script can enable extensions. On an existing volume, run the SQL as a migration after making the extension available. To use pgvector on a fresh volume, set the image to `pgvector/pgvector:pg17` and add this mount under `services.db.volumes`. Keep the existing `pgdata` entry.
+
+```yaml title="compose.yaml"
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+```
+
+Save the SQL below in `db/init/` before starting the database. The image runs the initialization files in filename order.
 
 ```sql title="db/init/01-extensions.sql"
 CREATE EXTENSION IF NOT EXISTS vector;

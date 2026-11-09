@@ -1,23 +1,15 @@
-{
-	# Let's Encrypt sends certificate expiry notices here.
-	email you@example.com
-}
-
 example.com {
 	encode zstd gzip
 
 	reverse_proxy localhost:3000
 
 	header {
-		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		X-Content-Type-Options nosniff
 		Referrer-Policy strict-origin-when-cross-origin
 		-Server
 	}
 
-	log {
-		output file /var/log/caddy/example.com.log
-	}
+	log
 }
 
 www.example.com {

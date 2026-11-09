@@ -1,12 +1,13 @@
 # Acme voice
 
-Read this before writing anything a customer will see: the site, emails, the app, the docs and
-social posts. It applies to people and to AI tools drafting copy for us.
+<!-- Fictional example. Replace the audience, product vocabulary and examples with your own. -->
+
+Use this guide when writing for Acme customers across the site, emails, app, docs and social posts.
 
 ## Who we write for
 
-Freelancers and small agencies who send invoices between client work. They are busy, they are
-not accountants, and they read on their phones.
+Freelancers and small agencies who send invoices between client jobs. Use terms that make
+sense to a reader with limited accounting experience.
 
 ## How we sound
 
@@ -19,13 +20,14 @@ not accountants, and they read on their phones.
 
 ## Rules
 
-1. Write full sentences in the second person: "you" and "your clients".
-2. Keep sentences under 25 words, and one idea per sentence.
+1. Address the reader as “you” when explaining an action. Use short labels for buttons and navigation.
+2. Keep one idea per sentence. Split long sentences when the next action becomes hard to find.
 3. Use sentence case for headings and buttons: "Send invoice", not "Send Invoice".
 4. Buttons name the action: "Send invoice", "Export CSV". Never "Submit" or "OK".
 5. Errors say what failed and what to do: "The card was declined. Try another card or contact
    your bank."
-6. Write numbers as digits, dates as "4 November 2026" and money with the currency: "€1,200".
+6. Use “4 November 2026” in English prose. Format dates, numbers and currency using the
+   reader’s locale in the app.
 7. Write Acme with a capital A only. Never ACME or acme.
 
 ## Words
@@ -39,10 +41,24 @@ not accountants, and they read on their phones.
 
 Never use: revolutionary, seamless, supercharge, game-changing, leverage, unlock.
 
+## Adapt the tone to the situation
+
+- An error starts with what happened and gives a recovery action. Keep the tone calm.
+- A release announcement can be warmer. Confirm the rollout, pricing and feature details before publishing.
+- A help article starts with the task and gives the exact menu or field names.
+
 ## Examples
+
+The examples below use fictional product data.
 
 | Situation | Write | Not |
 | --- | --- | --- |
-| Empty invoice list | No invoices yet. Create your first one to get paid. | Nothing to see here! 🎉 Let's get started on your invoicing journey. |
+| Empty invoice list | No invoices yet. Create an invoice to get started. | Nothing to see here! 🎉 Let's get started on your invoicing journey. |
 | Payment received | Northwind paid invoice #1042 (€1,200). | Woohoo! Cha-ching! 💸 |
 | Feature announcement | You can now invite your team. Each person gets a role that decides what they can change. | We're thrilled to announce our game-changing new collaboration experience! |
+
+## Review before publishing
+
+- Verify product claims, amounts and UI labels against the current release.
+- Check that each error gives a recovery action and each button describes its action.
+- Use approved sample data in screenshots and examples.

@@ -6,7 +6,7 @@ answer: A Claude Code skill is a folder with a SKILL.md file that tells Claude w
 category: agents
 department: engineering
 logo: claude
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - .claude/skills/review-pr/SKILL.md
   - .claude/skills/review-pr/checklist.md
@@ -16,7 +16,7 @@ post: claude-code-skills
 
 ## How the skill loads
 
-Claude keeps only the `name` and `description` of every skill in context. When a request matches the description, or you type `/review-pr`, Claude reads the body of `SKILL.md`. Other files in the folder, such as `checklist.md`, load only when the instructions point to them. That makes a long checklist cheap to keep around.
+Claude uses the description to decide when to invoke the skill and loads the body when the skill runs. The body tells Claude when to read the supporting checklist. To try it, open Claude Code at the project root and run `/review-pr` on a branch with a diff. For `/review-pr 42`, install and authenticate the GitHub CLI first, and replace `42` with an accessible pull request. [Claude Code skills](https://code.claude.com/docs/en/skills)
 
 Where you put the folder decides who gets it:
 
@@ -25,7 +25,7 @@ Where you put the folder decides who gets it:
 | Project | `.claude/skills/review-pr/SKILL.md` | Workflows for this codebase. Commit it and your team gets it. |
 | Personal | `~/.claude/skills/review-pr/SKILL.md` | Your own workflows, in every project on your machine. |
 
-Skills follow the [Agent Skills](https://agentskills.io) open standard, so the same folder also works in other tools that read it.
+The folder follows the [Agent Skills](https://agentskills.io) format. Check which frontmatter extensions and discovery paths your other clients support.
 
 ## What each part does
 
@@ -33,7 +33,7 @@ Skills follow the [Agent Skills](https://agentskills.io) open standard, so the s
 
 **description** is what Claude reads to decide whether to use the skill. Start with what the skill does, then say when to use it in the words people actually type: "review", "check a PR", "look over a diff". A vague description is the most common reason a skill never runs.
 
-**Steps** give the order of work with exact commands. Claude follows numbered steps closely, so put the checks it must run here rather than in prose.
+**argument-hint** shows the optional PR number in Claude Code. `$ARGUMENTS` gives the skill the text entered after the command. The steps define the default behavior when it is empty.
 
 **Report format** makes the output the same every time, which matters when several people read the reviews.
 
@@ -41,22 +41,20 @@ Skills follow the [Agent Skills](https://agentskills.io) open standard, so the s
 
 ## Variant: a skill only you can start
 
-Add `disable-model-invocation: true` for a skill with side effects, such as a release. Claude then never runs it on its own, and it starts only when you type `/release`.
+Add `disable-model-invocation: true` for a skill with side effects, such as a release. Claude Code then requires manual invocation. The example prepares a release checklist without changing the repository.
 
 ```md title=".claude/skills/release/SKILL.md"
 ---
 name: release
-description: Cut a release. Bumps the version, writes the changelog and tags the commit.
+description: Prepare the version and changelog for a release.
 disable-model-invocation: true
 ---
 
 # Release
 
-1. Make sure the working tree is clean and `main` is up to date.
-2. Run `pnpm test`. Stop if anything fails.
-3. Bump the version with `pnpm version <patch|minor|major>`, as given after the command.
-4. Add the merged pull requests since the last tag to `CHANGELOG.md`.
-5. Push the commit and the tag: `git push --follow-tags`.
+1. Find the previous release tag and read the changes since that tag.
+2. Check which version bump the repository's release policy calls for.
+3. Draft the changelog entry and list the checks required before tagging.
 ```
 
 ## Variant: background knowledge for some files

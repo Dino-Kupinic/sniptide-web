@@ -1,60 +1,63 @@
-# CSV export for invoices
+# Export filtered invoices to CSV
 
-Status: Ready to build
-Owner: Dana (product), Sam (engineering)
-Updated: 2026-11-08
+<!-- Fictional example. Replace the requirements, metrics and code references for your project. -->
+
+Status: Ready for implementation
+Owner: Product and billing engineering
+Updated: 2026-11-09
 
 ## Problem
 
-Accountants ask for a spreadsheet of invoices every month. Today support exports it by hand from
-the database, which takes about 20 minutes per request and arrives a day late.
+Accountants need to reconcile paid invoices each month. Support prepares their exports by hand,
+and the person requesting an export waits for a reply.
 
 ## Goal
 
-A signed-in user can download their invoices as a CSV file from the Invoices page, filtered the
-same way as the list on screen.
+People with invoice read access can export the same filtered set they see on the Invoices page.
 
-Success: support export requests drop to zero within a month of release.
-
-## Users and stories
-
-- As an owner, I download last month's paid invoices so my accountant can reconcile them.
-- As an accountant with read access, I export invoices for one customer without asking the owner.
+Success measure: compare monthly support requests for manual invoice exports for the 30 days
+before and after launch. Record the baseline before release.
 
 ## Requirements
 
-1. An **Export CSV** button sits next to the filters on the Invoices page.
-2. The file contains the invoices that match the current filters, in the list's order.
-3. Columns, in this order: number, customer, issue date, due date, status, currency, amount.
-4. Amounts are decimals with two places (19.99), dates are ISO 8601 (2026-11-08).
-5. The file name is `invoices-YYYY-MM-DD.csv`, using the day of the export.
-6. Exports of up to 10,000 rows download straight away. Larger exports show an error that asks
-   the user to narrow the filters.
-7. Users with read access can export. Nobody can export another workspace's invoices.
+1. Show **Export CSV** next to the invoice filters for users with invoice read access.
+2. Export every matching row in the current workspace across all pages, using the list's filters
+   and sort order. When no rows match, return only the header.
+3. Write UTF-8 CSV with columns `number,customer,issue_date,due_date,status,currency,amount`.
+   Use ISO dates (`YYYY-MM-DD`), ISO 4217 currency codes and decimal amounts with the currency's
+   usual number of fraction digits. Leave missing due dates empty.
+4. Use the filename `invoices-YYYY-MM-DD.csv`, based on the export date in UTC.
+5. Export up to 10,000 rows. At 10,001 matches or more, show “Too many invoices. Narrow your filters
+   and try again.” Return no partial file.
+6. Require a signed-in user with invoice read access in the requested workspace. Reject
+   signed-out requests with 401 and deny users without access with 403.
 
 ## Out of scope
 
-- Excel or PDF formats.
-- Scheduled or emailed exports.
-- Exporting line items.
+- Scheduled exports and export by email.
+- Excel workbooks, PDFs and invoice line items.
 
 ## Technical notes
 
-- Add `GET /api/invoices/export` that takes the same query parameters as `GET /api/invoices`.
-- Reuse `listInvoices` in `lib/invoices.ts` for filtering and permissions. Don't write a second
-  query.
-- Stream the response with `Content-Type: text/csv` and `Content-Disposition: attachment`.
-- Escape fields per RFC 4180: quote fields that contain commas, quotes or line breaks.
+- Add `GET /api/invoices/export` with the list endpoint's filter and sort parameters.
+- Reuse the workspace authorization and filters from `lib/invoices.ts`. Query up to 10,001
+  matching rows and check the limit before starting the download.
+- Send `Content-Type: text/csv; charset=utf-8`, an attachment filename and `Cache-Control: no-store`.
+  Escape commas, quotes and line breaks with CSV quoting. Double embedded double quotes.
+- Treat user-controlled text as text when opened in a spreadsheet. Use the project's CSV
+  injection protection, or agree on the behavior before implementing the exporter.
 
 ## Acceptance criteria
 
-- [ ] With the "Paid" and "October" filters set, the file holds exactly the invoices on screen.
-- [ ] A customer named `Smith, "Jr" Ltd` opens correctly in Excel and Google Sheets.
-- [ ] A user with read access can export; a signed-out request gets 401.
-- [ ] A filter matching 10,001 invoices shows the error and downloads nothing.
-- [ ] Tests cover the CSV escaping and the permission check.
+- [ ] A paid-invoices filter with 51 matching rows exports all 51 in list order, including the
+      row on page 2. Rows from another workspace are excluded.
+- [ ] No matches returns the header alone. A name containing a comma and quotes parses as one
+      field, and a formula-like customer name opens as text in the supported spreadsheet.
+- [ ] Read access can export. Signed-out users get 401 and users without workspace access get 403.
+- [ ] Exactly 10,000 matches download. 10,001 returns the documented error without a file.
+- [ ] The test suite verifies CSV parsing, filter parity, permissions and both row-limit cases.
 
-## Open questions
+## Decisions
 
-- Should the export include voided invoices when no status filter is set? Current answer: yes,
-  matching the list.
+- Include voided invoices when the list's filters include them.
+- Verify spreadsheet behavior in Excel before release.
