@@ -43,7 +43,9 @@ const cachedEntries = unstable_cache(async () => toEntries(await fetchReleases()
 export async function getChangelog(): Promise<ChangelogEntry[] | null> {
   try {
     return await cachedEntries()
-  } catch {
+  } catch (error) {
+    // Usually GitHub's limit of 60 unauthenticated requests an hour; GITHUB_TOKEN raises it.
+    console.error("Could not load the changelog from GitHub:", error)
     return null
   }
 }

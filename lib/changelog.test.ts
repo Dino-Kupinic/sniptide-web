@@ -157,29 +157,50 @@ describe("listing", () => {
   })
 })
 
+const featuredPost = (
+  title: string,
+) => `<!-- sniptide-notes:start kind="feature" featured="true" -->
+## ${title}
+
+One paragraph.
+<!-- sniptide-notes:end -->`
+
 describe("announcement", () => {
   const now = Date.parse("2026-11-10T00:00:00Z")
 
-  test("the newest recent feature takes the bar and links to its anchor", () => {
+  test("the newest recent featured release takes the bar and links to its anchor", () => {
     const entries = toEntries([
+      release("v0.77.2", featureList, "2026-11-09T12:00:00Z"),
       release("v0.77.1", ciList, "2026-11-09T00:00:00Z"),
-      release("v0.77.0", featureList, "2026-11-08T00:00:00Z"),
+      release("v0.77.0", featuredPost("Custom links under your handle"), "2026-11-08T00:00:00Z"),
     ])
+    expect(entries.find((entry) => entry.tag === "v0.77.0")?.featured).toBe(true)
     expect(pickAnnouncement(entries, now)).toEqual({
       version: "0.77.0",
-      title: "Move custom links under /@handle",
+      title: "Custom links under your handle",
       href: "/changelog#v0.77.0",
     })
   })
 
-  test("a feature older than two weeks shows nothing", () => {
-    const entries = toEntries([release("v0.70.0", featureList, "2026-10-20T00:00:00Z")])
+  test("feature releases without the flag never take the bar", () => {
+    const written = `<!-- sniptide-notes:start kind="feature" -->\n## Title\n<!-- sniptide-notes:end -->`
+    const entries = toEntries([
+      release("v0.77.0", featureList, "2026-11-09T00:00:00Z"),
+      release("v0.76.0", written, "2026-11-08T00:00:00Z"),
+    ])
+    expect(entries.map((entry) => entry.featured)).toEqual([false, false])
     expect(pickAnnouncement(entries, now)).toBeNull()
   })
 
-  test("fixes and maintenance never take the bar", () => {
+  test("a featured release older than two weeks shows nothing", () => {
+    const entries = toEntries([release("v0.70.0", featuredPost("Title"), "2026-10-20T00:00:00Z")])
+    expect(pickAnnouncement(entries, now)).toBeNull()
+  })
+
+  test("the flag only counts on a feature", () => {
+    const fix = `<!-- sniptide-notes:start kind="fix" featured="true" -->\n## Title\n<!-- sniptide-notes:end -->`
     expect(
-      pickAnnouncement(toEntries([release("v0.75.2", ciList, "2026-11-09T00:00:00Z")]), now),
+      pickAnnouncement(toEntries([release("v0.75.2", fix, "2026-11-09T00:00:00Z")]), now),
     ).toBeNull()
   })
 })
