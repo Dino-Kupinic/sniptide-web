@@ -10,7 +10,7 @@ This guide decides what a post says and how it is built. Three other sources dec
 
 - The copy rules in `DESIGN.md` in the app repository: full sentences, no em dashes, no "It's X, not Y", sentence case, and the vocabulary in `docs/positioning.md` (paste, snippet, pattern, link, self-host, agent).
 - The frontmatter schema in `lib/blog.ts`, which the build checks.
-- `components/blog/mdx.tsx`, which lists every component a post can use, and the Blog section of the README.
+- `components/blog/mdx.tsx`, which lists every component a post can use, and the [blog guide](blog.md).
 
 How the guide maps to the blog:
 

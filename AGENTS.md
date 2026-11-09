@@ -18,7 +18,7 @@ The graph can lag behind your branch, so the source files decide what is true. `
 
 ## Blog posts
 
-Before drafting or editing a post in `content/blog`, read `docs/blog-style-guide.md` and fill in its writing brief. Write from the notes, sources and product facts you are given, and mark missing evidence instead of inventing benchmarks, quotes, availability or personal experience. `components/blog/mdx.tsx` lists every component a post can use.
+Before drafting or editing a post in `content/blog`, read `docs/blog.md` for how the blog works, then read `docs/blog-style-guide.md` and fill in its writing brief. Write from the notes, sources and product facts you are given, and mark missing evidence instead of inventing benchmarks, quotes, availability or personal experience. `components/blog/mdx.tsx` lists every component a post can use.
 
 ## Templates
 

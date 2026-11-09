@@ -14,5 +14,5 @@ and theme. Add a recording when the change is interactive. When nothing visible 
 
 ## Verification
 
-<!-- The checks you ran from the README and their results. Name anything left to CI or a
+<!-- The checks you ran from docs/development.md and their results. Name anything left to CI or a
 browser. -->
