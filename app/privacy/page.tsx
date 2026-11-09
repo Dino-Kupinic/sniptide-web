@@ -60,8 +60,9 @@ export default function Privacy() {
         identifier in your browser. Your browser sends these events to sniptide.com, which passes
         them on to PostHog together with your IP address. PostHog turns your IP address, browser and
         the site into an identifier with a salt that changes every day, so we can count visitors for
-        one day but cannot follow anyone from one day to the next. The legal basis is our legitimate
-        interest in knowing how the site is used (Art. 6(1)(f) GDPR).
+        one day but cannot follow anyone from one day to the next. Your approximate location is then
+        only the country that our network reports for your IP address. The legal basis is our
+        legitimate interest in knowing how the site is used (Art. 6(1)(f) GDPR).
       </p>
       <p>
         The cookie banner asks about two categories separately. If you allow analytics, PostHog

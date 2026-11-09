@@ -18,6 +18,11 @@ draws heatmaps. With session replay as well, it records sessions. Turn on sessio
 heatmaps in the project. The answer is stored in the `sniptide_consent` cookie for six months, and
 the Cookies link in the footer opens the settings. `lib/tracking.ts` lists the named funnel events,
 and every event carries `consent` (`pending`, `denied`, `analytics` or `analytics_replay`).
+PostHog removes the IP from cookieless events before its GeoIP lookup, so those events would have
+no country. The site asks `/_site/country` for the country Cloudflare reports in `CF-IPCountry`
+before PostHog starts, and adds it to cookieless events as `$geoip_country_code` and
+`$geoip_country_name`. Only the country is sent, never the IP or a city. Events with consent keep
+PostHog's own lookup. Cloudflare's IP Geolocation setting must stay on for this.
 Re-check the privacy policy before adding another tracker or an `identify()` call.
 
 To exclude your own browser, open `/_site/analytics` and select **Exclude this browser**. Use the

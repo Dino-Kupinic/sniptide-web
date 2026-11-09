@@ -9,7 +9,14 @@ import {
 } from "@/lib/consent"
 import { ctaEvent } from "@/lib/cta"
 import { isSectionSeen, newMilestones, outboundHost, scrollPercent } from "@/lib/funnel"
-import { deploymentEnvironment, posthogHost, posthogKey, posthogProxyPath } from "@/lib/posthog"
+import {
+  countryPath,
+  deploymentEnvironment,
+  posthogHost,
+  posthogKey,
+  posthogProxyPath,
+  withCountry,
+} from "@/lib/posthog"
 
 // PostHog on sniptide.com, gated by the cookie banner (components/consent-banner.tsx).
 //
@@ -29,14 +36,42 @@ import { deploymentEnvironment, posthogHost, posthogKey, posthogProxyPath } from
 //   consent_banner_shown   { trigger }            the banner or the settings appeared
 //   consent_updated        { action, analytics, replay, source }  the visitor answered
 // Every event carries surface=marketing, consent=pending|denied|analytics|analytics_replay and
-// environment=production|preview|development (lib/posthog.ts).
+// environment=production|preview|development (lib/posthog.ts). Cookieless events also carry the
+// visitor's country from /_site/country, since PostHog can't look it up for them.
 
 let started = false
+let ready = false
 let consent: ConsentState = null
+let country: string | null = null
+// Events tracked while the country is still loading, sent once PostHog starts.
+const pending: [string, Record<string, string | number | boolean> | undefined][] = []
+
+// Long enough for one request to this site, short enough that a slow answer costs no events.
+const countryTimeout = 1500
 
 export function startTracking() {
   if (started || !posthogKey || isAnalyticsExcluded()) return
   started = true
+  // PostHog starts after the country arrives, so the first pageview carries it too.
+  loadCountry().then((value) => {
+    country = value
+    init()
+  })
+}
+
+async function loadCountry() {
+  try {
+    const response = await fetch(countryPath, { signal: AbortSignal.timeout(countryTimeout) })
+    if (!response.ok) return null
+    const { country } = (await response.json()) as { country?: unknown }
+    return typeof country === "string" && /^[A-Z]{2}$/.test(country) ? country : null
+  } catch {
+    return null
+  }
+}
+
+function init() {
+  if (!posthogKey || isAnalyticsExcluded()) return
   consent = readConsent()
   const analytics = consent?.analytics ?? false
   const environment = deploymentEnvironment(window.location.hostname)
@@ -61,16 +96,21 @@ export function startTracking() {
       event.properties.surface = "marketing"
       event.properties.consent = consentLabel(consent)
       event.properties.environment = environment
+      withCountry(event.properties, country)
       return event
     },
   })
   applyConsent(consent)
   onConsentChange(applyConsent)
   listen()
+  ready = true
+  for (const [event, properties] of pending.splice(0)) track(event, properties)
 }
 
 export function track(event: string, properties?: Record<string, string | number | boolean>) {
-  if (started && !isAnalyticsExcluded()) posthog.capture(event, properties)
+  if (!started || isAnalyticsExcluded()) return
+  if (ready) posthog.capture(event, properties)
+  else pending.push([event, properties])
 }
 
 function applyConsent(next: ConsentState) {
