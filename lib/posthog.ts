@@ -25,3 +25,32 @@ export function deploymentEnvironment(hostname: string): DeploymentEnvironment {
 export function posthogAssetsHost(host: string) {
   return host.replace(/^(https?:\/\/)(\w+)\.i\.posthog\.com/, "$1$2-assets.i.posthog.com")
 }
+
+// PostHog removes the IP from cookieless events before its GeoIP lookup runs, so those events
+// would have no location. app/_site/country returns the country Cloudflare reports for the
+// visitor, and withCountry adds it under PostHog's own GeoIP property names so web analytics and
+// breakdowns use it. Only the country is sent, never an address or a city. Events with consent
+// keep PostHog's own lookup.
+export const countryPath = "/_site/country"
+
+// The visitor's country as a CDN reports it, uppercase ISO 3166-1 alpha-2, or null. Cloudflare's
+// XX (unknown) and T1 (Tor) aren't countries.
+export function visitorCountry(headers: Headers) {
+  const value =
+    headers.get("cf-ipcountry") ??
+    headers.get("x-vercel-ip-country") ??
+    headers.get("cloudfront-viewer-country")
+  const code = value?.trim().toUpperCase()
+  return code && /^[A-Z]{2}$/.test(code) && code !== "XX" ? code : null
+}
+
+export function withCountry(properties: Record<string, unknown>, country: string | null) {
+  if (!country || properties.$cookieless_mode !== true || properties.$geoip_country_code) return
+  properties.$geoip_country_code = country
+  try {
+    const name = new Intl.DisplayNames(["en"], { type: "region" }).of(country)
+    if (name && name !== country) properties.$geoip_country_name = name
+  } catch {
+    // An unknown region code still records the code.
+  }
+}
