@@ -498,6 +498,17 @@ p {
   color: var(--link);
 }
 
+.blog-prose .blog-mark-unknown {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
 .blog-prose .blog-mark-no {
   display: inline-flex;
   width: 1.5rem;

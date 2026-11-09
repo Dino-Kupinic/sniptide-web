@@ -34,7 +34,7 @@ export const blogMdxComponents = {
       <div className="blog-cell">{children}</div>
     </th>
   ),
-  // A cell of "✓" or "–" draws as a marker, and "~note" as partial support (ComparisonCell).
+  // A cell of "✓", "–" or "?" draws as a marker, and "~note" as partial support (ComparisonCell).
   td: ({ children, ...props }: ComponentProps<"td">) => (
     <td {...props}>
       <div className="blog-cell">

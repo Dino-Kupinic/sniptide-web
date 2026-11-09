@@ -16,7 +16,7 @@ import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 //   </Comparison>
 //
 // A row whose first cell is bold and whose other cells are empty becomes a group heading. Cells of
-// "✓" and "–" turn into markers (see ComparisonCell), and a note starting with "~" marks partial
+// "✓", "–" and "?" turn into markers (see ComparisonCell), and a note starting with "~" marks partial
 // support. `highlight` is the product column to tint, counted from 1, such as the publisher's own.
 // The styles live under .blog-comparison in app/globals.css. On wide screens the table breaks out
 // of the text column so eight products fit, and on phones it scrolls with the first column pinned.
@@ -44,8 +44,8 @@ export function Comparison({
   )
 }
 
-// The content of a table cell, with "✓" and "–" (or "—") drawn as markers and a leading "~" drawn as
-// a half-filled dot for partial support. Any other content passes through unchanged.
+// The content of a table cell, with "✓" (yes), "–" or "—" (no) and "?" (the docs don't say) drawn
+// as markers, and a leading "~" drawn as a half-filled dot for partial support. Any other content passes through unchanged.
 export function ComparisonCell({ children }: { children: ReactNode }) {
   if (children === "✓") {
     return (
@@ -60,6 +60,14 @@ export function ComparisonCell({ children }: { children: ReactNode }) {
       <span className="blog-mark-no">
         <MinusIcon aria-hidden="true" className="size-4" />
         <span className="sr-only">No or not documented</span>
+      </span>
+    )
+  }
+  if (children === "?") {
+    return (
+      <span className="blog-mark-unknown">
+        <span aria-hidden="true">?</span>
+        <span className="sr-only">Not documented</span>
       </span>
     )
   }
