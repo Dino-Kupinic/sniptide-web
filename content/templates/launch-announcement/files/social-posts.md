@@ -1,30 +1,31 @@
-# Social posts: team invites
+# Team invites launch copy
 
-Link: https://acme.com/blog/team-invites
+<!-- Fictional example. Replace the URL and confirm availability before publishing. -->
 
-## X or Bluesky (under 280 characters)
+## X or Bluesky
 
-You can now invite your team to Acme. Each person signs in as themselves, as an Owner, Editor or
-Viewer, so you always know who sent which invoice.
+Team workspace owners can now invite teammates to Acme as Editors or Viewers. Open
+Settings → Members to send an invite.
 
-https://acme.com/blog/team-invites
+https://example.com/blog/team-invites
 
 ## LinkedIn
 
-Agencies told us they shared one Acme login among three or four people. That meant no record of
-who sent which invoice, and a password reset every time someone left.
+Your bookkeeper needs to see invoices. Your teammate needs to send them. They can now
+do both in Acme with their own accounts.
 
-Starting today, owners can invite their team. Each person gets a role:
+Team workspace owners can invite Editors to create and send invoices or Viewers to
+read them. Open Settings → Members to invite your first teammate.
 
-- Owners manage billing and members.
-- Editors create and send invoices.
-- Viewers can look without changing anything.
+https://example.com/blog/team-invites
 
-Every plan includes 3 members. Open Settings > Members to send your first invite.
+## Email
 
-https://acme.com/blog/team-invites
+**Subject** Invite your team to Acme
 
-## Email subject and preview
+**Preview** Give teammates access to invoices with their own accounts.
 
-Subject: Invite your team to Acme
-Preview: Everyone signs in as themselves, with a role that fits what they do.
+**Body** Team workspace owners can now invite Editors or Viewers from Settings → Members.
+Invites expire after 7 days.
+
+[See how team invites work](https://example.com/blog/team-invites)

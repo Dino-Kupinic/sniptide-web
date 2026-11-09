@@ -48,7 +48,10 @@ deploy, with no further step.
    ```
 
 3. Write the explanation: what each section does and when to change it, then one or two variants.
-   That part is what makes the page worth ranking. Follow the copy rules in `DESIGN.md`.
+   Use the [documentation style guide](documentation-style-guide.md). Name the prerequisites and
+   placeholders, show a way to verify the result, and include cleanup when a command starts
+   services or creates persistent resources. Use reserved example domains and keep credentials
+   out of copyable files.
 4. Run `bun test`. `lib/templates.test.ts` fails when `files/` and the frontmatter disagree, or
    when a related template or post doesn't exist. Update the list of names in that test when
    you add or remove a template.
@@ -60,5 +63,7 @@ the editor can open every template.
 
 Outdated templates hurt rankings and trust. Each quarter, check every template against the
 current documentation of the tool it configures, such as action versions, image tags and
-frontmatter fields. Change `updated` only when the files or the explanation change, so the date
+frontmatter fields. Try the steps from a fresh project that meets the stated prerequisites.
+Review the published page, raw files, Markdown and JSON. Report which examples you could run and
+which you only checked against upstream documentation. Change `updated` only when the files or the explanation change, so the date
 on the page and in the sitemap stays honest.

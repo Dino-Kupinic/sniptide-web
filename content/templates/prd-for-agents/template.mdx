@@ -7,7 +7,7 @@ category: specs
 department: product
 icon: contributing
 mark: "PRD"
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - docs/specs/csv-export.md
 related: [user-stories, agents-md, claude-md, release-notes]
@@ -15,7 +15,7 @@ related: [user-stories, agents-md, claude-md, release-notes]
 
 ## Why a PRD for an agent reads differently
 
-A person reading a PRD fills gaps with context from meetings and Slack. An agent fills them by guessing, and its guesses look plausible enough to pass a quick review. The fix is to write down what a teammate would have asked: which columns, in what order, what happens at 10,001 rows, which function to reuse. Every vague line in the spec becomes a decision the agent makes for you.
+Write down the choices a teammate would otherwise ask about. In this export example, that means which rows count across pages, which workspace they belong to, how each column is formatted, and what happens at 10,001 rows.
 
 Keep the file in the repository, such as `docs/specs/`, so the agent can read it next to the code and the spec changes in the same pull request as the feature.
 
@@ -30,17 +30,17 @@ Keep the file in the repository, such as `docs/specs/`, so the agent can read it
 | Out of scope | The work the agent must not start. | Name the features people will assume come along. Agents tend to add them. |
 | Technical notes | Where the change goes and what to reuse. | File paths and function names. This stops a second copy of logic that already exists. |
 | Acceptance criteria | The tests the agent writes and runs before it says it's done. | Concrete inputs and expected results, including the awkward ones. |
-| Open questions | Decisions still pending, with the current answer. | Give a default so the agent isn't blocked. |
+| Decisions and open questions | What is settled and what still needs an owner. | Record decisions and mark unresolved questions that block implementation. |
 
-The acceptance criteria do the most work. An agent that can run a check knows when it is finished; an agent told to "make sure it works" decides for itself.
+Map the checks to the requirements. Include an authorized request, a forbidden request and examples on both sides of a limit. For exports opened in spreadsheets, check how the file handles user-entered values that look like formulas. [OWASP CSV injection guidance](https://owasp.org/www-community/attacks/CSV_Injection)
 
 ## Hand it to the agent
 
-Point the agent at the file and ask for a plan before code, so you can correct a misunderstanding while it is cheap:
+Replace the sample paths with modules you have checked in your codebase. Give the agent the spec and ask it to flag mismatches before implementation.
 
 ```text title="Prompt"
-Read docs/specs/csv-export.md. Before you write code, list the files you'll change and how you'll
-test each acceptance criterion. Wait for my go-ahead.
+Read docs/specs/csv-export.md and compare it with the invoice list and authorization code.
+Map each requirement to a test. Flag any conflict with the current behavior or missing decision.
 ```
 
 Rules that apply to every task, such as commands and code style, belong in your [AGENTS.md](/templates/agents-md) or [CLAUDE.md](/templates/claude-md) rather than in each spec.

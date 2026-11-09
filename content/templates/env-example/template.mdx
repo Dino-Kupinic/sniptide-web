@@ -7,7 +7,7 @@ category: project
 department: engineering
 icon: tune
 mark: ".env"
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - .env.example
 related: [docker-compose-postgres, nextjs-dockerfile, github-actions-node-ci, mcp-json]
@@ -15,12 +15,15 @@ related: [docker-compose-postgres, nextjs-dockerfile, github-actions-node-ci, mc
 
 ## How the file works
 
-A new teammate or an agent runs `cp .env.example .env`, fills in the blanks and starts the app. The example file is committed and the real `.env` is not. Add this line to `.gitignore` before anything else:
+Keep the variables your app actually reads. On a fresh clone, copy the file with `cp .env.example .env`, generate the required local secret and start your app with its environment loader. Add these patterns to `.gitignore` before staging files.
 
-```bash title=".gitignore"
+```text title=".gitignore"
 .env
-.env*.local
+.env.*
+!.env.example
 ```
+
+Confirm with `git check-ignore .env .env.production .env.local`. It should list all three. If Git already tracks a secrets file, remove it from tracking and rotate any credentials that were exposed.
 
 ## What each part does
 
@@ -28,15 +31,15 @@ A new teammate or an agent runs `cp .env.example .env`, fills in the blanks and 
 | --- | --- | --- |
 | Header comment | Says how to copy the file and what not to commit. | It is the first thing someone opens on a fresh clone. |
 | Groups | One `# --- Name ---` comment per service. | Long files stay scannable, and a missing group stands out. |
-| Defaults | Real values that work on a laptop, such as `localhost` URLs. | The app starts with only the secrets filled in. |
-| Secrets | Left empty, with a comment saying where to get one. | An empty value fails loudly. A fake one fails in confusing ways. |
+| Defaults | Real values that work on a laptop, such as `localhost` URLs. | The defaults give readers a local starting point. Start any services they refer to. |
+| Secrets | Left empty, with a comment saying where to get one. | Validate required values at startup and document how to obtain them. |
 | Optional | Grouped last, with what happens when they are empty. | People know which blanks they can skip. |
 
 Quote a value that contains spaces, as `EMAIL_FROM` does. Comments go on their own line, because some parsers read a `#` after a value as part of the value.
 
 ## Keep it in sync with the code
 
-The file goes stale the day someone reads a new variable without adding it here. Validate the environment when the app starts, so a missing variable stops the app with a clear message:
+Add new variables here in the same change that reads them. In this Zod 4 example, load the environment before parsing it on the server. An empty optional DSN is accepted. A missing required secret stops startup.
 
 ```ts title="lib/env.ts"
 import { z } from "zod"
@@ -44,24 +47,30 @@ import { z } from "zod"
 const schema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   APP_URL: z.url(),
-  DATABASE_URL: z.string().min(1),
+  DATABASE_URL: z.url({ protocol: /^postgres(?:ql)?$/ }),
   AUTH_SECRET: z.string().min(32),
-  SENTRY_DSN: z.string().optional(),
+  SENTRY_DSN: z.union([z.url(), z.literal("")]).optional(),
 })
 
-export const env = schema.parse(process.env)
+const result = schema.safeParse(process.env)
+if (!result.success) {
+  const invalidKeys = result.error.issues.map((issue) => issue.path.join("."))
+  throw new Error(`Invalid environment variables: ${invalidKeys.join(", ")}`)
+}
+
+export const env = result.data
 ```
 
 ## Variant: a Next.js app
 
-Next.js loads `.env.local` and sends variables that start with `NEXT_PUBLIC_` to the browser. Mark those clearly, because anything with the prefix is public.
+Next.js loads `.env.local` and inlines `NEXT_PUBLIC_` values referenced in browser code at build time. Use that prefix only for values you can publish.
 
 ```bash title=".env.example"
 # Server only
-DATABASE_URL=postgres://app:app@localhost:5432/app
+DATABASE_URL=postgres://app:app@127.0.0.1:5432/app
 AUTH_SECRET=
 
-# Sent to the browser. Never put a secret here.
+# Public values that can appear in the browser bundle.
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_POSTHOG_KEY=
 ```
@@ -70,4 +79,4 @@ Copy it with `cp .env.example .env.local` in a Next.js project.
 
 ## Share the real values
 
-The example file shows what is needed, and the values still have to reach each person. Sending a `.env` over chat leaves a copy in every thread. Sniptide stores the variables as an encrypted env group. You upload yours with `sniptide env push my-app`, and a new teammate writes their `.env` with `sniptide env pull my-app` instead of asking for keys. The [secrets guide](https://docs.sniptide.com/core-concepts/secrets) covers the setup.
+Distribute real values through your team's secret manager. If you use Sniptide, authenticate the CLI and run `sniptide env push my-app --dry-run` from the project directory to preview an upload. A real push replaces the whole env group. Run `sniptide env pull my-app` to write the group's values to a local `.env`. [Sniptide secrets setup](https://docs.sniptide.com/core-concepts/secrets)

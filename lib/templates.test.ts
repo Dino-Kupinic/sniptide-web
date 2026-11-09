@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test"
 import { readdirSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 import sitemap from "@/app/sitemap"
+import { GET as getRaw } from "@/app/templates/[name]/raw/[...path]/route"
 import { GET as getJson } from "@/app/templates/json/[name]/route"
 import { GET as getMarkdown } from "@/app/templates/md/[name]/route"
 import { getPosts } from "@/lib/blog-source"
@@ -159,18 +160,37 @@ describe("template twins", () => {
     expect(body).toContain("## What each section does")
   })
 
-  test("the JSON twin carries the files the editor opens", async () => {
-    const response = await getJson(
-      new Request(`${siteUrl}/templates/cursor-rules.json`),
-      params("cursor-rules"),
-    )
-    expect(response.headers.get("access-control-allow-origin")).toBe("*")
-    const body = await response.json()
-    expect(body.title).toBe("Cursor rules examples")
-    expect(body.files.map((file: { name: string }) => file.name)).toEqual([
-      ".cursor/rules/project.mdc",
-      ".cursor/rules/react-components.mdc",
-    ])
-    expect(body.files[0].content).toContain("alwaysApply: true")
-  })
+  for (const template of templates) {
+    test(`${template.name} exports the same files as JSON, Markdown and raw text`, async () => {
+      const files = readTemplateFiles(template)
+      const json = await getJson(
+        new Request(`${siteUrl}/templates/${template.name}.json`),
+        params(template.name),
+      )
+      expect(json.status).toBe(200)
+      expect(json.headers.get("access-control-allow-origin")).toBe("*")
+      expect(await json.json()).toMatchObject({
+        title: template.title,
+        files: files.map(({ path, content, language }) => ({ name: path, content, language })),
+      })
+
+      const markdown = await getMarkdown(
+        new Request(`${siteUrl}/templates/${template.name}.md`),
+        params(template.name),
+      )
+      expect(markdown.status).toBe(200)
+      const body = await markdown.text()
+      expect(body).toContain(templateEditorUrl(template.name))
+
+      for (const file of files) {
+        expect(body).toContain(`### ${file.path}\n\n${fence(file.content, file.language)}`)
+        const raw = await getRaw(
+          new Request(`${siteUrl}/templates/${template.name}/raw/${file.path}`),
+          { params: Promise.resolve({ name: template.name, path: file.path.split("/") }) },
+        )
+        expect(raw.status).toBe(200)
+        expect(await raw.text()).toBe(file.content)
+      }
+    })
+  }
 })

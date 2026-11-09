@@ -1,82 +1,62 @@
 ---
 title: llms.txt example
 query: llms.txt example, llms.txt template
-description: An llms.txt example for a product site with a summary, grouped links to Markdown pages and an Optional section, plus how to generate it in Next.js.
-answer: An llms.txt file at the root of your site gives AI assistants a short Markdown map of the pages that explain your product. Copy the example below to /llms.txt, replace the summary and links with your own, and point each link at a Markdown version of the page where you can.
+description: A copyable llms.txt example with a short product summary, grouped public documentation links and a Next.js route variant.
+answer: An llms.txt file gives tools a short Markdown index of your public product documentation. Replace the sample links, publish the file at /llms.txt, and check that each page opens without signing in.
 category: discovery
 department: marketing
 icon: robot
 mark: "llms.txt"
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - llms.txt
 related: [robots-txt-ai-crawlers, brand-voice-guide, agents-md, prd-for-agents]
 ---
 
-## What the file is for
+## Publish a short index
 
-An assistant that answers a question about your product, or writes code against your API, does better with clean text than with your rendered pages full of navigation and scripts. `llms.txt` is a proposed standard, described at [llmstxt.org](https://llmstxt.org), for handing it that text: one Markdown file at a known address that says what you are and links to the pages worth reading.
+Replace Acme and every sample URL with your product and public documentation. Put `llms.txt` at the root of the site and serve it as UTF-8 text. For Next.js, save a static file as `public/llms.txt`.
 
-Be clear about what it does. Coding agents and AI tools read the file when someone points them at your site or when they look for it, and many documentation platforms now publish one. No major search engine has said it uses the file for ranking, so treat it as a way to be read well by agents, not as an SEO lever.
+Check the deployed URL and each link in a signed-out browser, or fetch the file from a terminal. Expect the Markdown title and link list.
+
+```bash title="Terminal"
+curl -fsS https://example.com/llms.txt
+```
+
+`llms.txt` is a proposal for a curated Markdown index. Tools can use it when they fetch it. Use the index alongside your sitemap and keep crawler preferences in `robots.txt`. [llms.txt proposal](https://llmstxt.org/)
 
 ## What each part does
 
-| Part | Rule | What to write |
-| --- | --- | --- |
-| `# Acme` | The one required part: an H1 with the name of the site or product. | Your product name, exactly as people search for it. |
-| `> Summary` | A blockquote right after the title. | One or two sentences on what the product is and what the file covers. |
-| Free text | Optional paragraphs before the first section. | Facts an assistant gets wrong without help, such as units, auth or naming. |
-| `## Docs` and other sections | H2 sections, each a list of links. | `- [Name](url): what the page answers`. Group them the way a reader would ask. |
-| `## Optional` | A section with this exact name. | Links a tool can skip when it needs a shorter context, such as the blog. |
+| Part | What to include |
+| --- | --- |
+| H1 | Your product or documentation name. |
+| Blockquote | A short summary of what the product does and who uses it. |
+| Details | Facts that apply across pages, such as the units an API uses. |
+| H2 sections | A small set of links grouped by task. Describe what each link answers. |
+| Optional | Secondary links, such as release notes, that can be skipped when context is limited. |
 
-Write each link note as the question the page answers. "Event types, payloads and how to verify signatures" helps an assistant pick the right page; "Webhooks documentation" doesn't.
+Use stable public URLs. Link to a Markdown version if you publish one. Keep the normal page URL when it is the available source. Adding `.md` to a URL requires your site to serve that route.
 
-## Serve Markdown versions of your pages
+## Generate it from a docs catalog
 
-The proposal suggests serving each page as Markdown at the same URL with `.md` added, and linking to those versions from `llms.txt`. A Markdown page costs an agent a fraction of the tokens of the HTML one and keeps code blocks intact. Documentation tools such as Mintlify, Fumadocs and Docusaurus plugins can generate these for you. Sniptide's own pages work this way: every blog post and template is also served as Markdown at its URL plus `.md`.
-
-## Variant: generate it in Next.js
-
-A route handler keeps the file in step with your content, so a new docs page shows up without anyone editing the file.
+If your docs source already provides titles and public URLs, generate the link list from that catalog at build time. This route shows the response format using two sample entries. Use either this route or the static file above for `/llms.txt`.
 
 ```ts title="app/llms.txt/route.ts"
-import { getDocs } from "@/lib/docs"
+const docs = [
+  { title: "Quickstart", url: "https://example.com/docs/quickstart", detail: "Send an invoice" },
+  { title: "Webhooks", url: "https://example.com/docs/webhooks", detail: "Verify event signatures" },
+]
 
 export const dynamic = "force-static"
 
 export function GET() {
-  const links = getDocs()
-    .map((page) => `- [${page.title}](https://acme.dev${page.url}.md): ${page.description}`)
-    .join("\n")
+  const links = docs.map(({ title, url, detail }) => `- [${title}](${url}): ${detail}`).join("\n")
+  const body = `# Acme\n\n> Acme is an invoicing API.\n\n## Docs\n\n${links}\n`
 
-  const body = `# Acme
-
-> Acme is an invoicing API for small businesses.
-
-## Docs
-
-${links}
-`
   return new Response(body, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },
   })
 }
 ```
 
-## Variant: llms-full.txt
-
-Many sites also publish `/llms-full.txt`, with the full text of every linked page in one file, so a tool can load everything in a single request. It is a convention rather than part of the proposal. Keep it for documentation small enough to fit in a context window, and keep `llms.txt` as the short index next to it.
-
-```text title="llms-full.txt"
-# Acme
-
-> Acme is an invoicing API for small businesses.
-
-## Quickstart
-
-Create an API key in the dashboard under Settings, API keys...
-
-## Authentication
-
-Send the key in the Authorization header as a bearer token...
-```
+Keep the index short enough to scan. If you also offer a full-text export such as `llms-full.txt`, link to it as optional material and check that it includes only public content.

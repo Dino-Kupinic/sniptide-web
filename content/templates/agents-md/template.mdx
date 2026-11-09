@@ -6,7 +6,7 @@ answer: AGENTS.md is a plain Markdown file at the root of a repository that tell
 category: agents
 department: engineering
 logo: openai
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - AGENTS.md
 related: [claude-md, cursor-rules, claude-code-skill, github-actions-node-ci]
@@ -14,9 +14,9 @@ related: [claude-md, cursor-rules, claude-code-skill, github-actions-node-ci]
 
 ## Who reads it
 
-AGENTS.md is an open format described at [agents.md](https://agents.md). OpenAI Codex, Cursor and many other coding agents read it on their own. Claude Code reads `CLAUDE.md` instead, and a `CLAUDE.md` that contains the line `@AGENTS.md` imports it, so one file can serve every agent your team uses.
+Codex and Cursor discover `AGENTS.md` in a project. Claude Code can load the shared instructions through a root `CLAUDE.md` containing `@AGENTS.md`. Check discovery and directory scope for each agent your team uses. [AGENTS.md format](https://agents.md) · [Codex discovery rules](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 
-The format has no required fields or headings. It is a README for agents: the things a new teammate would need on day one that don't belong in the human README.
+The format has no required fields or headings. Keep the instructions specific to the repository. Link to the README for setup details that already live there.
 
 ## What each section does
 
@@ -30,11 +30,11 @@ The format has no required fields or headings. It is a README for agents: the th
 | Pull requests | Title format and what a description includes. | When the team's review process changes. |
 | Security | What an agent must never do without asking. | Rarely. Keep it short. |
 
-Commands are the most valuable part of the file. Write them exactly as they run, in backticks, so an agent can copy them.
+Run the setup and check commands from a fresh clone before committing the file. Then start a new agent session and ask for the test command for one named file. Compare the answer with your scripts and CI.
 
 ## Variant: a monorepo
 
-Agents use the `AGENTS.md` closest to the file they are editing, so each package can carry its own rules. Keep the root file about the whole repository.
+Codex layers project instructions from the repository root to its working directory. Put shared rules at the root and package rules in the package. Start a session in that package and check that the agent can identify its package-specific command.
 
 ```md title="AGENTS.md"
 # Acme monorepo
@@ -60,7 +60,7 @@ Each package has its own AGENTS.md with its rules.
 
 - Routes live in `src/routes`, one file per resource.
 - Validate request bodies with the Zod schemas in `src/schemas`.
-- Tests need `DATABASE_URL` from `.env.test`.
+- Run integration tests against the disposable database configured in `.env.test`.
 ```
 
 ## Variant: a small library

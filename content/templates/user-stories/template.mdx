@@ -7,7 +7,7 @@ category: specs
 department: product
 icon: authors
 mark: "User stories"
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - docs/stories/team-invites.md
 related: [prd-for-agents, github-issue-templates, release-notes, agents-md]
@@ -17,24 +17,24 @@ related: [prd-for-agents, github-issue-templates, release-notes, agents-md]
 
 | Part | What it settles | How to write it |
 | --- | --- | --- |
-| As a ... | Whose problem this is, and which permissions apply. | A real role in your product, such as "workspace owner", never "user". |
-| I want ... | The capability, in the user's words. | One action. If you need "and", split the story. |
-| So that ... | The reason, which settles the small choices the story doesn't cover. | The outcome the user cares about, not the feature again. |
+| As a ... | Whose problem this is, and which permissions apply. | Use a role that affects the outcome, such as “workspace owner”. |
+| I want ... | The capability, in the user's words. | Keep one outcome per story. Split work when the outcomes can be released independently. |
+| So that ... | The reason, which settles the small choices the story doesn't cover. | Name the outcome the person cares about. |
 | Acceptance criteria | When the story is done. | Given a starting state, when the user acts, then a visible result. |
 | Notes | Facts the team would otherwise ask about. | Defaults, limits and names. |
 | Out of scope | What the story deliberately leaves out. | The features people will assume come along. |
 
-The "so that" clause is the one teams skip and the one that matters most. "So that they can see our invoices without sharing my login" tells the developer that a shared password is the real problem, which rules out a cheaper fix that misses it.
+Use the outcome to decide which checks belong in the story. The invite example gives a teammate their own access, so the criteria check the invited identity and role as well as email delivery.
 
 ## Write criteria someone can check
 
-Each criterion should pass or fail with no discussion. "Invites work well" can't fail. "The invite appears under Pending and the person receives an email with a link" can. Cover the unhappy paths too, such as an existing member, a full workspace or an expired link, because those are the cases that ship broken.
+Each criterion should pass or fail with no discussion. "Invites work well" can't fail. "The invite appears under Pending and the person receives an email with a link" can. Cover duplicate invitations, full workspaces and expired links. When a story changes access, try it with a person who lacks permission and verify that the system denies the change.
 
 Exact copy belongs in the criteria when it matters, as in the expired-link message above. A developer or an agent will otherwise write its own.
 
 ## Keep stories small
 
-A story should fit in a few days of work. When one grows, split it by behavior the user notices (invite, accept, revoke) rather than by layer (database, API, UI), so each piece is still something a person can try.
+Split a large story by behavior someone can try, such as sending, accepting or revoking an invite. Put rules that span stories, such as seat reservations, in one shared section.
 
 ## Variant: a story in an issue
 
@@ -45,8 +45,8 @@ When stories live in your tracker instead of the repository, the same parts fit 
 can't join.
 
 **Done when**
-- [ ] A revoked invite disappears from Pending.
-- [ ] Its link shows "This invite has expired. Ask the owner for a new one."
+- [ ] A revoked invite leaves Pending and frees its reserved seat.
+- [ ] Its link shows “This invite is no longer valid. Ask a workspace owner for a new one.”
 ```
 
 For a feature larger than a few stories, write a [PRD](/templates/prd-for-agents) and keep the stories inside it.

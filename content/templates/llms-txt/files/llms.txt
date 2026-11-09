@@ -1,28 +1,30 @@
 # Acme
 
-> Acme is an invoicing API for small businesses. This file lists the pages an AI assistant needs to answer questions about Acme and to write code against its API.
+> Acme is an example invoicing API for small businesses. This index covers authentication,
+> invoice creation and webhooks.
 
-The API is REST over HTTPS with JSON bodies. Every request needs an API key in the `Authorization` header. Amounts are integers in the smallest currency unit, so 1999 means 19.99.
+The API uses JSON over HTTPS. Amounts are integers in the currency’s smallest unit. For
+example, 1999 represents 19.99 USD.
 
 ## Docs
 
-- [Quickstart](https://acme.dev/docs/quickstart.md): Create an API key and send your first invoice in five minutes
-- [Authentication](https://acme.dev/docs/authentication.md): API keys, test and live mode, and key rotation
-- [Invoices](https://acme.dev/docs/invoices.md): Create, send, void and list invoices
-- [Webhooks](https://acme.dev/docs/webhooks.md): Event types, payloads and how to verify signatures
-- [Errors](https://acme.dev/docs/errors.md): Error codes and which ones are safe to retry
+- [Quickstart](https://example.com/docs/quickstart.md): Create a test API key and send an invoice
+- [Authentication](https://example.com/docs/authentication.md): API keys, test and live mode, and key rotation
+- [Invoices](https://example.com/docs/invoices.md): Create, send, void and list invoices
+- [Webhooks](https://example.com/docs/webhooks.md): Event types, payloads and how to verify signatures
+- [Errors](https://example.com/docs/errors.md): Error codes and which ones are safe to retry
 
 ## API reference
 
-- [OpenAPI specification](https://acme.dev/openapi.json): Every endpoint, parameter and response schema
-- [Node SDK](https://github.com/acme/acme-node): Official TypeScript client with examples
+- [OpenAPI specification](https://example.com/openapi.json): Every endpoint, parameter and response schema
+- [Node SDK](https://example.com/docs/sdk/typescript): TypeScript client setup and examples
 
 ## Product
 
-- [Pricing](https://acme.dev/pricing.md): Plans, limits and what counts as an invoice
-- [Security](https://acme.dev/security.md): Data storage, encryption and compliance
+- [Pricing](https://example.com/pricing.md): Plans, limits and what counts as an invoice
+- [Security](https://example.com/security.md): Data storage, encryption and compliance
 
 ## Optional
 
-- [Changelog](https://acme.dev/changelog.md): API changes by version
-- [Blog](https://acme.dev/blog.md): Guides and product news
+- [Changelog](https://example.com/changelog.md): API changes by version
+- [Blog](https://example.com/blog.md): Guides and product news

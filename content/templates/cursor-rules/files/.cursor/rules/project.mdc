@@ -13,10 +13,10 @@ Next.js App Router, TypeScript, Tailwind CSS and Drizzle on Postgres.
 - Tests: `pnpm test`
 - Lint and types: `pnpm lint && pnpm typecheck`
 
-Run the tests and the type check before you finish a task.
+Run lint, types and the relevant tests before opening a pull request. Report any check you could not run.
 
 ## Rules
 
 - TypeScript strict mode. Use `unknown` and narrow it instead of `any`.
-- Database access only in `lib/db`. Components call functions from there.
+- Keep database queries in server-only modules under `lib/db`. Client components use server actions or API routes.
 - Ask before you add a dependency.

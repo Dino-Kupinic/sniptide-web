@@ -7,15 +7,15 @@ category: writing
 department: product
 icon: changelog
 mark: "Changelog"
-updated: 2026-11-08
+updated: 2026-11-09
 files:
   - CHANGELOG.md
 related: [user-stories, github-issue-templates, launch-announcement, prd-for-agents]
 ---
 
-## Who reads a changelog
+## Write an entry for the reader
 
-Two readers open this file. A customer wants to know what is new and whether anything they rely on changed. A developer upgrading a dependency wants to know what breaks. Both skim, so the order of each release matters more than the prose: a one-paragraph summary for the first reader, then grouped lines for the second.
+Start with the changes customers will notice and the steps an upgrader must take. For a breaking change, name who is affected, the replacement and when to switch.
 
 Write for those readers rather than from the commit log. "Totals on invoices with a 0% tax line no longer show NaN" tells a customer whether their bug is fixed. "fix: handle zero tax in calc" doesn't.
 
@@ -23,17 +23,23 @@ Write for those readers rather than from the commit log. "Totals on invoices wit
 
 | Part | What it does | How to write it |
 | --- | --- | --- |
-| `## [Unreleased]` | Collects changes as they merge, so release day is a rename. | Add a line in the same pull request as the change. |
-| `## [2.4.0] - 2026-11-04` | One heading per release, newest first. | The version and an ISO date, which reads the same in every country. |
+| `## [Unreleased]` | Collects changes between releases. | Add a line in the same pull request as the change. |
+| `## [2.4.0] - 2026-11-04` | One heading per release, newest first. | Use the version and actual release date in YYYY-MM-DD format. |
 | Summary paragraph | The one thing a customer should know about the release. | Optional. Use it when a release has a headline feature. |
 | Added, Changed, Fixed | New features, changes to existing behavior and bug fixes. | One line per change, written as the result the user sees. |
 | Deprecated, Removed | What will stop working and what already has. | Say what to use instead and the date, as in the endpoint line. |
 | Security | Fixes people need to act on. | Always its own group, so nobody misses it. |
 | Links at the bottom | Each version links to its diff. | Update them when you add a version. |
 
-Leave out groups a release doesn't need. An empty "Removed" heading is noise.
+Include only groups that have entries. Follow your project's versioning policy. In a project that follows SemVer, removal of a supported public API requires a major release. [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-## Changelog or release notes
+## Publish a release
+
+1. Move the relevant entries from **Unreleased** into the new version section and add the release date.
+2. Add its comparison link between the previous and new tags. Point the **Unreleased** link at the new tag through `HEAD`.
+3. After tagging, open both links and confirm they show the intended commit range.
+
+## Changelog and release notes
 
 The changelog is the complete record and lives in the repository. Release notes are the customer-facing version of one release, on a page, in an email or in the app. Write the changelog first, then build the notes from its summary and its Added and Changed lines, and leave out internal fixes nobody noticed.
 
@@ -42,15 +48,14 @@ The changelog is the complete record and lives in the repository. Release notes 
 ```md title="release-notes-2.4.md"
 # Invite your team to Acme
 
-Owners can now invite teammates from Settings > Members. Each person joins as an Owner,
-Editor or Viewer, so you decide who can send invoices and who can only look.
+Team workspace owners can now invite Editors or Viewers from Settings → Members.
 
 Also in this release:
 
 - Export invoices to CSV from the Invoices page, with your filters applied.
 - The Invoices list shows 50 rows at a time.
 
-Full details are in the [changelog](https://acme.com/changelog#240).
+Full details are in the [changelog](https://example.com/changelog).
 ```
 
 For a release big enough to announce, the [launch announcement template](/templates/launch-announcement) covers the post and the social copy.

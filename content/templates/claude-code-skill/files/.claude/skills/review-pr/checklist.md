@@ -4,7 +4,7 @@
 
 - Does the code do what the pull request says, including empty, missing and very large inputs?
 - Are errors handled where they happen, with a message a person can act on?
-- Do new database queries use an index, and do migrations run on a table with data in it?
+- Will queries and migrations behave on tables with realistic data and concurrency?
 
 ## Tests
 
@@ -14,7 +14,7 @@
 ## Security
 
 - Is all user input validated before use?
-- Do new routes check that the user is signed in and allowed to see the data?
+- Do protected routes check the caller’s identity, permissions and resource ownership?
 - Are secrets read from the environment, never written in code or logs?
 
 ## Readability
