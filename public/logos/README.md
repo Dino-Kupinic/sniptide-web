@@ -34,3 +34,14 @@ These are compatibility links. The marks belong to their respective owners.
 
 Every logo links to its official site in a new tab, with `noopener noreferrer`.
 Accessible link labels announce that a new tab opens.
+
+## Agent marks
+
+The hero's "Set up your agent" menu shows each agent's symbol on a square tile, drawn inline by
+`components/agent-mark.tsx` so the tiles keep their brand colors in both themes.
+
+| Agent | Path source | Tile |
+| --- | --- | --- |
+| Claude | [Simple Icons](https://simpleicons.org/?q=claude) `claude.svg` (CC0), the spark from Anthropic's brand artwork | `#D97757` spark on `#FAF9F5` |
+| OpenAI | [Lobe Icons](https://github.com/lobehub/lobe-icons) `openai.svg` (MIT), the OpenAI blossom | White on black |
+| Cursor | [Simple Icons](https://simpleicons.org/?q=cursor) `cursor.svg` (CC0), the cube from the Cursor brand kit | `#EDECEC` cube on `#14120B` |
