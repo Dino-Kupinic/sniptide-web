@@ -51,7 +51,7 @@ const PREVIEW_BOT = new RegExp(
 
 // Indexed so the value is read when the request arrives. A static process.env.NAME lookup can be
 // frozen at `next build`.
-function envValue(name: string) {
+export function envValue(name: string) {
   const value = process.env[name]
   return value ? value : undefined
 }

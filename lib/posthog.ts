@@ -1,4 +1,4 @@
-import { visitorAddress } from "./share-proxy"
+import { envValue, visitorAddress } from "./share-proxy"
 
 // PostHog, shared with the app in one project. Events from this site carry surface=marketing.
 // Without NEXT_PUBLIC_POSTHOG_KEY nothing is loaded or sent.
@@ -20,7 +20,7 @@ export const posthogProxyPath = "/_site/ph"
 // visitor who fakes CF-Connecting-IP only changes how their own events are counted.
 export function headersForPostHog(headers: Headers) {
   const upstream = new Headers(headers)
-  const address = process.env.CLIENT_IP_HEADER
+  const address = envValue("CLIENT_IP_HEADER")
     ? visitorAddress(headers)
     : headers.get("cf-connecting-ip")?.trim() || visitorAddress(headers)
   if (address) upstream.set("x-forwarded-for", address)
