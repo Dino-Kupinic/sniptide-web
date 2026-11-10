@@ -1,10 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { isAiAgent, prefersMarkdown } from "@/lib/accept"
 import { agentDocuments, markdownPath, renderMarkdown } from "@/lib/agent-docs"
+import { headersForPostHog, posthogProxyPath } from "@/lib/posthog"
 import { headersForUpstream, type RevealBlock, revealBlock } from "@/lib/share-proxy"
 import { appBase, siteUrl } from "@/lib/site"
 
 export function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith(`${posthogProxyPath}/`)) {
+    return NextResponse.next({ request: { headers: headersForPostHog(request.headers) } })
+  }
   const doc = agentDocuments.find((item) => item.path === request.nextUrl.pathname)
   if (doc && (request.method === "GET" || request.method === "HEAD")) {
     const acceptsMarkdown =
@@ -45,5 +49,6 @@ function revealResponse(blocked: RevealBlock) {
 
 export const config = {
   // Own assets live under /_site. Everything else may be proxied, including the app's /_next files.
-  matcher: ["/((?!_site/).*)"],
+  // PostHog's proxy (posthogProxyPath) is the one /_site path that needs the visitor address.
+  matcher: ["/((?!_site/).*)", "/_site/ph/:path*"],
 }

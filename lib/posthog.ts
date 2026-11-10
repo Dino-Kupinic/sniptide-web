@@ -1,3 +1,5 @@
+import { visitorAddress } from "./share-proxy"
+
 // PostHog, shared with the app in one project. Events from this site carry surface=marketing.
 // Without NEXT_PUBLIC_POSTHOG_KEY nothing is loaded or sent.
 export const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY
@@ -9,6 +11,21 @@ export const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://eu.i
 // Events go through this site (see next.config.ts) so ad blockers don't drop them. It sits under
 // /_site because every other unknown path is a share link proxied to the app.
 export const posthogProxyPath = "/_site/ph"
+
+// The rewrite passes on the X-Forwarded-For it receives, which here holds the Cloudflare edge in
+// front of this server. PostHog would then hash and locate the edge, not the visitor, so a
+// cookieless visitor here never matched the same visitor on app.sniptide.com, which reports
+// straight from the browser. proxy.ts sends PostHog the visitor address instead: CLIENT_IP_HEADER
+// when set, otherwise Cloudflare's CF-Connecting-IP, otherwise the last X-Forwarded-For hop. A
+// visitor who fakes CF-Connecting-IP only changes how their own events are counted.
+export function headersForPostHog(headers: Headers) {
+  const upstream = new Headers(headers)
+  const address = process.env.CLIENT_IP_HEADER
+    ? visitorAddress(headers)
+    : headers.get("cf-connecting-ip")?.trim() || visitorAddress(headers)
+  if (address) upstream.set("x-forwarded-for", address)
+  return upstream
+}
 
 // Pull request previews are served at <number>.sniptide.com and report to the same project, so
 // every event says where it came from. Reports about real visitors filter on

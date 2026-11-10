@@ -29,7 +29,9 @@ unset, or no visitor address is available, neither header is sent. A visitor can
 
 `CLIENT_IP_HEADER` names the incoming header the address is read from. Leave it unset to use the
 last hop of `X-Forwarded-For`, which is what a single reverse proxy appends, so a self-hosted site
-needs nothing else. If the chosen header is missing, no address is forwarded.
+needs nothing else. If the chosen header is missing, no address is forwarded. The PostHog proxy
+uses the same setting, but when it is unset it reads Cloudflare's `CF-Connecting-IP` first
+([Analytics](analytics.md)).
 
 Build-time settings: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point, defaults
 to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" points, defaults to

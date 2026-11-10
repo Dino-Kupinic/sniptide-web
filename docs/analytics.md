@@ -2,6 +2,10 @@
 
 Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud) as build variables to
 send events to PostHog. Requests go through `/_site/ph` on this site so ad blockers don't drop them.
+`proxy.ts` gives those requests the visitor address as `X-Forwarded-For`: `CLIENT_IP_HEADER` when
+set, otherwise Cloudflare's `CF-Connecting-IP`, otherwise the last `X-Forwarded-For` hop. Without
+it PostHog sees the Cloudflare edge, so cookieless visitors get a different ID here than on the app
+and the funnel from `cta_clicked` to the app's `sign_up_started` shows no conversions.
 The app reports to the same project; filter on the `surface` property (`marketing` or `app`).
 Pull request previews at `<number>.sniptide.com` report to the same project too, so every marketing
 event carries `environment`: `production` on `sniptide.com`, `preview` on a numbered preview host
