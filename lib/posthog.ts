@@ -10,15 +10,19 @@ export const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://eu.i
 // /_site because every other unknown path is a share link proxied to the app.
 export const posthogProxyPath = "/_site/ph"
 
-// Pull request previews are served at <number>.sniptide.com and report to the same project, so
-// every event says where it came from. Reports about real visitors filter on
-// environment=production.
+// Only the live site reports. Preview deployments, local development, and the app's own host
+// would pollute the project, so they never start PostHog.
 export type DeploymentEnvironment = "production" | "preview" | "development"
 
 export function deploymentEnvironment(hostname: string): DeploymentEnvironment {
   if (hostname === "sniptide.com") return "production"
   if (/^\d+\.sniptide\.com$/.test(hostname)) return "preview"
   return "development"
+}
+
+// The live site is the only host that reports (lib/tracking.ts).
+export function isProductionHost(hostname: string) {
+  return deploymentEnvironment(hostname) === "production"
 }
 
 // The region's static assets host: eu.i.posthog.com -> eu-assets.i.posthog.com.

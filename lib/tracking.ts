@@ -12,6 +12,7 @@ import { isSectionSeen, newMilestones, outboundHost, scrollPercent } from "@/lib
 import {
   countryPath,
   deploymentEnvironment,
+  isProductionHost,
   posthogHost,
   posthogKey,
   posthogProxyPath,
@@ -51,6 +52,9 @@ const countryTimeout = 1500
 
 export function startTracking() {
   if (started || !posthogKey || isAnalyticsExcluded()) return
+  // Only the live site reports. Preview deployments and local development never start PostHog,
+  // and the app's own host has its own SDK (lib/analytics.ts in the app).
+  if (!isProductionHost(window.location.hostname)) return
   started = true
   // PostHog starts after the country arrives, so the first pageview carries it too.
   loadCountry().then((value) => {

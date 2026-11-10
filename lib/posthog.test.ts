@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { GET as countryRoute } from "@/app/%5Fsite/country/route"
-import { deploymentEnvironment, visitorCountry, withCountry } from "./posthog"
+import { deploymentEnvironment, isProductionHost, visitorCountry, withCountry } from "./posthog"
 
 describe("deployment environment", () => {
   test("labels the live site as production", () => {
@@ -16,6 +16,18 @@ describe("deployment environment", () => {
     expect(deploymentEnvironment("localhost")).toBe("development")
     expect(deploymentEnvironment("app.sniptide.com")).toBe("development")
     expect(deploymentEnvironment("33.sniptide.com.example.org")).toBe("development")
+  })
+})
+
+describe("production host gate", () => {
+  test("the live site reports", () => {
+    expect(isProductionHost("sniptide.com")).toBe(true)
+  })
+
+  test("previews, local development and the app never report", () => {
+    for (const host of ["33.sniptide.com", "pr-10.sniptide.com", "localhost", "app.sniptide.com"]) {
+      expect(isProductionHost(host)).toBe(false)
+    }
   })
 })
 
