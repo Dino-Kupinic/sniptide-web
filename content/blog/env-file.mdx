@@ -1,0 +1,332 @@
+---
+title: "What is a .env file? Format, examples and project setup"
+description: Learn the .env file format with a copyable example, quoting rules and .env.example guidance, then choose how to load and share project values.
+date: 2026-11-09
+author: dino
+category: engineering
+tags: [env, dotenv, configuration, secrets, cli]
+cover: /blog/env-file/cover.webp
+coverAlt: A .env file with five variables next to a terminal running sniptide env pull acme-notes, on a black grid with blue corner marks.
+image: /blog/env-file/share.png
+---
+
+{/*
+Writing brief (docs/blog-style-guide.md, blog plan revision 2, Day 3)
+Reader: a developer trying to understand or create a project configuration file, often right after cloning a repository.
+Question or task: what is a .env file, how do I write one that works, and how do I get the real values to my team?
+Primary mode: Operator
+Article type: practical guide
+Central claim: a .env file is a plain list of KEY=value lines that a loader copies into the process environment; loaders disagree on the edge cases, so write the portable subset, commit only .env.example, and hand off real values through something other than Git.
+Evidence and sources: the sample files in public/blog/env-file were loaded on 9 November 2026 with dotenv 18.0.10, Node.js 22.23.4 (--env-file), Bun 1.4.4, python-dotenv 1.2.3 and Bash with set -a, and every loader produced the same six values. The edge-case table is the output of one test file loaded by the same five. Product facts come from docs.sniptide.com (CLI and encrypted secrets), read the same day.
+Opening move: direct answer, then the template
+Main sections: the template, how loading works, format rules, loader differences, .env vs .env.example vs the environment, create and load, share values, troubleshooting
+Running example: Acme notes, a small app with a port, a database URL and a fake payments key
+Visuals: cover, how a .env file reaches the process, handing off values with an env group
+Primary CTA: create an env group and pull the sample values into a project.
+Keyword: .env file (Google Keyword Planner reports env file at US 1K to 10K, worldwide 10K to 100K). Route: /blog/env-file.
+*/}
+
+A `.env` file is a plain text file of `KEY=value` lines that holds a project's configuration, such as its port, database address and API keys. Your code never reads it directly: a loader such as dotenv, Node's `--env-file` flag or Bun copies each line into the process environment when the app starts, and the app reads `process.env.PORT` or `os.environ["PORT"]`.
+
+<Callout title="TL;DR">
+
+- One variable per line, `NAME=value`, no spaces around `=`, and `#` comments on their own line.
+- Put double quotes around any value with spaces or a `#`, and don't rely on `${VAR}` expansion. Loaders disagree on both.
+- Commit `.env.example` with empty values. Add `.env` to `.gitignore` and never commit it.
+- A variable already set in your shell wins over the file in every loader we tested.
+- Send real values through a channel built for it: a password manager, an encrypted file, a secrets manager or a Sniptide env group.
+
+</Callout>
+
+## A .env file example you can copy
+
+Here is a complete file for a small app called Acme notes. Every value is fake.
+
+```bash title=".env"
+# Acme notes, local development. Every value here is fake.
+APP_NAME="Acme notes"
+PORT=3000
+DEBUG=true
+
+# Database
+DATABASE_URL=postgres://localhost:5432/acme_dev
+
+# Third-party services
+PAYMENTS_API_KEY=fake-key-for-local-dev
+SENTRY_DSN=
+```
+
+Download the [sample .env](/blog/env-file/sample.env) and its matching [.env.example](/blog/env-file/sample.env.example). We loaded this exact file with five loaders, and all five read the same six values:
+
+```text title="Output"
+APP_NAME="Acme notes"
+PORT="3000"
+DEBUG="true"
+DATABASE_URL="postgres://localhost:5432/acme_dev"
+PAYMENTS_API_KEY="fake-key-for-local-dev"
+SENTRY_DSN=""
+```
+
+Every value arrives as a string. `PORT` is `"3000"` and `DEBUG` is `"true"`, so convert them in your code before you compare or add. An empty value such as `SENTRY_DSN=` sets the variable to an empty string, which is different from leaving the line out.
+
+## How a .env file reaches your app
+
+The operating system knows nothing about `.env`. Each process has its own environment, a list of names and values it inherits from the shell that started it. A loader reads the file once at startup and adds its lines to that list.
+
+<Figure
+  src="/blog/env-file/loading.webp"
+  alt="Three stages. The .env file holds lines such as PORT=3000. A loader, such as dotenv, node --env-file, Bun or python-dotenv, parses it at startup. The process environment then holds PORT as the string 3000, unless the shell already set PORT, which wins."
+  caption="The loader copies the file into the process environment once, at startup. A value already set in the shell wins."
+/>
+
+Two consequences follow from this:
+
+- **Edits need a restart.** Changing `.env` while the app runs does nothing until the loader runs again.
+- **The shell wins.** If `PORT=4000` is already exported in your terminal, the app sees `4000`. We checked this with dotenv, Node, Bun and python-dotenv, and all four keep the existing value. dotenv and python-dotenv have an `override` option if you want the file to win.
+
+## .env file format and syntax
+
+There's no formal standard for the format. These rules hold in every loader we tested:
+
+| Rule | Example |
+| --- | --- |
+| One variable per line, with no spaces around `=` | `PORT=3000` |
+| Names use letters, digits and `_`, uppercase by convention | `DATABASE_URL` |
+| A comment starts its own line with `#` | `# Database` |
+| Double quotes keep spaces, and are removed from the value | `APP_NAME="Acme notes"` |
+| An empty value sets the variable to an empty string | `SENTRY_DSN=` |
+| If a name repeats, the later line wins | `PORT=3001` |
+
+The Node, Bun and Python loaders trim spaces around `=`, but a shell rejects them, so leave them out. Blank lines are ignored everywhere.
+
+Most loaders also accept `export NAME=value`, single quotes and multi-line values in double quotes, which is how you store something like a PEM key. dotenv, Node, Bun and python-dotenv all read those the same way. The trouble starts with a few specific lines.
+
+## Do all loaders read .env the same way?
+
+No. We wrote one test file with the lines people most often get wrong and loaded it on 9 November 2026 with dotenv 18.0.10, Node 22.23.4 with `--env-file`, Bun 1.4.4, python-dotenv 1.2.3, and Bash with `set -a; source .env`. Every other line in the file read the same in all five.
+
+| Line in `.env` | dotenv | Node | Bun | python-dotenv | Bash |
+| --- | --- | --- | --- | --- | --- |
+| `APP_NAME=Acme notes` | `Acme notes` | `Acme notes` | `Acme notes` | `Acme notes` | Unset, `notes: command not found` |
+| `HASH=abc#123` | `abc` | `abc` | `abc` | `abc#123` | `abc#123` |
+| `PRICE='costs $5'` | `costs $5` | `costs $5` | `costs ` | `costs $5` | `costs $5` |
+| `API_URL=${API_BASE}/v1` | `${API_BASE}/v1` | `${API_BASE}/v1` | Expanded | Expanded | Expanded |
+| `SIGNATURE="Line one\nLine two"` | Two lines | Two lines | Two lines | Two lines | A literal `\n` |
+
+What each row means for your file:
+
+- **Quote values with spaces.** Unquoted `Acme notes` works in the Node and Python loaders, but a shell treats `notes` as a command.
+- **Quote values with a `#`.** dotenv, Node and Bun cut `abc#123` at the hash, so a password containing `#` silently loses its end. `HASH="abc#123"` reads the same everywhere.
+- **Escape `$` for Bun.** Bun expands `$5` even inside single quotes, so `costs $5` becomes `costs `. Bun's docs say to write `\$` instead.
+- **Don't build values from other variables.** dotenv and Node keep `${API_BASE}` as text, while Bun, Python and the shell substitute it. Write the full value on each line.
+
+If a file only uses the rules from the format table and quotes anything unusual, every loader above reads it the same. The sample file at the top is written that way.
+
+## .env vs .env.example vs the environment
+
+Three things share the name, and they have different jobs:
+
+| | What it is | Commit it? |
+| --- | --- | --- |
+| `.env` | Your real values for this machine | No. Add it to `.gitignore` |
+| `.env.example` | Every variable name the app needs, with empty or safe defaults | Yes. It documents the configuration |
+| Process environment | What the running app actually sees, from the shell, the host or a loader | Not a file. Your host or CI sets it in production |
+
+`.env.example` is the file a new teammate copies after cloning. Keep it in step with `.env` whenever you add a variable, and leave real secrets out of it, since it lives in Git history forever.
+
+In production, you usually skip the file entirely. Hosting platforms, containers and CI systems all have their own way to set environment variables, and the app reads them the same way.
+
+## How to create a .env file
+
+<Steps>
+<Step>
+
+### Copy the example
+
+From the project root, copy the template and keep `.env` out of Git:
+
+```bash title="Terminal"
+cp .env.example .env
+echo ".env" >> .gitignore
+```
+
+If the repository has no `.env.example`, check its README or the code for `process.env` and `os.environ` to find the names it expects.
+
+</Step>
+<Step>
+
+### Fill in your values
+
+Open `.env` and set each value. Use the portable rules above: no spaces around `=`, and double quotes around anything with spaces or `#`.
+
+</Step>
+<Step>
+
+### Load it
+
+Pick the loader for your runtime.
+
+<Tabs items={["Node.js", "Bun", "dotenv", "Python"]}>
+<Tab value="Node.js">
+
+Node 20.6 and later read the file with a flag. It's stable since 22.21 and 24.10.
+
+```bash title="Terminal"
+node --env-file=.env server.js
+```
+
+Use `--env-file-if-exists=.env` when the file is optional, for example in CI.
+
+</Tab>
+<Tab value="Bun">
+
+Bun loads `.env`, `.env.local` and `.env.<NODE_ENV>` automatically, with no code.
+
+```bash title="Terminal"
+bun server.ts
+```
+
+Pass `--no-env-file` to turn that off in production.
+
+</Tab>
+<Tab value="dotenv">
+
+For older Node versions or tools that don't take flags, load it in code before anything reads the environment:
+
+```js title="server.js"
+require("dotenv").config()
+```
+
+</Tab>
+<Tab value="Python">
+
+Install `python-dotenv`, then load it at the top of your entry point:
+
+```python title="app.py"
+from dotenv import load_dotenv
+
+load_dotenv()
+```
+
+</Tab>
+</Tabs>
+
+</Step>
+<Step>
+
+### Check what the app sees
+
+Print one value to confirm the file loaded:
+
+```bash title="Terminal"
+node --env-file=.env -p "process.env.APP_NAME"
+```
+
+```text title="Output"
+Acme notes
+```
+
+</Step>
+</Steps>
+
+## How to share .env values with your team
+
+The file stays on your machine, so the hard part is getting the real values to the next person without pasting them into a chat. These are the common options, from least to most setup:
+
+| Option | Fits when | Watch out for |
+| --- | --- | --- |
+| Password manager or one-time link | One person needs the values once | Nothing updates when a value changes |
+| Encrypted file in Git, with dotenvx or SOPS | The team already shares a key and wants values versioned with the code | Everyone needs the key, and rotating it touches every file |
+| Secrets manager, such as Doppler or Infisical | You need audit logs, rotation and per-environment access rules | More setup than a small project needs |
+| Sniptide env group | A solo developer or small team wants the values in the same place as their shared code | Encrypted at rest with a key the server holds, so it doesn't replace a dedicated secrets manager |
+
+Sniptide is a good fit when a solo developer or small team wants a project's `.env` values next to the code they already share, encrypted at rest and pulled into any checkout with one command, on Sniptide's servers or their own. If you need audit logs, automatic rotation or fine-grained access policies, a dedicated secrets manager is the better pick.
+
+<Figure
+  src="/blog/env-file/handoff.webp"
+  alt="On your machine, sniptide env push acme-notes uploads .env into an env group called acme-notes, which stores the values encrypted. On a teammate's machine, sniptide env pull acme-notes writes .env, or sniptide env run starts the app with the values and writes no file."
+  caption="One env group per project. Push from one machine, pull or run on another."
+/>
+
+Here is the handoff with the [Sniptide CLI](https://docs.sniptide.com/cli), using the Acme notes file:
+
+<Steps>
+<Step>
+
+### Install the CLI and log in
+
+```bash title="Terminal"
+npm install --global @sniptide/cli
+printf '%s' "$SNIPTIDE_TOKEN" | sniptide login --token-stdin
+```
+
+Create the token under **Settings**, **API tokens** in the app, with write access so the CLI can push. Add `--base-url` to `login` if you run your own instance.
+
+</Step>
+<Step>
+
+### Push your .env once
+
+```bash title="Terminal"
+sniptide env push acme-notes
+```
+
+This creates the env group `acme-notes` from `./.env`. A push replaces the whole group, so a variable you deleted from the file is deleted from the group too.
+
+</Step>
+<Step>
+
+### Pull it on another machine
+
+```bash title="Terminal"
+sniptide env pull acme-notes
+```
+
+The CLI writes `.env` readable only by you, with a first line such as `# sniptide env acme-notes revision 1`. That line lets the next push refuse to overwrite changes someone else made in the meantime. To skip the file entirely, run the app with the values set:
+
+```bash title="Terminal"
+sniptide env run acme-notes -- npm run dev
+```
+
+</Step>
+</Steps>
+
+You can also open the group on the **Secrets** page to edit values, reveal one at a time, or share it through a password-protected link that expires after an hour, a day or a week. The [encrypted secrets docs](https://docs.sniptide.com/core-concepts/secrets) explain how values are encrypted and what the server can read.
+
+If you'd rather keep the values on your own server, Sniptide self-hosts with one command on a Linux server with Docker and the Compose plugin:
+
+```bash title="Terminal"
+curl -fsSL https://sniptide.com/install.sh | sh
+```
+
+<InlineCta
+  title="Pull your .env into any project"
+  description="Push the values once, then pull them on every machine with one command."
+  href="https://app.sniptide.com/sign-up"
+  label="Create an env group"
+  secondaryHref="https://docs.sniptide.com/core-concepts/secrets"
+  secondaryLabel="Read the secrets docs"
+/>
+
+## When the .env file isn't loading
+
+- **The app reads `undefined`.** Nothing loaded the file. Check that you passed `--env-file`, called `config()` before the code that reads the value, or that the runtime loads it on its own.
+- **The file is in the wrong folder.** Loaders look in the current working directory, which isn't always the folder of the script. Run the command from the project root, or pass the full path.
+- **An old value sticks.** The shell already exports that name. Run `echo $PORT`, then `unset PORT` or open a new terminal.
+- **A value is cut short.** It contains `#` or `$`. Put it in double quotes, and escape `$` as `\$` for Bun.
+- **The file is named `.env.txt`.** Some editors add an extension. Show file extensions and rename it to exactly `.env`.
+
+{/* TODO(Dino): link Day 4 (Docker Compose env files), Day 10 (self-hosted pastebin) and Day 9 (MCP versus skills) here as each goes live. */}
+
+If you keep reusable code next to these values, the [Claude Code skills tutorial](/blog/claude-code-skills) shows how the same CLI turns a collection into an agent skill, and the [Pastebin alternatives comparison](/blog/pastebin-alternatives) covers sharing the code itself.
+
+## Sources
+
+Checked on 9 November 2026.
+
+- [Node.js docs: `--env-file`](https://nodejs.org/api/cli.html#--env-filefile)
+- [dotenv README](https://github.com/motdotla/dotenv)
+- [Bun docs: environment variables](https://bun.com/docs/runtime/environment-variables)
+- [python-dotenv README](https://github.com/theskumar/python-dotenv)
+- Sniptide: [CLI, Sync .env files](https://docs.sniptide.com/cli#sync-env-files), [encrypted secrets](https://docs.sniptide.com/core-concepts/secrets), [self-hosting](https://docs.sniptide.com/self-hosting/install-script)
+- Loader tests: the [sample .env](/blog/env-file/sample.env) and a test file with the five edge-case lines, loaded with dotenv 18.0.10, Node.js 22.23.4, Bun 1.4.4, python-dotenv 1.2.3 and GNU Bash
