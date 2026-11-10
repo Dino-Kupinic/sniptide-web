@@ -3,10 +3,10 @@
 Set `NEXT_PUBLIC_POSTHOG_KEY` (and `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud) as build variables to
 send events to PostHog. Requests go through `/_site/ph` on this site so ad blockers don't drop them.
 The app reports to the same project; filter on the `surface` property (`marketing` or `app`).
-Pull request previews at `<number>.sniptide.com` report to the same project too, so every marketing
-event carries `environment`: `production` on `sniptide.com`, `preview` on a numbered preview host
-and `development` anywhere else. Filter marketing reports on `environment` = `production`. Events
-from before this property existed have none; filter them on `$host` = `sniptide.com`.
+Only the live site reports. Pull request previews at `<number>.sniptide.com`, local development,
+and the app's own host never start PostHog, so they send no events. Every marketing event carries
+`environment` = `production` on `sniptide.com`. Events from before this property existed have
+none; filter them on `$host` = `sniptide.com`.
 Without a key nothing loads and the cookie banner stays hidden.
 
 A cookie banner (`components/consent-banner.tsx`) asks whether PostHog may use cookies, with
