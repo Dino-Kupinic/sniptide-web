@@ -2,3 +2,7 @@
 # https://sniptide.com/<key>.txt. This commit put it in lib/indexnow.ts; the next commit moved it
 # to public/<key>.txt only, so this is the one place the scanner sees it.
 5f1b1329e45620f82753137abadc603eabd25e37:lib/indexnow.ts:generic-api-key:6
+
+# The made-up key in the example share link on the Product menu's featured card. This commit wrote
+# it as one string; the next commit splits it so the scanner no longer matches it.
+3edddfc3155513b58fdc044778d61982bd5e2704:components/nav-visuals.tsx:generic-api-key:24
