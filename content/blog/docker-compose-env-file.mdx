@@ -1,0 +1,251 @@
+---
+title: "Docker Compose .env vs env_file: which variables reach the container?"
+description: Run a small Docker Compose example to see how .env interpolation, env_file and environment differ, including precedence and common loading failures.
+date: 2026-11-12
+author: dino
+category: engineering
+tags: [docker, compose, env, configuration, secrets]
+cover: /blog/docker-compose-env-file/cover.webp
+coverAlt: A compose.yaml with env_file and environment entries next to a terminal running docker compose run, with the variables the container received, on a black grid with blue corner marks.
+image: /blog/docker-compose-env-file/share.png
+---
+
+{/*
+Writing brief (docs/blog-style-guide.md, blog plan revision 2, Day 4)
+Reader: a developer whose container doesn't see a value they put in .env, or who wants to know which of .env, env_file and environment to use.
+Question or task: which variables does Docker Compose pass into the container, from which file, and which one wins?
+Primary mode: Operator
+Article type: practical guide with a test matrix
+Central claim: Compose reads .env to fill in ${...} in compose.yaml, and only env_file and environment set variables inside the container. A .env value reaches the container only when compose.yaml names it.
+Evidence and sources: every output block and table cell is captured from the fixture in public/blog/docker-compose-env-file, run on 12 November 2026 with Docker Compose 5.6.1, Docker Engine 29.9.2 and alpine:3.20, from a clean shell (env -i) and from a second working directory. Precedence rules are checked against the Docker Compose docs read the same day. Product facts come from docs.sniptide.com (CLI, encrypted secrets).
+Opening move: direct answer, then the fixture
+Main sections: the fixture, interpolation, the container environment, precedence matrix, paths and overrides, getting the values onto a machine, sensitive values, troubleshooting
+Running example: Acme notes, an alpine container that prints six variables
+Visuals: cover, which file reaches which stage, pulling app.env from an env group
+Primary CTA: create an env group and pull the project's app.env before docker compose up.
+Keyword: docker compose env file (Google Keyword Planner reports US 100 to 1K, worldwide 1K to 10K). Route: /blog/docker-compose-env-file.
+Scope: this post owns Compose behavior. The general .env format lives in /blog/env-file.
+*/}
+
+Docker Compose uses a `.env` file in the project folder to fill in `${...}` placeholders in `compose.yaml`, and it does not copy that file into your container. Variables reach the container only through `env_file` and `environment` in the service definition. So a value in `.env` shows up inside the container only when `compose.yaml` names it, for example as `GREETING: ${GREETING}`.
+
+<Callout title="TL;DR">
+
+- `.env` feeds interpolation. It sets the image tag, ports and anything else written as `${VAR}` in `compose.yaml`.
+- `env_file:` copies a whole file into the container. `environment:` sets single variables and wins over `env_file`.
+- `docker compose run -e` beats both, and the image's own `ENV` loses to all of them.
+- For interpolation, a variable exported in your shell beats `--env-file`, which replaces `.env` entirely.
+- Run `docker compose config` to see the resolved file before you start anything.
+
+</Callout>
+
+Every output below comes from one small project, run with Docker Compose 5.6.1 and Docker Engine 29.9.2 from a clean shell. If you need a refresher on the file format itself, quoting and `.env.example`, read [What is a .env file?](/blog/env-file) first.
+
+## The example project
+
+The project has three files. The container is plain Alpine and prints the six variables we care about, so you can see exactly what arrived.
+
+```yaml title="compose.yaml"
+services:
+  app:
+    image: alpine:${ALPINE_TAG}
+    env_file: app.env
+    environment:
+      GREETING: ${GREETING}
+      PORT: "8080"
+      DEBUG:
+    command: ["sh", "-c", "env | sort | grep -E '^(APP_NAME|DATABASE_URL|DB_PASSWORD|DEBUG|GREETING|PORT)='"]
+```
+
+```bash title=".env"
+# Read by Compose to fill in ${...} in compose.yaml. Every value is fake.
+ALPINE_TAG=3.20
+GREETING=hello from .env
+DB_PASSWORD=only-in-dot-env
+```
+
+```bash title="app.env"
+# Copied into the container by env_file. Every value is fake.
+APP_NAME=Acme notes
+PORT=3000
+DATABASE_URL=postgres://db:5432/acme
+```
+
+Download [compose.yaml](/blog/docker-compose-env-file/compose.yaml), [sample.env](/blog/docker-compose-env-file/sample.env) (rename it to `.env`) and [app.env](/blog/docker-compose-env-file/app.env) into one folder, then run it:
+
+```bash title="Terminal"
+docker compose run --rm app
+```
+
+```text title="Output"
+APP_NAME=Acme notes
+DATABASE_URL=postgres://db:5432/acme
+GREETING=hello from .env
+PORT=8080
+```
+
+Four things already happened here. `APP_NAME` and `DATABASE_URL` came from `app.env`. `GREETING` came from `.env`, but only because `compose.yaml` asked for `${GREETING}`. `PORT` is `8080` because `environment` beat the `3000` in `app.env`. And `DB_PASSWORD`, which sits in `.env`, never reached the container, while `DEBUG` is missing because nothing gave it a value.
+
+<Figure
+  src="/blog/docker-compose-env-file/stages.webp"
+  alt="Three stages. The .env file holds ALPINE_TAG, GREETING and DB_PASSWORD. compose.yaml uses image alpine:${ALPINE_TAG}, env_file app.env and GREETING: ${GREETING}. The container receives APP_NAME, DATABASE_URL, GREETING and PORT=8080, and DB_PASSWORD is not set."
+  caption=".env fills in compose.yaml. Only env_file and environment reach the container."
+/>
+
+## What .env does: interpolation
+
+When you run any `docker compose` command, Compose reads `.env` from the project directory and uses it, together with your shell, to replace every `${VAR}` in `compose.yaml`. That is how `alpine:${ALPINE_TAG}` became `alpine:3.20`. The result is the resolved Compose model, and `docker compose config` prints it:
+
+```bash title="Terminal"
+docker compose config
+```
+
+```yaml title="Output (excerpt)"
+    environment:
+      APP_NAME: Acme notes
+      DATABASE_URL: postgres://db:5432/acme
+      DEBUG: null
+      GREETING: hello from .env
+      PORT: "8080"
+    image: alpine:3.20
+```
+
+This is the most useful debugging command in this post. If a value is wrong here, it will be wrong in the container. `docker compose config --environment` lists the variables Compose used for interpolation, which includes everything in `.env` and everything your shell exports:
+
+```text title="Output (filtered)"
+ALPINE_TAG=3.20
+DB_PASSWORD=only-in-dot-env
+GREETING=hello from .env
+```
+
+Compose read `DB_PASSWORD`, but no line in `compose.yaml` asked for it, so it stopped there.
+
+## What env_file and environment do: the container
+
+`env_file` and `environment` both set variables inside the running container, and they differ in scope. `env_file` keeps a service's whole runtime configuration out of `compose.yaml`, and each entry under `environment` sets one variable:
+
+| Entry | What the container gets |
+| --- | --- |
+| `env_file: app.env` | Every line of the file |
+| `PORT: "8080"` | One variable with a fixed value |
+| `GREETING: ${GREETING}` | One variable, filled from the shell or `.env` |
+| `DEBUG:` | One variable, only when the shell or `.env` has it |
+
+Two details are easy to miss. First, a bare name such as `DEBUG:` takes its value from the shell and also from `.env`. In the precedence test below, `PORT:` with no shell variable picked up `PORT=7000` from `.env`. When neither has it, the variable is left out of the container, which is why `DEBUG` is missing in the first run.
+
+Second, Compose interpolates the values inside an `env_file` too. With a line `APP_NAME=${GREETING} app` in the env file, the container received:
+
+```text title="Output"
+APP_NAME=hello from .env app
+```
+
+If you want a `.env` value in the container without naming each one, list `.env` as an env file as well. With `env_file: [app.env, .env]` the first run gains `DB_PASSWORD=only-in-dot-env`. This works, but it also hands the container `ALPINE_TAG` and anything else you added for interpolation, so keep the two files separate when you can.
+
+## Which value wins? The precedence matrix
+
+To test precedence, each row below sets one variable, `PORT`, in a different combination of places and prints what the container received. The image is `alpine:3.20` with `ENV PORT=5000`, `app.env` holds `PORT=3000` and `.env` holds `PORT=7000`.
+
+| Where PORT is set | Container gets |
+| --- | --- |
+| Image `ENV` only | `5000` |
+| Image, plus `env_file` | `3000` |
+| Image, `env_file`, plus `environment: PORT: "8080"` | `8080` |
+| The row above, plus `PORT=9999` exported in the shell | `8080` |
+| The row above, plus `docker compose run -e PORT=1234` | `1234` |
+| Image and `env_file`, plus `run -e PORT=1234` | `1234` |
+| `env_file`, plus `environment: PORT: ${PORT}`, with `.env` | `7000` |
+| `env_file`, plus `environment: PORT: ${PORT}`, with `.env` and shell `9999` | `9999` |
+| `env_file`, plus bare `environment: PORT:`, with `.env` | `7000` |
+| `env_file`, plus bare `environment: PORT:`, with `.env` and shell `9999` | `9999` |
+
+Read from strongest to weakest, the container gets its value from:
+
+1. `docker compose run -e` on the command line.
+2. `environment`, where a `${VAR}` or bare name is filled from the shell first and `.env` second.
+3. `env_file`.
+4. The image's `ENV`.
+
+The fourth row is the one that surprises people. Exporting `PORT=9999` in your shell does nothing to the container when `compose.yaml` sets a fixed value, because a shell variable only reaches the container through `${PORT}` or a bare `PORT:`. The same goes for `DB_PASSWORD`. Running the example with `DB_PASSWORD=from-shell` exported still left it out of the container.
+
+The order matches the [Docker precedence docs](https://docs.docker.com/compose/how-tos/environment-variables/envvars-precedence/). They also list `docker compose run -e` above everything and the image `ENV` at the bottom.
+
+## Which value fills a placeholder? Shell, --env-file and .env
+
+Interpolation has its own, shorter order. Each row below changes one thing about how `docker compose run --rm app` runs and shows the `GREETING` the container received:
+
+| How you run it | GREETING |
+| --- | --- |
+| No extra options | `hello from .env` |
+| Shell exports `GREETING` | `hello from the shell` |
+| `--env-file staging.env` | `hello from staging.env` |
+| `-f` from another folder | `hello from .env` |
+
+So the shell beats `--env-file`, and `--env-file` replaces `.env`. Replace is the important word. When the alternative file left out `ALPINE_TAG`, Compose did not fall back to `.env` for it:
+
+```text title="Output"
+level=warning msg="The \"ALPINE_TAG\" variable is not set. Defaulting to a blank string."
+unable to get image 'alpine:': Error response from daemon: invalid reference format
+```
+
+The last row matters for scripts and CI. We ran `docker compose -f ../acme/compose.yaml` from a folder with its own `.env`, and Compose still used `acme/.env`. It looks for `.env` in the project directory, which defaults to the folder that holds the first `compose.yaml`, and ignored the `.env` in the folder where we ran the command. `env_file` paths are resolved relative to the project directory as well, and `--project-directory` changes both.
+
+## Getting the values onto a new machine
+
+Everything above assumes `app.env` already exists. On a fresh checkout it usually doesn't, because env files with real values stay out of Git. That handoff is where Sniptide fits: an env group holds the project's variables, encrypted at rest, and the CLI writes them to the file `env_file` already points at.
+
+<Figure
+  src="/blog/docker-compose-env-file/pull.webp"
+  alt="An env group called acme-notes stores the variables encrypted. sniptide env pull acme-notes --file app.env writes app.env into the project folder, and docker compose up starts the container with those values."
+  caption="Pull app.env from an env group, then start Compose as usual."
+/>
+
+```bash title="Terminal"
+npm install --global @sniptide/cli
+printf '%s' "$SNIPTIDE_TOKEN" | sniptide login --token-stdin
+sniptide env pull acme-notes --file app.env
+docker compose up
+```
+
+The pulled file starts with a comment such as `# sniptide env acme-notes revision 1`, which Compose skips like any other `#` line. `compose.yaml` doesn't change, so a teammate who writes `app.env` by hand runs exactly the same project. To push the file the first time, run `sniptide env push acme-notes --file app.env`.
+
+You can also skip the file with `sniptide env run acme-notes -- docker compose up`. Then the values arrive as Compose's shell environment, so the precedence rules above apply: they fill `${VAR}` and bare names, and they don't reach the container on their own.
+
+Sniptide is a good fit when a solo developer or small team wants a Compose project's env file on every machine with one command, without sending it through chat. If you'd rather keep those values on your own server, Sniptide itself self-hosts with Docker Compose in one command on a Linux server with Docker and the Compose plugin:
+
+```bash title="Terminal"
+curl -fsSL https://sniptide.com/install.sh | sh
+```
+
+<InlineCta
+  title="Pull app.env before docker compose up"
+  description="Keep a project's env file in an env group and write it into any checkout with one command."
+  href="https://app.sniptide.com/sign-up"
+  label="Create an env group"
+  secondaryHref="https://docs.sniptide.com/cli#sync-env-files"
+  secondaryLabel="Read the CLI docs"
+/>
+
+## Passwords and other sensitive values
+
+Whichever way the file is written, `env_file` and `environment` hand the container plain environment variables. Anyone who can run `docker inspect` or read `/proc` inside the container can read them, and they often end up in logs and crash reports. Docker's own guidance is to [use Compose secrets](https://docs.docker.com/compose/how-tos/use-secrets/) for passwords and keys that a running container needs, which mount each value as a file under `/run/secrets/` instead. Env files work well for configuration and for local development, and production credentials deserve the secrets mechanism.
+
+## When the variable doesn't reach the container
+
+- **A `.env` value is missing inside the container.** `.env` only feeds interpolation. Add `NAME: ${NAME}` under `environment`, or list the file under `env_file`.
+- **A shell variable is ignored.** `compose.yaml` sets that name to a fixed value. Use `${NAME}` or a bare `NAME:` if the shell should be able to override it.
+- **The value is blank and Compose warns `The "GREETNG" variable is not set. Defaulting to a blank string.`** A typo in `compose.yaml`, here `${GREETNG}`, gives an empty value and only a warning. Write placeholders as `${GREETING:?set GREETING in .env}`, and the same typo makes Compose stop with `required variable GREETNG is missing a value: set GREETING in .env` instead.
+- **`invalid reference format` on the image.** The image tag came from a variable that was blank. Usually `--env-file` replaced `.env` and the new file lacks the tag.
+- **You edited `app.env` and nothing changed.** `docker compose restart` keeps the container and its old environment. Run `docker compose up -d`, which recreates the container with the new values.
+- **The env file is in the wrong place.** Paths are relative to the project directory. Check it with `docker compose config`, and mark a file that may be absent as `required: false` (Compose 2.24 and later).
+
+{/* TODO(Dino): link Day 10 (self-hosted pastebin) here when it goes live. */}
+
+For the format of the files themselves, quoting rules and how other loaders read them, see [What is a .env file?](/blog/env-file).
+
+## Sources
+
+Checked on 12 November 2026.
+
+- Docker docs: [environment variables precedence](https://docs.docker.com/compose/how-tos/environment-variables/envvars-precedence/), [interpolation](https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/), [set environment variables](https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables/), [best practices](https://docs.docker.com/compose/how-tos/environment-variables/best-practices/) and [secrets in Compose](https://docs.docker.com/compose/how-tos/use-secrets/)
+- Sniptide: [CLI, Sync .env files](https://docs.sniptide.com/cli#sync-env-files), [encrypted secrets](https://docs.sniptide.com/core-concepts/secrets), [self-hosting](https://docs.sniptide.com/self-hosting/install-script)
+- Tests: the [compose.yaml](/blog/docker-compose-env-file/compose.yaml), [sample.env](/blog/docker-compose-env-file/sample.env) and [app.env](/blog/docker-compose-env-file/app.env) above, plus one-line variations for each table row, run with Docker Compose 5.6.1, Docker Engine 29.9.2 and alpine:3.20 from a shell started with `env -i`

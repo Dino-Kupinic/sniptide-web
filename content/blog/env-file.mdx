@@ -316,7 +316,9 @@ curl -fsSL https://sniptide.com/install.sh | sh
 - **A value is cut short.** It contains `#` or `$`. Put it in double quotes, and escape `$` as `\$` for Bun.
 - **The file is named `.env.txt`.** Some editors add an extension. Show file extensions and rename it to exactly `.env`.
 
-{/* TODO(Dino): link Day 4 (Docker Compose env files), Day 10 (self-hosted pastebin) and Day 9 (MCP versus skills) here as each goes live. */}
+{/* TODO(Dino): link Day 10 (self-hosted pastebin) and Day 9 (MCP versus skills) here as each goes live. */}
+
+If Docker Compose runs your app, [Docker Compose .env vs env_file](/blog/docker-compose-env-file) shows which of these values reach the container and which file wins.
 
 If you keep reusable code next to these values, the [Claude Code skills tutorial](/blog/claude-code-skills) shows how the same CLI turns a collection into an agent skill, and the [Pastebin alternatives comparison](/blog/pastebin-alternatives) covers sharing the code itself.
 
