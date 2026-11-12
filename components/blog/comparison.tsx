@@ -130,14 +130,14 @@ export function InlineCta({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,color-mix(in_oklab,var(--link)_14%,transparent),transparent_55%)]"
       />
-      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+      <div className="relative flex flex-col gap-4">
         <div className="flex min-w-0 flex-col gap-1">
           <p className="font-heading text-lg leading-6 font-medium tracking-[-0.02em]">{title}</p>
           <p className="text-[0.9375rem] leading-6 text-pretty text-muted-foreground">
             {description}
           </p>
         </div>
-        <div className="flex shrink-0 flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           <a href={href} className={primaryButton}>
             {label}
           </a>
