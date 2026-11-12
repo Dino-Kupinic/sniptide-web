@@ -2,6 +2,7 @@
 title: Best Pastebin alternatives for code in 2026
 description: Compare Pastebin alternatives for code, private links and self-hosting, with sourced trade-offs and a clear pick for each job.
 date: 2026-11-07
+updated: 2026-11-12
 author: dino
 category: product
 tags: [comparison, pastebin, self-hosting, privatebin, gist, hastebin]
@@ -22,7 +23,7 @@ Opening move: problem
 Main sections: why people switch, best for, comparison, what "private" means, best fit per tool, everything Sniptide does, moving over, first step
 Running example: a three-file Express health check with fake values
 Visuals: illustrations in the OG card style, the Comparison component
-Limitations: Sniptide has no browser-side encryption, needs an account to paste, takes code and text only, and is not a secrets manager. The table shows these rows too.
+Limitations: Sniptide's encrypted pastes are opt-in, web app only and read-only, Sniptide needs an account to paste, takes code and text only, and is not a secrets manager. The table shows these rows too.
 Primary CTA: create a first paste. Secondary: self-host.
 Facts to verify before publication: every comparison cell, and the Pastebin.com column.
 Keyword: pastebin alternative (US 1K to 10K). Route: /blog/pastebin-alternatives.
@@ -47,7 +48,7 @@ These picks are our recommendations, and the comparison table below sticks to do
 
 | Job | Best fit |
 | --- | --- |
-| A secret the server can't read | PrivateBin |
+| A secret the server can't read | PrivateBin or Sniptide |
 | Snippets you keep in Git | Gist, or Opengist to self-host |
 | The smallest self-hosted pastebin | MicroBin |
 | A screenshot or file without an account | Pastes.io |
@@ -113,7 +114,7 @@ This is a three-file save, revise and retrieve task, so it says nothing about se
 | Burn after reading | ✓ | ✓ | – | ✓ | – | ✓ | – | ~Pro |
 | Invite named people | View or edit | – | – | – | – | – | – | – |
 | Warns before you share a key | ✓ | – | – | – | – | – | – | – |
-| Encrypted in the browser | – | ✓ | – | ~Optional mode | – | – | – | ? |
+| Encrypted in the browser | Per paste | ✓ | – | ~Optional mode | – | – | – | ? |
 | **Posting it** | | | | | | | | |
 | Code preview in link unfurls | ✓ | – | ~Text preview | – | – | – | ? | ? |
 | Post to Slack or Discord | ✓ | – | – | – | – | – | – | – |
@@ -153,9 +154,9 @@ The word covers three different guarantees, and mixing them up is how secrets le
   caption="Three privacy models. The highlighted step protects the paste."
 />
 
-**Encrypted in the browser.** PrivateBin encrypts the paste before it leaves your browser and keeps the key in the part of the link the server never receives. A breach of the server doesn't reveal the paste, but anyone with the full link can read it, which is why PrivateBin recommends a password for anything sensitive.
+**Encrypted in the browser.** PrivateBin encrypts the paste before it leaves your browser and keeps the key in the part of the link the server never receives. A breach of the server doesn't reveal the paste, but anyone with the full link can read it, which is why PrivateBin recommends a password for anything sensitive. Sniptide works the same way for a paste you mark as end-to-end encrypted in the editor. That paste can't be edited afterwards, and it stays out of the CLI, the MCP server, raw links and link previews, because the server can't read it.
 
-**Access rules on the server.** Sniptide, Opengist and Gist store your code and decide who may open it. In Sniptide that means private pastes for you and the people you invite, plus passwords, expiry and burn after reading. The operator of the server can read the content.
+**Access rules on the server.** Opengist, Gist and Sniptide's other pastes store your code and decide who may open it. In Sniptide that means private pastes for you and the people you invite, plus passwords, expiry and burn after reading. The operator of the server can read the content.
 
 **The link is the secret.** An unlisted paste, a Hastebin link and a secret gist work the same way. GitHub's documentation says it directly: "Secret gists aren't private." Treat an unlisted link like a password you have already sent.
 
@@ -170,9 +171,9 @@ The word covers three different guarantees, and mixing them up is how secrets le
 
 ## When each tool is the better choice
 
-**Sniptide** fits when you'll need the code again. Multi-file pastes with passwords, expiry and invites cover the handoff, while collections, search and revisions keep it findable months later. Gist and Pastes.io also have first-party MCP servers, and Opengist has a community one. Among the tools compared, Sniptide is the only one whose own MCP server also runs on your own server. The trade-off is an account: Sniptide has no anonymous pastes, and it holds code and text, not screenshots or files.
+**Sniptide** fits when you'll need the code again. Multi-file pastes with passwords, expiry and invites cover the handoff, while collections, search and revisions keep it findable months later. Gist and Pastes.io also have first-party MCP servers, and Opengist has a community one. Among the tools compared, Sniptide is the only one whose own MCP server also runs on your own server. For a secret, an end-to-end encrypted paste keeps the content away from the server, though only in the web app and without editing. The trade-off is an account: Sniptide has no anonymous pastes, and it holds code and text, not screenshots or files.
 
-**PrivateBin** fits when the person running the server shouldn't be able to read the paste. With no accounts and only ciphertext on the server, there is nothing to search and nowhere to collect your pastes, so it's built for handing something over rather than keeping it.
+**PrivateBin** fits when the person running the server shouldn't be able to read the paste and you don't want an account. Every paste is encrypted and the server holds only ciphertext, so there is nothing to search and nowhere to collect your pastes, so it's built for handing something over rather than keeping it.
 
 **Opengist** suits developers who think in Git. Snippets clone and push like any repository, revisions keep their history, and you can sign in with GitHub, GitLab or Gitea. Recent releases add expiry and a token-authenticated REST API with an OpenAPI spec, and the community `opengist-mcp` server connects it to coding agents. It has no burn after reading or per-paste passwords.
 
@@ -243,7 +244,7 @@ The CLI searches your pastes, pulls files back into a project and installs a col
 
 Use it on [sniptide.com](https://sniptide.com), or [run the same app on your own server](/#self-host) with one command. The self-hosted version has the same editor, CLI support and MCP server.
 
-Some gaps matter for this comparison. Nothing is encrypted in your browser, so PrivateBin is the better pick when the server must not read the paste. Every paste needs an account and holds code or text only, so Hastebin, Pastebin and Pastes.io are quicker for an anonymous one-off, and Pastes.io is the one for screenshots and files. Snippets don't clone or push over Git the way Gist and Opengist do. And env groups have no rotation or audit trail, so Sniptide doesn't replace a secrets manager.
+Some gaps matter for this comparison. An end-to-end encrypted paste is created and read in the web app only, can't be edited, and doesn't reach the CLI or the MCP server, so it sits outside the agent workflow above. Every paste needs an account and holds code or text only, so Hastebin, Pastebin and Pastes.io are quicker for an anonymous one-off, and Pastes.io is the one for screenshots and files. Snippets don't clone or push over Git the way Gist and Opengist do. And env groups have no rotation or audit trail, so Sniptide doesn't replace a secrets manager.
 
 ## Moving your snippets over
 
@@ -257,9 +258,9 @@ Before you share anything sensitive on any of these tools, check three things: w
 
 ## Sources
 
-Last verified on 9 November 2026. Each link goes to the page that backs the table.
+Last verified on 9 November 2026, and Sniptide's encrypted pastes on 12 November 2026. Each link goes to the page that backs the table.
 
-- Sniptide: [pastes and limits](https://docs.sniptide.com/core-concepts/pastes), [sharing, passwords and expiry](https://docs.sniptide.com/core-concepts/sharing), [revisions](https://docs.sniptide.com/core-concepts/revisions), [encrypted secrets](https://docs.sniptide.com/core-concepts/secrets), [MCP server](https://docs.sniptide.com/mcp), [CLI](https://docs.sniptide.com/cli), [import a gist](https://docs.sniptide.com/getting-started/import-gist)
+- Sniptide: [pastes and limits](https://docs.sniptide.com/core-concepts/pastes), [sharing, passwords and expiry](https://docs.sniptide.com/core-concepts/sharing), [revisions](https://docs.sniptide.com/core-concepts/revisions), [end-to-end encrypted pastes](https://docs.sniptide.com/core-concepts/encrypted-pastes), [encrypted secrets](https://docs.sniptide.com/core-concepts/secrets), [MCP server](https://docs.sniptide.com/mcp), [CLI](https://docs.sniptide.com/cli), [import a gist](https://docs.sniptide.com/getting-started/import-gist)
 - PrivateBin: [features](https://github.com/PrivateBin/PrivateBin#what-privatebin-provides), [what it doesn't provide](https://github.com/PrivateBin/PrivateBin#what-it-doesnt-provide), [license](https://github.com/PrivateBin/PrivateBin/blob/master/LICENSE.md), [link preview tags](https://github.com/PrivateBin/PrivateBin/blob/master/tpl/bootstrap5.php)
 - Opengist: [features](https://github.com/thomiceli/opengist/blob/master/docs/introduction.md#features), [REST API and OpenAPI spec](https://github.com/thomiceli/opengist/blob/master/docs/api.md), [changelog with expiry in 1.14.0](https://github.com/thomiceli/opengist/blob/master/CHANGELOG.md), [link preview tags](https://github.com/thomiceli/opengist/blob/master/templates/partials/seo_meta.html), [custom URL setting](https://github.com/thomiceli/opengist/blob/master/templates/pages/gist_settings.html), [community MCP server `opengist-mcp`](https://github.com/ni-c/opengist-mcp)
 - MicroBin: [features](https://github.com/szabodanika/microbin#features), [privacy and password options](https://github.com/szabodanika/microbin/blob/master/templates/index.html), [defaults for encryption and burn after reading](https://github.com/szabodanika/microbin/blob/master/src/args.rs)
