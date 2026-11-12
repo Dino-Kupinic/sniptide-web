@@ -1,0 +1,9 @@
+services:
+  app:
+    image: alpine:${ALPINE_TAG}
+    env_file: app.env
+    environment:
+      GREETING: ${GREETING}
+      PORT: "8080"
+      DEBUG:
+    command: ["sh", "-c", "env | sort | grep -E '^(APP_NAME|DATABASE_URL|DB_PASSWORD|DEBUG|GREETING|PORT)='"]
