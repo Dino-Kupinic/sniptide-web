@@ -18,7 +18,9 @@ internal. Consecutive internal releases collapse into one row.
 The newest featured release from the last 14 days also fills a blue bar above the header on the
 landing page and every blog and changelog page (`components/announcement-bar.tsx`). A release is
 featured when its marker reads `kind="feature" featured="true"`, which the release workflow sets
-from a `featured` label on the pull request. It links to
+from a `featured` label on the pull request. A launch that shipped without the label can be
+featured by adding its marker attribute on GitHub, or by listing its version in `featuredReleases`
+in `lib/changelog.ts`, which takes a deploy. It links to
 that release in the changelog and scrolls away with the page. The bar is a pane of blue glass
 over the Game of Life, like the window on the pink sharing section; its colors keep white text
 above 4.5:1 even over a lit cell. Closing it stores the version in

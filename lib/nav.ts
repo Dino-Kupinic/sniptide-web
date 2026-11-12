@@ -9,6 +9,7 @@ import {
   LayoutTemplateIcon,
   LibraryBigIcon,
   Link2Icon,
+  LockKeyholeIcon,
   MailIcon,
   MonitorPlayIcon,
   NewspaperIcon,
@@ -38,7 +39,10 @@ export type NavItem = {
 export type NavGroup = { label: string; items: NavItem[] }
 
 // The last column of a menu: one link with a picture, a sentence and a call to action.
-export type NavFeature = NavItem & { action: string; visual: "demo" | "terminal" | "github" }
+export type NavFeature = NavItem & {
+  action: string
+  visual: "encrypted" | "terminal" | "github"
+}
 
 // The line under a menu's columns: an identifier worth copying, such as a command, or one link
 // worth reading next, such as the latest blog post.
@@ -104,16 +108,23 @@ export const navMenus: NavMenu[] = [
             href: docsPages.analytics,
             icon: ChartColumnIcon,
           },
+          {
+            label: "Live demo",
+            description: "Try the app as a guest, with no account to create.",
+            href: links.demo,
+            icon: MonitorPlayIcon,
+          },
         ],
       },
     ],
     feature: {
-      label: "Live demo",
-      description: "Try the app as a guest, with nothing to install and no account to create.",
-      action: "Open the demo",
-      href: links.demo,
-      icon: MonitorPlayIcon,
-      visual: "demo",
+      label: "End-to-end encrypted pastes",
+      description:
+        "Encrypt a paste in your browser, so the server stores only ciphertext and never the key.",
+      action: "See how it works",
+      href: docsPages.encryptedPastes,
+      icon: LockKeyholeIcon,
+      visual: "encrypted",
     },
     strip: {
       kind: "copy",
