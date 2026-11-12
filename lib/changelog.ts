@@ -100,6 +100,10 @@ function parseWritten(attributes: string, content: string) {
   return { kind: isKind(kindAttribute) ? kindAttribute : "feature", title, body }
 }
 
+// Releases featured from this repo, for a launch whose pull request shipped without the `featured`
+// label. Editing the marker on the GitHub release does the same without a deploy.
+export const featuredReleases = new Set(["0.82.0"])
+
 function isFeatured(attributes: string) {
   return parseAttributes(attributes).featured === "true"
 }
@@ -133,18 +137,19 @@ function parseCommitList(body: string) {
 }
 
 export function parseRelease(release: GithubRelease): ChangelogEntry {
+  const version = release.tag_name.replace(/^v/, "")
   const raw = (release.body ?? "").replace(/\r\n/g, "\n")
   const block = raw.match(notesBlock)
   const parsed = block ? parseWritten(block[1] ?? "", block[2] ?? "") : parseCommitList(raw)
   return {
-    version: release.tag_name.replace(/^v/, ""),
+    version,
     tag: release.tag_name,
     date: release.published_at ?? "",
     url: release.html_url,
     ...parsed,
     pulls: pullNumbers(raw),
     written: Boolean(block),
-    featured: block ? isFeatured(block[1] ?? "") : false,
+    featured: (block ? isFeatured(block[1] ?? "") : false) || featuredReleases.has(version),
   }
 }
 
@@ -195,7 +200,8 @@ export const announcementDays = 14
 
 // The newest featured release from the last two weeks, or nothing. A release is featured only when
 // its notes marker says so (the app repo's release-notes workflow sets it from a `featured` PR
-// label), so the bar speaks up for launches and stays quiet for routine releases.
+// label) or featuredReleases lists it, so the bar speaks up for launches and stays quiet for
+// routine releases.
 export function pickAnnouncement(entries: ChangelogEntry[], now = Date.now()): Announcement | null {
   const cutoff = now - announcementDays * 24 * 60 * 60 * 1000
   const entry = entries.find((item) => item.kind === "feature" && item.featured)

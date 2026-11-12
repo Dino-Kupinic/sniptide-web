@@ -192,6 +192,12 @@ describe("announcement", () => {
     expect(pickAnnouncement(entries, now)).toBeNull()
   })
 
+  test("a feature release listed in featuredReleases takes the bar without the flag", () => {
+    const written = `<!-- sniptide-notes:start kind="feature" -->\n## End-to-end encrypted pastes\n<!-- sniptide-notes:end -->`
+    const entries = toEntries([release("v0.82.0", written, "2026-11-09T00:00:00Z")])
+    expect(pickAnnouncement(entries, now)?.title).toBe("End-to-end encrypted pastes")
+  })
+
   test("a featured release older than two weeks shows nothing", () => {
     const entries = toEntries([release("v0.70.0", featuredPost("Title"), "2026-10-20T00:00:00Z")])
     expect(pickAnnouncement(entries, now)).toBeNull()

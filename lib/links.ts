@@ -36,6 +36,7 @@ const docsUrl = documentation.home.url
 export const docsPages = {
   sharing: `${docsUrl}/core-concepts/sharing`,
   revisions: `${docsUrl}/core-concepts/revisions`,
+  encryptedPastes: `${docsUrl}/core-concepts/encrypted-pastes`,
   analytics: `${docsUrl}/core-concepts/analytics`,
   importGist: `${docsUrl}/getting-started/import-gist`,
   sdks: `${docsUrl}/sdks`,

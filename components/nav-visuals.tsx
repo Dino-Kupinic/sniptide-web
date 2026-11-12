@@ -1,34 +1,30 @@
 "use client"
 
-import { CheckIcon, CopyIcon, StarIcon } from "lucide-react"
-import Image from "next/image"
+import { CheckIcon, CopyIcon, LockKeyholeIcon, StarIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import demoDark from "@/assets/landing/demo-preview-dark.webp"
-import demoLight from "@/assets/landing/demo-preview-light.webp"
 import { GitHubMark } from "@/components/github-mark"
 import { LifeField } from "@/components/life-field"
 import type { NavFeature } from "@/lib/nav"
 
-// The pictures at the top of each menu's featured card. Each one shows the real thing: the demo
-// dashboard, the CLI output from the recipes section, and the repository with its stars.
+// The pictures at the top of each menu's featured card. Each one shows the real thing: an
+// encrypted paste's share link, the CLI output from the recipes section, and the repository with
+// its stars.
 
-function DemoVisual() {
-  // A crop of the guest dashboard's top left: the sidebar and the greeting.
+// The link an encrypted paste is shared with, as the docs show it. The key after the # never
+// reaches the server, so it is set apart in blue.
+function EncryptedVisual() {
   return (
-    <>
-      <Image
-        src={demoLight}
-        alt=""
-        unoptimized
-        className="absolute top-0 left-0 w-[640px] max-w-none dark:hidden"
-      />
-      <Image
-        src={demoDark}
-        alt=""
-        unoptimized
-        className="absolute top-0 left-0 hidden w-[640px] max-w-none dark:block"
-      />
-    </>
+    <div className="absolute inset-0 flex items-center justify-center gap-3 px-5">
+      <span className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-[#e8e8e8] bg-white text-[#0a0a0a] dark:border-[#2f2c2c] dark:bg-[#121111] dark:text-white">
+        <LockKeyholeIcon className="size-6" strokeWidth={1.5} />
+      </span>
+      <span className="flex h-8 min-w-0 items-center rounded-md border border-[#e8e8e8] bg-white px-2.5 font-mono text-xs text-[#0a0a0a] dark:border-[#2f2c2c] dark:bg-[#121111] dark:text-white">
+        <span className="shrink-0">sniptide.com/k7Qe2x</span>
+        <span className="truncate text-[#2a26ec] dark:text-[#8f8cff]">
+          #key=3q2-7wAAECAwQFBgcICQoLDA0
+        </span>
+      </span>
+    </div>
   )
 }
 
@@ -98,7 +94,7 @@ export function FeatureVisual({
       aria-hidden="true"
       className="relative h-40 overflow-hidden border-b border-[#e8e8e8] bg-[#fafafa] dark:border-[#262626] dark:bg-[#0c0b0b]"
     >
-      {visual === "demo" && <DemoVisual />}
+      {visual === "encrypted" && <EncryptedVisual />}
       {visual === "terminal" && <TerminalVisual />}
       {visual === "github" && <GitHubVisual stars={stars} />}
     </div>
