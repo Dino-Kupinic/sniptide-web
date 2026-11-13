@@ -1,0 +1,270 @@
+---
+title: How to add an MCP server to Claude Code and reuse saved code
+description: Add an MCP server to Claude Code, choose the configuration scope, authenticate and verify the connection by retrieving a saved code pattern.
+date: 2026-11-13
+author: dino
+category: agents
+tags: [claude-code, mcp, agents, snippets, oauth]
+cover: /blog/add-mcp-server-claude-code/cover.webp
+coverAlt: The words “How to add an MCP server to Claude Code” above six blue stripes that widen from left to right, on a near-black background.
+image: /blog/add-mcp-server-claude-code/share.png
+---
+
+{/*
+Writing brief (docs/blog-style-guide.md, blog plan revision 2, Day 5)
+Reader: a Claude Code user who wants a working MCP server connection and a useful first tool call, not just a registered server.
+Question or task: how do I add a remote MCP server to Claude Code, which scope do I pick, how do I sign in, and how do I know it works?
+Primary mode: Builder
+Article type: practical guide with a worked first task
+Central claim: adding a remote server takes one command, and the setup is only done once Claude Code shows it as connected and an agent has completed a real task with its tools.
+Evidence and sources: every command output and tool call is captured on 13 November 2026 with Claude Code 2.1.323 in a fresh configuration directory (CLAUDE_CONFIG_DIR), against a Sniptide instance on localhost:3100 built from the main branch. The OAuth sign-in ran through the real consent page. The first task ran as claude -p with stream-json output; the diff is the resulting git diff. Scope, approval and OAuth scope behavior is checked against code.claude.com/docs/en/mcp the same day. Product facts come from docs.sniptide.com/mcp.
+Opening move: direct answer with the three commands
+Main sections: what you end up with, transport, scope, add and sign in, check, first task, read-only access, prompts, troubleshooting
+Running example: a repo-stats project whose getRepo() calls fetch once, and a saved fetchWithRetry snippet
+Visuals: cover, the search, read and reuse loop
+Primary CTA: connect Sniptide and read one saved snippet.
+Keyword: claude code add mcp server (Google Keyword Planner reports US 100 to 1K, worldwide 100 to 1K). Route: /blog/add-mcp-server-claude-code.
+Scope: this post owns the Claude Code walkthrough. Setup reference stays in docs.sniptide.com/mcp. Cursor setup and MCP versus skills belong to later posts.
+*/}
+
+To add a remote MCP server to Claude Code, run `claude mcp add --transport http <name> <url>`, sign in with `/mcp` inside Claude Code or `claude mcp login <name>` in your shell, and check that `claude mcp list` shows the server as connected. The server's tools are then available in every session in that project. The rest of this guide picks the right scope, connects a real server and uses it for one useful task.
+
+<Callout title="TL;DR">
+
+- `claude mcp add --transport http sniptide https://app.sniptide.com/api/mcp` adds a remote server. Use `--transport http`, since SSE is deprecated.
+- The default scope is **local**: only you, only this project. Use `-s project` to share it through `.mcp.json`, or `-s user` for every project on your machine.
+- Adding a server doesn't sign you in. Run `/mcp` and pick **Authenticate**, or `claude mcp login sniptide` in a terminal.
+- `claude mcp get sniptide` should say `√ Connected`. `! Needs authentication` means the sign-in hasn't happened yet.
+- Prove it with a task: ask Claude to search a saved snippet, read it and use it in your code.
+
+</Callout>
+
+## What you end up with
+
+By the end, Claude Code reads a pattern you saved earlier and applies it to the file you're working on. In the test for this post, the saved pattern was a `fetchWithRetry` helper, and the project was a small script whose `getRepo()` called `fetch` once and gave up. One prompt later, the project had the helper and this change:
+
+```diff title="src/github.ts"
++import { fetchWithRetry } from "./fetch-with-retry"
++
+ export async function getRepo(owner: string, name: string) {
+-  const res = await fetch(`https://api.github.com/repos/${owner}/${name}`)
++  const res = await fetchWithRetry(`https://api.github.com/repos/${owner}/${name}`)
+   if (!res.ok) throw new Error(`GitHub returned ${res.status}`)
+   return res.json()
+ }
+```
+
+You need Claude Code (the tests used 2.1.323), a browser for the one-time sign-in, and an MCP server URL. This guide uses Sniptide's server at `https://app.sniptide.com/api/mcp`, which lets an agent search, read and save your snippets. The same commands work for any remote server that speaks Streamable HTTP.
+
+## Pick the transport
+
+Claude Code connects to MCP servers in three ways, and the server decides which one you use.
+
+- **HTTP** is for remote servers with a URL. The MCP specification calls it Streamable HTTP, and Claude Code accepts `streamable-http` as an alias in JSON. Use it for any hosted server.
+- **stdio** starts a local program and talks to it over standard input and output, for example `npx some-mcp-server`. Use it when the server is a package you run yourself.
+- **SSE** is the older remote transport. Claude Code's docs mark it as deprecated, so choose HTTP whenever a server offers both.
+
+Sniptide's server runs inside the app at `/api/mcp`, on the hosted app and on every self-hosted instance, so it uses HTTP. For a client that only supports stdio, the `@sniptide/mcp` package runs the same tools locally with an API token.
+
+## Pick the scope
+
+The scope decides which projects load the server and whether your team gets it too.
+
+| Scope | Stored in |
+| --- | --- |
+| `local` | `~/.claude.json` |
+| `project` | `.mcp.json` |
+| `user` | `~/.claude.json` |
+
+**Local** is the default. Claude Code saves the server under the current project's path in `~/.claude.json`, so it loads only in this project and nobody else sees it. In the test, a server added in one folder didn't appear in `claude mcp list` from another folder.
+
+**Project** writes `.mcp.json` at the project root. Commit it and everyone on the team gets the same server. Each person still signs in with their own account, and Claude Code asks before it uses a server from a `.mcp.json` it hasn't seen. Until you approve it, the list shows ``⏸ Pending approval (run `claude` to approve)``.
+
+**User** also goes in `~/.claude.json`, at the top level, and loads in every project on your machine. It's a good fit for a server you use everywhere, like your own snippet library.
+
+When the same name exists in more than one scope, local wins over project, and project wins over user. Claude Code uses the whole entry from the winning scope and doesn't merge fields.
+
+## Add the server and sign in
+
+<Steps>
+<Step>
+
+### Add it
+
+Run this from the project folder. Add `-s user` to have it in every project.
+
+```bash title="Terminal"
+claude mcp add --transport http sniptide https://app.sniptide.com/api/mcp
+```
+
+Claude Code writes the configuration and confirms it with a line that starts `Added HTTP MCP server sniptide`. For a self-hosted Sniptide, replace the host with your instance's address and keep `/api/mcp`.
+
+</Step>
+<Step>
+
+### Sign in
+
+Adding the server doesn't open a browser. Start Claude Code, type `/mcp`, choose `sniptide` and pick **Authenticate**. You can also do it from your shell:
+
+```bash title="Terminal"
+claude mcp login sniptide
+```
+
+Claude Code registers itself with the server, opens the sign-in page and waits on a local callback port. Sniptide shows a consent page titled **Connect Claude Code (sniptide)** with two permissions: search and read your snippets, and create, edit and delete them. Pick **Allow access**, and the terminal prints `Authenticated with "sniptide"`.
+
+Claude Code stores the tokens and refreshes them on its own, so you sign in once per server. On a machine without a browser, `claude mcp login` prints the URL instead, and you paste the redirect URL back at the prompt. That step needs an interactive terminal, so use `ssh -t` on a remote box.
+
+</Step>
+<Step>
+
+### Check it
+
+```bash title="Terminal"
+claude mcp get sniptide
+```
+
+```text title="Output"
+sniptide:
+  Scope: Local config (private to you in this project)
+  Status: √ Connected
+  Type: http
+  URL: https://app.sniptide.com/api/mcp
+```
+
+Before the sign-in, the same command says `! Needs authentication`. Inside a session, `/mcp` shows the same status and lists the server's tools, which Claude Code names `mcp__sniptide__search_snippets`, `mcp__sniptide__read_snippet` and so on.
+
+</Step>
+</Steps>
+
+Sniptide also ships a Claude Code plugin that adds the server and five Sniptide skills in one go. Run `claude plugin marketplace add Dino-Kupinic/sniptide`, then `claude plugin install sniptide@sniptide`. The server then shows up as `plugin:sniptide:sniptide`, and you sign in through `/mcp` the same way.
+
+## The first task: search, read, reuse
+
+A connected server with nobody using it is still unproven, so give it a real job. Save a pattern you reach for often. Here it's a `fetch` wrapper with per-attempt timeouts, backoff with jitter and support for `Retry-After`, saved as a private snippet called “fetch with retry, timeout and backoff” in a collection called `http`.
+
+```ts title="src/lib/fetch-with-retry.ts"
+export interface RetryOptions {
+  retries?: number
+  timeoutMs?: number
+  baseDelayMs?: number
+}
+
+const RETRYABLE = new Set([408, 429, 500, 502, 503, 504])
+
+// Retries network errors and retryable statuses with exponential backoff and jitter.
+// Each attempt gets its own timeout, and a Retry-After header wins over the computed delay.
+export async function fetchWithRetry(
+  input: RequestInfo | URL,
+  init: RequestInit = {},
+  { retries = 3, timeoutMs = 10_000, baseDelayMs = 300 }: RetryOptions = {},
+): Promise<Response> {
+  for (let attempt = 0; ; attempt++) {
+    const signal = AbortSignal.timeout(timeoutMs)
+    try {
+      const res = await fetch(input, { ...init, signal })
+      if (!RETRYABLE.has(res.status) || attempt >= retries) return res
+      await sleep(retryDelay(res, attempt, baseDelayMs))
+    } catch (error) {
+      if (attempt >= retries) throw error
+      await sleep(baseDelayMs * 2 ** attempt * (0.5 + Math.random()))
+    }
+  }
+}
+
+function retryDelay(res: Response, attempt: number, baseDelayMs: number) {
+  const header = Number(res.headers.get("retry-after"))
+  if (Number.isFinite(header) && header > 0) return header * 1000
+  return baseDelayMs * 2 ** attempt * (0.5 + Math.random())
+}
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+```
+
+Then, in the project, ask for the change in plain words:
+
+> Search my Sniptide snippets for a fetch retry helper, read the best match, and use it in src/github.ts so getRepo retries GitHub's rate limits and server errors.
+
+<Figure
+  src="/blog/add-mcp-server-claude-code/loop-v3.webp"
+  alt="Three steps from top to bottom. Claude Code calls search_snippets with the query fetch retry, which returns one summary. It then calls read_snippet with the id hv9tkkmw, which returns the full file. Finally it writes src/fetch-with-retry.ts and changes getRepo in src/github.ts to call fetchWithRetry."
+  caption="Search the summaries, read one snippet, then change the code."
+/>
+
+Claude made two Sniptide calls. `search_snippets` with `{"query": "fetch retry"}` returned the snippet's summary: title, description, tags and id. Then `read_snippet` with `{"id": "hv9tkkmw"}` returned the full file. It wrote the helper to `src/fetch-with-retry.ts` unchanged, made the edit in `src/github.ts` shown at the top of this post, and finished in 8 turns and about 16 seconds.
+
+The useful part came at the end. Claude pointed out that GitHub usually signals its primary rate limit with a `403` and `x-ratelimit-remaining: 0`, which the snippet doesn't retry, so `getRepo` now covers `429` and server errors but not that case. It offered to add the check. That's the kind of answer you want from reuse: the saved pattern as written, plus a clear note on where it doesn't fit this API.
+
+Searching summaries first and reading one snippet keeps the conversation small. Sniptide's search matches when every word appears in the title, description, tags, file paths or code, so a descriptive title and two or three tags make snippets easy to find later.
+
+To run the same task without the interactive prompt, for example in a script, pass the tools you allow:
+
+```bash title="Terminal"
+claude -p "Find my fetch retry snippet in Sniptide and use it in src/github.ts." \
+  --allowedTools "mcp__sniptide__search_snippets,mcp__sniptide__read_snippet,Read,Edit,Write"
+```
+
+A `claude -p` run can't show the sign-in page, so sign in once interactively first.
+
+Sniptide is best for a developer who wants the code they already wrote to be one search away inside Claude Code, on the hosted app at sniptide.com or on their own server. If you'd rather run it yourself, Sniptide self-hosts with Docker Compose in one command on a Linux server with Docker and the Compose plugin:
+
+```bash title="Terminal"
+curl -fsSL https://sniptide.com/install.sh | sh
+```
+
+<InlineCta
+  title="Connect Sniptide to Claude Code"
+  description="Save the patterns you reuse, then let Claude search and read them while it works."
+  href="https://app.sniptide.com/sign-up"
+  label="Create a free account"
+  secondaryHref="https://docs.sniptide.com/mcp"
+  secondaryLabel="Read the MCP docs"
+/>
+
+## Give the agent read-only access
+
+Without a pinned scope, Claude Code asked Sniptide for `read write` in the test. If the agent should only look things up, pin the OAuth scope when you add the server:
+
+```bash title="Terminal"
+claude mcp add-json sniptide '{
+  "type": "http",
+  "url": "https://app.sniptide.com/api/mcp",
+  "oauth": { "scopes": "read" }
+}'
+```
+
+Sign in again, and the consent request carries `scope=read`. Claude Code still lists all nine Sniptide tools, and the server refuses the write calls. When the test asked Claude to save a file as a new snippet, `create_snippet` came back with `This token doesn't have the write scope.` and nothing was saved.
+
+For an agent that runs unattended, use a read-only [personal API token](https://docs.sniptide.com/api-tokens) in `.mcp.json` instead of OAuth. Sniptide's MCP docs show that setup, with the token kept in an environment variable outside the file.
+
+## Use the server's prompts
+
+MCP servers can also offer prompts, which Claude Code lists in the `/` menu as `/sniptide:use_snippet (MCP)` and runs as `/mcp__sniptide__use_snippet`. Sniptide has three:
+
+- `use_snippet` takes a task, searches your snippets for it, reads the best match and adapts it to the project.
+- `save_snippet` takes code, proposes a title, tags and paths, leaves secrets out, and saves a private snippet after you confirm.
+- `apply_collection` fetches a whole collection, lists its steps and waits for your go-ahead before applying them in order.
+
+If you want the same collection available without a server connection, the [Claude Code skills tutorial](/blog/claude-code-skills) shows how to export it as a skill.
+
+## When the server doesn't connect
+
+Each status and error below was captured during the tests.
+
+- **`! Needs authentication`.** The server is added and you haven't signed in, or the sign-in was revoked. Run `/mcp` and pick **Authenticate**, or `claude mcp login <name>`.
+- **`× Failed to connect` with `MCP endpoint not found at http://localhost:3100. Check the URL in your MCP config.`** The host is right and the path is wrong. Sniptide's server lives at `/api/mcp`, so `https://app.sniptide.com/mcp` fails. Remove the entry with `claude mcp remove <name>` and add it again.
+- **`ECONNREFUSED: Unable to connect. Is the computer able to access the url?`** Nothing is listening at that address. Check the port, VPN and, for a self-hosted instance, that the app is running.
+- **``⏸ Pending approval (run `claude` to approve)``.** The server comes from a project `.mcp.json` you haven't approved. Start `claude` in the project and accept it. `claude mcp reset-project-choices` clears earlier answers.
+- **The server is missing in another project.** It's in local scope. Add it again there, or move it to user scope with `claude mcp remove <name>` and `claude mcp add -s user ...`.
+- **`stdin isn't a terminal, so authentication can't be completed here`.** `claude mcp login` ran without an interactive terminal, for example inside a script. Run it in a normal terminal, or over `ssh -t`.
+- **A write tool returns `This token doesn't have the write scope.`** The connection is read-only. Add the server without the pinned `read` scope and sign in again, or use a token with write access.
+- **The tool list is empty.** Check the status first: a server that needs authentication or failed to connect exposes no tools. Inside a session, `/mcp` lets you reconnect, and Claude Code marks a server as failed after five failed reconnect attempts.
+
+{/* TODO(Dino): link Day 6 (Cursor MCP setup), Day 9 (MCP versus skills) and Day 8 (code snippet managers) here as each goes live. */}
+
+## Sources
+
+Checked on 13 November 2026.
+
+- Claude Code docs: [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp), including installation scopes, authentication from the command line, restricting OAuth scopes and MCP prompts
+- Sniptide docs: [MCP server](https://docs.sniptide.com/mcp), [OAuth for agents](https://docs.sniptide.com/oauth) and [API tokens](https://docs.sniptide.com/api-tokens)
+- Tests: Claude Code 2.1.323 with a fresh `CLAUDE_CONFIG_DIR`, connected to a Sniptide instance on `localhost:3100` built from the main branch. The commands above use the hosted address, `https://app.sniptide.com/api/mcp`, and the test outputs showed `http://localhost:3100/api/mcp` in its place. The plugin install was checked against the hosted app up to the sign-in step
