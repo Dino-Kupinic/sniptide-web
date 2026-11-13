@@ -21,8 +21,7 @@ import { ZoomImage } from "@/components/blog/zoom-image"
 // .blog-prose in app/globals.css; the named components are the docs' prose components.
 export const blogMdxComponents = {
   pre: (props: ComponentProps<"pre">) => <CodeBlock {...props} />,
-  // Tables scroll inside their own frame when they are wider than the text, rather than the page,
-  // and stack into labelled rows on phones (lib/rehype-table-labels.ts).
+  // Tables scroll inside their own frame when they are wider than the text, rather than the page.
   // Each cell sizes to its content between 8.5rem and 18rem (.blog-table in app/globals.css): table
   // cells ignore max-width, so the limit sits on a wrapper inside the cell.
   table: (props: ComponentProps<"table">) => (

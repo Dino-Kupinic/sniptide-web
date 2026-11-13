@@ -398,68 +398,17 @@ p {
   border-top: 1px solid var(--border);
 }
 
-/* On phones the text column is too narrow for two readable columns, so a plain table stacks: each
-   row becomes a block that opens with its first cell, and every other cell follows with its column
-   header (data-label, from lib/rehype-table-labels.ts). A short value sits beside its label and a
-   long one wraps below it. The header row stays for screen readers. Comparison tables keep their
-   pinned, scrolling grid, because a feature matrix is read across products. */
+/* On phones an 18rem first column fills most of the screen, and because it is pinned the other
+   columns have almost no room to scroll through. There it stops a little under half the
+   screen, padding included, and long text and code wrap inside it. Comparison tables set their own first column. */
 @media (width < 40rem) {
-  .blog-prose .blog-table:not(.blog-comparison > *) {
-    overflow: visible;
-    background: none;
+  .blog-prose .blog-table:not(.blog-comparison > *) :is(th, td):first-child .blog-cell {
+    max-width: calc(50vw - 2.5rem);
+    overflow-wrap: anywhere;
 
-    & table {
-      display: block;
-      width: auto;
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-
-    & thead {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-
-    & :is(tbody, tr, td) {
-      display: block;
-    }
-
-    & tbody tr {
-      padding: 0.75rem 0.875rem;
-    }
-
-    & tbody tr + tr {
-      border-top: 1px solid var(--border);
-    }
-
-    & tbody td {
-      position: static;
-      padding: 0;
-      border-top: 0;
-      background: none;
-      box-shadow: none;
-    }
-
-    & .blog-cell {
-      min-width: 0;
-      max-width: none;
-    }
-
-    & tbody td + td {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      column-gap: 0.5rem;
-      margin-top: 0.25rem;
-    }
-
-    & tbody td + td[data-label]::before {
-      content: attr(data-label);
-      color: var(--muted-foreground);
+    & code {
+      white-space: normal;
+      box-decoration-break: clone;
     }
   }
 }

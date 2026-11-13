@@ -45,10 +45,8 @@ draft: true # optional
   read them. Text sets at 17px on a 27px line (16px on 26px on phones) in a 35rem
   column, about 68 characters to a line (`.blog-prose` in `app/globals.css`). Inter loads its
   optical size axis for the whole site. Table cells grow with their text up to 18rem, and wide tables scroll
-  sideways inside their frame, with the first column pinned. Below 640px a plain table stacks
-  instead: each row becomes a block led by its first cell, and every other cell shows its column
-  header beside the value (`lib/rehype-table-labels.ts` copies the headers onto the cells).
-  `Comparison` tables keep the pinned, scrolling grid on phones.
+  sideways inside their frame, with the first column pinned. On phones the pinned column stops a
+  little under half the screen, so the other columns stay readable.
 - **Post page.** From 1280px the text sits between two sticky rails. The left one holds an "All
   posts" link, the author and two groups of actions (`components/blog/post-actions.tsx`): sharing
   (copy link, X, LinkedIn) and reading with AI (copy the post's Markdown, open it in ChatGPT or
