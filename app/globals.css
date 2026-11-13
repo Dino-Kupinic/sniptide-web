@@ -398,6 +398,21 @@ p {
   border-top: 1px solid var(--border);
 }
 
+/* On phones an 18rem first column fills most of the screen, and because it is pinned the other
+   columns have almost no room to scroll through. There it stops a little under half the
+   screen, padding included, and long text and code wrap inside it. Comparison tables set their own first column. */
+@media (width < 40rem) {
+  .blog-prose .blog-table:not(.blog-comparison > *) :is(th, td):first-child .blog-cell {
+    max-width: calc(50vw - 2.5rem);
+    overflow-wrap: anywhere;
+
+    & code {
+      white-space: normal;
+      box-decoration-break: clone;
+    }
+  }
+}
+
 /* The Comparison component (components/blog/comparison.tsx) styles a Markdown table: equal product
    columns that fit the frame on wide screens, markers for yes and no, group rows and a tinted
    column. */
