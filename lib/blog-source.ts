@@ -2,6 +2,7 @@ import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineCollections } from "fumadocs-mdx/macro"
 import { type PostMeta, postSchema, publishedPosts, slugFromPath } from "@/lib/blog"
 import { codeTheme } from "@/lib/code-theme"
+import { rehypeTableLabels } from "@/lib/rehype-table-labels"
 
 // The posts in content/blog, compiled by fumadocs-mdx when the site builds (next.config.ts). Each
 // entry carries its frontmatter, the compiled body and its Markdown for the .md twin.
@@ -10,9 +11,11 @@ const collection = defineCollections({
   dir: "content/blog",
   schema: postSchema,
   postprocess: { includeProcessedMarkdown: true },
-  // Fumadocs' defaults with the app's code colours in place of GitHub's themes.
+  // Fumadocs' defaults with the app's code colours in place of GitHub's themes, and column labels
+  // on table cells for the stacked phone layout.
   mdxOptions: applyMdxPreset({
     rehypeCodeOptions: { themes: { light: codeTheme, dark: codeTheme } },
+    rehypePlugins: (plugins) => [...plugins, rehypeTableLabels],
   }),
 })
 
