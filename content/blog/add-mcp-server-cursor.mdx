@@ -52,7 +52,9 @@ To add an MCP server to Cursor, put an entry under `mcpServers` in `~/.cursor/mc
 
 ## What you end up with
 
-By the end, Cursor's agent reads a pattern you saved earlier and applies it to the file you're working on. The example is the same one the [Claude Code MCP guide](/blog/add-mcp-server-claude-code) uses: a saved `fetchWithRetry` helper, and a small script whose `getRepo()` calls `fetch` once and gives up. That way you can compare the two clients on one task.
+By the end, Cursor's agent reads a pattern you saved earlier and applies it to the file you're working on. The example is the same one the [Claude Code MCP guide](/blog/add-mcp-server-claude-code) uses: a saved `fetchWithRetry` helper, and a small script whose `getRepo()` calls `fetch` once and gives up.
+
+The server responses in this guide were captured from the hosted app. The steps inside Cursor follow Cursor's docs and haven't been run in the app for this post yet, so no Cursor screen or chat output is quoted.
 
 You need Cursor, a browser for the one-time sign-in and an MCP server URL. This guide uses Sniptide's server at `https://app.sniptide.com/api/mcp`, which lets an agent search, read and save your snippets. The same configuration works for any remote server that supports Streamable HTTP or SSE.
 
@@ -162,13 +164,13 @@ The quickest end-to-end check is a question that needs one tool call. Ask the ag
 
 ## The first task: search, read, reuse
 
-A server that lists collections is connected. A server that changes your code the way you would is useful. Save a pattern you reach for often. Here it's a `fetch` wrapper with a timeout per attempt, backoff with jitter and support for `Retry-After`, saved as a private snippet called “fetch with retry, timeout and backoff”. The full file is in the [Claude Code guide](/blog/add-mcp-server-claude-code#the-first-task-search-read-reuse).
+Listing collections shows the server is connected, and a real task shows it is useful. Save a pattern you reach for often. Here it's a `fetch` wrapper with a timeout per attempt, backoff with jitter and support for `Retry-After`, saved as a private snippet called “fetch with retry, timeout and backoff”. The full file is in the [Claude Code guide](/blog/add-mcp-server-claude-code#the-first-task-search-read-reuse).
 
 Then, in the project, ask the agent in plain words:
 
 > Search my Sniptide snippets for a fetch retry helper, read the best match, and use it in src/github.ts so getRepo retries GitHub's rate limits and server errors.
 
-A well-behaved agent makes two Sniptide calls. `search_snippets` with a query like `fetch retry` returns summaries (title, description, tags and id), and `read_snippet` with the best match's id returns the full file. It then writes the helper next to your code and changes `getRepo()` to call it:
+A well-behaved agent makes two Sniptide calls. `search_snippets` with a query like `fetch retry` returns summaries (title, description, tags and id), and `read_snippet` with the best match's id returns the full file. It then writes the helper next to your code and changes `getRepo()` to call it. This diff is the one Claude Code produced from the same snippet:
 
 ```diff title="src/github.ts"
 +import { fetchWithRetry } from "./fetch-with-retry"
@@ -181,7 +183,7 @@ A well-behaved agent makes two Sniptide calls. `search_snippets` with a query li
  }
 ```
 
-That diff is the one Claude Code produced from the same snippet. By default, Cursor asks before it runs each MCP tool, and you can open the arrow next to the tool name to see the arguments it wants to send. Approve the two reads, and the change lands in the editor like any other agent edit.
+By default, Cursor asks before it runs each MCP tool, and you can open the arrow next to the tool name to see the arguments it wants to send. Approve the two reads, and the change lands in the editor like any other agent edit.
 
 Searching summaries first and reading one snippet keeps the conversation small. Sniptide's search matches when every word appears in the title, description, tags, file paths or code, so a descriptive title and two or three tags make snippets easy to find later.
 
@@ -246,7 +248,7 @@ The remote server is simpler when your client supports it, because there's nothi
 
 Commit `.cursor/mcp.json` at the project root, and everyone who opens the project gets the same server. Two rules keep it safe:
 
-- **Commit the shape, not the secret.** For an OAuth server, the entry is just the `url`, and each person signs in with their own account. For a token server, use `${env:...}` and let each person set the variable.
+- **Commit the entry and keep the secret in the environment.** For an OAuth server, the entry is just the `url`, and each person signs in with their own account. For a token server, use `${env:...}` and let each person set the variable.
 - **Keep each server in one place.** Cursor's docs don't say how a project entry and a global entry with the same name combine, so pick one file per server and give it one name.
 
 `${workspaceFolder}` resolves to the project root, which helps when a stdio server's script lives in the repository, as in `"args": ["${workspaceFolder}/tools/mcp-server.js"]`.
@@ -274,3 +276,4 @@ Checked on 14 November 2026.
 - Cursor docs: [Model Context Protocol](https://cursor.com/docs/mcp), including configuration locations, interpolation, static OAuth, redirect URLs, tool approval and the FAQ on logs and failures; [MCP install links](https://cursor.com/docs/mcp/install-links); [MCP in the CLI](https://cursor.com/docs/cli/mcp)
 - Sniptide docs: [MCP server](https://docs.sniptide.com/mcp), [OAuth for agents](https://docs.sniptide.com/oauth) and [API tokens](https://docs.sniptide.com/api-tokens)
 - Server responses: the `401` header, `/.well-known/oauth-protected-resource/api/mcp` and `/.well-known/oauth-authorization-server`, fetched from `https://app.sniptide.com` on 14 November 2026. The redirect URI rules and the install link match `lib/oauth/clients.ts` and `lib/onboarding.ts` in the Sniptide repository
+- Not yet run: the sign-in and the first task inside the Cursor app. Those steps follow Cursor's docs

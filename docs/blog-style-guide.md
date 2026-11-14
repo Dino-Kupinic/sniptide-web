@@ -8,7 +8,7 @@ Reviewed 6 November 2026. Sources are identified by aliases throughout. Source l
 
 This guide decides what a post says and how it is built. Three other sources decide the rest, and they win where they disagree with it:
 
-- The copy rules in `DESIGN.md` in the app repository: full sentences, no em dashes, no "It's X, not Y", sentence case, and the vocabulary in `docs/positioning.md` (paste, snippet, pattern, link, self-host, agent).
+- The copy rules in `DESIGN.md` in the app repository: full sentences, no em dashes, no "It's X, not Y", sentence case, and the vocabulary in rule 8 of those copy rules (paste, snippet, pattern, link, self-host, agent).
 - The frontmatter schema in `lib/blog.ts`, which the build checks.
 - `components/blog/mdx.tsx`, which lists every component a post can use, and the [blog guide](blog.md).
 
@@ -21,7 +21,9 @@ How the guide maps to the blog:
 | Opening | `description` restates the promise in one sentence of 50 to 160 characters, and the first paragraph delivers it |
 | Charts, screenshots and diagrams | `<Figure>` with a `caption` that follows the caption pattern in section 6, and a `darkSrc` when it shows the product |
 | Code | Fenced blocks with a `title`, `<Tabs>` for alternatives, and `<Steps>` for sequences |
-| Primary next step | One link or `<Callout>` in the post's last section. The footer under every post already carries the global sign-up prompt |
+| Summary | A practical guide can follow its opening paragraph with one `<Callout title="TL;DR">` of at most five bullets |
+| Primary next step | One `<InlineCta>`, link or `<Callout>` where the reader has enough context to act, with a label that names the action. The footer under every post already carries the global sign-up prompt |
+| Evidence | A closing `## Sources` section with the date the facts were checked, the pages behind them and the versions any test ran on. A step that was not run is listed there as "Not yet run" and qualified where the post describes it |
 | Cover | `cover` and `coverDark` for the index, and `image` for the share card |
 
 ## 1. Editorial direction

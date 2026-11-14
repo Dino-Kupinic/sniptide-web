@@ -2,6 +2,7 @@
 title: How to add an MCP server to Claude Code and reuse saved code
 description: Add an MCP server to Claude Code, choose the configuration scope, authenticate and verify the connection by retrieving a saved code pattern.
 date: 2026-11-13
+updated: 2026-11-14
 author: dino
 category: agents
 tags: [claude-code, mcp, agents, snippets, oauth]
@@ -70,11 +71,11 @@ Sniptide's server runs inside the app at `/api/mcp`, on the hosted app and on ev
 
 The scope decides which projects load the server and whether your team gets it too.
 
-| Scope | Stored in |
-| --- | --- |
-| `local` | `~/.claude.json` |
-| `project` | `.mcp.json` |
-| `user` | `~/.claude.json` |
+| Scope | Stored in | Loads in |
+| --- | --- | --- |
+| `local` | `~/.claude.json` | This project, for you |
+| `project` | `.mcp.json` | This project, for the team |
+| `user` | `~/.claude.json` | Every project, for you |
 
 **Local** is the default. Claude Code saves the server under the current project's path in `~/.claude.json`, so it loads only in this project and nobody else sees it. In the test, a server added in one folder didn't appear in `claude mcp list` from another folder.
 
@@ -190,7 +191,7 @@ Then, in the project, ask for the change in plain words:
   caption="Search the summaries, read one snippet, then change the code."
 />
 
-Claude made two Sniptide calls. `search_snippets` with `{"query": "fetch retry"}` returned the snippet's summary: title, description, tags and id. Then `read_snippet` with `{"id": "hv9tkkmw"}` returned the full file. It wrote the helper to `src/fetch-with-retry.ts` unchanged, made the edit in `src/github.ts` shown at the top of this post, and finished in 8 turns and about 16 seconds.
+Claude made two Sniptide calls. `search_snippets` with `{"query": "fetch retry"}` returned the snippet's summary: title, description, tags and id. Then `read_snippet` with `{"id": "hv9tkkmw"}` returned the full file. It wrote the helper to `src/fetch-with-retry.ts` unchanged, made the edit in `src/github.ts` shown at the top of this post, and in this run it finished in 8 turns and about 16 seconds.
 
 The useful part came at the end. Claude pointed out that GitHub usually signals its primary rate limit with a `403` and `x-ratelimit-remaining: 0`, which the snippet doesn't retry, so `getRepo` now covers `429` and server errors but not that case. It offered to add the check. That's the kind of answer you want from reuse: the saved pattern as written, plus a clear note on where it doesn't fit this API.
 
@@ -204,12 +205,6 @@ claude -p "Find my fetch retry snippet in Sniptide and use it in src/github.ts."
 ```
 
 A `claude -p` run can't show the sign-in page, so sign in once interactively first.
-
-Sniptide is best for a developer who wants the code they already wrote to be one search away inside Claude Code, on the hosted app at sniptide.com or on their own server. If you'd rather run it yourself, Sniptide self-hosts with Docker Compose in one command on a Linux server with Docker and the Compose plugin:
-
-```bash title="Terminal"
-curl -fsSL https://sniptide.com/install.sh | sh
-```
 
 <InlineCta
   title="Connect Sniptide to Claude Code"

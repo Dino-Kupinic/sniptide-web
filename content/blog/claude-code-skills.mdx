@@ -2,6 +2,7 @@
 title: "Claude Code skills tutorial: build a reusable code library"
 description: Create a working Claude Code skill from a small code library. See the files, install scope, invocation and how to refresh an exported collection.
 date: 2026-11-08
+updated: 2026-11-14
 author: dino
 category: agents
 tags: [claude-code, skills, agents, collections, cli]
@@ -180,7 +181,7 @@ Open a different project and start Claude Code. You can let Claude pick the skil
 Add an empty state to the projects page for when the list is empty.
 ```
 
-Claude matches "empty state" against the description, loads `SKILL.md`, then opens `snippets/empty-state/empty-state.tsx` and adapts it to the project.
+According to the Claude Code docs, Claude matches "empty state" against the description, loads `SKILL.md`, then opens `snippets/empty-state/empty-state.tsx` and adapts it to the project.
 
 </Tab>
 <Tab value="Call it directly">
@@ -216,9 +217,15 @@ Copying folders by hand works for one project. It breaks down when the button ch
 Push each pattern into a collection called `ui`. The collection has to exist already; create it in the app first.
 
 ```bash title="Terminal"
-sniptide push src/components/button.tsx --title 'Button with variants' --collection ui --tag react
-sniptide push src/hooks/use-debounced-value.ts --title 'Debounced value hook' --collection ui --tag react
-sniptide push src/components/empty-state.tsx --title 'Empty state' --collection ui --tag react
+sniptide push src/components/button.tsx --title 'Button with variants' \
+  --description 'A button with primary, secondary and ghost variants.' \
+  --collection ui --tag react --tag tailwind
+sniptide push src/hooks/use-debounced-value.ts --title 'Debounced value hook' \
+  --description 'Delays a changing value, for search fields.' \
+  --collection ui --tag react
+sniptide push src/components/empty-state.tsx --title 'Empty state' \
+  --description 'An icon, a title, one line of help and an action.' \
+  --collection ui --tag react --tag tailwind
 ```
 
 </Step>
@@ -301,7 +308,7 @@ If you'd rather not refresh at all, connect Claude Code to Sniptide's [MCP serve
   title="Turn your patterns into a skill"
   description="Save them in a collection once, then install them in any project with one command."
   href="https://app.sniptide.com/sign-up"
-  label="Try Sniptide"
+  label="Create your first collection"
   secondaryHref="https://docs.sniptide.com/cli"
   secondaryLabel="Read the CLI docs"
 />
@@ -327,3 +334,4 @@ Checked on 8 November 2026.
 - [Claude Code docs: Extend Claude with skills](https://code.claude.com/docs/en/skills)
 - [Agent Skills](https://agentskills.io)
 - Sniptide: [CLI](https://docs.sniptide.com/cli), [MCP server](https://docs.sniptide.com/mcp), and the `@sniptide/cli` 0.3.0 package for the generated `SKILL.md`
+- Not yet run: the second-project walkthrough in a clean project. Its steps follow the Claude Code docs

@@ -2,6 +2,7 @@
 title: "Docker Compose .env vs env_file: which variables reach the container?"
 description: Run a small Docker Compose example to see how .env interpolation, env_file and environment differ, including precedence and common loading failures.
 date: 2026-11-12
+updated: 2026-11-14
 author: dino
 category: engineering
 tags: [docker, compose, env, configuration, secrets]
@@ -143,15 +144,20 @@ If you want a `.env` value in the container without naming each one, list `.env`
 
 ## Which value wins? The precedence matrix
 
-To test precedence, each row below sets one variable, `PORT`, in a different combination of places and prints what the container received. The image is `alpine:3.20` with `ENV PORT=5000`, `app.env` holds `PORT=3000` and `.env` holds `PORT=7000`.
+To test precedence, each row below sets one variable, `PORT`, in a different combination of places and prints what the container received. The image is `alpine:3.20` with `ENV PORT=5000`, `app.env` holds `PORT=3000` and `.env` holds `PORT=7000`. To rerun the rows, build that image from this file and replace `image:` with `build: .` in `compose.yaml`:
+
+```dockerfile title="Dockerfile"
+FROM alpine:3.20
+ENV PORT=5000
+```
 
 | Where PORT is set | Container gets |
 | --- | --- |
 | Image `ENV` only | `5000` |
 | Image, plus `env_file` | `3000` |
 | Image, `env_file`, plus `environment: PORT: "8080"` | `8080` |
-| The row above, plus `PORT=9999` exported in the shell | `8080` |
-| The row above, plus `docker compose run -e PORT=1234` | `1234` |
+| Image, `env_file`, `environment: PORT: "8080"`, plus `PORT=9999` exported in the shell | `8080` |
+| Image, `env_file`, `environment: PORT: "8080"`, shell `9999`, plus `docker compose run -e PORT=1234` | `1234` |
 | Image and `env_file`, plus `run -e PORT=1234` | `1234` |
 | `env_file`, plus `environment: PORT: ${PORT}`, with `.env` | `7000` |
 | `env_file`, plus `environment: PORT: ${PORT}`, with `.env` and shell `9999` | `9999` |
@@ -210,11 +216,7 @@ The pulled file starts with a comment such as `# sniptide env acme-notes revisio
 
 You can also skip the file with `sniptide env run acme-notes -- docker compose up`. Then the values arrive as Compose's shell environment, so the precedence rules above apply: they fill `${VAR}` and bare names, and they don't reach the container on their own.
 
-Sniptide is a good fit when a solo developer or small team wants a Compose project's env file on every machine with one command, without sending it through chat. If you'd rather keep those values on your own server, Sniptide itself self-hosts with Docker Compose in one command on a Linux server with Docker and the Compose plugin:
-
-```bash title="Terminal"
-curl -fsSL https://sniptide.com/install.sh | sh
-```
+If you'd rather keep those values on your own server, the [self-hosting guide](https://docs.sniptide.com/self-hosting/install-script) installs Sniptide with Docker Compose on a Linux server.
 
 <InlineCta
   title="Pull app.env before docker compose up"
