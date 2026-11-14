@@ -13,7 +13,9 @@ export function Tab({ children }: TabProps) {
 
 // Alternatives a reader picks one of, such as the same command for each package manager. The tab
 // row sits on the fill with a hairline below, and the active tab rises onto the page colour with a
-// hairline, as in packages/ui tabs. A code block inside a panel runs edge to edge.
+// hairline, as in packages/ui tabs. A code block inside a panel runs edge to edge. Only a block that
+// opens or closes the panel pulls into the padding above or below it, so a block between paragraphs
+// never covers the text next to it, and keeps a hairline on each side that meets text.
 export function Tabs({ children, className }: { children?: ReactNode; className?: string }) {
   const tabs = Children.toArray(children).filter((child): child is ReactElement<TabProps> =>
     isValidElement<TabProps>(child),
@@ -39,7 +41,7 @@ export function Tabs({ children, className }: { children?: ReactNode; className?
         <TabsPrimitive.Panel
           key={tab.props.value}
           value={tab.props.value}
-          className="p-4 text-[0.9375rem] leading-6 outline-none focus-visible:ring-2 focus-visible:ring-ring/40 [&>[data-code-block]]:-m-4 [&>[data-code-block]]:rounded-none [&>[data-code-block]]:border-0 [&>*+*]:mt-3"
+          className="p-4 text-[0.9375rem] leading-6 outline-none focus-visible:ring-2 focus-visible:ring-ring/40 [&>[data-code-block]]:-mx-4 [&>[data-code-block]]:rounded-none [&>[data-code-block]]:border-0 [&>[data-code-block]:first-child]:-mt-4 [&>[data-code-block]:last-child]:-mb-4 [&>[data-code-block]:not(:first-child)]:border-t [&>[data-code-block]:not(:last-child)]:border-b [&>*+*]:mt-3"
         >
           {tab.props.children}
         </TabsPrimitive.Panel>
