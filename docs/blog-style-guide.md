@@ -8,7 +8,7 @@ Reviewed 6 November 2026. Sources are identified by aliases throughout. Source l
 
 This guide decides what a post says and how it is built. Three other sources decide the rest, and they win where they disagree with it:
 
-- The copy rules in `DESIGN.md` in the app repository: full sentences, no em dashes, no "It's X, not Y", sentence case, and the vocabulary in `docs/positioning.md` (paste, snippet, pattern, link, self-host, agent).
+- The copy rules in `DESIGN.md` in the app repository: full sentences, no em dashes, no "It's X, not Y", sentence case, and the vocabulary in rule 8 of those copy rules (paste, snippet, pattern, link, self-host, agent).
 - The frontmatter schema in `lib/blog.ts`, which the build checks.
 - `components/blog/mdx.tsx`, which lists every component a post can use, and the [blog guide](blog.md).
 
@@ -21,8 +21,47 @@ How the guide maps to the blog:
 | Opening | `description` restates the promise in one sentence of 50 to 160 characters, and the first paragraph delivers it |
 | Charts, screenshots and diagrams | `<Figure>` with a `caption` that follows the caption pattern in section 6, and a `darkSrc` when it shows the product |
 | Code | Fenced blocks with a `title`, `<Tabs>` for alternatives, and `<Steps>` for sequences |
-| Primary next step | One link or `<Callout>` in the post's last section. The footer under every post already carries the global sign-up prompt |
+| Summary | A practical guide can follow its opening paragraph with one `<Callout title="TL;DR">` of at most five bullets |
+| Primary next step | One `<InlineCta>`, link or `<Callout>` where the reader has enough context to act, with a label that names the action. The footer under every post already carries the global sign-up prompt |
+| Evidence | A closing `## Sources` section with the date the facts were checked, the pages behind them and the versions any test ran on. A step that was not run is listed there as "Not yet run" and qualified where the post describes it |
 | Cover | `cover` and `coverDark` for the index, and `image` for the share card |
+
+### House rules
+
+These rules apply to every Sniptide post, on top of the sections below.
+
+**Evidence**
+
+- Run every step of a walkthrough before publishing, and record the tool versions under Sources. When a step was not run, say so in the paragraph that describes it and list it under Sources as "Not yet run". A hidden comment in the file does not qualify a claim for the reader.
+- Write "we checked the documentation" when the facts come from documentation, and keep "tested", "judged" and "ran" for hands-on work.
+- A caption or sentence that says "verified" covers every cell it sits on. Mark a cell that could not be confirmed with `?` or name it in the caption.
+- Generate example output from the commands shown above it. Flags, tags and descriptions in the output have to appear in the commands.
+- Give the reader every file a test needs. When a result depends on a Dockerfile, a fixture or a setting, show it or add it to the downloads in `public/blog/<slug>/`.
+- Scope a single measurement to its run, as in "in this run it finished in about 16 seconds".
+
+**Product mentions**
+
+- Mention Sniptide where it solves the step at hand, and state its limits beside the claim. A launch names what the product does not do, such as needing an account.
+- The self-host install command lives in the launch post and the self-hosting docs. Other posts link to the self-hosting guide in one sentence.
+- Write the "who Sniptide fits" statement at most once per post. A table row that already makes the point needs no paragraph repeating it.
+- A comparison keeps product detail in the table and in the list of gaps. A feature tour belongs in the launch post, which the comparison links to.
+
+**Next step**
+
+- The label of an `<InlineCta>` names the action from the post's brief, such as "Create your first paste" or "Create an env group". "Try Sniptide" names no action.
+- Place the call to action after the section that gives the reader a reason to act. In a comparison that is after the recommendations.
+
+**Visuals**
+
+- Show a step the reader performs in the product with a real screenshot and a `darkSrc`. Say "illustration" in the caption of a drawn figure that stands in for a screen.
+- A caption states the takeaway, as in ".env fills in compose.yaml. Only env_file and environment reach the container."
+- Keep a table inside the text column where possible, with three short columns or fewer. A wider table scrolls sideways, which suits a comparison and hides the last column of a small one.
+- Each row of a results table stands on its own. Spell out the full condition in every row.
+
+**Voice**
+
+- A post signed by one author uses "I" for what the author did and chose, and "we" for decisions the Sniptide team made. Keep one of the two for the testing in a post.
+- The copy rules in `DESIGN.md` apply to headings and bold lead-ins too, including full sentences and the rule against "X, not Y".
 
 ## 1. Editorial direction
 
@@ -322,6 +361,11 @@ Finish on the next useful thing the reader can do, the implication of the result
 - Does the CTA follow naturally from the article?
 - Have repeated sales language and unnecessary recaps been removed?
 - Are time-sensitive facts assigned a review date?
+- Was every walkthrough step run, and is each step that was not run named in the post and under Sources?
+- Does every output block match the commands above it, and can the reader rerun each test from the files provided?
+- Does the post state the product's limits, and does it leave out the install block and the feature tour that the launch post owns?
+- Does the call to action name its action, and does it sit after the section that motivates it?
+- Is every product step shown with a real screenshot and a dark variant, and is every drawn figure labeled as an illustration?
 
 ### Reusable writing brief
 

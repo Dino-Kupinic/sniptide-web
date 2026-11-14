@@ -2,6 +2,7 @@
 title: "What is a .env file? Format, examples and project setup"
 description: Learn the .env file format with a copyable example, quoting rules and .env.example guidance, then choose how to load and share project values.
 date: 2026-11-09
+updated: 2026-11-14
 author: dino
 category: engineering
 tags: [env, dotenv, configuration, secrets, cli]
@@ -240,8 +241,6 @@ The file stays on your machine, so the hard part is getting the real values to t
 | Secrets manager, such as Doppler or Infisical | You need audit logs, rotation and per-environment access rules | More setup than a small project needs |
 | Sniptide env group | A solo developer or small team wants the values in the same place as their shared code | Encrypted at rest with a key the server holds, so it doesn't replace a dedicated secrets manager |
 
-Sniptide is a good fit when a solo developer or small team wants a project's `.env` values next to the code they already share, encrypted at rest and pulled into any checkout with one command, on Sniptide's servers or their own. If you need audit logs, automatic rotation or fine-grained access policies, a dedicated secrets manager is the better pick.
-
 <Figure
   src="/blog/env-file/handoff.webp"
   alt="On your machine, sniptide env push acme-notes uploads .env into an env group called acme-notes, which stores the values encrypted. On a teammate's machine, sniptide env pull acme-notes writes .env, or sniptide env run starts the app with the values and writes no file."
@@ -255,12 +254,14 @@ Here is the handoff with the [Sniptide CLI](https://docs.sniptide.com/cli), usin
 
 ### Install the CLI and log in
 
+Create a token under **Settings**, **API tokens** in the app, with write access so the CLI can push, and export it as `SNIPTIDE_TOKEN`.
+
 ```bash title="Terminal"
 npm install --global @sniptide/cli
 printf '%s' "$SNIPTIDE_TOKEN" | sniptide login --token-stdin
 ```
 
-Create the token under **Settings**, **API tokens** in the app, with write access so the CLI can push. Add `--base-url` to `login` if you run your own instance.
+Add `--base-url` to `login` if you run your own instance.
 
 </Step>
 <Step>
@@ -293,11 +294,7 @@ sniptide env run acme-notes -- npm run dev
 
 You can also open the group on the **Secrets** page to edit values, reveal one at a time, or share it through a password-protected link that expires after an hour, a day or a week. The [encrypted secrets docs](https://docs.sniptide.com/core-concepts/secrets) explain how values are encrypted and what the server can read.
 
-If you'd rather keep the values on your own server, Sniptide self-hosts with one command on a Linux server with Docker and the Compose plugin:
-
-```bash title="Terminal"
-curl -fsSL https://sniptide.com/install.sh | sh
-```
+If you'd rather keep the values on your own server, the [self-hosting guide](https://docs.sniptide.com/self-hosting/install-script) installs Sniptide on a Linux server with Docker and the Compose plugin.
 
 <InlineCta
   title="Pull your .env into any project"
