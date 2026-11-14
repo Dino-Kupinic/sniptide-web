@@ -1,0 +1,276 @@
+---
+title: "How to add an MCP server to Cursor: mcp.json, OAuth and checks"
+description: Add a remote or local MCP server to Cursor with mcp.json or an install link, sign in with OAuth, keep tokens out of Git and check the tools work.
+date: 2026-11-14
+author: dino
+category: agents
+tags: [cursor, mcp, agents, snippets, oauth]
+cover: /blog/add-mcp-server-cursor/cover.webp
+coverAlt: The words “How to add an MCP server to Cursor” above six blue stripes that widen from left to right, on a near-black background.
+image: /blog/add-mcp-server-cursor/share.png
+---
+
+{/*
+Writing brief (docs/blog-style-guide.md, blog plan revision 2, Day 6)
+Reader: a Cursor user who wants a working MCP connection, set up once and shared with the team the right way, not a list of servers to try.
+Question or task: where does Cursor read MCP servers from, how do I add a remote one, how does sign-in work, how do I keep secrets out of the repo, and how do I know it works?
+Primary mode: Builder
+Article type: practical guide with a worked first task
+Central claim: a remote MCP server in Cursor is one entry with a url in mcp.json; OAuth servers need no headers at all, and the setup is done once the server's tools appear in chat and complete a real task.
+Evidence and sources: Cursor's MCP, MCP install links and CLI MCP docs, read on 14 November 2026 (cursor.com/docs/mcp, /docs/mcp/install-links, /docs/cli/mcp). Server behavior captured the same day from the hosted app: the 401 with its WWW-Authenticate header, the protected resource metadata and the authorization server metadata at app.sniptide.com. Redirect URI rules and the install link come from the Sniptide source (lib/oauth/clients.ts, lib/onboarding.ts) and docs.sniptide.com/mcp and /oauth.
+Not verified: the sign-in and the first task inside the Cursor app. Cursor's hosts are blocked in the sandbox used for this post, so no Cursor screen, version or chat output is quoted, and the UI steps follow Cursor's docs.
+Opening move: direct answer with the config
+Main sections: what you end up with, where Cursor reads servers, add a remote server (three ways), sign in, check, first task, tokens and read-only access, local stdio servers, team setup, troubleshooting
+Running example: the same saved fetchWithRetry snippet as the Claude Code post, so both posts tell one story
+Visuals: cover, the OAuth sign-in sequence
+Primary CTA: connect Sniptide to Cursor and read one saved snippet.
+Keyword: how to add mcp server to cursor (Google Autocomplete suggestion, 6 Nov). Secondary: cursor mcp.json, cursor mcp oauth. Route: /blog/add-mcp-server-cursor.
+Scope: this post owns the Cursor walkthrough. Claude Code lives in /blog/add-mcp-server-claude-code, and MCP versus skills belongs to a later post.
+*/}
+
+To add an MCP server to Cursor, put an entry under `mcpServers` in `~/.cursor/mcp.json` for every project, or in `.cursor/mcp.json` for one project. A remote server needs only a `url`, and a local one needs a `command`. If the server supports OAuth, Cursor opens your browser to sign in the first time, so the entry carries no token. The rest of this guide connects a real server, checks that its tools load and uses them for one useful task.
+
+```json title="~/.cursor/mcp.json"
+{
+  "mcpServers": {
+    "sniptide": {
+      "url": "https://app.sniptide.com/api/mcp"
+    }
+  }
+}
+```
+
+<Callout title="TL;DR">
+
+- `~/.cursor/mcp.json` loads the server in every project. `.cursor/mcp.json` in a project loads it there and can be committed for the team.
+- A remote server is `{ "url": "..." }`. Cursor speaks Streamable HTTP and the older SSE, so check which one the server offers.
+- For an OAuth server, leave out `headers`. Cursor finds the sign-in page, registers itself and opens the browser.
+- For a token, write `"Authorization": "Bearer ${env:SNIPTIDE_TOKEN}"` and keep the value in your shell, never in the file.
+- Prove it with a task: ask the agent to search a saved snippet, read it and use it in your code.
+
+</Callout>
+
+## What you end up with
+
+By the end, Cursor's agent reads a pattern you saved earlier and applies it to the file you're working on. The example is the same one the [Claude Code MCP guide](/blog/add-mcp-server-claude-code) uses: a saved `fetchWithRetry` helper, and a small script whose `getRepo()` calls `fetch` once and gives up. That way you can compare the two clients on one task.
+
+You need Cursor, a browser for the one-time sign-in and an MCP server URL. This guide uses Sniptide's server at `https://app.sniptide.com/api/mcp`, which lets an agent search, read and save your snippets. The same configuration works for any remote server that supports Streamable HTTP or SSE.
+
+## Where Cursor reads MCP servers
+
+Cursor reads the same `mcpServers` format from two places:
+
+- **`~/.cursor/mcp.json`** loads in every project on your machine. Use it for a server you want everywhere, like your snippet library.
+- **`.cursor/mcp.json`** loads in the project that contains it, for everyone who opens it. Use it for a server the whole team should get from the repository.
+
+The Cursor CLI uses the same configuration as the editor, so a server you add once works in both. Cursor's docs describe the lookup order as project, then global, then nested, and the CLI also picks up configuration from parent folders.
+
+Inside an entry, a few fields decide what kind of server it is:
+
+- **`url`** makes it a remote server. Cursor connects over Streamable HTTP or SSE, whichever the server speaks. Sniptide's server uses Streamable HTTP, so a plain `url` is enough.
+- **`command`** with `args` makes it a local stdio server that Cursor starts for you, for example `npx some-mcp-server`.
+- **`headers`** and **`env`** pass credentials. Both accept `${env:NAME}`, so the secret stays in your environment.
+- **`auth`** holds a fixed OAuth client ID for providers that don't let clients register themselves. Most servers that support OAuth don't need it.
+
+## Add a remote server
+
+There are three ways in, and they all end in the same `mcp.json` entry.
+
+<Tabs items={["Edit mcp.json", "Install link", "Customize"]}>
+<Tab value="Edit mcp.json">
+
+Open `~/.cursor/mcp.json`, or create it, and add the server:
+
+```json title="~/.cursor/mcp.json"
+{
+  "mcpServers": {
+    "sniptide": {
+      "url": "https://app.sniptide.com/api/mcp"
+    }
+  }
+}
+```
+
+For a self-hosted Sniptide, replace the host with your instance's address and keep `/api/mcp`. If the file already has servers, add `sniptide` next to them inside the same `mcpServers` object.
+
+</Tab>
+<Tab value="Install link">
+
+Cursor installs a server from a link that carries its name and its `mcp.json` entry, base64-encoded, in the `config` parameter. For Sniptide's hosted server, the encoded entry is the `url` alone, and the link is:
+
+```text title="Install link"
+cursor://anysphere.cursor-deeplink/mcp/install?name=sniptide&config=eyJ1cmwiOiJodHRwczovL2FwcC5zbmlwdGlkZS5jb20vYXBpL21jcCJ9
+```
+
+Paste it into your browser's address bar, and Cursor asks whether to install the server. Sniptide's welcome setup and dashboard show an **Add to Cursor** button that opens the same link, with your instance's address filled in.
+
+To build a link for another server, encode its entry and put the result after `config=`:
+
+```bash title="Terminal"
+printf '%s' '{"url":"https://app.sniptide.com/api/mcp"}' | base64
+```
+
+</Tab>
+<Tab value="Customize">
+
+Cursor's docs put MCP management on the **Customize** page in the sidebar. From there you can install servers from the Cursor Marketplace, add a custom one, and turn each server on or off without deleting it. A custom server you add there is written to `mcp.json`, so the result matches the other two tabs.
+
+</Tab>
+</Tabs>
+
+## Sign in with OAuth
+
+The entry above has no `headers`, and that's on purpose. Sniptide's server supports OAuth, so the first request without a token comes back as a `401` that tells Cursor where to sign in. This is the exact header the hosted app sent on 14 November:
+
+```http title="Response from https://app.sniptide.com/api/mcp"
+HTTP/1.1 401 Unauthorized
+Www-Authenticate: Bearer error="invalid_token", resource_metadata="https://app.sniptide.com/.well-known/oauth-protected-resource/api/mcp"
+```
+
+<Figure
+  src="/blog/add-mcp-server-cursor/sign-in.webp"
+  alt="Four steps from top to bottom. Cursor calls /api/mcp and gets a 401 that points to the resource metadata. Cursor registers itself at /api/oauth/register with PKCE and no secret. You approve on the Sniptide consent page with Allow access. The server's tools, such as search_snippets and read_snippet, show up in chat."
+  caption="Cursor finds the sign-in page from the server's 401, registers itself and waits for you to allow access."
+/>
+
+Cursor follows that pointer on its own. It reads the metadata, finds the authorization server, registers itself as a public client with no secret and opens the consent page in your browser. The desktop app listens on `http://localhost:8787/callback`, and Sniptide accepts loopback redirects on any port, so there's nothing to configure. On the Sniptide page, check that you started the connection from Cursor and pick **Allow access**.
+
+Two details are worth knowing before you click:
+
+- **Scopes.** When the entry names no scopes, Cursor reads `scopes_supported` from the server's metadata and asks for those. Sniptide lists `read` and `write`, so the consent page asks for both: search and read your snippets, and create, edit and delete them. For a read-only agent, use a read-only token instead, as shown in [Tokens and read-only access](#tokens-and-read-only-access).
+- **Renewal.** Cursor renews the access token with the refresh token the server issued. Sniptide's access tokens last an hour and its refresh tokens 30 days without use, so in practice you sign in once and stay connected while you keep using it.
+
+Sniptide lists the connection under **Settings** > **API tokens** with "Connected with OAuth" and Cursor's logo. **Revoke** there ends it at once.
+
+## Check that it works
+
+In the editor, open **Customize** and look for `sniptide`. Once you've signed in, the entry lists the server's tools. Sniptide has nine tools: `search_snippets`, `read_snippet`, `list_collections` and `fetch_collection` read, and five more create, edit and trash.
+
+In a terminal, the Cursor CLI shows the same servers:
+
+```bash title="Terminal"
+agent mcp list
+agent mcp list-tools sniptide
+agent mcp login sniptide
+```
+
+`agent mcp list` shows each server's status, source (project or global) and transport, `list-tools` prints a server's tools with their parameters, and `login` runs the OAuth sign-in for a server in your `mcp.json`.
+
+The quickest end-to-end check is a question that needs one tool call. Ask the agent to list your Sniptide collections. It calls `list_collections` and answers with your collections, or with an empty list on a new account.
+
+{/* TODO(Dino): run this walkthrough in Cursor, record the Cursor version, and add a screenshot of the server in Customize with its tools listed. Replace the status descriptions above with the exact wording Cursor shows. */}
+
+## The first task: search, read, reuse
+
+A server that lists collections is connected. A server that changes your code the way you would is useful. Save a pattern you reach for often. Here it's a `fetch` wrapper with a timeout per attempt, backoff with jitter and support for `Retry-After`, saved as a private snippet called “fetch with retry, timeout and backoff”. The full file is in the [Claude Code guide](/blog/add-mcp-server-claude-code#the-first-task-search-read-reuse).
+
+Then, in the project, ask the agent in plain words:
+
+> Search my Sniptide snippets for a fetch retry helper, read the best match, and use it in src/github.ts so getRepo retries GitHub's rate limits and server errors.
+
+A well-behaved agent makes two Sniptide calls. `search_snippets` with a query like `fetch retry` returns summaries (title, description, tags and id), and `read_snippet` with the best match's id returns the full file. It then writes the helper next to your code and changes `getRepo()` to call it:
+
+```diff title="src/github.ts"
++import { fetchWithRetry } from "./fetch-with-retry"
++
+ export async function getRepo(owner: string, name: string) {
+-  const res = await fetch(`https://api.github.com/repos/${owner}/${name}`)
++  const res = await fetchWithRetry(`https://api.github.com/repos/${owner}/${name}`)
+   if (!res.ok) throw new Error(`GitHub returned ${res.status}`)
+   return res.json()
+ }
+```
+
+That diff is the one Claude Code produced from the same snippet. By default, Cursor asks before it runs each MCP tool, and you can open the arrow next to the tool name to see the arguments it wants to send. Approve the two reads, and the change lands in the editor like any other agent edit.
+
+Searching summaries first and reading one snippet keeps the conversation small. Sniptide's search matches when every word appears in the title, description, tags, file paths or code, so a descriptive title and two or three tags make snippets easy to find later.
+
+Sniptide also offers three MCP prompts, which Cursor lists in the slash menu: `use_snippet` runs the search, read and adapt loop for a task, `save_snippet` turns code in the chat into a private snippet after you confirm, and `apply_collection` walks through a whole collection step by step.
+
+<InlineCta
+  title="Connect Sniptide to Cursor"
+  description="Save the patterns you reuse, then let Cursor's agent search and read them while it works."
+  href="https://app.sniptide.com/sign-up"
+  label="Create a free account"
+  secondaryHref="https://docs.sniptide.com/mcp"
+  secondaryLabel="Read the MCP docs"
+/>
+
+## Tokens and read-only access
+
+OAuth fits a person at a keyboard. Use a personal API token when the server or client can't do OAuth, or when you want the agent limited to reading.
+
+Create a **read-only** token in Sniptide under **Settings** > **API tokens**, export it in your shell profile, and reference it from the entry:
+
+```json title="~/.cursor/mcp.json"
+{
+  "mcpServers": {
+    "sniptide": {
+      "url": "https://app.sniptide.com/api/mcp",
+      "headers": { "Authorization": "Bearer ${env:SNIPTIDE_TOKEN}" }
+    }
+  }
+}
+```
+
+```bash title="~/.zshrc"
+export SNIPTIDE_TOKEN="snpt_your_read_only_token"
+```
+
+Cursor resolves `${env:NAME}` in `command`, `args`, `env`, `url` and `headers`, so the file holds no secret and can sit in a public dotfiles repo. Restart Cursor after you change your profile, so it picks up the new value. With a read-only token, Cursor still lists every tool, and Sniptide refuses the write calls with `This token doesn't have the write scope.`
+
+Remote servers don't support `envFile`, which only works for stdio servers. For a remote server, the token has to come from the environment.
+
+## Run a local stdio server
+
+Some servers only run as a local program. Cursor starts them with `command` and `args`, and passes credentials through `env`. Sniptide publishes the same tools as a stdio package, `@sniptide/mcp`, which needs Node.js 24 or newer and an API token:
+
+```json title="~/.cursor/mcp.json"
+{
+  "mcpServers": {
+    "sniptide": {
+      "command": "npx",
+      "args": ["--yes", "@sniptide/mcp"],
+      "env": {
+        "SNIPTIDE_TOKEN": "${env:SNIPTIDE_TOKEN}",
+        "SNIPTIDE_BASE_URL": "https://app.sniptide.com"
+      }
+    }
+  }
+}
+```
+
+The remote server is simpler when your client supports it, because there's nothing to install or update. Reach for stdio when a server only exists as a package, or when it needs files on your machine.
+
+## Share a server with your team
+
+Commit `.cursor/mcp.json` at the project root, and everyone who opens the project gets the same server. Two rules keep it safe:
+
+- **Commit the shape, not the secret.** For an OAuth server, the entry is just the `url`, and each person signs in with their own account. For a token server, use `${env:...}` and let each person set the variable.
+- **Keep each server in one place.** Cursor's docs don't say how a project entry and a global entry with the same name combine, so pick one file per server and give it one name.
+
+`${workspaceFolder}` resolves to the project root, which helps when a stdio server's script lives in the repository, as in `"args": ["${workspaceFolder}/tools/mcp-server.js"]`.
+
+Cursor team admins can also distribute servers from the Cursor dashboard, and admins can allowlist which servers and tools may run. Cursor's MCP docs cover those settings.
+
+## When the server doesn't work
+
+Cursor writes MCP logs to the Output panel. Press <Kbd>⌘⇧U</Kbd> (<Kbd>Ctrl+Shift+U</Kbd> on Windows and Linux), choose **MCP Logs** from the dropdown, and look for connection, sign-in and crash errors. These are the usual causes:
+
+- **The server shows up but has no tools.** It hasn't signed in yet, or the sign-in was revoked. Sign in from Customize, or run `agent mcp login sniptide` in a terminal.
+- **A `404` from the server.** The host is right and the path is wrong. Sniptide's server lives at `/api/mcp`, so `https://app.sniptide.com/mcp` fails.
+- **A `405` from the server.** A plain `GET` reached the endpoint, which is what a client does when it connects over the older SSE transport. Sniptide's server is stateless and speaks only Streamable HTTP, which works with a plain `url` entry.
+- **A `401` with a token in `headers`.** The token is missing, expired or revoked, or `${env:SNIPTIDE_TOKEN}` resolved to nothing because Cursor started before you exported it. Restart Cursor from a shell that has the variable, or check the token under **Settings** > **API tokens**.
+- **The server works in one project and not another.** It's in that project's `.cursor/mcp.json`. Move it to `~/.cursor/mcp.json` to have it everywhere.
+- **A write tool returns `This token doesn't have the write scope.`** The token or connection is read-only. Use a token with **Write access**, or sign in again through OAuth.
+- **One server fails and the rest keep working.** That's by design: Cursor isolates server failures, marks the tool call as failed and shows the error in chat. Turn the broken server off in Customize while you fix it.
+
+If you also use Claude Code, the [Claude Code MCP guide](/blog/add-mcp-server-claude-code) covers its scopes, the `/mcp` sign-in and its error messages for the same server.
+
+## Sources
+
+Checked on 14 November 2026.
+
+- Cursor docs: [Model Context Protocol](https://cursor.com/docs/mcp), including configuration locations, interpolation, static OAuth, redirect URLs, tool approval and the FAQ on logs and failures; [MCP install links](https://cursor.com/docs/mcp/install-links); [MCP in the CLI](https://cursor.com/docs/cli/mcp)
+- Sniptide docs: [MCP server](https://docs.sniptide.com/mcp), [OAuth for agents](https://docs.sniptide.com/oauth) and [API tokens](https://docs.sniptide.com/api-tokens)
+- Server responses: the `401` header, `/.well-known/oauth-protected-resource/api/mcp` and `/.well-known/oauth-authorization-server`, fetched from `https://app.sniptide.com` on 14 November 2026. The redirect URI rules and the install link match `lib/oauth/clients.ts` and `lib/onboarding.ts` in the Sniptide repository

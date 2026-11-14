@@ -259,7 +259,9 @@ Each status and error below was captured during the tests.
 - **A write tool returns `This token doesn't have the write scope.`** The connection is read-only. Add the server without the pinned `read` scope and sign in again, or use a token with write access.
 - **The tool list is empty.** Check the status first: a server that needs authentication or failed to connect exposes no tools. Inside a session, `/mcp` lets you reconnect, and Claude Code marks a server as failed after five failed reconnect attempts.
 
-{/* TODO(Dino): link Day 6 (Cursor MCP setup), Day 9 (MCP versus skills) and Day 8 (code snippet managers) here as each goes live. */}
+If you also work in Cursor, [How to add an MCP server to Cursor](/blog/add-mcp-server-cursor) connects the same server there, with `mcp.json` and an install link.
+
+{/* TODO(Dino): link Day 9 (MCP versus skills) and Day 8 (code snippet managers) here as each goes live. */}
 
 ## Sources
 
