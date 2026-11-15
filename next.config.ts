@@ -37,6 +37,17 @@ const nextConfig: NextConfig = {
       { source: "/docs", destination: documentation.home.url, permanent: true },
       { source: "/docs/mcp", destination: documentation.mcp.url, permanent: true },
       { source: "/docs/auth", destination: documentation.oauth.url, permanent: true },
+      // The Cursor MCP post became a section of the Claude Code MCP post.
+      {
+        source: "/blog/add-mcp-server-cursor",
+        destination: "/blog/add-mcp-server-claude-code#the-same-server-in-cursor",
+        permanent: true,
+      },
+      {
+        source: "/blog/add-mcp-server-cursor.md",
+        destination: "/blog/add-mcp-server-claude-code.md",
+        permanent: true,
+      },
       {
         source: `/:page(${appPages})/:rest*`,
         destination: `${appUrl}/:page/:rest*`,

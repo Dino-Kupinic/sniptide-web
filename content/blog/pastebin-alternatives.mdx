@@ -2,7 +2,7 @@
 title: Best Pastebin alternatives for code in 2026
 description: Compare Pastebin alternatives for code, private links and self-hosting, with sourced trade-offs and a clear pick for each job.
 date: 2026-11-07
-updated: 2026-11-14
+updated: 2026-11-15
 author: dino
 category: product
 tags: [comparison, pastebin, self-hosting, privatebin, gist, hastebin]
@@ -39,7 +39,7 @@ That's the real reason most developers go looking for a Pastebin alternative. Pa
 - **Code comes in more than one file.** A config is rarely a single file. A useful paste holds the app, its config and the `.env.example` together.
 - **You want control over who reads it.** Passwords, expiry, a link that burns after one read, or a private paste you share with two named people.
 - **You want it on your own server.** For work code, a pastebin on your own domain keeps the data where you can see it.
-- **The old tools feel old.** Ads, cramped editors and no dark mode make a quick paste feel like a chore.
+- **The old tools feel old.** On 15 November 2026, Pastebin's consent banner asked to share visitor data with 1,750 advertising partners, and the public paste list next to the editor was mostly crypto scams. A quick paste shouldn't come with either.
 - **Your coding agent needs it too.** Claude Code, Codex and Cursor work better from your saved patterns than from a fresh guess.
 
 ## Best for
@@ -99,7 +99,7 @@ This is a three-file save, revise and retrieve task, so it says nothing about se
 
 ## The comparison
 
-<Comparison highlight={1} caption="Sniptide publishes this comparison. Last verified 9 November 2026, against the pages under Sources. A dash means no, a question mark means the docs don't say, and a dash under MCP means I found no server. Pastebin's FAQ page refused automated requests on that date, so treat the Pastebin column as unconfirmed, burn after reading in particular.">
+<Comparison highlight={1} caption="Sniptide publishes this comparison. Last verified 9 November 2026, against the pages under Sources. A dash means no, a question mark means the docs don't say, and a dash under MCP means I found no server. The Pastebin column's sharing rows were checked against its paste form and FAQ on 15 November 2026.">
 
 | | Sniptide | PrivateBin | Opengist | MicroBin | GitHub Gist | Pastebin | Hastebin | Pastes.io |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -141,8 +141,6 @@ This is a three-file save, revise and retrieve task, so it says nothing about se
 | Open source | AGPL-3.0 | zlib | AGPL-3.0 | BSD-3-Clause | – | – | ~MIT fork | ~CLI only |
 
 </Comparison>
-
-{/* TODO(Dino): pastebin.com/faq refused automated fetches. Check the Pastebin.com column, especially burn after reading, before relying on it. */}
 
 ## What "private" means in each tool
 
@@ -232,7 +230,7 @@ Some gaps matter for this comparison. An end-to-end encrypted paste is created a
 
 Before you share anything sensitive on any of these tools, check three things: whether the link alone opens it, when it expires, and who can read it on the server.
 
-To let a coding agent search and read your saved pastes, see [How to add an MCP server to Claude Code](/blog/add-mcp-server-claude-code) or [to Cursor](/blog/add-mcp-server-cursor).
+To let a coding agent search and read your saved pastes, see [How to add an MCP server to Claude Code and Cursor](/blog/add-mcp-server-claude-code).
 
 {/* TODO(Dino): link Day 8 (code snippet managers) and Day 10 (self-hosted pastebin) here as each goes live. */}
 
@@ -245,6 +243,6 @@ Last verified on 9 November 2026, and Sniptide's encrypted pastes on 12 November
 - Opengist: [features](https://github.com/thomiceli/opengist/blob/master/docs/introduction.md#features), [REST API and OpenAPI spec](https://github.com/thomiceli/opengist/blob/master/docs/api.md), [changelog with expiry in 1.14.0](https://github.com/thomiceli/opengist/blob/master/CHANGELOG.md), [link preview tags](https://github.com/thomiceli/opengist/blob/master/templates/partials/seo_meta.html), [custom URL setting](https://github.com/thomiceli/opengist/blob/master/templates/pages/gist_settings.html), [community MCP server `opengist-mcp`](https://github.com/ni-c/opengist-mcp)
 - MicroBin: [features](https://github.com/szabodanika/microbin#features), [privacy and password options](https://github.com/szabodanika/microbin/blob/master/templates/index.html), [defaults for encryption and burn after reading](https://github.com/szabodanika/microbin/blob/master/src/args.rs)
 - GitHub Gist: [creating gists and secret gists](https://docs.github.com/en/get-started/writing-on-github/editing-and-sharing-content-with-gists/creating-gists), [REST API](https://docs.github.com/en/rest/gists/gists), [GitHub MCP server gist tools](https://github.com/github/github-mcp-server#tool-configuration)
-- Pastebin: [new paste form](https://pastebin.com/), [FAQ with folders and editing](https://pastebin.com/faq) (not loaded on 9 November), [Pro limits](https://pastebin.com/pro)
+- Pastebin: [new paste form](https://pastebin.com/), [FAQ with folders, limits and paste sizes](https://pastebin.com/faq) (checked by hand on 15 November), [Pro limits](https://pastebin.com/pro)
 - Hastebin: [API documentation and retention](https://www.toptal.com/developers/hastebin/documentation), [haste-server community fork](https://github.com/jirutka/haste-server)
 - Pastes.io: [plan comparison](https://pastes.io/pricing), [API documentation](https://pastes.io/docs), [MCP server](https://pastes.io/docs/mcp)
