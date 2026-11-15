@@ -284,7 +284,7 @@ export default function Privacy() {
           address, and is based in {cdn.country}.
         </li>
         <li>PostHog processes the analytics events and error reports described above.</li>
-        <li>{emailProvider} , based in the United States, delivers the app&apos;s emails.</li>
+        <li>{emailProvider}, based in the United States, delivers the app&apos;s emails.</li>
         <li>Linear stores bug reports and feedback, and Anthropic answers support questions.</li>
         <li>
           GitHub or Google receive a request when you choose to sign in with them, and we receive
