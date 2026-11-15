@@ -4,13 +4,14 @@ import { appBase, repoUrl, siteName, siteUrl } from "@/lib/site"
 import { agentSkills } from "@/lib/skills"
 
 // Who publishes every entry. The domain matches the sniptide.com segment of each identifier, and
-// the operator and source repository are the ones the Impressum and About page name. No
-// attestation or signature is claimed, because none has been issued.
+// the source repository is the one the About page names. The Impressum names the operator, so the
+// manifest links to it instead of repeating a personal name. No attestation or signature is
+// claimed, because none has been issued.
 const trustManifest = {
   identity: {
     domain: "sniptide.com",
     publisher: siteName,
-    operator: operator.name,
+    legalNotice: `${siteUrl}/impressum`,
     url: siteUrl,
     contact: operator.email,
     sourceRepository: repoUrl,

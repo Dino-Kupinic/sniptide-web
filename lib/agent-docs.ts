@@ -226,7 +226,7 @@ export const aboutDocument: AgentDocument = {
     },
     {
       title: "Operator",
-      paragraphs: [`Sniptide is operated by ${operator.name}.`],
+      paragraphs: ["The Impressum names the operator of Sniptide and gives the postal address."],
       links: [{ label: "Impressum", href: `${siteUrl}/impressum` }],
     },
   ],
@@ -240,7 +240,6 @@ export const contactDocument: AgentDocument = {
     {
       title: "Contact",
       paragraphs: [
-        `${operator.name}, ${operator.street}, ${operator.city}, ${operator.country}.`,
         `Email: ${operator.email}.`,
         "For help with the hosted service, describe the action you attempted, the time it occurred, and the error message you received. Include the affected public URL when it is safe to share. Keep personal API tokens, passwords, private snippet contents, and environment variable values out of reports.",
         "For a reproducible software problem or feature request, use the source repository's issue tracker. For a privacy request or a report about hosted content, contact the operator by email. If you run your own Sniptide instance, contact its operator for account and data questions. The Impressum identifies the operator of sniptide.com and provides the published contact details.",
