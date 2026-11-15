@@ -1,8 +1,8 @@
 ---
-title: How to add an MCP server to Claude Code and reuse saved code
-description: Add an MCP server to Claude Code, choose the configuration scope, authenticate and verify the connection by retrieving a saved code pattern.
+title: How to add an MCP server to Claude Code and Cursor
+description: Add an MCP server to Claude Code, pick the scope, sign in with OAuth and prove it works with a real task, plus the same server in Cursor.
 date: 2026-11-13
-updated: 2026-11-14
+updated: 2026-11-15
 author: dino
 category: agents
 tags: [claude-code, mcp, agents, snippets, oauth]
@@ -25,7 +25,7 @@ Running example: a repo-stats project whose getRepo() calls fetch once, and a sa
 Visuals: cover, the search, read and reuse loop
 Primary CTA: connect Sniptide and read one saved snippet.
 Keyword: claude code add mcp server (Google Keyword Planner reports US 100 to 1K, worldwide 100 to 1K). Route: /blog/add-mcp-server-claude-code.
-Scope: this post owns the Claude Code walkthrough. Setup reference stays in docs.sniptide.com/mcp. Cursor setup and MCP versus skills belong to later posts.
+Scope: this post owns the Claude Code walkthrough and the short Cursor section, which replaced the separate Cursor post (/blog/add-mcp-server-cursor redirects here). Setup reference stays in docs.sniptide.com/mcp.
 */}
 
 To add a remote MCP server to Claude Code, run `claude mcp add --transport http <name> <url>`, sign in with `/mcp` inside Claude Code or `claude mcp login <name>` in your shell, and check that `claude mcp list` shows the server as connected. The server's tools are then available in every session in that project. The rest of this guide picks the right scope, connects a real server and uses it for one useful task.
@@ -254,14 +254,41 @@ Each status and error below was captured during the tests.
 - **A write tool returns `This token doesn't have the write scope.`** The connection is read-only. Add the server without the pinned `read` scope and sign in again, or use a token with write access.
 - **The tool list is empty.** Check the status first: a server that needs authentication or failed to connect exposes no tools. Inside a session, `/mcp` lets you reconnect, and Claude Code marks a server as failed after five failed reconnect attempts.
 
-If you also work in Cursor, [How to add an MCP server to Cursor](/blog/add-mcp-server-cursor) connects the same server there, with `mcp.json` and an install link.
+## The same server in Cursor
 
-{/* TODO(Dino): link Day 9 (MCP versus skills) and Day 8 (code snippet managers) here as each goes live. */}
+Cursor reads MCP servers from `~/.cursor/mcp.json` for every project, or from `.cursor/mcp.json` in one project, which you can commit for the team. A remote server needs only its `url`:
+
+```json title="~/.cursor/mcp.json"
+{
+  "mcpServers": {
+    "sniptide": {
+      "url": "https://app.sniptide.com/api/mcp"
+    }
+  }
+}
+```
+
+The entry carries no token. The first request without one comes back as a `401` that points the client to the server's sign-in metadata, and this is the header the hosted app sent on 14 November:
+
+```http title="Response from https://app.sniptide.com/api/mcp"
+HTTP/1.1 401 Unauthorized
+Www-Authenticate: Bearer error="invalid_token", resource_metadata="https://app.sniptide.com/.well-known/oauth-protected-resource/api/mcp"
+```
+
+Cursor follows that pointer the same way Claude Code does: it registers itself, opens the consent page and stores the tokens. A few things differ from Claude Code:
+
+- **Install link.** `cursor://anysphere.cursor-deeplink/mcp/install?name=sniptide&config=eyJ1cmwiOiJodHRwczovL2FwcC5zbmlwdGlkZS5jb20vYXBpL21jcCJ9` installs the entry above. The `config` value is the entry encoded with `base64`, and Sniptide's dashboard has an **Add to Cursor** button that opens the same link.
+- **Tokens.** For a read-only token instead of OAuth, add `"headers": { "Authorization": "Bearer ${env:SNIPTIDE_TOKEN}" }` and export the variable in your shell. Cursor fills in `${env:NAME}`, so the file holds no secret.
+- **Logs.** Cursor writes MCP errors to the Output panel under **MCP Logs** (<Kbd>⌘⇧U</Kbd>, or <Kbd>Ctrl+Shift+U</Kbd> on Windows and Linux).
+
+The `401` and the install link were checked against the hosted app. The steps inside Cursor follow [Cursor's MCP docs](https://cursor.com/docs/mcp) and haven't been run in the Cursor app for this post.
 
 ## Sources
 
 Checked on 13 November 2026.
 
+- Cursor docs: [Model Context Protocol](https://cursor.com/docs/mcp) and [MCP install links](https://cursor.com/docs/mcp/install-links), read on 14 November 2026
 - Claude Code docs: [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp), including installation scopes, authentication from the command line, restricting OAuth scopes and MCP prompts
 - Sniptide docs: [MCP server](https://docs.sniptide.com/mcp), [OAuth for agents](https://docs.sniptide.com/oauth) and [API tokens](https://docs.sniptide.com/api-tokens)
 - Tests: Claude Code 2.1.323 with a fresh `CLAUDE_CONFIG_DIR`, connected to a Sniptide instance on `localhost:3100` built from the main branch. The commands above use the hosted address, `https://app.sniptide.com/api/mcp`, and the test outputs showed `http://localhost:3100/api/mcp` in its place. The plugin install was checked against the hosted app up to the sign-in step
+- Not yet run: the sign-in and the first task inside the Cursor app

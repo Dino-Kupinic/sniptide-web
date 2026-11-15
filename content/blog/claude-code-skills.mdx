@@ -1,8 +1,8 @@
 ---
-title: "Claude Code skills tutorial: build a reusable code library"
+title: Build a Claude Code skill from your own code
 description: Create a working Claude Code skill from a small code library. See the files, install scope, invocation and how to refresh an exported collection.
 date: 2026-11-08
-updated: 2026-11-14
+updated: 2026-11-15
 author: dino
 category: agents
 tags: [claude-code, skills, agents, collections, cli]
@@ -181,7 +181,7 @@ Open a different project and start Claude Code. You can let Claude pick the skil
 Add an empty state to the projects page for when the list is empty.
 ```
 
-According to the Claude Code docs, Claude matches "empty state" against the description, loads `SKILL.md`, then opens `snippets/empty-state/empty-state.tsx` and adapts it to the project.
+Claude matches "empty state" against the description, loads `SKILL.md`, then opens `snippets/empty-state/empty-state.tsx` and adapts it to the project. In our test it did this in all six runs, three with Sonnet and three with Opus.
 
 </Tab>
 <Tab value="Call it directly">
@@ -190,14 +190,45 @@ According to the Claude Code docs, Claude matches "empty state" against the desc
 /ui add an empty state to the projects page for when the list is empty
 ```
 
-A slash command at the start of the message runs the skill directly, and the rest of the message is the task.
+A slash command at the start of the message runs the skill directly, and the rest of the message is the task. Both test runs with `/ui` read the snippet first and made the same change.
 
 </Tab>
 </Tabs>
 
 To check what's loaded, ask "What skills are available?" The skill should be in the list.
 
-{/* TODO(Dino): run this in a clean Next.js project, record the Claude Code version, and add the before/after diff of the projects page the plan asks for. */}
+We ran it on 15 November 2026 with Claude Code 2.1.325 in a fresh `create-next-app` project (Next.js 16.4.6) with one extra file: a projects page that renders a list and shows nothing when the list is empty. The skill folder was copied into the project's `.claude/skills/ui`. Every run saved the snippet as a component next to the page's code and used it there. This is the edit from one Sonnet run:
+
+```diff title="app/projects/page.tsx"
++import { EmptyState } from "@/components/empty-state"
++
+ type Project = { id: string; name: string; updatedAt: string }
+@@
+-      <ul className="divide-y rounded-lg border">
+-        {projects.map((project) => (
+-          ...
+-        ))}
+-      </ul>
++      {projects.length === 0 ? (
++        <EmptyState
++          icon={<svg ...>...</svg>}
++          title="No projects yet"
++          help="Projects you create will show up here."
++        />
++      ) : (
++        <ul className="divide-y rounded-lg border">
++          {projects.map((project) => (
++            ...
++          ))}
++        </ul>
++      )}
+```
+
+The diff is shortened where `...` appears: the list items are unchanged, and the icon is an inline folder SVG that Claude drew because the project has no icon library. The other runs made the same change, with small differences in the import path and in where the icon is defined.
+
+The adapting is visible too. The snippet colors its help text with `text-muted-foreground`, a shadcn/ui class that a fresh Next.js app doesn't define. In seven of the eight runs Claude swapped it for `text-gray-500` and left the rest of the file alone.
+
+The control runs are the useful part. Without the skill, the same prompt still produced an empty state in all eight runs, but each was a one-off `<div>` written into the page, with no icon and no component to reuse on the next empty list. The skill is what turned the request into your pattern.
 
 ## Install a skill from a Sniptide collection
 
@@ -334,4 +365,4 @@ Checked on 8 November 2026.
 - [Claude Code docs: Extend Claude with skills](https://code.claude.com/docs/en/skills)
 - [Agent Skills](https://agentskills.io)
 - Sniptide: [CLI](https://docs.sniptide.com/cli), [MCP server](https://docs.sniptide.com/mcp), and the `@sniptide/cli` 0.3.0 package for the generated `SKILL.md`
-- Not yet run: the second-project walkthrough in a clean project. Its steps follow the Claude Code docs
+- Second-project test: Claude Code 2.1.325 run with `claude -p` from a clean environment on 15 November 2026, in a fresh Next.js 16.4.6 project with the skill in `.claude/skills/ui`. Six runs used the prompt above (three with Sonnet, three with Opus) and two used `/ui`. All eight loaded the skill and read `empty-state.tsx`. Eight runs in the same project without the skill (three with Sonnet, three with Opus, one with Haiku and one `/ui` attempt, which Claude answered as a plain request) served as the control. A copy in personal scope wasn't picked up in this test environment, so the personal path follows the Claude Code docs

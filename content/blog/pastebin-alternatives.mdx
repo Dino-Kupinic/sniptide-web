@@ -1,8 +1,8 @@
 ---
-title: Best Pastebin alternatives for code in 2026
-description: Compare Pastebin alternatives for code, private links and self-hosting, with sourced trade-offs and a clear pick for each job.
+title: Best Pastebin alternatives in 2026
+description: Compare Pastebin alternatives for private links, self-hosting and agents, with sourced trade-offs and a clear pick for each job.
 date: 2026-11-07
-updated: 2026-11-14
+updated: 2026-11-15
 author: dino
 category: product
 tags: [comparison, pastebin, self-hosting, privatebin, gist, hastebin]
@@ -39,7 +39,7 @@ That's the real reason most developers go looking for a Pastebin alternative. Pa
 - **Code comes in more than one file.** A config is rarely a single file. A useful paste holds the app, its config and the `.env.example` together.
 - **You want control over who reads it.** Passwords, expiry, a link that burns after one read, or a private paste you share with two named people.
 - **You want it on your own server.** For work code, a pastebin on your own domain keeps the data where you can see it.
-- **The old tools feel old.** Ads, cramped editors and no dark mode make a quick paste feel like a chore.
+- **The old tools feel old.** On 15 November 2026, Pastebin's consent banner asked to share visitor data with 1,750 advertising partners, and the public paste list next to the editor was mostly crypto scams. A quick paste shouldn't come with either.
 - **Your coding agent needs it too.** Claude Code, Codex and Cursor work better from your saved patterns than from a fresh guess.
 
 ## Best for
@@ -91,7 +91,7 @@ APP_NAME=health-demo
 </Tab>
 </Tabs>
 
-For each tool I asked whether it can **save** all three files together, **share** them with the right people, keep the **old version** when a file changes, and get the files **back** later, from the browser, a terminal or an agent. The answers come from each project's README or documentation, last verified on 9 November 2026. I haven't run the task by hand in every product yet, so the table reports what each tool documents.
+For each tool I asked whether it can **save** all three files together, **share** them with the right people, keep the **old version** when a file changes, and get the files **back** later, from the browser, a terminal or an agent. The answers come from each project's README or documentation, last verified on 9 November 2026. I haven't run the task by hand in every product yet, so the table reports what each tool documents. The Pastebin column's sharing rows were also checked by hand against its paste form on 15 November 2026. Sniptide publishes this comparison, so weigh the Sniptide column with that in mind.
 
 This is a three-file save, revise and retrieve task, so it says nothing about security audits, scale or enterprise needs such as SSO.
 
@@ -99,7 +99,7 @@ This is a three-file save, revise and retrieve task, so it says nothing about se
 
 ## The comparison
 
-<Comparison highlight={1} caption="Sniptide publishes this comparison. Last verified 9 November 2026, against the pages under Sources. A dash means no, a question mark means the docs don't say, and a dash under MCP means I found no server. Pastebin's FAQ page refused automated requests on that date, so treat the Pastebin column as unconfirmed, burn after reading in particular.">
+<Comparison highlight={1} caption="From each tool's docs, updated 15 November 2026. A dash means no, and a question mark means the docs don't say.">
 
 | | Sniptide | PrivateBin | Opengist | MicroBin | GitHub Gist | Pastebin | Hastebin | Pastes.io |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -141,8 +141,6 @@ This is a three-file save, revise and retrieve task, so it says nothing about se
 | Open source | AGPL-3.0 | zlib | AGPL-3.0 | BSD-3-Clause | – | – | ~MIT fork | ~CLI only |
 
 </Comparison>
-
-{/* TODO(Dino): pastebin.com/faq refused automated fetches. Check the Pastebin.com column, especially burn after reading, before relying on it. */}
 
 ## What "private" means in each tool
 
@@ -198,31 +196,35 @@ Sniptide is built for the Discord problem from the top of this post: code you sh
 - Up to 10 files per paste
 - Short or custom links
 - Private, unlisted or public
-- Passwords and expiry
-- Burn after reading
+- Passwords, expiry and burn after reading
+- End-to-end encryption, per paste
+- A warning before you share a key
 - Invite people to view or edit
+- Code previews in Slack and Discord
 
 **Keep**
 
 - Collections and stars
-- Revisions you can restore
+- Revisions to compare and restore
 - Search with ⌘K
 - Views, copies and referrers
 - Trash for 30 days
 - Import from Gist
+- Self-host with one command
 
 **Reuse**
 
 - MCP server for agents
-- CLI with search and pull
 - Collections as agent skills
-- Markdown copy for agents
-- TypeScript and Python SDKs
+- CLI, TypeScript and Python SDKs
+- Chrome extension
+- VS Code extension, also for Cursor
+- Raycast extension, in beta
 - Encrypted .env groups
 
 </FeatureGrid>
 
-Some gaps matter for this comparison. An end-to-end encrypted paste is created and read in the web app only, can't be edited, and doesn't reach the CLI or the MCP server, so your agents cannot read it. Every paste needs an account and holds code or text only, so Hastebin, Pastebin and Pastes.io are quicker for an anonymous one-off, and Pastes.io is the one for screenshots and files. Snippets don't clone or push over Git the way Gist and Opengist do. And env groups have no rotation or audit trail, so Sniptide doesn't replace a secrets manager.
+Some gaps matter for this comparison. An end-to-end encrypted paste is created and read in the web app only, can't be edited, and doesn't reach the CLI or the MCP server, so your agents cannot read it. Every paste needs an account and holds code or text only, so Hastebin, Pastebin and Pastes.io are quicker for an anonymous one-off, and Pastes.io is the one for screenshots and files. Snippets don't clone or push over Git the way Gist and Opengist do. And env groups have no rotation or audit trail, so Sniptide doesn't replace a secrets manager. The Chrome, VS Code and Raycast extensions aren't in their stores yet, so for now you install them from the repository.
 
 ## Moving your snippets over
 
@@ -232,7 +234,7 @@ Some gaps matter for this comparison. An end-to-end encrypted paste is created a
 
 Before you share anything sensitive on any of these tools, check three things: whether the link alone opens it, when it expires, and who can read it on the server.
 
-To let a coding agent search and read your saved pastes, see [How to add an MCP server to Claude Code](/blog/add-mcp-server-claude-code) or [to Cursor](/blog/add-mcp-server-cursor).
+To let a coding agent search and read your saved pastes, see [How to add an MCP server to Claude Code and Cursor](/blog/add-mcp-server-claude-code).
 
 {/* TODO(Dino): link Day 8 (code snippet managers) and Day 10 (self-hosted pastebin) here as each goes live. */}
 
@@ -245,6 +247,6 @@ Last verified on 9 November 2026, and Sniptide's encrypted pastes on 12 November
 - Opengist: [features](https://github.com/thomiceli/opengist/blob/master/docs/introduction.md#features), [REST API and OpenAPI spec](https://github.com/thomiceli/opengist/blob/master/docs/api.md), [changelog with expiry in 1.14.0](https://github.com/thomiceli/opengist/blob/master/CHANGELOG.md), [link preview tags](https://github.com/thomiceli/opengist/blob/master/templates/partials/seo_meta.html), [custom URL setting](https://github.com/thomiceli/opengist/blob/master/templates/pages/gist_settings.html), [community MCP server `opengist-mcp`](https://github.com/ni-c/opengist-mcp)
 - MicroBin: [features](https://github.com/szabodanika/microbin#features), [privacy and password options](https://github.com/szabodanika/microbin/blob/master/templates/index.html), [defaults for encryption and burn after reading](https://github.com/szabodanika/microbin/blob/master/src/args.rs)
 - GitHub Gist: [creating gists and secret gists](https://docs.github.com/en/get-started/writing-on-github/editing-and-sharing-content-with-gists/creating-gists), [REST API](https://docs.github.com/en/rest/gists/gists), [GitHub MCP server gist tools](https://github.com/github/github-mcp-server#tool-configuration)
-- Pastebin: [new paste form](https://pastebin.com/), [FAQ with folders and editing](https://pastebin.com/faq) (not loaded on 9 November), [Pro limits](https://pastebin.com/pro)
+- Pastebin: [new paste form](https://pastebin.com/), [FAQ with folders, limits and paste sizes](https://pastebin.com/faq) (checked by hand on 15 November), [Pro limits](https://pastebin.com/pro)
 - Hastebin: [API documentation and retention](https://www.toptal.com/developers/hastebin/documentation), [haste-server community fork](https://github.com/jirutka/haste-server)
 - Pastes.io: [plan comparison](https://pastes.io/pricing), [API documentation](https://pastes.io/docs), [MCP server](https://pastes.io/docs/mcp)

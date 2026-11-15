@@ -1,8 +1,8 @@
 ---
-title: "Docker Compose .env vs env_file: which variables reach the container?"
+title: "Docker Compose .env vs env_file: which value wins?"
 description: Run a small Docker Compose example to see how .env interpolation, env_file and environment differ, including precedence and common loading failures.
 date: 2026-11-12
-updated: 2026-11-14
+updated: 2026-11-15
 author: dino
 category: engineering
 tags: [docker, compose, env, configuration, secrets]
@@ -22,8 +22,8 @@ Evidence and sources: every output block and table cell is captured from the fix
 Opening move: direct answer, then the fixture
 Main sections: the fixture, interpolation, the container environment, precedence matrix, paths and overrides, getting the values onto a machine, sensitive values, troubleshooting
 Running example: Acme notes, an alpine container that prints six variables
-Visuals: cover, which file reaches which stage, pulling app.env from an env group
-Primary CTA: create an env group and pull the project's app.env before docker compose up.
+Visuals: cover, which file reaches which stage
+Primary CTA: none inside the post. The getting-values section links to the .env guide, which owns the env group walkthrough.
 Keyword: docker compose env file (Google Keyword Planner reports US 100 to 1K, worldwide 1K to 10K). Route: /blog/docker-compose-env-file.
 Scope: this post owns Compose behavior. The general .env format lives in /blog/env-file.
 */}
@@ -197,35 +197,9 @@ The last row matters for scripts and CI. We ran `docker compose -f ../acme/compo
 
 ## Getting the values onto a new machine
 
-Everything above assumes `app.env` already exists. On a fresh checkout it usually doesn't, because env files with real values stay out of Git. That handoff is where Sniptide fits: an env group holds the project's variables, encrypted at rest, and the CLI writes them to the file `env_file` already points at.
+Everything above assumes `app.env` already exists. On a fresh checkout it usually doesn't, because env files with real values stay out of Git. Hand it over through a password manager or a secrets manager, or with the Sniptide CLI, which writes it from an encrypted env group with `sniptide env pull acme-notes --file app.env`. The [.env guide](/blog/env-file#how-to-share-env-values-with-your-team) covers that setup.
 
-<Figure
-  src="/blog/docker-compose-env-file/pull.webp"
-  alt="An env group called acme-notes stores the variables encrypted. sniptide env pull acme-notes --file app.env writes app.env into the project folder, and docker compose up starts the container with those values."
-  caption="Pull app.env from an env group, then start Compose as usual."
-/>
-
-```bash title="Terminal"
-npm install --global @sniptide/cli
-printf '%s' "$SNIPTIDE_TOKEN" | sniptide login --token-stdin
-sniptide env pull acme-notes --file app.env
-docker compose up
-```
-
-The pulled file starts with a comment such as `# sniptide env acme-notes revision 1`, which Compose skips like any other `#` line. `compose.yaml` doesn't change, so a teammate who writes `app.env` by hand runs exactly the same project. To push the file the first time, run `sniptide env push acme-notes --file app.env`.
-
-You can also skip the file with `sniptide env run acme-notes -- docker compose up`. Then the values arrive as Compose's shell environment, so the precedence rules above apply: they fill `${VAR}` and bare names, and they don't reach the container on their own.
-
-If you'd rather keep those values on your own server, the [self-hosting guide](https://docs.sniptide.com/self-hosting/install-script) installs Sniptide with Docker Compose on a Linux server.
-
-<InlineCta
-  title="Pull app.env before docker compose up"
-  description="Keep a project's env file in an env group and write it into any checkout with one command."
-  href="https://app.sniptide.com/sign-up"
-  label="Create an env group"
-  secondaryHref="https://docs.sniptide.com/cli#sync-env-files"
-  secondaryLabel="Read the CLI docs"
-/>
+One detail matters for Compose: `sniptide env run acme-notes -- docker compose up` skips the file and puts the values in Compose's shell environment. By the precedence rules above, they then fill `${VAR}` and bare names, and they don't reach the container on their own.
 
 ## Passwords and other sensitive values
 
