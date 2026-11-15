@@ -12,10 +12,12 @@ export default function Terms() {
   return (
     <LegalPage title="Terms of service">
       <p>
-        These terms apply to the hosted Sniptide service at sniptide.com and app.sniptide.com,
-        operated by {operator.name}, {operator.street}, {operator.city}, {operator.country}. The
-        Sniptide software is open source under the AGPL-3.0, and that license, not these terms,
-        governs a copy you run on your own server.
+        These terms apply to the hosted Sniptide service at sniptide.com and app.sniptide.com, and
+        to the extensions, command line tool and MCP server when they connect to it. The service is
+        run by the operator named in the <a href="/impressum">Impressum</a>, called
+        &quot;Sniptide&quot; and &quot;we&quot; in these terms. The Sniptide software is open source
+        under the AGPL-3.0, and that license, not these terms, governs a copy you run on your own
+        server.
       </p>
 
       <h2>Your account</h2>
@@ -34,9 +36,21 @@ export default function Terms() {
       </p>
       <p>
         A public paste can be read by anyone. An unlisted paste can be read by anyone who has the
-        link, so share the link with care. Pastes are not end-to-end encrypted. Sniptide is not a
-        full secrets manager and has no key rotation or audit trail, so do not store data that the
-        law requires you to protect in a particular way.
+        link, so share the link with care. You can encrypt a paste end-to-end when you create it.
+        Its key exists only in the link and in your browsers, so anyone with the full link can read
+        it, and we cannot recover it if you lose the key. Keep sensitive details out of its title,
+        which is not encrypted. Pastes you do not encrypt are not end-to-end encrypted. Sniptide is
+        not a full secrets manager and has no key rotation or audit trail, so do not store data that
+        the law requires you to protect in a particular way.
+      </p>
+
+      <h2>Tokens, extensions and agents</h2>
+      <p>
+        You can connect the extensions, the command line tool and AI agents to your account with
+        OAuth or a personal API token. Keep tokens private and give an agent only the scopes it
+        needs. Whatever a connected tool or agent does with your token counts as done under your
+        account. Revoke a connection or token in the settings when you no longer use it or think
+        someone else has it.
       </p>
 
       <h2>What you must not do</h2>
@@ -58,7 +72,9 @@ export default function Terms() {
         To report a paste you believe is illegal, write to{" "}
         <a href={`mailto:${operator.email}`}>{operator.email}</a> with the link to the paste, why
         you think it is illegal, your name and email address, and a statement that you are acting in
-        good faith. We confirm that we received your report and tell you what we decided.
+        good faith. For an encrypted paste, send the full link with its key if you have it, because
+        we cannot read the paste otherwise. We confirm that we received your report and tell you
+        what we decided.
       </p>
       <p>
         When we remove a paste or restrict an account, we email the account&apos;s owner what we did

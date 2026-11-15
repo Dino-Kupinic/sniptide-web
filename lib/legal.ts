@@ -20,8 +20,9 @@ export const operator = {
   vatId: undefined as string | undefined,
   tradeAuthority: undefined as string | undefined,
   chamber: undefined as string | undefined,
-  // § 25 MedienG: who owns the service, and what the website is for.
-  ownership: "Dino Kupinic owns Sniptide in full.",
+  // § 25 MedienG: who owns the service, and what the website is for. The Impressum is the one page
+  // that names the operator; the other pages call the service "Sniptide" and link here.
+  ownership: "The operator named above owns Sniptide in full.",
   purpose: "Operating the Sniptide pastebin service and publishing its open-source software.",
 }
 
@@ -30,13 +31,26 @@ export const hosting = {
   country: "Germany",
   // How long the web server keeps access logs.
   logDays: todo("number of days"),
+  // The longest any database backup is kept, so a deleted row has left every backup after this
+  // many days. A ceiling the backup schedule must stay under, whichever schedule is chosen.
+  backupDays: 30,
 }
+
+// The network in front of sniptide.com and its subdomains. It terminates TLS, so it sees every
+// request, and it reports the visitor's country that analytics use.
+export const cdn = {
+  provider: "Cloudflare, Inc.",
+  country: "the United States",
+}
+
+// Who delivers the app's account and notification emails over SMTP.
+export const emailProvider = "Resend, Inc."
 
 // Where PostHog stores events: the build setting that picks its API host also says whether the
 // site sends them to the EU or the US.
 export const analyticsInEu = posthogHost.includes("//eu.")
 
-export const lastUpdated = "2 November 2026"
+export const lastUpdated = "15 November 2026"
 
 // The youngest age the terms allow.
 export const minimumAge = 16
