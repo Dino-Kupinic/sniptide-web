@@ -31,8 +31,9 @@ export const hosting = {
   country: "Germany",
   // How long the web server keeps access logs.
   logDays: todo("number of days"),
-  // After how many days a deleted row has left every database backup.
-  backupDays: todo("number of days"),
+  // The longest any database backup is kept, so a deleted row has left every backup after this
+  // many days. A ceiling the backup schedule must stay under, whichever schedule is chosen.
+  backupDays: 30,
 }
 
 // The network in front of sniptide.com and its subdomains. It terminates TLS, so it sees every
@@ -43,7 +44,7 @@ export const cdn = {
 }
 
 // Who delivers the app's account and notification emails over SMTP.
-export const emailProvider = todo("email delivery provider and its country")
+export const emailProvider = "Resend, Inc."
 
 // Where PostHog stores events: the build setting that picks its API host also says whether the
 // site sends them to the EU or the US.

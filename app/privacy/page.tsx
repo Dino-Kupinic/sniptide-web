@@ -284,7 +284,7 @@ export default function Privacy() {
           address, and is based in {cdn.country}.
         </li>
         <li>PostHog processes the analytics events and error reports described above.</li>
-        <li>{emailProvider} delivers the app&apos;s emails.</li>
+        <li>{emailProvider} , based in the United States, delivers the app&apos;s emails.</li>
         <li>Linear stores bug reports and feedback, and Anthropic answers support questions.</li>
         <li>
           GitHub or Google receive a request when you choose to sign in with them, and we receive
@@ -304,9 +304,9 @@ export default function Privacy() {
         We keep your account data until you delete your account. Pastes follow their own expiry and
         your deletions. Logs, sessions, analytics records, reports and counters are kept for the
         periods given above, and we delete data sooner when it is no longer needed for its purpose.
-        Backups of the database are overwritten on a rolling schedule, so deleted data leaves them
-        within {hosting.backupDays} days. We keep data longer only where the law requires it, for
-        example for a moderation case.
+        Backups of the database, when we keep them, are overwritten on a rolling schedule, so
+        deleted data leaves them within {hosting.backupDays} days. We keep data longer only where
+        the law requires it, for example for a moderation case.
       </p>
 
       <h2>Your rights</h2>
