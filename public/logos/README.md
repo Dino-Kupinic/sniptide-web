@@ -29,6 +29,15 @@ row; trimming transparent export padding gives the lettering comparable visual
 size. Slack uses the official
 standalone monochrome SVG rather than the navigation lockup with Salesforce text.
 
+## Template logos
+
+Template cards and share images reuse the artwork above. A tool that isn't in the marquee gets its
+own file here, listed in `components/templates/template-visual.ts`.
+
+| Local file | Path source | Artwork |
+| --- | --- | --- |
+| `grok-bot.svg` | [Lobe Icons](https://github.com/lobehub/lobe-icons) `grokbot.svg` and `grokbot-text.svg` (MIT), version 1.102.0 | The Grok Bot symbol beside the Grok Bot wordmark, 6 units apart on one 24-unit row, in black |
+
 These are compatibility links. The marks belong to their respective owners.
 
 

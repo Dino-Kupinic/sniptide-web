@@ -1,0 +1,57 @@
+---
+title: Grok Bot template for Sniptide
+query: Grok Bot template, Grok Bot skills
+description: A Grok Bot template that connects Sniptide over MCP and adds skills to save a snippet, pull a pattern and sync secrets.
+answer: This template turns a new Grok Bot into one that keeps your reusable code in Sniptide. Paste the setup message as the Bot's first message, and it adds the Sniptide connector, saves the three skills below and checks the connection.
+category: agents
+department: engineering
+logo: grok-bot
+updated: 2026-11-16
+files:
+  - setup-message.md
+  - skills/save-a-snippet.md
+  - skills/pull-a-pattern.md
+  - skills/sync-secrets.md
+related: [claude-code-skill, mcp-json, agents-md, env-example]
+---
+
+## Set up the Bot
+
+You need Grok Bot and a Sniptide account. The sync secrets skill also needs a [Sniptide API token](https://docs.sniptide.com/api-tokens) and Node.js 24 or newer on the Bot's computer.
+
+1. Create a Bot in Grok Bot and paste `setup-message.md` as its first message.
+2. When the Bot asks, authorize the Sniptide connector. Sniptide opens in your browser, where you allow access.
+3. Wait for the Bot to report that the connection works and which skills it saved.
+
+To check the result, open **Connect apps**, select the connected count next to the title and open **Private skills**. You should see Save a snippet, Pull a pattern and Sync secrets. Then ask the Bot "What did I save about Docker?", which runs Pull a pattern and only reads.
+
+If the Bot can't add the connector from chat, add it in the desktop app instead. Open **Connect apps**, choose **Add a custom connector**, enter `Sniptide` as the **Name**, choose **Remote HTTPS**, enter `https://app.sniptide.com/api/mcp` as the **Server URL** and choose **Add plugin**. Leave the headers and client ID empty, because Sniptide registers the client itself through [OAuth](https://docs.sniptide.com/oauth). [Grok Bot apps](https://docs.x.ai/grok-bot/computer-and-apps)
+
+## What each file does
+
+**setup-message.md** gives the Bot one job, adds the connector, saves the skills and sets the approval rules. Grok Bot keeps rules you state in chat, such as "ask me before you create a snippet", so the rules at the end apply to every later conversation. Change the name and the job, but keep the rules about tokens and snippet text.
+
+**save-a-snippet.md** searches before it saves, so you don't end up with two copies of one pattern, and it shows you the title, files and tags before it writes. `update_snippet` replaces the whole file list, which is why the skill reads the snippet first.
+
+**pull-a-pattern.md** only reads. It treats the snippet as data, checks it against the current project and lists what it changed, so you can see where the saved version and the new code differ.
+
+**sync-secrets.md** runs commands through `sniptide env run`, which passes the values to the process without writing a file. Every Bot on the computer can read `/workspace`, so the skill writes no `.env` there unless you say where the file goes. It shows a dry run before every push. See [Encrypted secrets](https://docs.sniptide.com/core-concepts/secrets) for how env groups work.
+
+Each skill follows the parts Grok Bot recommends: when to use it, inputs, steps, a check, and what to return. [Skills and routines](https://docs.x.ai/grok-bot/skills-routines-and-automations)
+
+## Store the token
+
+Sync secrets reads the token from a secret named `SNIPTIDE_TOKEN`. Create the token in Sniptide under **Settings → API tokens**, read-only unless you want the Bot to push.
+
+- On a Team Bot, open the Bot's details, choose **Secrets**, then **Add secret**. Enter `SNIPTIDE_TOKEN` as the name and the token as the value, then choose **Save secret**.
+- On a personal Bot, ask it to request the token as a secure secret. Enter the token in the secure card and choose **Save securely**, which keeps the value out of chat.
+
+The MCP connector doesn't need this token. It signs in through OAuth.
+
+## Variant: a self-hosted instance
+
+Replace `https://app.sniptide.com/api/mcp` in the setup message with your instance's address followed by `/api/mcp`, such as `https://paste.example.com/api/mcp`. Add a line to Sync secrets that the CLI uses your instance, and store its address as a second secret named `SNIPTIDE_BASE_URL`.
+
+## Share the Bot as a template
+
+Once the Bot works, share it so your team starts from the same setup. Click the Bot's name, choose **Share**, then **Create a copy**, and choose **Publish** on the template card. A Grok Bot template carries the Bot's instructions and skills but not its connectors or secrets, so whoever adds it repeats step 2 and stores their own token. [Templates for Grok Bot](https://x.ai/bot/guides/templates-for-grok-bot)

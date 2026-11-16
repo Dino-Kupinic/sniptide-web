@@ -41,6 +41,7 @@ describe("template content", () => {
       "env-example",
       "github-actions-node-ci",
       "github-issue-templates",
+      "grok-bot",
       "launch-announcement",
       "llms-txt",
       "mcp-json",
