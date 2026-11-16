@@ -36,7 +36,7 @@ deploy, with no further step.
    answer: Two sentences under the H1 that answer the query before the files.
    category: agents                 # agents, deploy, project, specs, discovery or writing
    department: engineering          # engineering, product or marketing
-   logo: claude                     # claude, cursor, openai, github or docker
+   logo: claude                     # claude, cursor, openai, github, docker or grok-bot
    # or, for a tool without a logo in public/logos:
    # icon: robots                     # an icon from public/templates/icons
    # mark: "robots.txt"               # the short name beside it, up to 16 characters

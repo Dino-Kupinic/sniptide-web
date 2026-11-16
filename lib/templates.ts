@@ -32,7 +32,7 @@ export type TemplateCategory = keyof typeof templateCategories
 const categoryKeys = Object.keys(templateCategories) as [TemplateCategory, ...TemplateCategory[]]
 
 // The tool whose logo a template's card shows, from the artwork in public/logos.
-export const templateLogos = ["claude", "cursor", "openai", "github", "docker"] as const
+export const templateLogos = ["claude", "cursor", "openai", "github", "docker", "grok-bot"] as const
 
 export type TemplateLogo = (typeof templateLogos)[number]
 
