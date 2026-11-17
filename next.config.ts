@@ -48,6 +48,17 @@ const nextConfig: NextConfig = {
         destination: "/blog/add-mcp-server-claude-code.md",
         permanent: true,
       },
+      // The Docker Compose post was retired; its precedence rule lives in the .env post.
+      {
+        source: "/blog/docker-compose-env-file",
+        destination: "/blog/env-file#a-value-your-shell-already-set",
+        permanent: true,
+      },
+      {
+        source: "/blog/docker-compose-env-file.md",
+        destination: "/blog/env-file.md",
+        permanent: true,
+      },
       {
         source: `/:page(${appPages})/:rest*`,
         destination: `${appUrl}/:page/:rest*`,

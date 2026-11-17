@@ -230,7 +230,7 @@ With `PORT=4000` exported in the shell and `PORT=3000` in the file:
 | The nine library loaders | `4000`, the shell |
 | Bash, Compose `env_file` | `3000`, the file |
 
-Libraries such as dotenv, python-dotenv and Node's flag never overwrite a variable that is already set, and dotenv and python-dotenv have an `override` option if you want the file to win. Sourcing a file in Bash is a series of assignments, so the file wins. In Compose, a file named in `env_file` goes into the container even when your shell sets the same name, as the [Docker Compose .env guide](/blog/docker-compose-env-file) shows.
+Libraries such as dotenv, python-dotenv and Node's flag never overwrite a variable that is already set, and dotenv and python-dotenv have an `override` option if you want the file to win. Sourcing a file in Bash is a series of assignments, so the file wins. In Compose, a file named in `env_file` goes into the container even when your shell sets the same name.
 
 ## A .env file that reads the same in all 11
 
@@ -462,8 +462,6 @@ If you'd rather keep the values on your own server, the [self-hosting guide](htt
 - **The file is named `.env.txt`.** Some editors add an extension. Show file extensions and rename it to exactly `.env`.
 
 {/* TODO(Dino): link Day 10 (self-hosted pastebin) and Day 9 (MCP versus skills) here as each goes live. */}
-
-If Docker Compose runs your app, [Docker Compose .env vs env_file](/blog/docker-compose-env-file) shows which of these values reach the container and which file wins.
 
 If you keep reusable code next to these values, the [Claude Code skills tutorial](/blog/claude-code-skills) shows how the same CLI turns a collection into an agent skill, and the [Pastebin alternatives comparison](/blog/pastebin-alternatives) covers sharing the code itself.
 

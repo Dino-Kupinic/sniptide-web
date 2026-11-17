@@ -1,0 +1,127 @@
+---
+title: The history of Pastebin, from an IRC channel to 95 million pastes
+description: "How a 2002 tool for the #php IRC channel became the place hackers posted leaks, and what 24 years of it say about sharing text online."
+date: 2026-11-17
+updated: 2026-11-17
+author: dino
+category: company
+tags: [pastebin, history, internet-culture, privatebin, gist]
+cover: /blog/pastebin-history/cover.webp
+coverAlt: The words “The history of Pastebin” above six blue stripes that widen from left to right, on a near-black background.
+image: /blog/pastebin-history/share.png
+draft: false
+---
+
+{/*
+Writing brief (docs/blog-style-guide.md)
+Reader: a developer or curious reader who has used Pastebin and never wondered where it came from.
+Question or task: how did a small code-sharing page become one of the best-known sites on the internet, and why did it end up so different from what it was built for?
+Primary mode: Analyst
+Article type: history, essay
+Central claim: Pastebin was built to keep long text out of a chat channel, and almost every turn in its story comes from the same fact: a paste is a link that anyone who has it can read.
+Evidence and sources: Paul Dixon's README for the original code, The Next Web's 2011 interview with Jeroen Vader, TechCrunch (2011), The Register (2012), Boing Boing (2012), InfoQ (2008), the ZeroBin repository, and the Wikipedia article on Pastebin.com for the 2012 to 2020 figures. All read on 17 November 2026 (Sources section).
+Opening move: scene
+Main sections: the channel, eight quiet years, the sale, the leak era, policing, the encrypted answer, the unlisted majority, 2020, what it adds up to
+Running example: none; the timeline is the spine
+Visuals: one bar chart of active pastes by year, from the published counts, with a text alternative in the caption and the prose
+Limitations: active-paste counts come from the owners and the press, use different dates, and exclude expired and spam pastes. No traffic numbers after 2012 are cited. No personal experience is claimed.
+Primary CTA: create a first paste on Sniptide.
+Facts to verify before publication: every date and number, against the linked source.
+*/}
+
+In March 2002, the people in the #php channel on IRC had a small problem. Someone would ask why their script failed, paste forty lines of code into the channel, and bury every other conversation under it. Paul Dixon, one of the regulars, wrote a page that took the code and gave back a link. It went live on 3 September 2002 at pastebin.com.
+
+Dixon's own README for the original code says it plainly: "This is the source code to the original pastebin.com, which I started back in 2002." It was one PHP script that grew as people asked for things. Twenty-four years later, the word pastebin names a whole category of website, and the site itself has hosted everything from homework to the passwords of a million people.
+
+## A link instead of forty lines
+
+A pastebin solves a chat problem, not a code problem. A link takes one line in the channel, and only the people who want to help have to read the code. Everyone else keeps talking.
+
+That trade sounds small, and for years it was. Pastebin took eight years to reach its first million active pastes, according to TechCrunch, where "active" means pastes that haven't expired and aren't spam.
+
+## Sold because of the copyright notices
+
+By 2010, running the site had stopped being a hobby. Dixon later wrote that he "sold the domain in 2010 due to the time required to deal with all the copyright issues", and told TechCrunch it had become "too much of a time drain".
+
+The buyer was Jeroen Vader, a Dutch entrepreneur who saw the site listed for sale in February 2010. "Pastebin is actually the only website I have ever owned that I didn't create myself," he told The Next Web the following year. When he bought it, he said, the design and interface hadn't changed in about eight years.
+
+## The year Pastebin became a notice board
+
+Then the internet found a new use for it. A paste needs no account, shows up in the public list of recent pastes, and stays up until someone removes it. For a group that had just broken into a server, that made it the perfect place to publish what they took.
+
+The Next Web counted the big ones in June 2011:
+
+- In December 2010, a group called Gnosis posted 1.3 million usernames and passwords from Gawker Media.
+- In May 2011, LulzSec posted more than 70,000 records from a Fox talent show database.
+- On 2 June 2011, LulzSec posted what it said was data on more than a million Sony users. Google's cache showed 155,000 views of that one paste.
+
+About half of the top 60 trending pastes at the time were related to hacked servers. The site also stored about 20,000 new pastes on an ordinary day, most of them still code, but the leaks were what made the news.
+
+The numbers grew with the attention. Ten million active pastes arrived in October 2011, a year and a half after the first million.
+
+<Figure
+  src="/blog/pastebin-history/active-pastes.webp"
+  darkSrc="/blog/pastebin-history/active-pastes-dark.webp"
+  alt="Bar chart of active pastes on Pastebin.com: 1 million in 2010, 10 million in October 2011, 20 million in July 2012, 65 million in June 2015 and 95 million in December 2015."
+  caption="Active pastes on Pastebin.com, from published counts. It took eight years to reach the first million."
+/>
+
+## Hiring people to read the pastes
+
+By April 2012 the site drew 17 million unique visitors a month, up from 500,000 two years earlier, and received about 1,200 abuse reports a day. Vader told the BBC that the report button "isn't responsive enough" and that he planned to hire staff to look for dumps of personal data and remove them, The Register reported. The site had already been blocked in Pakistan and Turkey over pastes, and Vader said that in three months not a single day had passed without a denial-of-service attack.
+
+Members of Anonymous called it censorship. On 19 April 2012, Anonymous and a group calling itself the People's Liberation Front announced AnonPaste, a pastebin whose servers cannot read what they host, and so cannot be asked to remove it.
+
+## The encrypted answer
+
+AnonPaste was "based on the open source ZeroBin software", which the French developer Sébastien Sauvage had released a week earlier, on 12 April 2012. ZeroBin encrypts each paste with 256-bit AES in the browser and puts the key in the part of the link after the `#`. Browsers never send that part to the server, so, in Sauvage's words, the server "cannot decrypt data".
+
+ZeroBin's repository now points to PrivateBin, its maintained successor. Pastebin's moderation problem produced a lasting idea: if the host never sees the text, there is nothing for the host to read, sell or delete.
+
+Four years earlier, GitHub had taken the opposite direction. Gist, demonstrated in July 2008, stored each paste in its own Git repository, so a snippet could be cloned, edited and given a history. Between Gist and ZeroBin, the two ideas later pastebins keep returning to were in place by 2012: a paste as a versioned file, and a paste the server cannot read.
+
+## Most pastes were never public
+
+The leaks shaped Pastebin's reputation, but they were never most of what it held. In June 2015 the site counted 65 million active pastes, and the owners said about 75 percent were unlisted or private. By December 2015 it held 95 million active pastes and more than two million members.
+
+Most people, in other words, were using it the way Dixon's channel did. They needed a link to give one person, and the public list was a side effect.
+
+## Pastebin closes the front window
+
+In April 2020, Pastebin removed its built-in search and restricted its scraping API, which people had used to collect every new public paste as it appeared. Pastes from logged-out users stopped appearing in the recent list. Later that year it added password-protected pastes and pastes that delete themselves after one view.
+
+Each of those changes moved Pastebin back toward its first job: a link for the people you choose, and less of a public board for everyone else.
+
+## What 24 years of pastes add up to
+
+Pastebin was built to save a chat channel forty lines, and almost every turn in its story comes from one fact about a paste: whoever has the link can read it. That made it useful in 2002, it made it a leak site in 2011, and it pushed the next generation of tools toward encryption, passwords and accounts.
+
+The question of who can read a paste never went away. A newer question is who can find it again. A link from 2011 still works if the paste survived, but only for someone who can find the link.
+
+That's the part we built Sniptide for. Sniptide is best for code you'll want again: pastes you can search later, share with the people you name, and hand to coding agents such as Claude Code through its MCP server. It works at sniptide.com, or on your own server with one command:
+
+```bash
+curl -fsSL sniptide.com/install.sh | sh
+```
+
+<InlineCta
+  title="Keep the code you share"
+  description="Paste it once, share the link, and find it again when you need it."
+  href="https://app.sniptide.com/sign-up"
+  label="Create your first paste"
+  secondaryHref="https://docs.sniptide.com/self-hosting"
+  secondaryLabel="Self-host it"
+/>
+
+## Sources
+
+Read on 17 November 2026.
+
+- Paul Dixon, [the original pastebin.com source and README](https://github.com/lordelph/pastebin): the 2002 start, the #php channel, and the 2010 sale over copyright work.
+- Matt Brian, The Next Web, [Pastebin: how a popular code-sharing site became the ultimate hacker hangout](https://thenextweb.com/news/pastebin-how-a-popular-code-sharing-site-became-the-ultimate-hacker-hangout), 5 June 2011: the launch dates, Jeroen Vader's quotes, daily pastes and the 2010 to 2011 leaks.
+- Greg Kumparak, TechCrunch, [Pastebin surpasses 10 million active pastes](https://techcrunch.com/2011/10/26/pastebin-surpasses-10-million-active-pastes/), 26 October 2011: eight years to a million, and Dixon's comment on the sale.
+- John Leyden, The Register, [Pastebin.com hiring staff to get rid of activists' dumps](https://www.theregister.com/2012/04/02/pastebin_content_policing/), 2 April 2012: visitors, abuse reports, blocks and attacks.
+- Kyt Dotson, SiliconANGLE, [Anonymous looks to obsolete Pastebin for leaks with AnonPaste](https://siliconangle.com/2012/04/19/anonymous-looks-to-obsolete-pastebin-for-leaks-with-anonpaste/), 19 April 2012: the announcement and the ZeroBin quote.
+- Sébastien Sauvage, [ZeroBin](https://sebsauvage.net/wiki/doku.php?id=php:zerobin), its [version history](https://sebsauvage.net/wiki/doku.php?id=php:zerobin_history) with the first public release on 12 April 2012, its [repository](https://github.com/sebsauvage/ZeroBin), and its successor [PrivateBin](https://github.com/PrivateBin/PrivateBin).
+- Werner Schuster, InfoQ, [GitHub Gist: versioning for pasted code](https://www.infoq.com/news/2008/07/gist-versioning-for-pasting), 24 July 2008.
+- Wikipedia, [Pastebin.com](https://en.wikipedia.org/wiki/Pastebin.com): the 2012 and 2015 paste counts, the share of unlisted pastes, and the 2020 changes, each with its original citation.
