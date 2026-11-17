@@ -18,10 +18,9 @@ How the guide maps to the blog:
 | --- | --- |
 | Editorial mode and article type | The `category` field. Launches usually go in `product`, engineering explanations in `engineering`, and practical guides in `agents` or `self-hosting` |
 | Title patterns | `title`, at most 70 characters, in sentence case |
-| Opening | `description` restates the promise in one sentence of 50 to 160 characters, and the first paragraph delivers it |
+| Opening | `description` restates the promise in one sentence of 50 to 160 characters, and the first paragraph delivers it. No TL;DR or summary callout follows it, because the first paragraph already is the summary |
 | Charts, screenshots and diagrams | `<Figure>` with a `caption` that follows the caption pattern in section 6, and a `darkSrc` when it shows the product |
 | Code | Fenced blocks with a `title`, `<Tabs>` for alternatives, and `<Steps>` for sequences |
-| Summary | A practical guide can follow its opening paragraph with one `<Callout title="TL;DR">` of at most five bullets |
 | Primary next step | One `<InlineCta>`, link or `<Callout>` where the reader has enough context to act, with a label that names the action. The footer under every post already carries the global sign-up prompt |
 | Evidence | A closing `## Sources` section with the date the facts were checked, the pages behind them and the versions any test ran on. A step that was not run is listed there as "Not yet run" and qualified where the post describes it |
 | Cover | `cover` and `coverDark` for the index, and `image` for the share card |

@@ -30,16 +30,6 @@ Scope: this post owns Compose behavior. The general .env format lives in /blog/e
 
 Docker Compose uses a `.env` file in the project folder to fill in `${...}` placeholders in `compose.yaml`, and it does not copy that file into your container. Variables reach the container only through `env_file` and `environment` in the service definition. So a value in `.env` shows up inside the container only when `compose.yaml` names it, for example as `GREETING: ${GREETING}`.
 
-<Callout title="TL;DR">
-
-- `.env` feeds interpolation. It sets the image tag, ports and anything else written as `${VAR}` in `compose.yaml`.
-- `env_file:` copies a whole file into the container. `environment:` sets single variables and wins over `env_file`.
-- `docker compose run -e` beats both, and the image's own `ENV` loses to all of them.
-- For interpolation, a variable exported in your shell beats `--env-file`, which replaces `.env` entirely.
-- Run `docker compose config` to see the resolved file before you start anything.
-
-</Callout>
-
 Every output below comes from one small project, run with Docker Compose 5.6.1 and Docker Engine 29.9.2 from a clean shell. If you need a refresher on the file format itself, quoting and `.env.example`, read [We tested how 11 loaders read the same .env file](/blog/env-file) first.
 
 ## The example project
