@@ -1,4 +1,4 @@
-import { LoopVideo } from "@/components/loop-video"
+import { RecipeTree } from "@/components/recipe-tree"
 import { SectionHeading } from "@/components/section-heading"
 import { type SessionLine, TypedSession } from "@/components/typed-session"
 import { documentation } from "@/lib/agent-docs"
@@ -46,21 +46,7 @@ export function Recipes() {
       />
 
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
-        {/* Recorded from a local demo instance with a Components collection seeded (public/landing). */}
-        <LoopVideo
-          light={{
-            src: "/landing/components-light.mp4",
-            poster: "/landing/components-light-poster.webp",
-          }}
-          dark={{
-            src: "/landing/components-dark.mp4",
-            poster: "/landing/components-dark-poster.webp",
-          }}
-          width={1604}
-          height={960}
-          label="The Components collection in Sniptide as cards in two columns, scrolling past Confirm dialog, Toaster, Button, Design tokens, Combobox, Data table, Bottom sheet, Kbd, Tabs and Switch."
-          crop
-        />
+        <RecipeTree />
 
         <div className="flex flex-col gap-8">
           <ol className="flex flex-col gap-8">
