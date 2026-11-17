@@ -1,5 +1,13 @@
 # Landing page
 
+## Hero still
+
+The hero horizon is a canvas that starts drawing when the page hydrates. Until then, the hero
+shows the canvas's first frame from four small PNGs in `public/landing`, for day and night on
+desktops and phones, so the scene is there on the first paint. The canvas draws the same frame
+over it, so the handover doesn't show. After changing `drawHorizon` in `lib/motion.ts`, run
+`bun scripts/generate-hero-still.ts` to render the stills again.
+
 ## Product screenshot
 
 The product band shows the demo dashboard as a still, light and dark, in
