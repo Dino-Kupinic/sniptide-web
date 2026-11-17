@@ -4,6 +4,7 @@ import { join, relative } from "node:path"
 import sitemap from "@/app/sitemap"
 import { GET as getRaw } from "@/app/templates/[name]/raw/[...path]/route"
 import { GET as getJson } from "@/app/templates/json/[name]/route"
+import { GET as getIndex } from "@/app/templates/json/route"
 import { GET as getMarkdown } from "@/app/templates/md/[name]/route"
 import { getPosts } from "@/lib/blog-source"
 import { siteUrl } from "@/lib/site"
@@ -144,6 +145,26 @@ describe("template helpers", () => {
     if (!template) throw new Error("No templates")
     const graph = templateStructuredData(template, readTemplateFiles(template))["@graph"]
     expect(graph.map((node) => node["@type"])).toEqual(["SoftwareSourceCode", "BreadcrumbList"])
+  })
+})
+
+describe("template index", () => {
+  test("lists every template in directory order with its files and visual", async () => {
+    const response = getIndex()
+    expect(response.headers.get("access-control-allow-origin")).toBe("*")
+    const { templates: listed } = await response.json()
+    expect(listed.map((entry: { name: string }) => entry.name)).toEqual(
+      templates.map((template) => template.name),
+    )
+    for (const [index, template] of templates.entries()) {
+      expect(listed[index]).toMatchObject({
+        title: template.title,
+        description: template.description,
+        files: template.files,
+        url: `${siteUrl}/templates/${template.name}`,
+      })
+      expect(listed[index].visual.src).toMatch(/^\/(logos|templates\/icons)\/[a-z-]+\.svg$/)
+    }
   })
 })
 

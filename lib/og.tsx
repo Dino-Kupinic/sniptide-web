@@ -3,6 +3,7 @@ import { join } from "node:path"
 import { ImageResponse } from "next/og"
 import { bars, wordmark } from "@/components/brand"
 import { siteName } from "@/lib/site"
+import type { TemplateVisual } from "@/lib/templates"
 
 export const ogSize = { width: 1200, height: 630 }
 export const ogContentType = "image/png"
@@ -98,9 +99,7 @@ export async function renderPostOgImage({ title }: { title: string }) {
 }
 
 // What a template's share card shows over its code: the tool's logo, or an icon with a name.
-export type TemplateOgVisual =
-  | { kind: "logo"; src: string; ratio: number }
-  | { kind: "icon"; src: string; mark: string }
+export type TemplateOgVisual = TemplateVisual
 
 async function dataUrl(publicPath: string) {
   const svg = await readFile(join(process.cwd(), "public", publicPath))
