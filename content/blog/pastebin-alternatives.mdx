@@ -46,14 +46,12 @@ That's the real reason most developers go looking for a Pastebin alternative. Pa
 
 These picks are my recommendations, and the comparison table below sticks to documented facts.
 
-| Job | Best fit |
-| --- | --- |
-| A secret the server can't read | PrivateBin or Sniptide |
-| Snippets you keep in Git | Gist, or Opengist to self-host |
-| The smallest self-hosted pastebin | MicroBin |
-| A screenshot or file without an account | Pastes.io |
-| A quick public text link | Hastebin or Pastebin |
-| A library for you and your agents | [Sniptide](/blog/introducing-sniptide) |
+- **A secret the server can't read:** PrivateBin or Sniptide
+- **Snippets you keep in Git:** Gist, or Opengist to self-host
+- **The smallest self-hosted pastebin:** MicroBin
+- **A screenshot or file without an account:** Pastes.io
+- **A quick public text link:** Hastebin or Pastebin
+- **A library for you and your agents:** [Sniptide](/blog/introducing-sniptide)
 
 ## How we compared them
 
@@ -150,8 +148,9 @@ This is a three-file save, revise and retrieve task, so it says nothing about se
 The word covers three different guarantees, and mixing them up is how secrets leak.
 
 <Figure
-  src="/blog/pastebin-alternatives/privacy-models-v2.webp"
-  alt="Three columns. Encrypted in the browser: the browser encrypts, the server stores ciphertext, the reader decrypts with the key in the link. Access rules on the server: the server stores the code and checks who may open it. The link is the secret: anyone who has the link can read it."
+  src="/blog/pastebin-alternatives/privacy-models-v3.webp"
+  darkSrc="/blog/pastebin-alternatives/privacy-models-v3-dark.webp"
+  alt="Three privacy models, each with the step that protects the paste highlighted. Encrypted in the browser, as in PrivateBin: the browser encrypts the paste, the server stores ciphertext only, and the reader decrypts with the key in the link, so the server never sees the key. Access rules on the server, as in Sniptide, Opengist and Gist: the server checks who may open the paste, so the server operator can read it. The link is the secret, as in unlisted pastes and secret gists: anyone who has the link can read it, so treat the link like a password."
   caption="Three privacy models. The highlighted step protects the paste."
 />
 

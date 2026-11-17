@@ -56,8 +56,9 @@ A skill is a folder with a `SKILL.md` file. The file has YAML frontmatter that s
 The way a skill loads is what makes it cheap to keep around:
 
 <Figure
-  src="/blog/claude-code-skills/loading.webp"
-  alt="Three stages. Always: the name and description of every skill sit in Claude's context. When used: the SKILL.md body loads once you or Claude invoke the skill. When needed: Claude opens only the snippet files the task calls for."
+  src="/blog/claude-code-skills/loading-v2.webp"
+  darkSrc="/blog/claude-code-skills/loading-v2-dark.webp"
+  alt="Three steps from top to bottom. Always in context: the name and description of every skill, such as ui with the description UI patterns for this repo. When the skill is used: Claude loads .claude/skills/ui/SKILL.md after you type /ui or it matches the description. When a task needs it: Claude opens only the snippet file it calls for, here empty-state.tsx."
   caption="Only the description is always loaded. The rest arrives when a task needs it."
 />
 
@@ -151,22 +152,18 @@ That's a complete skill. Claude Code watches skill folders, so it picks up the n
 
 A few frontmatter fields are worth knowing from the start:
 
-| Field | What it does |
-| --- | --- |
-| `description` | When to use the skill. Claude reads it to decide. Keep the key use case first, because the listing cuts it off after 1,536 characters. |
-| `name` | The command you type. Defaults to the folder name. |
-| `disable-model-invocation` | Set to `true` and only you can start the skill, with `/ui`. Good for anything with side effects, like a deploy. |
-| `user-invocable` | Set to `false` and only Claude can use it. Good for background knowledge. |
-| `paths` | Glob patterns. Claude loads the skill on its own only when working on matching files, such as `src/components/**`. |
+- **`description`** says when to use the skill, and Claude reads it to decide. Keep the key use case first, because the listing cuts it off after 1,536 characters.
+- **`name`** is the command you type, and defaults to the folder name.
+- **`disable-model-invocation: true`** means only you can start the skill, with `/ui`, which suits anything with side effects, like a deploy.
+- **`user-invocable: false`** means only Claude can use it, which suits background knowledge.
+- **`paths`** takes glob patterns, and Claude loads the skill on its own only when working on matching files, such as `src/components/**`.
 
 ## Choose personal or project scope
 
 Where you save the folder decides which sessions see it.
 
-| Scope | Path | Use it for |
-| --- | --- | --- |
-| Personal | `~/.claude/skills/ui/SKILL.md` | Your own patterns, in every project on this machine |
-| Project | `.claude/skills/ui/SKILL.md` | Patterns this codebase follows. Commit it and the team gets it too |
+- **Personal**, in `~/.claude/skills/ui/SKILL.md`: your own patterns, in every project on this machine.
+- **Project**, in `.claude/skills/ui/SKILL.md`: patterns this codebase follows. Commit it and the team gets it too.
 
 For a UI library you want in many repositories, either works. Personal scope follows you everywhere; project scope keeps the patterns versioned with the code that uses them. The catch with both is the same: the files are a copy, so the next project starts from whatever version you last copied.
 
@@ -235,8 +232,9 @@ The control runs are the useful part. Without the skill, the same prompt still p
 Copying folders by hand works for one project. It breaks down when the button changes and four repositories each hold a different version. Keeping the code in a [Sniptide collection](/#features) gives every project one source, and the CLI writes the skill folder for you.
 
 <Figure
-  src="/blog/claude-code-skills/collection-to-skill.webp"
-  alt="A Sniptide collection called ui with three pastes flows through the command sniptide skill ui into a .claude/skills/ui folder with SKILL.md and a snippets folder, which Claude Code reads."
+  src="/blog/claude-code-skills/collection-to-skill-v2.webp"
+  darkSrc="/blog/claude-code-skills/collection-to-skill-v2-dark.webp"
+  alt="A Sniptide collection called ui holds Button with variants, Debounced value hook and Empty state. The command sniptide skill ui writes it into the project as .claude/skills/ui with SKILL.md and a snippets folder holding button.tsx, use-debounced-value.ts and empty-state.tsx, which Claude Code reads like any other skill."
   caption="One collection, written out as a skill in any project."
 />
 
