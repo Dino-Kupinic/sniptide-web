@@ -29,17 +29,6 @@ Keyword: .env file (Google Keyword Planner reports env file at US 1K to 10K, wor
 
 A `.env` file is a plain text file of `KEY=value` lines that holds a project's configuration, such as its port, database address and API keys. Your code never reads it directly: a loader such as dotenv, Node's `--env-file` flag or Bun copies each line into the process environment when the app starts, and the app reads `process.env.PORT` or `os.environ["PORT"]`.
 
-<Callout title="TL;DR">
-
-- One variable per line, `NAME=value`, no spaces around `=`, and `#` comments on their own line.
-- Put double quotes around any value with spaces or a `#`, and don't rely on `${VAR}` expansion. Loaders disagree on both.
-- Keep `$` out of values if you can. No way of writing it reads the same in all 11 loaders we tested, and Next.js and Bun drop `$5` even inside single quotes.
-- Commit `.env.example` with empty values. Add `.env` to `.gitignore` and never commit it.
-- A variable already set in your shell wins over the file in every loader we tested except Docker Compose's `env_file`, where the file wins.
-- Send real values through a channel built for it: a password manager, an encrypted file, a secrets manager or a Sniptide env group.
-
-</Callout>
-
 ## A .env file example you can copy
 
 Here is a complete file for a small app called Acme notes. Every value is fake.

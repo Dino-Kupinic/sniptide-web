@@ -30,16 +30,6 @@ Scope: this post owns the Claude Code walkthrough and the short Cursor section, 
 
 To add a remote MCP server to Claude Code, run `claude mcp add --transport http <name> <url>`, sign in with `/mcp` inside Claude Code or `claude mcp login <name>` in your shell, and check that `claude mcp list` shows the server as connected. The server's tools are then available in every session in that project. The rest of this guide picks the right scope, connects a real server and uses it for one useful task.
 
-<Callout title="TL;DR">
-
-- `claude mcp add --transport http sniptide https://app.sniptide.com/api/mcp` adds a remote server. Use `--transport http`, since SSE is deprecated.
-- The default scope is **local**: only you, only this project. Use `-s project` to share it through `.mcp.json`, or `-s user` for every project on your machine.
-- Adding a server doesn't sign you in. Run `/mcp` and pick **Authenticate**, or `claude mcp login sniptide` in a terminal.
-- `claude mcp get sniptide` should say `√ Connected`. `! Needs authentication` means the sign-in hasn't happened yet.
-- Prove it with a task: ask Claude to search a saved snippet, read it and use it in your code.
-
-</Callout>
-
 ## What you end up with
 
 By the end, Claude Code reads a pattern you saved earlier and applies it to the file you're working on. In the test for this post, the saved pattern was a `fetchWithRetry` helper, and the project was a small script whose `getRepo()` called `fetch` once and gave up. One prompt later, the project had the helper and this change:
