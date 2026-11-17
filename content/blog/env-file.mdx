@@ -1,37 +1,240 @@
 ---
 title: We tested how 11 loaders read the same .env file
-description: The .env format with a copyable example, plus what happened when we loaded one tricky file with 11 loaders, from dotenv and Next.js to Go and Compose.
+description: We loaded 17 tricky .env files with dotenv, Node, Bun, Next.js, Vite, Deno, Python, Ruby, Go, Bash and Compose. Here is where they split.
 date: 2026-11-09
-updated: 2026-11-15
+updated: 2026-11-17
 author: dino
 category: engineering
 tags: [env, dotenv, configuration, secrets, cli]
-cover: /blog/env-file/cover-v2.webp
-coverAlt: The words “What is a .env file?” above six blue stripes that widen from left to right, on a near-black background.
-image: /blog/env-file/share-v2.png
+cover: /blog/env-file/cover-v3.webp
+coverAlt: The words “We tested how 11 loaders read the same .env file” above six blue stripes that widen from left to right, on a near-black background.
+image: /blog/env-file/share-v3.png
 ---
 
 {/*
-Writing brief (docs/blog-style-guide.md, blog plan revision 2, Day 3)
-Reader: a developer trying to understand or create a project configuration file, often right after cloning a repository.
-Question or task: what is a .env file, how do I write one that works, and how do I get the real values to my team?
-Primary mode: Operator
-Article type: practical guide
-Central claim: a .env file is a plain list of KEY=value lines that a loader copies into the process environment; loaders disagree on the edge cases, so write the portable subset, commit only .env.example, and hand off real values through something other than Git.
-Evidence and sources: on 15 November 2026 the sample file and the edge-case file were loaded again with 11 loaders (dotenv 18.0.10, Node 22.23.4 --env-file, Bun 1.4.4, python-dotenv 1.2.3, Bash, Vite 8.3.8 loadEnv, @next/env 16.4.6, Deno 2.9.6 --env-file, Ruby dotenv 3.2.0, Go godotenv 1.5.1, docker compose config 5.6.1), each from env -i. Earlier: the sample files in public/blog/env-file were loaded on 9 November 2026 with dotenv 18.0.10, Node.js 22.23.4 (--env-file), Bun 1.4.4, python-dotenv 1.2.3 and Bash with set -a, and every loader produced the same six values. The edge-case table is the output of one test file loaded by the same five. Product facts come from docs.sniptide.com (CLI and encrypted secrets), read the same day.
-Opening move: direct answer, then the template
-Main sections: the template, how loading works, format rules, loader differences, .env vs .env.example vs the environment, create and load, share values, troubleshooting
+Writing brief (docs/blog-style-guide.md, blog plan revision 2, Day 3, rewritten 17 November 2026)
+Reader: a developer writing or debugging a .env file, often after a value arrived wrong in one runtime but not another.
+Question or task: do all .env loaders read a file the same way, where do they differ, and how do I write a file that works everywhere?
+Primary mode: Analyst, with an Operator section for creating, loading and sharing the file
+Article type: original test with a practical guide
+Central claim: loaders agree on plain KEY=value lines and split on 11 of 17 edge cases, so write the portable subset, commit only .env.example, and hand off real values through something other than Git.
+Evidence and sources: on 17 November 2026, 17 one-case files plus the sample file were loaded with 11 loaders (dotenv 18.0.10, Node 22.23.4 --env-file, Bun 1.4.4 --env-file, @next/env 16.4.6 loadEnvConfig, Vite 8.3.8 loadEnv, Deno 2.9.6 --env-file, Ruby dotenv 3.2.0, python-dotenv 1.2.3, Go godotenv 1.5.1 Load, GNU Bash 5.2.21 with set -a, docker compose config 5.6.1), each from an empty environment. The files are published in public/blog/env-file. Product facts come from docs.sniptide.com (CLI and encrypted secrets).
+Opening move: direct answer with the headline result
+Main sections: how the test ran, what every loader agrees on, where they split (one subsection per case), the portable file, .env vs .env.example, create and load, share values, troubleshooting
 Running example: Acme notes, a small app with a port, a database URL and a fake payments key
 Visuals: cover, how a .env file reaches the process, handing off values with an env group
 Primary CTA: create an env group and pull the sample values into a project.
 Keyword: .env file (Google Keyword Planner reports env file at US 1K to 10K, worldwide 10K to 100K). Route: /blog/env-file.
 */}
 
-A `.env` file is a plain text file of `KEY=value` lines that holds a project's configuration, such as its port, database address and API keys. Your code never reads it directly: a loader such as dotenv, Node's `--env-file` flag or Bun copies each line into the process environment when the app starts, and the app reads `process.env.PORT` or `os.environ["PORT"]`.
+A `.env` file is a plain text file of `KEY=value` lines that holds a project's configuration, such as its port, database address and API keys. There is no formal standard for it, so we wrote 17 small files, each with one line people commonly get wrong, and loaded every one with 11 loaders, from dotenv and Next.js to Go, Bash and Docker Compose. All 11 agreed on 6 of the files and split on the other 11.
 
-## A .env file example you can copy
+## How we ran the test
 
-Here is a complete file for a small app called Acme notes. Every value is fake.
+On 17 November 2026 we wrote each case into its own `.env` file and loaded it with these 11 loaders. Each loader ran from an empty environment, so nothing from our own shell could leak in, and printed the values it set as JSON.
+
+| Loader | Read with |
+| --- | --- |
+| dotenv 18.0.10 | `config()` |
+| Node.js 22.23.4 | `--env-file` |
+| Bun 1.4.4 | `--env-file` |
+| Next.js, `@next/env` 16.4.6 | `loadEnvConfig()` |
+| Vite 8.3.8 | `loadEnv()` |
+| Deno 2.9.6 | `--env-file` |
+| Ruby dotenv 3.2.0 | `Dotenv.load` |
+| python-dotenv 1.2.3 | `load_dotenv()` |
+| Go godotenv 1.5.1 | `godotenv.Load()` |
+| GNU Bash 5.2.21 | `set -a; . ./.env` |
+| Docker Compose 5.6.1 | `env_file` |
+
+Compose doesn't start a container for this: `docker compose config` prints the environment each service would get.
+
+Download [all 17 test files](/blog/env-file/loader-tests.zip) to rerun the cases with your own loader. Each folder holds one `.env` and a `compose.yaml`.
+
+## How a .env file reaches your app
+
+Your code never reads the file. The operating system gives each process an environment, a list of names and values inherited from whatever started it, and a loader reads the file once at startup and adds its lines to that list. The app then reads `process.env.PORT` or `os.environ["PORT"]`.
+
+<Figure
+  src="/blog/env-file/loading-v3.webp"
+  darkSrc="/blog/env-file/loading-v3-dark.webp"
+  alt="A .env file with the lines PORT=3000 and DEBUG=true. The command node --env-file=.env app.js reads the file once, at startup. The process environment then holds process.env.PORT as the string 3000 and process.env.DEBUG as the string true."
+  caption="A loader copies the file into the process environment once, at startup."
+/>
+
+Each loader brings its own parser, which is why the same file can produce different values. It also means an edit to `.env` does nothing until the app restarts, and every value arrives as a string, so `PORT` is `"3000"` and `DEBUG=true` is the text `"true"`.
+
+## What all 11 loaders agree on
+
+Six of the 17 files read the same in every loader:
+
+| Line | Every loader read |
+| --- | --- |
+| `PORT=3000 # dev server` | `3000` |
+| `HASH="abc#123"` | `abc#123` |
+| `export PORT=3000` | `3000` |
+| `SENTRY_DSN=` | An empty string |
+| `NAME=acme   ` | `acme` |
+| A multi-line PEM key in double quotes | The same lines |
+
+A space before `#` starts a comment everywhere, trailing spaces are trimmed, and an empty value sets the variable to an empty string, which is different from leaving the line out.
+
+## Where the loaders disagree
+
+The other 11 files produced at least two different results. Bash read 7 of them differently from most of the other loaders, mostly because it runs the file as shell code instead of parsing it. No other loader stood apart on more than 3.
+
+<Figure
+  src="/blog/env-file/loader-splits.webp"
+  darkSrc="/blog/env-file/loader-splits-dark.webp"
+  alt="Bar chart of how many of the 11 contested files each loader read differently from most of the others. Bash 7, Node.js 3, Compose 2, Deno 2, dotenv 2, Go godotenv 2, python-dotenv 2, Bun 1, Next.js 1, Ruby dotenv 1, Vite 1."
+  caption="Bash is the outlier. Every other loader stood apart on 3 files or fewer."
+/>
+
+Each section below shows the line we tested and what each loader made of it.
+
+### Spaces in an unquoted value
+
+```bash title=".env"
+APP_NAME=Acme notes
+```
+
+| Loader | `APP_NAME` |
+| --- | --- |
+| Every loader except Bash | `Acme notes` |
+| Bash | Unset |
+
+Bash reads the line as a command: it sets `APP_NAME=Acme` for a program called `notes`, which doesn't exist, so the variable never reaches the environment. `APP_NAME="Acme notes"` works in all 11.
+
+### A `#` inside an unquoted value
+
+```bash title=".env"
+HASH=abc#123
+```
+
+| Loader | `HASH` |
+| --- | --- |
+| dotenv, Node, Bun, Next.js, Vite, Deno, Ruby | `abc` |
+| python-dotenv, Go, Bash, Compose | `abc#123` |
+
+Seven loaders treat the `#` as the start of a comment, so a password containing `#` silently loses its end. With double quotes, `HASH="abc#123"` reads the same in all 11.
+
+### A `$` inside single quotes
+
+```bash title=".env"
+PRICE='costs $5'
+```
+
+| Loader | `PRICE` |
+| --- | --- |
+| Bun, Next.js | `costs ` |
+| The other nine | `costs $5` |
+
+In most loaders single quotes turn expansion off. Bun and Next.js expand `$5` anyway, find no variable called `5`, and leave an empty string in its place.
+
+### An escaped `$`
+
+```bash title=".env"
+PRICE="costs \$5"
+```
+
+| Loader | `PRICE` |
+| --- | --- |
+| dotenv, Node, python-dotenv | `costs \$5` |
+| The other eight | `costs $5` |
+
+Bun and Next.js document `\$` as the fix for the case above, but three loaders keep the backslash. Together with single quotes, we found no spelling of `$` that all 11 read the same. If a secret contains `$`, test it with the loader you deploy with.
+
+### A reference to another variable
+
+```bash title=".env"
+API_BASE=https://api.example.com
+API_URL=${API_BASE}/v1
+```
+
+| Loader | `API_URL` |
+| --- | --- |
+| dotenv, Node | Kept as text |
+| The other nine | Expanded |
+
+The nine expand it to `https://api.example.com/v1`, while dotenv and Node pass `${API_BASE}/v1` through unchanged. The dotenv package needs its companion `dotenv-expand` for this, and Node's flag doesn't expand at all. Writing the full value on each line works everywhere.
+
+### `\n` in double quotes
+
+```bash title=".env"
+SIGNATURE="Line one\nLine two"
+```
+
+| Loader | `SIGNATURE` |
+| --- | --- |
+| Ruby dotenv, Bash | A literal `\n` |
+| The other nine | Two lines |
+
+Ruby dotenv and Bash keep the backslash and the `n` as two characters. A real line break inside the double quotes, as in the PEM key above, reads the same in all 11.
+
+### Spaces around `=`
+
+```bash title=".env"
+PORT = 3000
+```
+
+| Loader | `PORT` |
+| --- | --- |
+| Every loader except Bash | `3000` |
+| Bash | Unset |
+
+Bash runs a command called `PORT` instead of assigning it. Leave the spaces out.
+
+### The same name twice
+
+```bash title=".env"
+PORT=3000
+PORT=3001
+```
+
+| Loader | `PORT` |
+| --- | --- |
+| Every loader except Deno | `3001`, the later line |
+| Deno | `3000`, the first line |
+
+This usually happens when someone appends an override to the bottom of the file. In Deno the override does nothing, so keep each name on one line.
+
+### Windows line endings
+
+The file `PORT=3000` and `APP=acme`, saved with CRLF line endings:
+
+| Loader | `PORT` |
+| --- | --- |
+| Every loader except Bash | `3000` |
+| Bash | `3000\r` |
+
+Bash keeps the carriage return at the end of every value. The stray `\r` turns into a database name or port that looks right in a log and fails to match. Save the file with LF line endings, which most editors show in the status bar.
+
+### A byte order mark
+
+The same two lines, saved as UTF-8 with a byte order mark (BOM), an invisible character some Windows editors put at the start of the file:
+
+| Loader | `PORT`, the first line |
+| --- | --- |
+| dotenv, Bun, Next.js, Ruby, python-dotenv, Compose | `3000` |
+| Node, Vite, Deno, Bash | Unset |
+| Go | Fails to load the file |
+
+The loaders that miss `PORT` read the BOM as part of its name, so they set a variable nobody asks for. Go stops with `unexpected character "»" in variable name` and sets nothing. Every loader except Go still read `APP` on the second line, so the bug shows up only as one missing variable. Save the file as UTF-8 without a BOM.
+
+### A value your shell already set
+
+With `PORT=4000` exported in the shell and `PORT=3000` in the file:
+
+| Loader | `PORT` |
+| --- | --- |
+| The nine library loaders | `4000`, the shell |
+| Bash, Compose `env_file` | `3000`, the file |
+
+Libraries such as dotenv, python-dotenv and Node's flag never overwrite a variable that is already set, and dotenv and python-dotenv have an `override` option if you want the file to win. Sourcing a file in Bash is a series of assignments, so the file wins. In Compose, a file named in `env_file` goes into the container even when your shell sets the same name, as the [Docker Compose .env guide](/blog/docker-compose-env-file) shows.
+
+## A .env file that reads the same in all 11
+
+Put the agreed rules together and you get a file every loader reads identically. Here is one for a small app called Acme notes. Every value is fake.
 
 ```bash title=".env"
 # Acme notes, local development. Every value here is fake.
@@ -47,7 +250,7 @@ PAYMENTS_API_KEY=fake-key-for-local-dev
 SENTRY_DSN=
 ```
 
-Download the [sample .env](/blog/env-file/sample.env) and its matching [.env.example](/blog/env-file/sample.env.example). We loaded this exact file with 11 loaders, and all 11 read the same six values:
+We loaded this exact file with all 11 loaders, and every one printed the same six values:
 
 ```text title="Output"
 APP_NAME="Acme notes"
@@ -58,92 +261,30 @@ PAYMENTS_API_KEY="fake-key-for-local-dev"
 SENTRY_DSN=""
 ```
 
-Every value arrives as a string. `PORT` is `"3000"` and `DEBUG` is `"true"`, so convert them in your code before you compare or add. An empty value such as `SENTRY_DSN=` sets the variable to an empty string, which is different from leaving the line out.
+Download the [sample .env](/blog/env-file/sample.env) and its matching [.env.example](/blog/env-file/sample.env.example). The rules behind it:
 
-## How a .env file reaches your app
-
-The operating system knows nothing about `.env`. Each process has its own environment, a list of names and values it inherits from the shell that started it. A loader reads the file once at startup and adds its lines to that list.
-
-<Figure
-  src="/blog/env-file/loading.webp"
-  alt="Three stages. The .env file holds lines such as PORT=3000. A loader, such as dotenv, node --env-file, Bun or python-dotenv, parses it at startup. The process environment then holds PORT as the string 3000, unless the shell already set PORT, which wins."
-  caption="The loader copies the file into the process environment once, at startup. A value already set in the shell wins."
-/>
-
-Two consequences follow from this:
-
-- **Edits need a restart.** Changing `.env` while the app runs does nothing until the loader runs again.
-- **The shell wins.** If `PORT=4000` is already exported in your terminal, the app sees `4000`. We checked this with all 11 loaders from the next section, and ten keep the existing value. Docker Compose is the exception: a file named in `env_file` goes into the container even when your shell sets the same name, as the [Docker Compose .env guide](/blog/docker-compose-env-file) shows. dotenv and python-dotenv have an `override` option if you want the file to win.
-
-## .env file format and syntax
-
-There's no formal standard for the format. These rules hold in every loader we tested:
-
-| Rule | Example |
-| --- | --- |
-| One variable per line, with no spaces around `=` | `PORT=3000` |
-| Names use letters, digits and `_`, uppercase by convention | `DATABASE_URL` |
-| A comment starts its own line with `#` | `# Database` |
-| Double quotes keep spaces, and are removed from the value | `APP_NAME="Acme notes"` |
-| An empty value sets the variable to an empty string | `SENTRY_DSN=` |
-| If a name repeats, the later line wins | `PORT=3001` |
-
-The Node, Bun and Python loaders trim spaces around `=`, but a shell rejects them, so leave them out. Blank lines are ignored everywhere.
-
-Most loaders also accept `export NAME=value`, single quotes and multi-line values in double quotes, which is how you store something like a PEM key. The trouble starts with a few specific lines.
-
-## Do all loaders read .env the same way?
-
-No, and the differences are bigger than we expected. We wrote one file with the five lines people most often get wrong and loaded it with 11 loaders on 15 November 2026, each from an empty environment. They produced seven different sets of values. Download the [edge-case file](/blog/env-file/edge-cases.env) to try your own loader.
-
-```bash title="edge-cases.env"
-API_BASE=https://api.example.com
-APP_NAME=Acme notes
-HASH=abc#123
-PRICE='costs $5'
-API_URL=${API_BASE}/v1
-SIGNATURE="Line one\nLine two"
-```
-
-| Loader | `APP_NAME` | `HASH` | `PRICE` | `API_URL` | `SIGNATURE` |
-| --- | --- | --- | --- | --- | --- |
-| dotenv 18.0.10 | `Acme notes` | `abc` | `costs $5` | `${API_BASE}/v1` | Two lines |
-| Node 22.23.4, `--env-file` | `Acme notes` | `abc` | `costs $5` | `${API_BASE}/v1` | Two lines |
-| Bun 1.4.4 | `Acme notes` | `abc` | `costs ` | Expanded | Two lines |
-| Next.js, `@next/env` 16.4.6 | `Acme notes` | `abc` | `costs ` | Expanded | Two lines |
-| Vite 8.3.8, `loadEnv` | `Acme notes` | `abc` | `costs $5` | Expanded | Two lines |
-| Deno 2.9.6, `--env-file` | `Acme notes` | `abc` | `costs $5` | Expanded | Two lines |
-| Ruby dotenv 3.2.0 | `Acme notes` | `abc` | `costs $5` | Expanded | A literal `\n` |
-| python-dotenv 1.2.3 | `Acme notes` | `abc#123` | `costs $5` | Expanded | Two lines |
-| Go godotenv 1.5.1 | `Acme notes` | `abc#123` | `costs $5` | Expanded | Two lines |
-| Docker Compose 5.6.1, `env_file` | `Acme notes` | `abc#123` | `costs $5` | Expanded | Two lines |
-| Bash, `set -a; source` | Unset | `abc#123` | `costs $5` | Expanded | A literal `\n` |
-
-What each column means for your file:
-
-- **Quote values with spaces.** Every loader except the shell reads unquoted `Acme notes`, and the shell runs `notes` as a command.
-- **Quote values with a `#`.** Seven of the 11 cut `abc#123` at the hash, so a password containing `#` silently loses its end. `HASH="abc#123"` read the same in all 11.
-- **Keep `$` out of values.** Next.js and Bun expand `$5` even inside single quotes, so `costs $5` becomes `costs `. Their docs say to write `\$` instead, but dotenv, Node and python-dotenv then keep the backslash: `"costs \$5"` reads as `costs \$5` in those three and `costs $5` in the rest. We found no spelling that works in all 11 ([dollar.env](/blog/env-file/dollar.env) has both attempts). If a secret contains `$`, test it with the loader you deploy with.
-- **Don't build values from other variables.** dotenv and Node keep `${API_BASE}` as text, while the other nine substitute it. Write the full value on each line.
-- **Don't count on `\n`.** Ruby dotenv 3 and the shell keep `\n` as two characters. Put a real line break inside the double quotes instead.
-
-A file that sticks to the rules in the format table, quotes anything with a space or `#` and contains no `$` reads the same in all 11. The sample file at the top is written that way.
+- One variable per line, as `PORT=3000`, with no spaces around `=`.
+- Names use letters, digits and `_`, uppercase by convention.
+- Comments go on their own line.
+- Values with a space or `#` go in double quotes, as `APP_NAME="Acme notes"`.
+- Values contain no `$` and no references to other variables.
+- Multi-line values use real line breaks inside double quotes, never `\n`.
+- Each name appears once.
+- The file is UTF-8 without a BOM, with LF line endings.
 
 ## .env vs .env.example vs the environment
 
 Three things share the name, and they have different jobs:
 
-| | What it is | Commit it? |
-| --- | --- | --- |
-| `.env` | Your real values for this machine | No. Add it to `.gitignore` |
-| `.env.example` | Every variable name the app needs, with empty or safe defaults | Yes. It documents the configuration |
-| Process environment | What the running app actually sees, from the shell, the host or a loader | Not a file. Your host or CI sets it in production |
+- **`.env`** holds your real values for this machine. Add it to `.gitignore` and never commit it.
+- **`.env.example`** lists every variable name the app needs, with empty or safe defaults. Commit it, since it documents the configuration.
+- **The process environment** is what the running app sees, from the shell, the host or a loader. It isn't a file, and your host or CI sets it in production.
 
 `.env.example` is the file a new teammate copies after cloning. Keep it in step with `.env` whenever you add a variable, and leave real secrets out of it, since it lives in Git history forever.
 
 In production, you usually skip the file entirely. Hosting platforms, containers and CI systems all have their own way to set environment variables, and the app reads them the same way.
 
-## How to create a .env file
+## How to create and load a .env file
 
 <Steps>
 <Step>
@@ -164,7 +305,7 @@ If the repository has no `.env.example`, check its README or the code for `proce
 
 ### Fill in your values
 
-Open `.env` and set each value. Use the portable rules above: no spaces around `=`, and double quotes around anything with spaces or `#`.
+Open `.env` and set each value with the rules above: no spaces around `=`, double quotes around anything with a space or `#`, and no `$`.
 
 </Step>
 <Step>
@@ -240,16 +381,15 @@ Acme notes
 
 The file stays on your machine, so the hard part is getting the real values to the next person without pasting them into a chat. These are the common options, from least to most setup:
 
-| Option | Fits when | Watch out for |
-| --- | --- | --- |
-| Password manager or one-time link | One person needs the values once | Nothing updates when a value changes |
-| Encrypted file in Git, with dotenvx or SOPS | The team already shares a key and wants values versioned with the code | Everyone needs the key, and rotating it touches every file |
-| Secrets manager, such as Doppler or Infisical | You need audit logs, rotation and per-environment access rules | More setup than a small project needs |
-| Sniptide env group | A solo developer or small team wants the values in the same place as their shared code | Encrypted at rest with a key the server holds, so it doesn't replace a dedicated secrets manager |
+- **A password manager or one-time link** fits when one person needs the values once. Nothing updates when a value changes.
+- **An encrypted file in Git**, with dotenvx or SOPS, fits a team that shares a key and wants values versioned with the code. Rotating the key touches every file.
+- **A secrets manager**, such as Doppler or Infisical, fits when you need audit logs, rotation and per-environment access rules, and the setup pays off.
+- **A Sniptide env group** fits a solo developer or small team that wants the values next to their shared code and pulled with one command.
 
 <Figure
-  src="/blog/env-file/handoff.webp"
-  alt="On your machine, sniptide env push acme-notes uploads .env into an env group called acme-notes, which stores the values encrypted. On a teammate's machine, sniptide env pull acme-notes writes .env, or sniptide env run starts the app with the values and writes no file."
+  src="/blog/env-file/handoff-v3.webp"
+  darkSrc="/blog/env-file/handoff-v3-dark.webp"
+  alt="Three stages from top to bottom. On your machine, sniptide env push acme-notes uploads .env once. Sniptide stores the values in an encrypted env group called acme-notes. A teammate runs sniptide env pull acme-notes to write .env, or sniptide env run acme-notes -- npm run dev to start the app with the values and no file."
   caption="One env group per project. Push from one machine, pull or run on another."
 />
 
@@ -316,7 +456,9 @@ If you'd rather keep the values on your own server, the [self-hosting guide](htt
 - **The app reads `undefined`.** Nothing loaded the file. Check that you passed `--env-file`, called `config()` before the code that reads the value, or that the runtime loads it on its own.
 - **The file is in the wrong folder.** Loaders look in the current working directory, which isn't always the folder of the script. Run the command from the project root, or pass the full path.
 - **An old value sticks.** The shell already exports that name. Run `echo $PORT`, then `unset PORT` or open a new terminal.
-- **A value is cut short.** It contains `#` or `$`. Put it in double quotes, and escape `$` as `\$` for Bun.
+- **A value is cut short.** It contains `#` or `$`. Put it in double quotes, and test any `$` with the loader you deploy with.
+- **The first variable is missing.** The file starts with a byte order mark. Save it again as UTF-8 without a BOM.
+- **A value doesn't match although it looks right.** The file has Windows line endings and something sources it with Bash. Convert it to LF.
 - **The file is named `.env.txt`.** Some editors add an extension. Show file extensions and rename it to exactly `.env`.
 
 {/* TODO(Dino): link Day 10 (self-hosted pastebin) and Day 9 (MCP versus skills) here as each goes live. */}
@@ -327,7 +469,7 @@ If you keep reusable code next to these values, the [Claude Code skills tutorial
 
 ## Sources
 
-Checked on 9 November 2026. The loader tests were extended on 15 November 2026.
+Checked on 9 November 2026. The loader tests were last run on 17 November 2026.
 
 - [Node.js docs: `--env-file`](https://nodejs.org/api/cli.html#--env-filefile)
 - [dotenv README](https://github.com/motdotla/dotenv)
@@ -335,4 +477,4 @@ Checked on 9 November 2026. The loader tests were extended on 15 November 2026.
 - [python-dotenv README](https://github.com/theskumar/python-dotenv)
 - [Next.js docs: environment variables](https://nextjs.org/docs/app/guides/environment-variables), [Vite docs: env variables and modes](https://vite.dev/guide/env-and-mode), [Deno docs: environment variables](https://docs.deno.com/runtime/reference/env_variables/), [Ruby dotenv README](https://github.com/bkeepers/dotenv), [godotenv README](https://github.com/joho/godotenv), [Docker Compose: env_file](https://docs.docker.com/reference/compose-file/services/#env_file)
 - Sniptide: [CLI, Sync .env files](https://docs.sniptide.com/cli#sync-env-files), [encrypted secrets](https://docs.sniptide.com/core-concepts/secrets), [self-hosting](https://docs.sniptide.com/self-hosting/install-script)
-- Loader tests: the [sample .env](/blog/env-file/sample.env), the [edge-case file](/blog/env-file/edge-cases.env) and [dollar.env](/blog/env-file/dollar.env), each loaded from `env -i` on 15 November 2026 with dotenv 18.0.10, Node.js 22.23.4, Bun 1.4.4, python-dotenv 1.2.3, GNU Bash, Vite 8.3.8 (`loadEnv`), `@next/env` 16.4.6 (`loadEnvConfig`), Deno 2.9.6, Ruby 3.3.6 with dotenv 3.2.0, Go with godotenv 1.5.1, and Docker Compose 5.6.1. The Compose values come from `docker compose config`, which resolves `env_file` without starting a container and prints a literal `$` as `$$`
+- Loader tests: [all 17 test files](/blog/env-file/loader-tests.zip) and the [sample .env](/blog/env-file/sample.env), each loaded from an empty environment on 17 November 2026 with dotenv 18.0.10, Node.js 22.23.4, Bun 1.4.4, `@next/env` 16.4.6 (`loadEnvConfig`), Vite 8.3.8 (`loadEnv`), Deno 2.9.6, Ruby 3.3.6 with dotenv 3.2.0, python-dotenv 1.2.3, Go 1.24.7 with godotenv 1.5.1, GNU Bash 5.2.21 and Docker Compose 5.6.1. The Compose values come from `docker compose config`, which resolves `env_file` without starting a container
