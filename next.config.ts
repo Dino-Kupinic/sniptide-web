@@ -71,6 +71,15 @@ const nextConfig: NextConfig = {
     ]
   },
 
+  // The app draws template logos as CSS masks in its own text color, and a mask from another
+  // origin loads only with CORS.
+  async headers() {
+    return ["/logos/:file*", "/templates/icons/:file*"].map((source) => ({
+      source,
+      headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
+    }))
+  },
+
   async rewrites() {
     return {
       // PostHog, proxied so ad blockers don't drop events (lib/posthog.ts).
@@ -80,6 +89,8 @@ const nextConfig: NextConfig = {
         // A template's Markdown twin and its files as JSON (app/templates/md and app/templates/json).
         { source: "/templates/:name([a-z0-9-]+)\\.md", destination: "/templates/md/:name" },
         { source: "/templates/:name([a-z0-9-]+)\\.json", destination: "/templates/json/:name" },
+        // Every template as JSON, which the app's dashboard lists (app/templates/json/route.ts).
+        { source: "/templates.json", destination: "/templates/json" },
         {
           source: `${posthogProxyPath}/static/:path*`,
           destination: `${posthogAssetsHost(posthogHost)}/static/:path*`,

@@ -3,15 +3,12 @@ import type { ComponentProps, ReactNode } from "react"
 import type { TemplateCardData } from "@/components/templates/template-card"
 import { codeTheme } from "@/lib/code-theme"
 import { readTemplateFiles, type Template } from "@/lib/template-source"
-import type { TemplateFile } from "@/lib/templates"
-
-// Lines a template card's cover holds before it runs off the bottom edge.
-const previewLines = 10
+import { type TemplateFile, templatePreviewLines } from "@/lib/templates"
 
 // The first lines of a template's first file, highlighted, for its card. The cover blurs them
 // behind the tool's logo, so they read as a glimpse of the file rather than a code block.
 export async function templatePreview(file: TemplateFile): Promise<ReactNode> {
-  const code = file.content.split("\n").slice(0, previewLines).join("\n")
+  const code = file.content.split("\n").slice(0, templatePreviewLines).join("\n")
   return highlight(code, {
     lang: file.language,
     themes: { light: codeTheme, dark: codeTheme },

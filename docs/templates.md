@@ -19,6 +19,15 @@ content/templates/claude-md/
 | `/templates/<name>/raw/<path>` | One file as plain text, behind each file's Raw link |
 | `/templates/<name>/opengraph-image` | The share card with the title and the template's logo or icon |
 
+Every template is also an entry in `/templates.json` (`app/templates/json/route.ts`), in directory
+order, with its title, description, file names, visual and `preview`, the first ten lines of the
+first file. A visual's `src` is a path on this site. The app's dashboard lists the first entries
+in its Paste templates widget, so the first templates in the directory are the ones a new account
+sees, and the app's Paste templates page lists them all with the same card cover as this
+directory. The logos and icons under
+`public/logos` and `public/templates/icons` allow any origin, because the app draws them as CSS
+masks.
+
 The page is also a card in `/templates`, which filters by department and searches titles, categories and file names. Every template needs a visual: the card's cover shows the tool's logo, or an icon with a short name, over a blurred glimpse of the first file, and the share image shows the same visual next to the title. `lib/templates.test.ts` fails when a template has neither. To add an icon, copy it from Material Icon Theme into `public/templates/icons` as that folder's README describes. The page is also listed in the sitemap, `llms.txt` and the IndexNow submission after
 deploy, with no further step.
 

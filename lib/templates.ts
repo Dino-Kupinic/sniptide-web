@@ -227,6 +227,37 @@ export function templateJson(template: TemplateMeta, files: TemplateFile[]) {
   }
 }
 
+// One template in /templates.json, the directory the app's dashboard lists. The visual names
+// artwork on this site by path, which a reader resolves against the URL it fetched the list from,
+// so a copy of the site on another host serves its own artwork: a logo the app draws as a mask in
+// its text color, or an icon with its short name. The files stay in /templates/<name>.json.
+export type TemplateVisual =
+  | { kind: "logo"; src: string; ratio: number }
+  | { kind: "icon"; src: string; mark: string }
+
+// Lines of the main file a template card's cover shows, blurred behind the tool's logo.
+export const templatePreviewLines = 10
+
+// A template's entry in /templates.json. `preview` holds the first lines of the main file, so a
+// reader can draw the same card cover as the directory without fetching every template.
+export function templateIndexEntry(
+  template: TemplateMeta,
+  visual: TemplateVisual | null,
+  mainFile: string | null,
+) {
+  return {
+    name: template.name,
+    title: template.title,
+    description: template.description,
+    category: template.category,
+    department: template.department,
+    url: `${siteUrl}${templatePath(template.name)}`,
+    files: template.files,
+    visual,
+    preview: mainFile?.split("\n").slice(0, templatePreviewLines).join("\n") ?? null,
+  }
+}
+
 function breadcrumb(items: { name: string; url: string }[]) {
   return {
     "@type": "BreadcrumbList",
