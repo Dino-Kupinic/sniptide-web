@@ -61,11 +61,9 @@ Sniptide's server runs inside the app at `/api/mcp`, on the hosted app and on ev
 
 The scope decides which projects load the server and whether your team gets it too.
 
-| Scope | Stored in | Loads in |
-| --- | --- | --- |
-| `local` | `~/.claude.json` | This project, for you |
-| `project` | `.mcp.json` | This project, for the team |
-| `user` | `~/.claude.json` | Every project, for you |
+- **`local`** is stored in `~/.claude.json` and loads in this project, for you.
+- **`project`** is stored in `.mcp.json` and loads in this project, for the team.
+- **`user`** is stored in `~/.claude.json` and loads in every project, for you.
 
 **Local** is the default. Claude Code saves the server under the current project's path in `~/.claude.json`, so it loads only in this project and nobody else sees it. In the test, a server added in one folder didn't appear in `claude mcp list` from another folder.
 
@@ -176,8 +174,9 @@ Then, in the project, ask for the change in plain words:
 > Search my Sniptide snippets for a fetch retry helper, read the best match, and use it in src/github.ts so getRepo retries GitHub's rate limits and server errors.
 
 <Figure
-  src="/blog/add-mcp-server-claude-code/loop-v3.webp"
-  alt="Three steps from top to bottom. Claude Code calls search_snippets with the query fetch retry, which returns one summary. It then calls read_snippet with the id hv9tkkmw, which returns the full file. Finally it writes src/fetch-with-retry.ts and changes getRepo in src/github.ts to call fetchWithRetry."
+  src="/blog/add-mcp-server-claude-code/loop-v4.webp"
+  darkSrc="/blog/add-mcp-server-claude-code/loop-v4-dark.webp"
+  alt="Three steps from top to bottom. Search the summaries: search_snippets with the query fetch retry returns a title and description per match. Read one snippet: read_snippet with the id hv9tkkmw returns the full file. Change your project: Claude adds src/fetch-with-retry.ts and changes src/github.ts."
   caption="Search the summaries, read one snippet, then change the code."
 />
 

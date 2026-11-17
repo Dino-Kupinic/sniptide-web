@@ -53,8 +53,9 @@ These rules apply to every Sniptide post, on top of the sections below.
 **Visuals**
 
 - Show a step the reader performs in the product with a real screenshot and a `darkSrc`. Say "illustration" in the caption of a drawn figure that stands in for a screen.
+- Draw a diagram or chart flat on the page surface, in a light version and a dark version passed as `darkSrc`. Use the colors from `DESIGN.md` (white or `#1A1919` behind, Ink text, Graphite labels, Hairline rules, Tide Blue for keys and markers, the pink highlight for one peak). Use real values, a vertical layout 1000px wide rendered at 2x, and text no smaller than 30px so it stays readable on a phone. Leave out cards, glows, uppercase or numbered labels, and arrow glyphs.
 - A caption states the takeaway, as in ".env fills in compose.yaml. Only env_file and environment reach the container."
-- Keep a table inside the text column where possible, with three short columns or fewer. A wider table scrolls sideways, which suits a comparison and hides the last column of a small one.
+- Keep a table inside the text column where possible, with two short columns. A cell that holds a sentence or long code makes the table scroll sideways on a phone, so turn it into a list instead. A wide comparison may scroll.
 - Each row of a results table stands on its own. Spell out the full condition in every row.
 
 **Voice**

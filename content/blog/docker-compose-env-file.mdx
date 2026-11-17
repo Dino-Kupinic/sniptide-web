@@ -78,8 +78,9 @@ PORT=8080
 Four things already happened here. `APP_NAME` and `DATABASE_URL` came from `app.env`. `GREETING` came from `.env`, but only because `compose.yaml` asked for `${GREETING}`. `PORT` is `8080` because `environment` beat the `3000` in `app.env`. And `DB_PASSWORD`, which sits in `.env`, never reached the container, while `DEBUG` is missing because nothing gave it a value.
 
 <Figure
-  src="/blog/docker-compose-env-file/stages.webp"
-  alt="Three stages. The .env file holds ALPINE_TAG, GREETING and DB_PASSWORD. compose.yaml uses image alpine:${ALPINE_TAG}, env_file app.env and GREETING: ${GREETING}. The container receives APP_NAME, DATABASE_URL, GREETING and PORT=8080, and DB_PASSWORD is not set."
+  src="/blog/docker-compose-env-file/stages-v2.webp"
+  darkSrc="/blog/docker-compose-env-file/stages-v2-dark.webp"
+  alt="Three stages from top to bottom. The .env file holds ALPINE_TAG=3.20, GREETING and DB_PASSWORD. docker compose config fills each placeholder in compose.yaml, giving image alpine:3.20, env_file app.env, and GREETING and PORT under environment. Inside the container, APP_NAME and DATABASE_URL come from app.env, GREETING and PORT come from environment, and DB_PASSWORD is not set."
   caption=".env fills in compose.yaml. Only env_file and environment reach the container."
 />
 
@@ -115,12 +116,10 @@ Compose read `DB_PASSWORD`, but no line in `compose.yaml` asked for it, so it st
 
 `env_file` and `environment` both set variables inside the running container, and they differ in scope. `env_file` keeps a service's whole runtime configuration out of `compose.yaml`, and each entry under `environment` sets one variable:
 
-| Entry | What the container gets |
-| --- | --- |
-| `env_file: app.env` | Every line of the file |
-| `PORT: "8080"` | One variable with a fixed value |
-| `GREETING: ${GREETING}` | One variable, filled from the shell or `.env` |
-| `DEBUG:` | One variable, only when the shell or `.env` has it |
+- **`env_file: app.env`** gives the container every line of the file.
+- **`PORT: "8080"`** gives the container one variable with a fixed value.
+- **`GREETING: ${GREETING}`** gives the container one variable, filled from the shell or `.env`.
+- **`DEBUG:`** gives the container one variable, only when the shell or `.env` has it.
 
 Two details are easy to miss. First, a bare name such as `DEBUG:` takes its value from the shell and also from `.env`. In the precedence test below, `PORT:` with no shell variable picked up `PORT=7000` from `.env`. When neither has it, the variable is left out of the container, which is why `DEBUG` is missing in the first run.
 
@@ -167,14 +166,12 @@ The order matches the [Docker precedence docs](https://docs.docker.com/compose/h
 
 ## Which value fills a placeholder? Shell, --env-file and .env
 
-Interpolation has its own, shorter order. Each row below changes one thing about how `docker compose run --rm app` runs and shows the `GREETING` the container received:
+Interpolation has its own, shorter order. Each line below changes one thing about how `docker compose run --rm app` runs and shows the `GREETING` the container received:
 
-| How you run it | GREETING |
-| --- | --- |
-| No extra options | `hello from .env` |
-| Shell exports `GREETING` | `hello from the shell` |
-| `--env-file staging.env` | `hello from staging.env` |
-| `-f` from another folder | `hello from .env` |
+- No extra options: `hello from .env`
+- Shell exports `GREETING`: `hello from the shell`
+- `--env-file staging.env`: `hello from staging.env`
+- `-f` from another folder: `hello from .env`
 
 So the shell beats `--env-file`, and `--env-file` replaces `.env`. Replace is the important word. When the alternative file left out `ALPINE_TAG`, Compose did not fall back to `.env` for it:
 

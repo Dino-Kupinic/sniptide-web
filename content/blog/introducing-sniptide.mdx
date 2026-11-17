@@ -41,9 +41,10 @@ Most pastebins still give you one file, a random link, ads, and no way to find w
 - **Post it anywhere.** Links unfurl with a code preview, post straight to Slack or Discord, embed on a page or print as a PDF.
 
 <Figure
-  src="/blog/introducing-sniptide/paste-v2.webp"
-  alt="A paste with three files, its link, revision number and view count, next to its settings: visibility set to unlisted, expiry after one week, a password, burn after reading and two people invited to edit."
-  caption="An illustration of a paste with three files next to its sharing settings: unlisted, expiring after a week and protected by a password."
+  src="/blog/introducing-sniptide/paste-v3.webp"
+  darkSrc="/blog/introducing-sniptide/paste-v3-dark.webp"
+  alt="A paste called Health check for Express at sniptide.com/health-check with three files, server.js, health.js and .env.example. server.js shows an Express app with a /health route. Below it, 3 files, revision 4 and 128 views, then its sharing settings: visibility unlisted, expires after 1 week, password on, burn after reading off and 2 people invited to edit."
+  caption="An illustration of a paste with three files and its sharing settings: unlisted, expiring after a week and protected by a password."
 />
 
 ## One pattern, from paste to agent
@@ -51,8 +52,9 @@ Most pastebins still give you one file, a random link, ads, and no way to find w
 Say your team keeps a retry helper and a debounce hook it reuses everywhere. Here is how they become something your agent works from.
 
 <Figure
-  src="/blog/introducing-sniptide/agents-v2.webp"
-  alt="Pastes and a collection called snippets flow into Sniptide's MCP endpoint, which serves Claude Code, Codex and Cursor."
+  src="/blog/introducing-sniptide/agents-v3.webp"
+  darkSrc="/blog/introducing-sniptide/agents-v3-dark.webp"
+  alt="Your pastes, retry.ts and debounce.ts, and a collection called snippets reach one MCP endpoint at app.sniptide.com/api/mcp, signed in with OAuth or a token. Claude Code, Codex and Cursor can each search, read and save through it."
   caption="Pastes in a collection, served to your agents over MCP."
 />
 
@@ -124,8 +126,9 @@ An agent only reaches your own pastes, and revoking a token or a connection cuts
 Use Sniptide on [sniptide.com](https://sniptide.com), or [run the same app on your own server](/#self-host). Self-hosting takes one command on a Linux server with Docker and the Compose plugin, and the [self-hosting guide](https://docs.sniptide.com/self-hosting) covers the rest.
 
 <Figure
-  src="/blog/introducing-sniptide/self-host-v2.webp"
-  alt="A terminal runs the Sniptide install script, which sets up Docker Compose and HTTPS, and starts Sniptide and Postgres on your server."
+  src="/blog/introducing-sniptide/self-host-v3.webp"
+  darkSrc="/blog/introducing-sniptide/self-host-v3-dark.webp"
+  alt="On your server, curl -fsSL sniptide.com/install.sh | sh reports Docker Compose ready, HTTPS for paste.example.com and Sniptide running. docker compose ps then lists two running containers, sniptide and postgres."
   caption="One command installs Sniptide and Postgres on your server."
 />
 
