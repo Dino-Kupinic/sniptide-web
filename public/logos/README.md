@@ -14,6 +14,7 @@ outlines across the complete logo, with the scan effect enabled. The source artw
 | `docker.svg` | [Docker media resources](https://www.docker.com/company/newsroom/media-resources/), [brand kit](https://www.docker.com/static/Docker-Logos-1.zip) | `docker-logos/SVG/docker-logo-black.svg` |
 | `slack.svg` | [Official Slack logo library](https://brandfolder.com/slack/logos/#!asset/pl546j-7le8zk-4v3yy6) | `Slack_Monochrome_Black.svg`, standalone symbol and wordmark without a Salesforce suffix |
 | `discord.svg` | [Discord branding](https://discord.com/branding), [logo download](https://cdn.discordapp.com/assets/content/061dbac3ba20669ec7e5cce279692835f4077ab26174b9cd73fea32fa7c70a6d.zip) | `DIscord_Logo_White/Discord-Logo-White.svg` |
+| `grok-bot.svg` | [Grok](https://grok.com) | The Grok mark and wordmark with "Bot" set beside it, as the Grok Bot template shows it |
 | `curl.svg` | [curl logos](https://curl.se/logo/), [SVG](https://curl.se/logo/curl-logo.svg) | curl wordmark |
 
 SVGs retain the original product paths and proportions, with accessible names

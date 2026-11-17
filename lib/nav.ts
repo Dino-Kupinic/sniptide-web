@@ -1,4 +1,5 @@
 import {
+  BlocksIcon,
   BookOpenIcon,
   BracesIcon,
   ChartColumnIcon,
@@ -149,6 +150,12 @@ export const navMenus: NavMenu[] = [
             description: "Push and pull pastes from your terminal.",
             href: documentation.cli.url,
             icon: SquareTerminalIcon,
+          },
+          {
+            label: "Extensions",
+            description: "Save and insert snippets from VS Code, Chrome and Raycast.",
+            href: "#extensions",
+            icon: BlocksIcon,
           },
           {
             label: "OAuth sign-in",

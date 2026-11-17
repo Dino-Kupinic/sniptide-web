@@ -10,10 +10,11 @@ export function Hero() {
       className="relative flex h-160 flex-col justify-end overflow-clip bg-white p-3 md:block md:h-200 md:p-0 dark:bg-[#0a0a0a]"
     >
       {/* Pixel horizon: a day seascape in light mode, a pink dusk in dark mode. Phones get a crop
-          of the desktop scene around the sun rather than a squeezed one. */}
+          of the desktop scene around the sun rather than a squeezed one. Until the canvas draws, its
+          first frame shows as a still, from `scripts/generate-hero-still.ts`. */}
       <PixelCanvas
         kind="horizon"
-        className="absolute bottom-0 left-[calc((100%-1178px)*0.8)] h-180 w-[1178px] md:top-[-80px] md:bottom-auto md:left-0 md:h-[calc(100%+80px)] md:w-full"
+        className="absolute bottom-0 left-[calc((100%-1178px)*0.8)] h-180 w-[1178px] bg-[url(/landing/hero-day-phone.png)] bg-size-[100%_100%] [image-rendering:pixelated] md:top-[-80px] md:bottom-auto md:left-0 md:h-[calc(100%+80px)] md:w-full md:bg-[url(/landing/hero-day-desktop.png)] dark:bg-[url(/landing/hero-night-phone.png)] md:dark:bg-[url(/landing/hero-night-desktop.png)]"
       />
 
       <div className="relative flex flex-col gap-4 bg-white p-6 md:absolute md:top-10 md:left-[max(2rem,calc((100%-1440px)/2+2rem))] md:w-160 md:max-w-[calc(100%-64px)] md:gap-5.5 md:p-10 dark:bg-[#0a0a0a]">

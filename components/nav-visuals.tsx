@@ -4,6 +4,7 @@ import { CheckIcon, CopyIcon, LockKeyholeIcon, StarIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { GitHubMark } from "@/components/github-mark"
 import { LifeField } from "@/components/life-field"
+import { exampleKey } from "@/lib/encryption-example"
 import type { NavFeature } from "@/lib/nav"
 
 // The pictures at the top of each menu's featured card. Each one shows the real thing: an
@@ -12,8 +13,6 @@ import type { NavFeature } from "@/lib/nav"
 
 // The link an encrypted paste is shared with, as the docs show it. The key after the # never
 // reaches the server, so it is set apart in blue.
-// A made-up key, split so the secret scanner doesn't read the example as a credential.
-const exampleKey = ["3q2-7wAAEC", "AwQFBgcICQoLDA0"].join("")
 
 function EncryptedVisual() {
   return (

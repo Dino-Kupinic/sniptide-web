@@ -1,24 +1,39 @@
 # Landing page
 
-## Product walkthrough
+## Hero still
 
+The hero horizon is a canvas that starts drawing when the page hydrates. Until then, the hero
+shows the canvas's first frame from four small PNGs in `public/landing`, for day and night on
+desktops and phones, so the scene is there on the first paint. The canvas draws the same frame
+over it, so the handover doesn't show. After changing `drawHorizon` in `lib/motion.ts`, run
+`bun scripts/generate-hero-still.ts` to render the stills again.
 
-The product preview loops through the demo dashboard, creating a TypeScript paste, the saved paste,
-and account analytics, then returns to the dashboard. Light and dark GIFs live in
-`assets/landing/demo-walkthrough-{light,dark}.gif`. They replace the screenshots inside the existing
-preview, with the same dimensions, phone cropping, dimming, and centered **Try the demo** link.
-The recording follows the theme selected in the footer. The WebP dashboard stills supply the
-homepage screenshot metadata.
+## Product screenshot
 
-To refresh the media, record the same flow at 1266 × 793 in each theme using the shared demo's
-example data. Use only sample code, discard restored drafts before recording, and remove any
-pastes created for the recording afterwards. Until the companion banner removal in
-[sniptide#233](https://github.com/Dino-Kupinic/sniptide/pull/233) deploys, hide only the workspace's
-`p[role=note]` banner in the recording browser. Export an infinitely looping GIF and a WebP of the
-opening dashboard frame for each theme. Keep the dimensions and dashboard caption in
-`lib/structured-data.ts` in sync with the stills. Check both themes, the footer theme switch,
-the centered demo link, and phone cropping after replacing the files.
+The product band shows the demo dashboard as a still, light and dark, in
+`assets/landing/demo-preview-{light,dark}.webp`. The same stills supply the homepage screenshot
+metadata, so keep the caption in `lib/structured-data.ts` in sync with what they show.
 
+To refresh them, sign in to the shared demo at `demo.sniptide.com/demo` and add a few pastes with
+realistic sample code, so the sidebar and lists look like a library in use. Capture the dashboard
+at 1266 × 793 with a device scale factor of 2 in each theme and save both as WebP. Move the pastes
+you added to the trash afterwards; the demo also resets to its example data every hour. Check both
+themes, the centered demo link and the phone cropping after replacing the files.
+
+## Recipes figure
+
+The recipes section draws the Components collection next to the project it was pulled into in
+`components/recipe-tree.tsx`, in code, so it follows the theme and stays sharp. Keep its six steps
+in line with the CLI session in `components/recipes.tsx`, which reports writing six files.
+
+## Extensions carousel
+
+The extensions section is a horizontal carousel in `components/extensions.tsx`. The track scrolls
+natively with snap points, so touch, trackpad and keyboard scrolling work, and the arrow buttons
+move it one card at a time and turn off at each end. Each card draws its tool in code in
+`components/extension-replicas.tsx`, using the extension's real commands and labels, so update a
+drawing when an extension renames a command. A new card needs a replica, a title, one sentence and
+a link to its guide.
 
 ## Compatible tool marquee
 
