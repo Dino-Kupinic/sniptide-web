@@ -235,7 +235,16 @@ export type TemplateVisual =
   | { kind: "logo"; src: string; ratio: number }
   | { kind: "icon"; src: string; mark: string }
 
-export function templateIndexEntry(template: TemplateMeta, visual: TemplateVisual | null) {
+// Lines of the main file a template card's cover shows, blurred behind the tool's logo.
+export const templatePreviewLines = 10
+
+// A template's entry in /templates.json. `preview` holds the first lines of the main file, so a
+// reader can draw the same card cover as the directory without fetching every template.
+export function templateIndexEntry(
+  template: TemplateMeta,
+  visual: TemplateVisual | null,
+  mainFile: string | null,
+) {
   return {
     name: template.name,
     title: template.title,
@@ -245,6 +254,7 @@ export function templateIndexEntry(template: TemplateMeta, visual: TemplateVisua
     url: `${siteUrl}${templatePath(template.name)}`,
     files: template.files,
     visual,
+    preview: mainFile?.split("\n").slice(0, templatePreviewLines).join("\n") ?? null,
   }
 }
 

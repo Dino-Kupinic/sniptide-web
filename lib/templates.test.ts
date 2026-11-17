@@ -164,6 +164,8 @@ describe("template index", () => {
         url: `${siteUrl}/templates/${template.name}`,
       })
       expect(listed[index].visual.src).toMatch(/^\/(logos|templates\/icons)\/[a-z-]+\.svg$/)
+      const main = readTemplateFiles(template)[0]?.content ?? ""
+      expect(listed[index].preview).toBe(main.split("\n").slice(0, 10).join("\n"))
     }
   })
 })

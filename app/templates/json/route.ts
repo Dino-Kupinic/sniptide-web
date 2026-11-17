@@ -1,6 +1,6 @@
 import { templateOgVisual } from "@/components/templates/template-visual"
 import { siteUrl } from "@/lib/site"
-import { getTemplates } from "@/lib/template-source"
+import { getTemplates, readTemplateFiles } from "@/lib/template-source"
 import { templateIndexEntry, templatesPath } from "@/lib/templates"
 
 // Every template in directory order at /templates.json (rewritten here in next.config.ts). The
@@ -10,7 +10,11 @@ export const dynamic = "force-static"
 
 export function GET() {
   const templates = getTemplates().map((template) =>
-    templateIndexEntry(template, templateOgVisual(template)),
+    templateIndexEntry(
+      template,
+      templateOgVisual(template),
+      readTemplateFiles(template)[0]?.content ?? null,
+    ),
   )
   return Response.json(
     { templates },

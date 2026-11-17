@@ -20,9 +20,11 @@ content/templates/claude-md/
 | `/templates/<name>/opengraph-image` | The share card with the title and the template's logo or icon |
 
 Every template is also an entry in `/templates.json` (`app/templates/json/route.ts`), in directory
-order, with its title, description, file names and visual. A visual's `src` is a path on this
-site. The app's dashboard lists the first entries in its Paste templates widget, so the first
-templates in the directory are the ones a new account sees. The logos and icons under
+order, with its title, description, file names, visual and `preview`, the first ten lines of the
+first file. A visual's `src` is a path on this site. The app's dashboard lists the first entries
+in its Paste templates widget, so the first templates in the directory are the ones a new account
+sees, and the app's Paste templates page lists them all with the same card cover as this
+directory. The logos and icons under
 `public/logos` and `public/templates/icons` allow any origin, because the app draws them as CSS
 masks.
 
