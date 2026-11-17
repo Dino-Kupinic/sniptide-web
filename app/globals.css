@@ -97,6 +97,20 @@ body {
   }
 }
 
+/* The section frame for a horizontal track that runs to the window edges: snapped cards stop at
+   the same gutter as the rest of the section. */
+@utility section-frame-scroll {
+  scroll-padding-inline: max(1.25rem, calc((100% - 1280px) / 2));
+
+  @media (width >= 48rem) {
+    scroll-padding-inline: max(2.5rem, calc((100% - 1280px) / 2));
+  }
+
+  @media (width >= 80rem) {
+    scroll-padding-inline: max(7.5rem, calc((100% - 1280px) / 2));
+  }
+}
+
 /* The countdown under the active tab of the pink section; its end advances to the next tab. */
 @keyframes tab-progress {
   from {

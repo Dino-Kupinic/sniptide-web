@@ -18,6 +18,14 @@ The recipes section draws the Components collection next to the project it was p
 `components/recipe-tree.tsx`, in code, so it follows the theme and stays sharp. Keep its six steps
 in line with the CLI session in `components/recipes.tsx`, which reports writing six files.
 
+## Extensions carousel
+
+The extensions section is a horizontal carousel in `components/extensions.tsx`. The track scrolls
+natively with snap points, so touch, trackpad and keyboard scrolling work, and the arrow buttons
+move it one card at a time and turn off at each end. Each card draws its tool in code in
+`components/extension-replicas.tsx`, using the extension's real commands and labels, so update a
+drawing when an extension renames a command. A new card needs a replica, a title, one sentence and
+a link to its guide.
 
 ## Compatible tool marquee
 
