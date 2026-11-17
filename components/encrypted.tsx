@@ -3,8 +3,8 @@ import { EncryptionDemo } from "@/components/encryption-demo"
 import { SectionHeading } from "@/components/section-heading"
 import { docsPages } from "@/lib/links"
 
-// The facts mirror the encrypted pastes page in the app's docs, including what the feature gives
-// up, so the section never promises more than an encrypted paste does.
+// The facts mirror the encrypted pastes page in the app's docs, so the section never promises more
+// than an encrypted paste does.
 const facts = [
   {
     title: "Encrypted before it is saved",
@@ -15,8 +15,8 @@ const facts = [
     text: "Neither Sniptide nor anyone with a copy of its database or backups can read the files.",
   },
   {
-    title: "Fixed once created",
-    text: "An encrypted paste can't be edited, made public or read through the API, and its title stays readable.",
+    title: "Works with your link settings",
+    text: "Passwords, expiry, invites and burn after read all work on an encrypted paste.",
   },
 ]
 
@@ -28,8 +28,8 @@ export function Encrypted() {
       className="flex scroll-mt-4 flex-col gap-10 border-t border-[#e8e8e8] bg-white section-frame py-16 text-[#1b1919] md:gap-14 md:py-20 xl:py-30 dark:border-[#1f1f1f] dark:bg-[#0a0a0a] dark:text-[#f5f5f5]"
     >
       <SectionHeading
-        claim="Encrypt a paste before it leaves your browser."
-        reason="The server never sees the key."
+        claim="Some pastes are only for the people you send them to."
+        reason="Encrypt them in your browser, and the server never sees the key."
       />
 
       <EncryptionDemo />

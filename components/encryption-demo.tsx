@@ -84,7 +84,10 @@ export function EncryptionDemo() {
   const { ref, lines } = useCipher()
 
   return (
-    <figure className="flex flex-col gap-4">
+    <figure
+      aria-label="A paste readable in the browser and stored as ciphertext on the server, with the key in its link"
+      className="flex flex-col gap-4"
+    >
       <div
         ref={ref}
         className="grid items-center gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-4"
@@ -122,7 +125,7 @@ export function EncryptionDemo() {
               ciphertext
             </span>
           </div>
-          {/* The noise means nothing, so assistive technology hears the figure's caption instead. */}
+          {/* The noise means nothing, so assistive technology hears the figure's label instead. */}
           <div aria-hidden="true" className={paneBody}>
             {lines.map((line, i) => (
               <span
@@ -141,11 +144,6 @@ export function EncryptionDemo() {
         <span className="shrink-0">sniptide.com/k7Qe2x</span>
         <span className="truncate text-[#2a26ec] dark:text-[#8f8cff]">#key={exampleKey}</span>
       </div>
-      <figcaption className="text-base leading-6.5 text-[#6b6b6b] dark:text-[#a3a3a3]">
-        Browsers never send the part of a link after the{" "}
-        <code className="font-mono text-[15px] text-[#1b1919] dark:text-[#f5f5f5]">#</code>, so the
-        key travels with the link you share and never reaches the server.
-      </figcaption>
     </figure>
   )
 }
