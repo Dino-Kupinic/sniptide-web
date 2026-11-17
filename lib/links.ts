@@ -41,4 +41,8 @@ export const docsPages = {
   importGist: `${docsUrl}/getting-started/import-gist`,
   sdks: `${docsUrl}/sdks`,
   envSync: `${documentation.cli.url}#sync-env-files`,
+  vscodeExtension: `${docsUrl}/vscode-extension`,
+  browserExtension: `${docsUrl}/browser-extension`,
+  raycastExtension: `${docsUrl}/raycast-extension`,
+  agentPlugin: `${documentation.mcp.url}#install-in-your-agent`,
 }

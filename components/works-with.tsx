@@ -13,6 +13,7 @@ export const tools = [
   { src: "/logos/docker.svg", alt: "Docker", href: "https://www.docker.com", ratio: 1250 / 268 },
   { src: "/logos/slack.svg", alt: "Slack", href: "https://slack.com", ratio: 498 / 127 },
   { src: "/logos/discord.svg", alt: "Discord", href: "https://discord.com", ratio: 635.303 / 96 },
+  { src: "/logos/grok-bot.svg", alt: "Grok Bot", href: "https://grok.com", ratio: 132.119 / 24 },
   { src: "/logos/curl.svg", alt: "curl", href: "https://curl.se", ratio: 2851 / 854 },
 ] as const
 

@@ -30,7 +30,10 @@ export const features = [
   "Agents connect over MCP with an OAuth sign-in or a personal token",
   "Collections that agents and the CLI follow as ordered recipes",
   "Invite people to a private paste with view or edit access",
+  "End-to-end encrypted pastes whose key never reaches the server",
   "Sync .env files as encrypted env groups",
+  "Share env groups with view or edit access and review every read in an activity log",
+  "Extensions for VS Code, Chrome and Raycast, and a plugin for Claude Code and Gemini CLI",
   "Self-host with one Docker image and a database (AGPL-3.0)",
 ]
 

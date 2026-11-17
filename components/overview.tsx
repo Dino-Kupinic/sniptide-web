@@ -91,8 +91,8 @@ export function Overview() {
                 Agents reuse your snippets over MCP
               </span>
               <span className="max-w-120 text-base leading-6.5 text-[#6b6b6b] dark:text-[#a3a3a3]">
-                Claude Code, Cursor and Codex search your library and read the files before they
-                write new code. One sign-in in the browser connects them.
+                Claude Code, Cursor, Codex and Grok Bot search your library and read the files
+                before they write new code. One sign-in in the browser connects them.
               </span>
             </span>
             {/* The link names the tile, so the transcript stays out of the accessible name. */}

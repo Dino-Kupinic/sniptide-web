@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { AnnouncementBar } from "@/components/announcement-bar"
 import { Cta } from "@/components/cta"
+import { Encrypted } from "@/components/encrypted"
+import { Extensions } from "@/components/extensions"
 import { FunnelTracking } from "@/components/funnel-tracking"
 import { Hero } from "@/components/hero"
 import { JsonLd } from "@/components/json-ld"
@@ -42,6 +44,8 @@ export default async function Home() {
         <Recipes />
         <Secrets />
         <Sharing />
+        <Encrypted />
+        <Extensions />
         <Cta stars={stars} />
       </main>
       <SiteFooter />

@@ -17,8 +17,12 @@ const facts = [
     text: "The key is derived from your server's secret, so a copy of the database alone stays unreadable.",
   },
   {
-    title: "Never printed",
-    text: "The CLI names variables and never shows values, so agent output stays clean.",
+    title: "Shared with view or edit access",
+    text: "Give a teammate one group and nothing else, and take it back on their next request.",
+  },
+  {
+    title: "Every read in the activity log",
+    text: "Each reveal, pull and access change names the account or token, and no one can edit an entry.",
   },
 ]
 
@@ -50,7 +54,7 @@ export function Secrets() {
         </div>
       </figure>
 
-      <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
         {facts.map((fact) => (
           <li key={fact.title} className="flex flex-col gap-1.5 border-t border-[#262626] pt-4">
             <h3 className="text-base leading-5.5 font-semibold">{fact.title}</h3>
