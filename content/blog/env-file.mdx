@@ -29,18 +29,6 @@ Keyword: .env file (Google Keyword Planner reports env file at US 1K to 10K, wor
 
 A `.env` file is a plain text file of `KEY=value` lines that holds a project's configuration, such as its port, database address and API keys. There is no formal standard for it, so we wrote 17 small files, each with one line people commonly get wrong, and loaded every one with 11 loaders, from dotenv and Next.js to Go, Bash and Docker Compose. All 11 agreed on 6 of the files and split on the other 11.
 
-<Callout title="TL;DR">
-
-- Plain `NAME=value` lines, comments on their own line, `export`, empty values and multi-line values in double quotes read the same in all 11.
-- Put double quotes around any value with a space or `#`. Unquoted, Bash drops `Acme notes` and seven loaders cut `abc#123` to `abc`.
-- Keep `$` out of values. We found no way to write it that all 11 read the same, and Bun and Next.js expand `$5` even inside single quotes.
-- Write every value in full. dotenv and Node keep a reference such as `${API_BASE}` as text, while the other nine substitute it.
-- Save the file as UTF-8 without a BOM and with Unix line endings. A BOM costs Node, Vite, Deno and Bash the first variable and makes Go fail, and Windows line endings leave a `\r` on every value in Bash.
-- Don't repeat a name. The later line wins everywhere except Deno, which keeps the first.
-- A variable already set in your shell wins in the nine library loaders. Sourcing the file in Bash and Compose's `env_file` let the file win.
-
-</Callout>
-
 ## How we ran the test
 
 On 17 November 2026 we wrote each case into its own `.env` file and loaded it with these 11 loaders. Each loader ran from an empty environment, so nothing from our own shell could leak in, and printed the values it set as JSON.
