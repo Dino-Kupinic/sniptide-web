@@ -145,7 +145,18 @@ test("Markdown negotiation respects preferences, exclusions and HEAD", async () 
   expect(prefersMarkdown("text/markdown;q=0")).toBe(false)
   expect(prefersMarkdown("text/markdown;q=invalid")).toBe(false)
   expect(prefersMarkdown("text/markdown;q=2")).toBe(false)
+  for (const path of ["/", "/about", "/contact"]) {
+    const html = proxy(
+      new NextRequest(`https://sniptide.com${path}`, {
+        headers: { accept: "text/html" },
+      }),
+    )
+    expect(html.headers.get("link")).toContain('rel="alternate"; type="text/markdown"')
+    expect(html.headers.get("link")).not.toContain('rel="canonical"')
+  }
+
   const response = proxy(new NextRequest("https://sniptide.com/?mode=agent", { method: "HEAD" }))
+  expect(response.headers.get("link")).toContain('<https://sniptide.com>; rel="canonical"')
   expect(response.headers.get("content-type")).toContain("text/markdown")
   expect(response.headers.get("link")).toContain('rel="service-desc"')
   expect(response.headers.get("link")).toContain('rel="sitemap"')

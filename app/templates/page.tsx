@@ -10,7 +10,7 @@ import { getTemplates } from "@/lib/template-source"
 import { directoryStructuredData, templatesDescription, templatesPath } from "@/lib/templates"
 
 export const metadata: Metadata = {
-  title: "Templates",
+  title: "Code and configuration templates",
   description: templatesDescription,
   alternates: { canonical: templatesPath },
 }

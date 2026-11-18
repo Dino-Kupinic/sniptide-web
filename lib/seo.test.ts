@@ -12,7 +12,7 @@ describe("search engine basics", () => {
 
   test("robots.txt allows crawling and points at the sitemap", () => {
     expect(robots()).toMatchObject({
-      rules: { userAgent: "*", allow: "/" },
+      rules: { userAgent: "*", allow: "/", disallow: "/cdn-cgi/l/email-protection" },
       sitemap: `${siteUrl}/sitemap.xml`,
     })
   })

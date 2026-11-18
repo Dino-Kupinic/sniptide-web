@@ -21,7 +21,7 @@ export const metadata: Metadata = {
       ]),
     ),
   },
-  title: "Blog",
+  title: "Product news and engineering blog",
   description: "Product news and notes on building Sniptide, the pastebin for coding agents.",
 }
 

@@ -57,6 +57,8 @@ The way a skill loads is what makes it cheap to keep around:
 
 <Figure
   src="/blog/claude-code-skills/loading-v2.webp"
+  width={1200}
+  height={1051}
   darkSrc="/blog/claude-code-skills/loading-v2-dark.webp"
   alt="Three steps from top to bottom. Always in context: the name and description of every skill, such as ui with the description UI patterns for this repo. When the skill is used: Claude loads .claude/skills/ui/SKILL.md after you type /ui or it matches the description. When a task needs it: Claude opens only the snippet file it calls for, here empty-state.tsx."
   caption="Only the description is always loaded. The rest arrives when a task needs it."
@@ -233,6 +235,8 @@ Copying folders by hand works for one project. It breaks down when the button ch
 
 <Figure
   src="/blog/claude-code-skills/collection-to-skill-v2.webp"
+  width={1200}
+  height={1231}
   darkSrc="/blog/claude-code-skills/collection-to-skill-v2-dark.webp"
   alt="A Sniptide collection called ui holds Button with variants, Debounced value hook and Empty state. The command sniptide skill ui writes it into the project as .claude/skills/ui with SKILL.md and a snippets folder holding button.tsx, use-debounced-value.ts and empty-state.tsx, which Claude Code reads like any other skill."
   caption="One collection, written out as a skill in any project."

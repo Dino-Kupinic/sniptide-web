@@ -57,6 +57,8 @@ Your code never reads the file. The operating system gives each process an envir
 
 <Figure
   src="/blog/env-file/loading-v3.webp"
+  width={1200}
+  height={913}
   darkSrc="/blog/env-file/loading-v3-dark.webp"
   alt="A .env file with the lines PORT=3000 and DEBUG=true. The command node --env-file=.env app.js reads the file once, at startup. The process environment then holds process.env.PORT as the string 3000 and process.env.DEBUG as the string true."
   caption="A loader copies the file into the process environment once, at startup."
@@ -85,6 +87,8 @@ The other 11 files produced at least two different results. Bash read 7 of them 
 
 <Figure
   src="/blog/env-file/loader-splits.webp"
+  width={1200}
+  height={1121}
   darkSrc="/blog/env-file/loader-splits-dark.webp"
   alt="Bar chart of how many of the 11 contested files each loader read differently from most of the others. Bash 7, Node.js 3, Compose 2, Deno 2, dotenv 2, Go godotenv 2, python-dotenv 2, Bun 1, Next.js 1, Ruby dotenv 1, Vite 1."
   caption="Bash is the outlier. Every other loader stood apart on 3 files or fewer."
@@ -388,6 +392,8 @@ The file stays on your machine, so the hard part is getting the real values to t
 
 <Figure
   src="/blog/env-file/handoff-v3.webp"
+  width={1200}
+  height={1182}
   darkSrc="/blog/env-file/handoff-v3-dark.webp"
   alt="Three stages from top to bottom. On your machine, sniptide env push acme-notes uploads .env once. Sniptide stores the values in an encrypted env group called acme-notes. A teammate runs sniptide env pull acme-notes to write .env, or sniptide env run acme-notes -- npm run dev to start the app with the values and no file."
   caption="One env group per project. Push from one machine, pull or run on another."

@@ -46,10 +46,23 @@ for (const [path, canonicalUrl] of [
   assert.ok(body.includes(canonicalUrl), `${path} canonical guide link`)
   assert.ok(!body.includes("code_challenge_method"), `${path} contains no copied auth instructions`)
 }
-for (const path of ["/about", "/contact"]) {
-  const html = await read(path, "text/html", `${siteUrl}${path}`)
-  assert.ok(html.includes("<h1"), `${path} heading`)
-  assert.ok(html.includes(documentation.home.url), `${path} canonical documentation navigation`)
+for (const path of ["/", "/about", "/contact"]) {
+  const canonical = path === "/" ? siteUrl : `${siteUrl}${path}`
+  const response = await fetch(new URL(path, origin), {
+    headers: { Accept: "text/html" },
+    signal: AbortSignal.timeout(30_000),
+  })
+  assert.equal(response.status, 200, `${path} status`)
+  assert.ok(response.headers.get("content-type")?.includes("text/html"), `${path} content type`)
+  assert.ok(!response.headers.get("link")?.includes('rel="canonical"'), `${path} canonical header`)
+  const html = await response.text()
+  const canonicals = html.match(/<link rel="canonical"[^>]*>/g) ?? []
+  assert.equal(canonicals.length, 1, `${path} canonical count`)
+  assert.ok(canonicals[0]?.includes(`href="${canonical}"`), `${path} canonical URL`)
+  assert.equal(html.match(/<h([1-6])\b/)?.[1], "1", `${path} first heading`)
+  if (path !== "/")
+    assert.ok(html.includes(documentation.home.url), `${path} canonical documentation navigation`)
+  await read(`${path}?mode=agent`, "text/markdown", canonical)
 }
 const manifest = JSON.parse(await read("/.well-known/mcp.json", "application/json"))
 const server = manifest.servers[0]
