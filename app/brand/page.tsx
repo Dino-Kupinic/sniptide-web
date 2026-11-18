@@ -12,16 +12,22 @@ const logos = [
   {
     name: "Logo on light backgrounds",
     file: "/brand/sniptide-lockup.svg",
+    width: 917,
+    height: 154,
     surface: "bg-white border border-[#e8e8e8] dark:border-transparent",
   },
   {
     name: "Logo on dark backgrounds",
     file: "/brand/sniptide-lockup-inverse.svg",
+    width: 917,
+    height: 154,
     surface: "bg-[#0c0b0b] border border-transparent dark:border-[#262626]",
   },
   {
     name: "Wordmark",
     file: "/brand/sniptide-wordmark.svg",
+    width: 4340,
+    height: 683,
     surface: "bg-white border border-[#e8e8e8] dark:border-transparent",
   },
 ]
@@ -50,7 +56,13 @@ export default function Page() {
               className={`flex h-32 items-center justify-center rounded-lg px-8 ${logo.surface}`}
             >
               {/* biome-ignore lint/performance/noImgElement: a plain SVG file shown as it downloads */}
-              <img src={logo.file} alt={logo.name} className="h-10 w-auto max-w-full" />
+              <img
+                src={logo.file}
+                alt={logo.name}
+                width={logo.width}
+                height={logo.height}
+                className="h-10 w-auto max-w-full"
+              />
             </div>
             <a href={logo.file} download>
               Download the {logo.name.toLowerCase()} (SVG)

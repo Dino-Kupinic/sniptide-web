@@ -77,7 +77,7 @@ The database has no `ports` here: the app reaches it over the Compose network, a
 
 ## Variant: with pgAdmin
 
-Add this under `services` for local development. Set a local `PGADMIN_PASSWORD` in `.env`, then run `docker compose up -d --wait`. Sign in at http://localhost:5050 and register Postgres with host `db`, port `5432`, and the database user and password from `db`.
+Add this under `services` for local development. Set a local `PGADMIN_PASSWORD` in `.env`, then run `docker compose up -d --wait`. Sign in at `http://localhost:5050` and register Postgres with host `db`, port `5432`, and the database user and password from `db`.
 
 ```yaml title="compose.yaml"
   pgadmin:

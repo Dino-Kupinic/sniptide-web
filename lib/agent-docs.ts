@@ -213,7 +213,8 @@ export const aboutDocument: AgentDocument = {
   path: "/about",
   canonicalUrl: `${siteUrl}/about`,
   title: "About Sniptide",
-  description: siteDescription,
+  description:
+    "Learn how Sniptide is licensed, where to find its source code, and how to run the open-source pastebin on your own server.",
   sections: [
     {
       title: "Open source",

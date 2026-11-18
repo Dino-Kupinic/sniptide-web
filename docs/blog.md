@@ -61,7 +61,9 @@ draft: true # optional
   index and link previews always show a picture. The cover sits at the top of the post under the
   description. Every picture, from `<Figure src darkSrc>` or a Markdown image, opens a full-screen
   viewer with zoom up to 4x, panning and pinch (`components/blog/zoom-image.tsx`), and shows its
-  caption centered below in smaller text. A Markdown image uses its title, or its alt text, as the
+  caption centered below in smaller text. Export covers at 3200 by 2000 pixels. Give each
+  `Figure` its source image’s pixel width and height. Use the same dimensions for both color
+  schemes so the browser can reserve space before loading the image. A Markdown image uses its title, or its alt text, as the
   caption.
 - **Feeds and previews.** `/blog/rss.xml`, `/blog/atom.xml` and `/blog/feed.json` (JSON Feed 1.1)
   list the latest 20 posts, and the Subscribe menu on the index offers all three. Each post gets an Open Graph

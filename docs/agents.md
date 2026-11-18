@@ -15,7 +15,9 @@ and MCP metadata; `/auth.md` is a short authentication index.
 link to the canonical guides. The public documentation MCP at `/api/mcp`, A2A agent at
 `/api/a2a`, and conversational search at `/ask` return lightweight documentation indexes.
 The llms files and robots.txt point to canonical documentation. About and contact pages
-remain in the sitemap; redirected documentation pages do not.
+remain in the sitemap; redirected documentation pages do not. HTML declares one canonical in
+the page metadata. Markdown responses declare their HTML equivalent in the HTTP `Link` header.
+`robots.txt` excludes Cloudflare’s email protection endpoint from crawling.
 
 `/api/status` reports whether the app's `/api/health` answers, cached for a minute, and the
 footer's status line reads it.

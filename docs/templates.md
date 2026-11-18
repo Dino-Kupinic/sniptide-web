@@ -60,7 +60,8 @@ deploy, with no further step.
    Use the [documentation style guide](documentation-style-guide.md). Name the prerequisites and
    placeholders, show a way to verify the result, and include cleanup when a command starts
    services or creates persistent resources. Use reserved example domains and keep credentials
-   out of copyable files.
+   out of copyable files. Format local service URLs as inline code for readers to copy after
+   starting the service.
 4. Run `bun test`. `lib/templates.test.ts` fails when `files/` and the frontmatter disagree, or
    when a related template or post doesn't exist. Update the list of names in that test when
    you add or remove a template.

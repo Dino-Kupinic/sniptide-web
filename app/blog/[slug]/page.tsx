@@ -108,31 +108,6 @@ export default async function Page({ params }: Props) {
           data-cta-location="blog-post"
           className="mx-auto grid w-full max-w-[1440px] px-5 pt-8 pb-12 md:px-10 md:pt-14 md:pb-16 lg:px-30 xl:grid-cols-[minmax(0,1fr)_35rem_minmax(0,1fr)] xl:gap-x-16"
         >
-          <aside
-            aria-label="About this post"
-            className="hidden xl:col-start-1 xl:row-span-2 xl:row-start-1 xl:block xl:justify-self-end"
-          >
-            <div className="sticky top-24 flex w-56 flex-col gap-8">
-              <BackLink />
-              <div className="flex items-center gap-3">
-                <Image
-                  src={author.avatar}
-                  alt=""
-                  width={40}
-                  height={40}
-                  className="size-10 shrink-0 rounded-md"
-                />
-                <div className="flex min-w-0 flex-col text-sm leading-5">
-                  <a href={author.url} className="font-medium hover:underline">
-                    {author.name}
-                  </a>
-                  <span className="text-muted-foreground">{author.role}</span>
-                </div>
-              </div>
-              <PostRailActions {...actions} />
-            </div>
-          </aside>
-
           <header className="mx-auto w-full max-w-[35rem] xl:col-start-2 xl:row-start-1">
             <div className="mb-8 xl:hidden">
               <BackLink />
@@ -179,10 +154,41 @@ export default async function Page({ params }: Props) {
             <div className="mt-10 hidden border-b xl:block" />
             {post.cover && (
               <div className="mt-10 overflow-hidden rounded-lg border bg-card">
-                <ZoomImage src={post.cover} darkSrc={post.coverDark} alt={post.coverAlt ?? ""} />
+                <ZoomImage
+                  src={post.cover}
+                  darkSrc={post.coverDark}
+                  alt={post.coverAlt ?? ""}
+                  width={3200}
+                  height={2000}
+                />
               </div>
             )}
           </header>
+
+          <aside
+            aria-label="About this post"
+            className="hidden xl:col-start-1 xl:row-span-2 xl:row-start-1 xl:block xl:justify-self-end"
+          >
+            <div className="sticky top-24 flex w-56 flex-col gap-8">
+              <BackLink />
+              <div className="flex items-center gap-3">
+                <Image
+                  src={author.avatar}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="size-10 shrink-0 rounded-md"
+                />
+                <div className="flex min-w-0 flex-col text-sm leading-5">
+                  <a href={author.url} className="font-medium hover:underline">
+                    {author.name}
+                  </a>
+                  <span className="text-muted-foreground">{author.role}</span>
+                </div>
+              </div>
+              <PostRailActions {...actions} />
+            </div>
+          </aside>
 
           {hasToc && (
             <aside className="mx-auto mt-6 w-full max-w-[35rem] xl:col-start-3 xl:row-span-2 xl:row-start-1 xl:mx-0 xl:mt-0 xl:max-w-60">

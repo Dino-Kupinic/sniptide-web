@@ -163,14 +163,14 @@ function MenuPanel({ menu, stars }: { menu: NavMenu; stars: string | null }) {
             key={group.label}
             className={cn("row-start-1 flex min-w-0 flex-col", index > 0 && "border-l", hairline)}
           >
-            <h3
+            <p
               className={cn(
                 "flex h-11 items-center border-b px-4 text-[13px] leading-[18px] font-medium text-[#0a0a0a] dark:text-white",
                 hairline,
               )}
             >
               {group.label}
-            </h3>
+            </p>
             <ul className="flex flex-col gap-0.5 p-2 pb-4">
               {group.items.map((item) => (
                 <li key={item.label}>
@@ -298,7 +298,7 @@ export function MobileNavMenus({ open, menus }: { open: boolean; menus: NavMenu[
     <Accordion.Root>
       {menus.map((menu, index) => (
         <Accordion.Item key={menu.label} className={menuItem} style={staggerStyle(open, index)}>
-          <Accordion.Header className="m-0">
+          <Accordion.Header render={<div />}>
             <Accordion.Trigger
               className={cn(menuRow, "group/trigger w-full justify-between text-left", focusRing)}
             >
