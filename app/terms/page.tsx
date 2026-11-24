@@ -54,8 +54,13 @@ export default function Terms() {
       </p>
 
       <h2>What you must not do</h2>
+      <p>
+        The <a href="/acceptable-use">acceptable use policy</a> lists the content you may not
+        publish and the context in which we allow sensitive content. In short, you must not:
+      </p>
       <ul>
         <li>Publish content that is illegal where you live or where we operate.</li>
+        <li>Publish anything that sexualizes or exploits children, in any form.</li>
         <li>
           Publish malware, phishing pages, or credentials and personal data that belong to someone
           else.
@@ -69,18 +74,24 @@ export default function Terms() {
 
       <h2 id="reporting">Reporting a paste</h2>
       <p>
-        To report a paste you believe is illegal, write to{" "}
+        To report a paste you believe is illegal or breaks the{" "}
+        <a href="/acceptable-use">acceptable use policy</a>, write to{" "}
         <a href={`mailto:${operator.email}`}>{operator.email}</a> with the link to the paste, why
-        you think it is illegal, your name and email address, and a statement that you are acting in
-        good faith. For an encrypted paste, send the full link with its key if you have it, because
-        we cannot read the paste otherwise. We confirm that we received your report and tell you
-        what we decided.
+        you think it is illegal or breaks the policy, your name and email address, and a statement
+        that you are acting in good faith. For an encrypted paste, send the full link with its key
+        if you have it, because we cannot read the paste otherwise. We confirm that we received your
+        report and tell you what we decided. The same address is our point of contact for
+        authorities and for users under Articles 11 and 12 of the Digital Services Act, in English
+        and German.
       </p>
       <p>
-        When we remove a paste or restrict an account, we email the account&apos;s owner what we did
-        and why, which rule or law it rests on, and how to contest the decision. We decide each case
-        ourselves and do not use automated moderation. You can contest a decision by replying to
-        that email.
+        When we restrict a paste or an account, we email the account&apos;s owner a statement of
+        reasons. It says what we restricted and for how long, the facts behind the decision, whether
+        it followed a report, the rule or law it rests on, and how to contest it. We decide each
+        case ourselves and do not use automated detection or decisions. You can contest a decision
+        by replying to that email within six months, and we review it again with a person. You can
+        also take it to an out-of-court dispute settlement body certified under Article 21 of the
+        Digital Services Act, or to court.
       </p>
 
       <h2 id="copyright">Copyright</h2>

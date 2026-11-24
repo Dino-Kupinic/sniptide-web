@@ -1,9 +1,7 @@
 import { posthogHost } from "./posthog"
 
-// Details the Impressum, privacy policy and terms state about whoever runs sniptide.com.
-// [Bracketed text] is a placeholder: replace it before the pages go live. An optional field set to
-// undefined drops its row.
-const todo = (what: string) => `[${what}]`
+// Details the Impressum, privacy policy and terms state about whoever runs sniptide.com. An optional
+// field set to undefined drops its row.
 
 export const operator = {
   name: "Dino Kupinic",
@@ -29,8 +27,10 @@ export const operator = {
 export const hosting = {
   provider: "netcup GmbH",
   country: "Germany",
-  // How long the web server keeps access logs.
-  logDays: todo("number of days"),
+  // How long the web server keeps access logs. The reverse proxy and container log rotation on the
+  // server must delete request logs after this many days; see
+  // docs/deployment.md.
+  logDays: 14,
   // The longest any database backup is kept, so a deleted row has left every backup after this
   // many days. A ceiling the backup schedule must stay under, whichever schedule is chosen.
   backupDays: 30,
@@ -50,13 +50,14 @@ export const emailProvider = "Resend, Inc."
 // site sends them to the EU or the US.
 export const analyticsInEu = posthogHost.includes("//eu.")
 
-export const lastUpdated = "15 November 2026"
+export const lastUpdated = "24 November 2026"
 
 // The youngest age the terms allow.
 export const minimumAge = 16
 
 export const legalLinks = [
   { label: "Terms", href: "/terms" },
+  { label: "Acceptable use", href: "/acceptable-use" },
   { label: "Privacy", href: "/privacy" },
   { label: "Impressum", href: "/impressum" },
   // Served by the app (COPYRIGHT_EMAIL) and reached through the share-link proxy.

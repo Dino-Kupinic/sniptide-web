@@ -73,3 +73,18 @@ in `lib/legal.ts`; anything in [square brackets] on the live pages is still a pl
 the privacy policy says PostHog stores events in the EU or the US follows
 `NEXT_PUBLIC_POSTHOG_HOST`, which defaults to EU cloud. These paths are real pages, and custom links
 start with `@`, so no new paste link can take `terms`, `privacy` or `impressum`.
+
+## Access log retention
+
+The privacy policy says the servers keep access logs for `hosting.logDays` days (`lib/legal.ts`),
+currently 14. Both apps on the netcup server must delete request logs after that many days:
+
+- The Coolify proxy writes no access log unless one is turned on in its configuration. If it is
+  on, rotate the file daily and keep 14 files.
+- Docker's `json-file` driver rotates container output by size, not age, so a quiet container can
+  keep a request line for months. Use the `journald` log driver for both containers and set
+  `MaxRetentionSec=14day` in `/etc/systemd/journald.conf`, or send the logs to a store that
+  expires entries after 14 days.
+
+Change `hosting.logDays` in the same pull request as any change to this setup.
+

@@ -45,6 +45,7 @@ export const ogImageUrl = `${siteUrl}/opengraph-image`
 export const sitemapPaths = [
   "/",
   "/about",
+  "/acceptable-use",
   "/blog",
   "/brand",
   "/changelog",
