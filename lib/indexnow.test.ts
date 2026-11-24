@@ -73,8 +73,8 @@ describe("IndexNow", () => {
     expect(() => submission(["https://example.com/page"])).toThrow()
   })
 
-  test("every URL in the built sitemap can be submitted", () => {
-    const urls = toEntries(sitemap()).map((entry) => entry.url)
+  test("every URL in the built sitemap can be submitted", async () => {
+    const urls = toEntries(await sitemap()).map((entry) => entry.url)
     expect(submission(urls).urlList).toHaveLength(urls.length)
   })
 })

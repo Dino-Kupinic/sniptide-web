@@ -16,7 +16,6 @@ export type CtaTarget =
   | "github"
   | "docs"
   | "self_host"
-  | "demo"
   | "anchor"
 
 const targets: Record<string, CtaTarget> = {
@@ -30,7 +29,6 @@ const targets: Record<string, CtaTarget> = {
   [links.github]: "github",
   [links.docs]: "docs",
   [links.selfHost]: "self_host",
-  [links.demo]: "demo",
 }
 
 // A bare "#" is a placeholder and is not reported. Links to other pages, like the legal pages, are

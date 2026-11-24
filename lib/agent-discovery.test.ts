@@ -49,8 +49,8 @@ test("auth.md links canonical authentication guides", async () => {
   expect(body).not.toContain("code_challenge_method")
 })
 
-test("crawler indexes link canonical docs and omit redirected pages", () => {
-  const sitemapUrls = sitemap().map(({ url }) => url)
+test("crawler indexes link canonical docs and omit redirected pages", async () => {
+  const sitemapUrls = (await sitemap()).map(({ url }) => url)
   const robotHints = JSON.stringify(robots())
   for (const path of ["/docs", "/docs/mcp", "/docs/auth"])
     expect(sitemapUrls).not.toContain(`${siteUrl}${path}`)

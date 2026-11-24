@@ -11,7 +11,7 @@ keeps a post out of production builds, the sitemap and the feeds.
 title: Teach your agent a recipe # at most 70 characters
 description: Collections give a coding agent an ordered set of snippets to follow. # 50 to 160
 date: 2026-11-20
-updated: 2026-11-24 # optional
+updated: 2026-11-24 # optional, set when the text changes; the post shows "Updated <date>"
 author: dino # a key in lib/authors.ts
 category: agents # product, engineering, agents, self-hosting or company
 tags: [collections, mcp] # optional

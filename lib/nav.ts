@@ -110,9 +110,9 @@ export const navMenus: NavMenu[] = [
             icon: ChartColumnIcon,
           },
           {
-            label: "Live demo",
-            description: "Try the app as a guest, with no account to create.",
-            href: links.demo,
+            label: "Guest editor",
+            description: "Write a paste in the editor, with no account to create.",
+            href: links.newPaste,
             icon: MonitorPlayIcon,
           },
         ],

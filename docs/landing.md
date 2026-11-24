@@ -14,6 +14,11 @@ The product band shows the demo dashboard as a still, light and dark, in
 `assets/landing/demo-preview-{light,dark}.webp`. The same stills supply the homepage screenshot
 metadata, so keep the caption in `lib/structured-data.ts` in sync with what they show.
 
+The button over the still, and the header's Guest editor item, open the editor at
+`app.sniptide.com/new`, which works without an account. They don't link to the shared demo:
+`demo.sniptide.com/demo` signs a visitor in with a cookie, so a client without cookies, such as a
+search engine crawler, is sent between `/demo` and `/dashboard` in a loop.
+
 To refresh them, sign in to the shared demo at `demo.sniptide.com/demo` and add a few pastes with
 realistic sample code, so the sidebar and lists look like a library in use. Capture the dashboard
 at 1266 × 793 with a device scale factor of 2 in each theme and save both as WebP. Move the pastes
