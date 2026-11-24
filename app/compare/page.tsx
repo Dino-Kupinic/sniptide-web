@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { BlogShell } from "@/components/blog/blog-shell"
+import { MarkPair } from "@/components/compare/product-mark"
 import { postPath } from "@/lib/blog"
 import {
   compareDescription,
@@ -23,9 +24,9 @@ export default function Page() {
     <BlogShell cta>
       <div
         data-cta-location="compare"
-        className="mx-auto w-full max-w-[44rem] px-5 pt-12 pb-12 md:px-0 md:pt-20 md:pb-16"
+        className="mx-auto w-full max-w-[1440px] px-5 pt-12 pb-12 md:px-10 md:pt-20 md:pb-16 lg:px-30"
       >
-        <header className="flex flex-col gap-4">
+        <header className="flex max-w-[40rem] flex-col gap-4">
           <h1 className="font-heading text-[34px] leading-9.5 font-medium tracking-[-0.03em] md:text-5xl md:leading-13">
             Compare Sniptide
           </h1>
@@ -35,31 +36,38 @@ export default function Page() {
           </p>
         </header>
 
-        <ul className="mt-10 flex flex-col border-t">
-          {comparePages.map((page) => (
-            <li key={page.slug} className="border-b">
-              <a
-                href={comparePagePath(page.slug)}
-                className="group flex items-start gap-4 py-6 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
-              >
-                <span className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <span className="font-heading text-xl leading-7 font-medium tracking-[-0.02em] group-hover:text-link">
-                    Sniptide vs {product(page.competitor).name}
+        <ul className="mt-10 grid gap-4 md:mt-12 md:grid-cols-3">
+          {comparePages.map((page) => {
+            const name = product(page.competitor).name
+            return (
+              <li key={page.slug} className="min-w-0">
+                <a
+                  href={comparePagePath(page.slug)}
+                  className="group flex h-full flex-col gap-6 rounded-lg border bg-card p-5 transition-colors hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:p-6"
+                >
+                  <MarkPair competitor={page.competitor} name={name} />
+                  <span className="flex flex-1 flex-col gap-2">
+                    <span className="font-heading text-xl leading-7 font-medium tracking-[-0.02em]">
+                      Sniptide vs {name}
+                    </span>
+                    <span className="text-[0.9375rem] leading-6 text-pretty text-muted-foreground">
+                      {page.summary}
+                    </span>
                   </span>
-                  <span className="text-[0.9375rem] leading-6 text-pretty text-muted-foreground">
-                    {page.summary}
+                  <span className="inline-flex items-center gap-1.5 text-sm leading-5 font-medium text-link">
+                    Read the comparison
+                    <ArrowRightIcon
+                      aria-hidden="true"
+                      className="size-4 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+                    />
                   </span>
-                </span>
-                <ArrowRightIcon
-                  aria-hidden="true"
-                  className="mt-1.5 size-4 shrink-0 text-muted-foreground group-hover:text-link"
-                />
-              </a>
-            </li>
-          ))}
+                </a>
+              </li>
+            )
+          })}
         </ul>
 
-        <p className="mt-8 text-[0.9375rem] leading-6 text-pretty text-muted-foreground">
+        <p className="mt-8 max-w-[40rem] text-[0.9375rem] leading-6 text-pretty text-muted-foreground">
           The facts behind these pages are public in{" "}
           <a href={competitorDataPath} className="text-link underline underline-offset-2">
             competitors.json

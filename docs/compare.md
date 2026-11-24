@@ -1,8 +1,9 @@
 # Comparison pages
 
 The pages at `/compare` compare Sniptide with one other tool each: GitHub Gist, Pastebin and
-PrivateBin. `/compare` lists them, and the Compare link in the Resources menu and the footer
-leads there from the landing page.
+PrivateBin. `/compare` lists them as cards, each with Sniptide's mark, "vs" and the other tool's
+mark. The Resources menu has a Compare group below Brand and releases with one link per page, and
+the footer lists the same links.
 
 ## Where the facts live
 
@@ -42,7 +43,11 @@ file, so nothing else needs a date change.
    answer, say who each tool fits, and list at least two honest reasons to choose the other tool.
    Name Sniptide's gaps plainly and say nothing about the other tool that its own documentation
    doesn't back.
-3. The page, its Markdown twin at `/compare/<slug>.md`, the index and the sitemap entry follow from
+3. Add the tool's mark to `ProductMark` in `components/compare/product-mark.tsx`, and record where
+   the artwork comes from in `public/compare/README.md`. Use the tool's published mark without
+   changing its paths or colors.
+4. Add a link to the Compare group in `lib/nav.ts`.
+5. The page, its Markdown twin at `/compare/<slug>.md`, the index and the sitemap entry follow from
    the entry.
 
 ## Principles

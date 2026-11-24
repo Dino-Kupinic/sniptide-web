@@ -158,27 +158,36 @@ function MenuPanel({ menu, stars }: { menu: NavMenu; stars: string | null }) {
           hairline,
         )}
       >
-        {menu.groups.map((group, index) => (
-          <section
-            key={group.label}
+        {/* The first group fills the left column. Later groups stack in the middle column, each
+            under a hairline, as Compare sits below Brand and releases in Resources. */}
+        {[menu.groups.slice(0, 1), menu.groups.slice(1)].map((column, index) => (
+          <div
+            key={column[0]?.label ?? index}
             className={cn("row-start-1 flex min-w-0 flex-col", index > 0 && "border-l", hairline)}
           >
-            <p
-              className={cn(
-                "flex h-11 items-center border-b px-4 text-[13px] leading-[18px] font-medium text-[#0a0a0a] dark:text-white",
-                hairline,
-              )}
-            >
-              {group.label}
-            </p>
-            <ul className="flex flex-col gap-0.5 p-2 pb-4">
-              {group.items.map((item) => (
-                <li key={item.label}>
-                  <MenuRow item={item} />
-                </li>
-              ))}
-            </ul>
-          </section>
+            {column.map((group, position) => (
+              <section
+                key={group.label}
+                className={cn("flex min-w-0 flex-col", position > 0 && "border-t", hairline)}
+              >
+                <p
+                  className={cn(
+                    "flex h-11 items-center border-b px-4 text-[13px] leading-[18px] font-medium text-[#0a0a0a] dark:text-white",
+                    hairline,
+                  )}
+                >
+                  {group.label}
+                </p>
+                <ul className="flex flex-col gap-0.5 p-2 pb-4">
+                  {group.items.map((item) => (
+                    <li key={item.label}>
+                      <MenuRow item={item} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
         ))}
         <div className={cn("col-start-3 row-span-2 row-start-1 min-w-0 border-l p-3", hairline)}>
           <FeatureCard feature={menu.feature} stars={stars} />
