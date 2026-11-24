@@ -1,53 +1,43 @@
 import type { MetadataRoute } from "next"
 import { postPath } from "@/lib/blog"
 import { getPosts } from "@/lib/blog-source"
+import { getChangelog } from "@/lib/changelog-source"
 import { comparePagePath, comparePages, comparison } from "@/lib/compare"
 import { sitemapPaths, siteUrl } from "@/lib/site"
+import { pageEntries } from "@/lib/sitemap"
 import { getTemplates } from "@/lib/template-source"
 import { templatePath } from "@/lib/templates"
 
+// Rebuilt hourly, like the changelog, so /changelog's date follows the newest release.
+export const revalidate = 3600
+
 // The home page is listed without a trailing slash, matching its canonical link.
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getPosts()
   const templates = getTemplates()
-  // The directory changes whenever one of its templates does.
-  const templatesUpdated = templates
-    .map((template) => template.updated)
-    .sort()
-    .at(-1)
   // A comparison page changes when one of its facts is checked again.
   const compareEntries = comparePages.map((page) => ({
     url: `${siteUrl}${comparePagePath(page.slug)}`,
     lastModified: comparison(page).newest,
   }))
-  const compareUpdated = compareEntries
-    .map((entry) => entry.lastModified)
-    .sort()
-    .at(-1)
-  const pages = sitemapPaths.map((path) => ({
-    url: path === "/" ? siteUrl : `${siteUrl}${path}`,
-    lastModified:
-      path === "/blog"
-        ? (posts[0]?.date ?? "2026-11-06")
-        : path === "/templates"
-          ? (templatesUpdated ?? "2026-11-08")
-          : // The changelog changes with every release, which the sitemap cannot know in advance.
-            path === "/changelog"
-            ? undefined
-            : path === "/compare"
-              ? compareUpdated
-              : path === "/vision"
-                ? "2026-11-24"
-                : path === "/brand"
-                  ? "2026-11-05"
-                  : path === "/about" || path === "/contact" || path.startsWith("/docs")
-                    ? "2026-10-28"
-                    : path === "/acceptable-use" || path === "/terms"
-                      ? "2026-11-24"
-                      : path === "/privacy"
-                        ? "2026-10-25"
-                        : "2026-10-23",
-  }))
+  const releases = await getChangelog()
+  const pages = pageEntries(sitemapPaths, {
+    blog: posts
+      .map((post) => post.updated ?? post.date)
+      .sort()
+      .at(-1),
+    // The directory changes whenever one of its templates does.
+    templates: templates
+      .map((template) => template.updated)
+      .sort()
+      .at(-1),
+    // Releases are sorted newest first. Null when GitHub can't be reached.
+    changelog: releases?.[0]?.date,
+    compare: compareEntries
+      .map((entry) => entry.lastModified)
+      .sort()
+      .at(-1),
+  })
   // Posts and templates follow the pages, each dated by its last update.
   const postEntries = posts.map((post) => ({
     url: `${siteUrl}${postPath(post.slug)}`,

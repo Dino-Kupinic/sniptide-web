@@ -10,7 +10,12 @@ sniptide.com is shared with the app in two ways (`next.config.ts`):
   the address bar keeps sniptide.com. This site's own assets live under `/_site` so they never
   collide with the app's. A burn-after-read paste is consumed only by that POST. Every other
   method on `/<slug>/reveal` is `405` with `Allow: POST`. Known preview bots, and posts whose
-  `Sec-Fetch-Site` is `cross-site`, are `403`. None of those are forwarded.
+  `Sec-Fetch-Site` is `cross-site`, are `403`. None of those are forwarded. A page here wins over a
+  paste with the same path, so the app keeps its slugs out of the way by shape: a generated slug is
+  exactly 8 letters and digits from an alphabet without `0`, `1`, `I`, `O` and `l`, and a custom
+  link starts with `@`. Give a new page a first path segment of another shape, such as one with a
+  hyphen or of a different length. `lib/paste-slugs.test.ts` fails when a route or redirect could
+  be a generated slug. A path that matches no page and no paste gets the app's 404 with `noindex`.
 - **App pages redirect.** `/sign-in`, `/dashboard`, `/new`, `/settings`, … and `/api/auth/*` get a
   308 to the same path on app.sniptide.com. Add new app sections to `appPages` there.
 
@@ -32,8 +37,7 @@ last hop of `X-Forwarded-For`, which is what a single reverse proxy appends, so 
 needs nothing else. If the chosen header is missing, no address is forwarded.
 
 Build-time settings: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point, defaults
-to `https://app.sniptide.com`. `NEXT_PUBLIC_DEMO_URL`, where "Try the demo" points, defaults to
-`https://demo.sniptide.com/demo` (an app instance running with `DEMO_MODE=true`).
+to `https://app.sniptide.com`.
 `SHARE_PROXY_SECRET`, `CLIENT_IP_HEADER` and `GITHUB_TOKEN` are read at runtime. `GITHUB_TOKEN` is
 optional and raises the GitHub rate limit for the changelog, described under
 [the changelog guide](changelog.md).

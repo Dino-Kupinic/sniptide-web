@@ -38,11 +38,11 @@ export function ProductBand() {
         {/* Dimmed so the button reads as the way in. */}
         <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/45">
           <a
-            href={links.demo}
+            href={links.newPaste}
             className="raised-button flex h-12 items-center gap-2.5 bg-white [--button-depth:#b6b4ff] [--button-focus:white] px-5.5 text-base leading-5 font-semibold text-[#2a26ec]"
           >
             <span className="size-2.5 bg-[#2a26ec]" />
-            Try the demo
+            Try the editor
           </a>
         </div>
       </div>

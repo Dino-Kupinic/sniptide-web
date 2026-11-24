@@ -99,8 +99,8 @@ describe("template content", () => {
     expect([...departments].sort()).toEqual(["engineering", "marketing", "product"])
   })
 
-  test("the sitemap lists the directory and every template", () => {
-    const urls = sitemap().map((entry) => entry.url)
+  test("the sitemap lists the directory and every template", async () => {
+    const urls = (await sitemap()).map((entry) => entry.url)
     expect(urls).toContain(`${siteUrl}/templates`)
     for (const template of templates)
       expect(urls).toContain(`${siteUrl}/templates/${template.name}`)

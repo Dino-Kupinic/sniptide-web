@@ -7,3 +7,13 @@ import { createMdxPlugin } from "fumadocs-mdx/bun"
 await plugin(
   createMdxPlugin({ macro: { include: ["lib/blog-source.ts", "lib/template-source.ts"] } }),
 )
+
+// The changelog and the sitemap read GitHub releases. Tests get one fixed release instead of a
+// network request. `bun run indexnow` preloads this file too, and keeps the real module.
+if (process.env.NODE_ENV === "test") {
+  const { mock } = await import("bun:test")
+  mock.module("@/lib/changelog-source", () => ({
+    getChangelog: async () => [{ date: "2026-11-20T09:00:00Z" }],
+    getAnnouncement: async () => null,
+  }))
+}
