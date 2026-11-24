@@ -76,8 +76,8 @@ describe("blog posts", () => {
     expect(readingMinutes(`hi\n\`\`\`ts\n${"code ".repeat(1000)}\n\`\`\``)).toBe(1)
   })
 
-  test("the sitemap lists every published post", () => {
-    const urls = sitemap().map((entry) => entry.url)
+  test("the sitemap lists every published post", async () => {
+    const urls = (await sitemap()).map((entry) => entry.url)
     for (const entry of getPosts()) expect(urls).toContain(`${siteUrl}/blog/${entry.slug}`)
   })
 })

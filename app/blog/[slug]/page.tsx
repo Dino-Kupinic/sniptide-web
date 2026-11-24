@@ -120,9 +120,17 @@ export default async function Page({ params }: Props) {
               </a>
               {post.draft && <span className="text-highlight">Draft</span>}
               <span className="ml-auto text-right">
-                <time dateTime={post.date} className="whitespace-nowrap">
-                  {formatPostDate(post.date)}
-                </time>
+                {/* A post that changed after it was published shows the newer date, which is also its
+                    dateModified in the JSON-LD. */}
+                {post.updated && post.updated !== post.date ? (
+                  <span className="whitespace-nowrap">
+                    Updated <time dateTime={post.updated}>{formatPostDate(post.updated)}</time>
+                  </span>
+                ) : (
+                  <time dateTime={post.date} className="whitespace-nowrap">
+                    {formatPostDate(post.date)}
+                  </time>
+                )}
                 <span aria-hidden="true"> · </span>
                 <span className="whitespace-nowrap">{minutes} min read</span>
               </span>

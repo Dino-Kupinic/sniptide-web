@@ -30,10 +30,16 @@ async function liveSitemap(): Promise<SitemapEntry[]> {
   return parseSitemap(await response.text())
 }
 
-const local = toEntries(sitemap())
-const changes: Changes = all
-  ? { updated: local, removed: [] }
-  : findChanges(local, await liveSitemap(), new Date())
+const local = toEntries(await sitemap())
+const changes: Changes = all ? { updated: local, removed: [] } : await withoutUndated(local)
+
+// /changelog is dated by the newest GitHub release, which only the running site reads, so this
+// checkout has no date for it and says nothing about whether it changed. It is neither submitted
+// nor waited for.
+async function withoutUndated(entries: SitemapEntry[]): Promise<Changes> {
+  const found = findChanges(entries, await liveSitemap(), new Date())
+  return { ...found, updated: found.updated.filter((entry) => entry.lastModified) }
+}
 const urls = [...changes.updated.map((entry) => entry.url), ...changes.removed]
 
 if (urls.length === 0) {
