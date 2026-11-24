@@ -16,6 +16,7 @@ export type CtaTarget =
   | "github"
   | "docs"
   | "self_host"
+  | "copy_setup_prompt"
   | "anchor"
 
 const targets: Record<string, CtaTarget> = {

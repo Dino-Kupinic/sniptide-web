@@ -33,7 +33,8 @@ always skips analytics. This does not remove past events or change paste view co
 
 Button and link clicks are also sent as `cta_clicked` with `location` (the section: `header`, `hero`,
 `features`, `analytics`, `raw-links`, `cta` or `footer`, set with `data-cta-location`) and `target`
-(`sign_up`, `sign_in`, `new_paste`, `dashboard`, `import_gist` or `anchor`). Funnels should use this
+(`sign_up`, `sign_in`, `new_paste`, `dashboard`, `import_gist` or `anchor`). Copying the setup
+prompt from the hero's agent menu reports `target` `copy_setup_prompt`. Funnels should use this
 event rather than autocapture selectors. On the blog, links inside a post report as `blog-post` and the inline call to
 action as `blog-inline`, and sharing, copying, opening with AI and subscribing send `blog_action`
 with `action` and `slug`.

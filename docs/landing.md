@@ -8,6 +8,14 @@ desktops and phones, so the scene is there on the first paint. The canvas draws 
 over it, so the handover doesn't show. After changing `drawHorizon` in `lib/motion.ts`, run
 `bun scripts/generate-hero-still.ts` to render the stills again.
 
+## Agent setup menu
+
+"Set up your agent" in the hero opens a menu with one row per agent, each leading to sign-up, and a
+last row that copies a setup prompt (`lib/agent-setup-prompt.ts`). The prompt walks the reader's
+own agent through "Connect an agent" on docs.sniptide.com/mcp: the command for its client, the
+self-hosted address, the OAuth sign-in and a `list_collections` check. Change it together with
+that docs section; `lib/agent-setup-prompt.test.ts` checks the commands and endpoint.
+
 ## Product screenshot
 
 The product band shows the demo dashboard as a still, light and dark, in
