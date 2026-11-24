@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test"
 import robots from "@/app/robots"
 import sitemap from "@/app/sitemap"
+import { siteDescription, sitemapPaths, siteTitle, siteUrl } from "@/lib/site"
 import { pageEntries, pageUpdated } from "@/lib/sitemap"
-import { siteDescription, siteTitle, sitemapPaths, siteUrl } from "@/lib/site"
 
 describe("search engine basics", () => {
   test("the home page title and description fit in search results", () => {
