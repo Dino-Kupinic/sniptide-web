@@ -36,5 +36,5 @@ Button and link clicks are also sent as `cta_clicked` with `location` (the secti
 (`sign_up`, `sign_in`, `new_paste`, `dashboard`, `import_gist` or `anchor`). Copying the setup
 prompt from the hero's agent menu reports `target` `copy_setup_prompt`. Funnels should use this
 event rather than autocapture selectors. On the blog, links inside a post report as `blog-post` and the inline call to
-action as `blog-inline`, and sharing, copying, opening with AI and subscribing send `blog_action`
+action as `blog-inline`. Links on the comparison pages at `/compare` report as `compare`, and sharing, copying, opening with AI and subscribing send `blog_action`
 with `action` and `slug`.

@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next"
 import { siteUrl } from "./site"
 
 // When each page in sitemapPaths last changed in a way a reader would notice, as YYYY-MM-DD. Bump a
-// date when its page's text or layout changes. /blog, /templates and /changelog are left out,
-// because their dates come from their posts, templates and releases. The seo tests check that every
+// date when its page's text or layout changes. /blog, /templates, /changelog and /compare are left
+// out, because their dates come from their posts, templates, releases and comparison facts. The seo tests check that every
 // other path has a date here.
 export const pageUpdated: Record<string, string> = {
   "/": "2026-11-24",
@@ -22,6 +22,8 @@ type SitemapDates = {
   blog?: string
   templates?: string
   changelog?: string
+  // The newest check date behind the comparison pages.
+  compare?: string
 }
 
 // Every page with the date it last changed. Only /changelog can go without one, while GitHub
@@ -32,6 +34,7 @@ export function pageEntries(paths: string[], dates: SitemapDates): MetadataRoute
     "/blog": dates.blog,
     "/templates": dates.templates,
     "/changelog": dates.changelog,
+    "/compare": dates.compare,
   }
   return paths.map((path) => ({
     url: path === "/" ? siteUrl : `${siteUrl}${path}`,

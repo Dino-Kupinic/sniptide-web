@@ -37,7 +37,7 @@ describe("search engine basics", () => {
   })
 
   test("every page in the sitemap has a date of its own or one from its content", () => {
-    const fromContent = ["/blog", "/templates", "/changelog"]
+    const fromContent = ["/blog", "/templates", "/changelog", "/compare"]
     for (const path of sitemapPaths) {
       if (!fromContent.includes(path)) expect(pageUpdated[path]).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     }

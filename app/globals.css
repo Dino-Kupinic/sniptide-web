@@ -476,6 +476,16 @@ p {
   line-height: 1.25rem;
 }
 
+/* A comparison page sets two products side by side, so the feature names get a wider column and
+   the table fits a phone without sideways scrolling. */
+.blog-prose .blog-comparison.compare-pair table {
+  min-width: 0;
+}
+
+.blog-prose .blog-comparison.compare-pair :is(th, td):first-child {
+  width: 40%;
+}
+
 /* A row with only a bold first cell is a group heading. */
 .blog-prose
   .blog-comparison

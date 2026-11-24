@@ -1,0 +1,1494 @@
+{
+  "features": [
+    {
+      "id": "anonymous",
+      "group": "Sharing",
+      "label": "Paste without an account"
+    },
+    {
+      "id": "multiFile",
+      "group": "Sharing",
+      "label": "Several files per paste"
+    },
+    {
+      "id": "uploads",
+      "group": "Sharing",
+      "label": "Images and file uploads"
+    },
+    {
+      "id": "customLink",
+      "group": "Sharing",
+      "label": "Custom link"
+    },
+    {
+      "id": "password",
+      "group": "Sharing",
+      "label": "Password per paste"
+    },
+    {
+      "id": "expiry",
+      "group": "Sharing",
+      "label": "Expiry"
+    },
+    {
+      "id": "burn",
+      "group": "Sharing",
+      "label": "Burn after reading"
+    },
+    {
+      "id": "invite",
+      "group": "Sharing",
+      "label": "Invite named people"
+    },
+    {
+      "id": "keyWarning",
+      "group": "Sharing",
+      "label": "Warns before you share a key"
+    },
+    {
+      "id": "encryption",
+      "group": "Sharing",
+      "label": "Encrypted in the browser"
+    },
+    {
+      "id": "unfurl",
+      "group": "Posting it",
+      "label": "Code preview in link unfurls"
+    },
+    {
+      "id": "chatPost",
+      "group": "Posting it",
+      "label": "Post to Slack or Discord"
+    },
+    {
+      "id": "embed",
+      "group": "Posting it",
+      "label": "Embed on a page"
+    },
+    {
+      "id": "revisions",
+      "group": "Finding it again",
+      "label": "Revision history"
+    },
+    {
+      "id": "collections",
+      "group": "Finding it again",
+      "label": "Collections"
+    },
+    {
+      "id": "stars",
+      "group": "Finding it again",
+      "label": "Stars"
+    },
+    {
+      "id": "search",
+      "group": "Finding it again",
+      "label": "Search your snippets"
+    },
+    {
+      "id": "trash",
+      "group": "Finding it again",
+      "label": "Trash with restore"
+    },
+    {
+      "id": "analytics",
+      "group": "Finding it again",
+      "label": "View analytics"
+    },
+    {
+      "id": "mcp",
+      "group": "Agents and developers",
+      "label": "MCP server"
+    },
+    {
+      "id": "agentSkill",
+      "group": "Agents and developers",
+      "label": "Install a collection as an agent skill"
+    },
+    {
+      "id": "envSync",
+      "group": "Agents and developers",
+      "label": "Sync .env files"
+    },
+    {
+      "id": "cliApi",
+      "group": "Agents and developers",
+      "label": "CLI or API"
+    },
+    {
+      "id": "rawLinks",
+      "group": "Agents and developers",
+      "label": "Raw file links"
+    },
+    {
+      "id": "git",
+      "group": "Agents and developers",
+      "label": "Git clone and push"
+    },
+    {
+      "id": "hosted",
+      "group": "Hosting",
+      "label": "Hosted service"
+    },
+    {
+      "id": "selfHost",
+      "group": "Hosting",
+      "label": "Self-host"
+    },
+    {
+      "id": "license",
+      "group": "Hosting",
+      "label": "Open source"
+    }
+  ],
+  "products": [
+    {
+      "id": "sniptide",
+      "name": "Sniptide",
+      "url": "https://sniptide.com",
+      "sources": {
+        "pastes": {
+          "title": "Pastes, limits, search and trash",
+          "url": "https://docs.sniptide.com/core-concepts/pastes"
+        },
+        "sharing": {
+          "title": "Sharing, passwords, invites and expiry",
+          "url": "https://docs.sniptide.com/core-concepts/sharing"
+        },
+        "burn": {
+          "title": "Burn after read",
+          "url": "https://docs.sniptide.com/core-concepts/burn-after-read"
+        },
+        "encrypted": {
+          "title": "End-to-end encrypted pastes",
+          "url": "https://docs.sniptide.com/core-concepts/encrypted-pastes"
+        },
+        "revisions": {
+          "title": "Revisions",
+          "url": "https://docs.sniptide.com/core-concepts/revisions"
+        },
+        "collections": {
+          "title": "Collections",
+          "url": "https://docs.sniptide.com/core-concepts/collections"
+        },
+        "analytics": {
+          "title": "Analytics",
+          "url": "https://docs.sniptide.com/core-concepts/analytics"
+        },
+        "secrets": {
+          "title": "Encrypted secrets",
+          "url": "https://docs.sniptide.com/core-concepts/secrets"
+        },
+        "mcp": {
+          "title": "MCP server",
+          "url": "https://docs.sniptide.com/mcp"
+        },
+        "cli": {
+          "title": "CLI",
+          "url": "https://docs.sniptide.com/cli"
+        },
+        "selfHosting": {
+          "title": "Self-hosting",
+          "url": "https://docs.sniptide.com/self-hosting"
+        },
+        "license": {
+          "title": "License",
+          "url": "https://github.com/Dino-Kupinic/sniptide/blob/main/LICENSE"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "–",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "multiFile": {
+          "value": "Up to 10",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "uploads": {
+          "value": "–",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "customLink": {
+          "value": "✓",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "password": {
+          "value": "✓",
+          "source": "sharing",
+          "verified": "2026-11-24"
+        },
+        "expiry": {
+          "value": "✓",
+          "source": "sharing",
+          "verified": "2026-11-24"
+        },
+        "burn": {
+          "value": "✓",
+          "source": "burn",
+          "verified": "2026-11-24"
+        },
+        "invite": {
+          "value": "View or edit",
+          "source": "sharing",
+          "verified": "2026-11-24"
+        },
+        "keyWarning": {
+          "value": "✓",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "encryption": {
+          "value": "~Opt-in per paste",
+          "source": "encrypted",
+          "verified": "2026-11-24"
+        },
+        "unfurl": {
+          "value": "✓",
+          "source": "sharing",
+          "verified": "2026-11-24"
+        },
+        "chatPost": {
+          "value": "✓",
+          "source": "sharing",
+          "verified": "2026-11-24"
+        },
+        "embed": {
+          "value": "✓",
+          "source": "sharing",
+          "verified": "2026-11-24"
+        },
+        "revisions": {
+          "value": "Compare and restore",
+          "source": "revisions",
+          "verified": "2026-11-24"
+        },
+        "collections": {
+          "value": "✓",
+          "source": "collections",
+          "verified": "2026-11-24"
+        },
+        "stars": {
+          "value": "✓",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "search": {
+          "value": "Titles, files and code",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "trash": {
+          "value": "30 days",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "analytics": {
+          "value": "Views, copies, referrers",
+          "source": "analytics",
+          "verified": "2026-11-24"
+        },
+        "mcp": {
+          "value": "First-party",
+          "source": "mcp",
+          "verified": "2026-11-24"
+        },
+        "agentSkill": {
+          "value": "✓",
+          "source": "cli",
+          "verified": "2026-11-24"
+        },
+        "envSync": {
+          "value": "✓",
+          "source": "secrets",
+          "verified": "2026-11-24"
+        },
+        "cliApi": {
+          "value": "CLI, SDKs, API",
+          "source": "cli",
+          "verified": "2026-11-24"
+        },
+        "rawLinks": {
+          "value": "✓",
+          "source": "sharing",
+          "verified": "2026-11-24"
+        },
+        "git": {
+          "value": "–",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "hosted": {
+          "value": "✓",
+          "source": "pastes",
+          "verified": "2026-11-24"
+        },
+        "selfHost": {
+          "value": "One command",
+          "source": "selfHosting",
+          "verified": "2026-11-24"
+        },
+        "license": {
+          "value": "AGPL-3.0",
+          "source": "license",
+          "verified": "2026-11-24"
+        }
+      }
+    },
+    {
+      "id": "gist",
+      "name": "GitHub Gist",
+      "url": "https://gist.github.com",
+      "sources": {
+        "create": {
+          "title": "Creating gists and secret gists",
+          "url": "https://docs.github.com/en/get-started/writing-on-github/editing-and-sharing-content-with-gists/creating-gists"
+        },
+        "api": {
+          "title": "Gists REST API",
+          "url": "https://docs.github.com/en/rest/gists/gists"
+        },
+        "mcp": {
+          "title": "GitHub MCP server gist tools",
+          "url": "https://github.com/github/github-mcp-server#tool-configuration"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "multiFile": {
+          "value": "✓",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "uploads": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "customLink": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "password": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "expiry": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "burn": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "invite": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "keyWarning": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "encryption": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "unfurl": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "chatPost": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "embed": {
+          "value": "✓",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "revisions": {
+          "value": "✓",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "collections": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "stars": {
+          "value": "✓",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "search": {
+          "value": "✓",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "trash": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "analytics": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "mcp": {
+          "value": "First-party",
+          "source": "mcp",
+          "verified": "2026-11-09"
+        },
+        "agentSkill": {
+          "value": "–",
+          "source": "mcp",
+          "verified": "2026-11-09"
+        },
+        "envSync": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "cliApi": {
+          "value": "gh, API",
+          "source": "api",
+          "verified": "2026-11-09"
+        },
+        "rawLinks": {
+          "value": "✓",
+          "source": "api",
+          "verified": "2026-11-09"
+        },
+        "git": {
+          "value": "✓",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "hosted": {
+          "value": "✓",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "selfHost": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        },
+        "license": {
+          "value": "–",
+          "source": "create",
+          "verified": "2026-11-09"
+        }
+      }
+    },
+    {
+      "id": "pastebin",
+      "name": "Pastebin",
+      "url": "https://pastebin.com",
+      "sources": {
+        "form": {
+          "title": "New paste form",
+          "url": "https://pastebin.com/"
+        },
+        "faq": {
+          "title": "FAQ with folders, limits and paste sizes",
+          "url": "https://pastebin.com/faq"
+        },
+        "pro": {
+          "title": "Pro limits",
+          "url": "https://pastebin.com/pro"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "✓",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "multiFile": {
+          "value": "–",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "uploads": {
+          "value": "–",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "customLink": {
+          "value": "–",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "password": {
+          "value": "✓",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "expiry": {
+          "value": "✓",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "burn": {
+          "value": "✓",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "invite": {
+          "value": "–",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "keyWarning": {
+          "value": "–",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "encryption": {
+          "value": "–",
+          "source": "form",
+          "verified": "2026-11-15"
+        },
+        "unfurl": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "chatPost": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "embed": {
+          "value": "✓",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "revisions": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "collections": {
+          "value": "~Folders",
+          "source": "faq",
+          "verified": "2026-11-15"
+        },
+        "stars": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "search": {
+          "value": "?",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "trash": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "analytics": {
+          "value": "~View count",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "mcp": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "agentSkill": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "envSync": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "cliApi": {
+          "value": "API",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "rawLinks": {
+          "value": "✓",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "git": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "hosted": {
+          "value": "✓",
+          "source": "form",
+          "verified": "2026-11-09"
+        },
+        "selfHost": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        },
+        "license": {
+          "value": "–",
+          "source": "faq",
+          "verified": "2026-11-09"
+        }
+      }
+    },
+    {
+      "id": "privatebin",
+      "name": "PrivateBin",
+      "url": "https://privatebin.info",
+      "sources": {
+        "features": {
+          "title": "What PrivateBin provides",
+          "url": "https://github.com/PrivateBin/PrivateBin#what-privatebin-provides"
+        },
+        "limits": {
+          "title": "What it doesn't provide",
+          "url": "https://github.com/PrivateBin/PrivateBin#what-it-doesnt-provide"
+        },
+        "license": {
+          "title": "License",
+          "url": "https://github.com/PrivateBin/PrivateBin/blob/master/LICENSE.md"
+        },
+        "previews": {
+          "title": "Link preview tags",
+          "url": "https://github.com/PrivateBin/PrivateBin/blob/master/tpl/bootstrap5.php"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "multiFile": {
+          "value": "~Off by default",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "uploads": {
+          "value": "~Off by default",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "customLink": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "password": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "expiry": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "burn": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "invite": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "keyWarning": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "encryption": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "unfurl": {
+          "value": "–",
+          "source": "previews",
+          "verified": "2026-11-09"
+        },
+        "chatPost": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "embed": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "revisions": {
+          "value": "–",
+          "source": "limits",
+          "verified": "2026-11-09"
+        },
+        "collections": {
+          "value": "–",
+          "source": "limits",
+          "verified": "2026-11-09"
+        },
+        "stars": {
+          "value": "–",
+          "source": "limits",
+          "verified": "2026-11-09"
+        },
+        "search": {
+          "value": "–",
+          "source": "limits",
+          "verified": "2026-11-09"
+        },
+        "trash": {
+          "value": "–",
+          "source": "limits",
+          "verified": "2026-11-09"
+        },
+        "analytics": {
+          "value": "–",
+          "source": "limits",
+          "verified": "2026-11-09"
+        },
+        "mcp": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "agentSkill": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "envSync": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "cliApi": {
+          "value": "~Community CLIs",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "rawLinks": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "git": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "hosted": {
+          "value": "~Third-party instances",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "selfHost": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "license": {
+          "value": "zlib",
+          "source": "license",
+          "verified": "2026-11-09"
+        }
+      }
+    },
+    {
+      "id": "opengist",
+      "name": "Opengist",
+      "url": "https://github.com/thomiceli/opengist",
+      "sources": {
+        "features": {
+          "title": "Features",
+          "url": "https://github.com/thomiceli/opengist/blob/master/docs/introduction.md#features"
+        },
+        "api": {
+          "title": "REST API and OpenAPI spec",
+          "url": "https://github.com/thomiceli/opengist/blob/master/docs/api.md"
+        },
+        "changelog": {
+          "title": "Changelog with expiry in 1.14.0",
+          "url": "https://github.com/thomiceli/opengist/blob/master/CHANGELOG.md"
+        },
+        "previews": {
+          "title": "Link preview tags",
+          "url": "https://github.com/thomiceli/opengist/blob/master/templates/partials/seo_meta.html"
+        },
+        "customUrl": {
+          "title": "Custom URL setting",
+          "url": "https://github.com/thomiceli/opengist/blob/master/templates/pages/gist_settings.html"
+        },
+        "mcp": {
+          "title": "Community MCP server opengist-mcp",
+          "url": "https://github.com/ni-c/opengist-mcp"
+        },
+        "license": {
+          "title": "License",
+          "url": "https://github.com/thomiceli/opengist/blob/master/LICENSE"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "multiFile": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "uploads": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "customLink": {
+          "value": "✓",
+          "source": "customUrl",
+          "verified": "2026-11-09"
+        },
+        "password": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "expiry": {
+          "value": "✓",
+          "source": "changelog",
+          "verified": "2026-11-09"
+        },
+        "burn": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "invite": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "keyWarning": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "encryption": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "unfurl": {
+          "value": "~Text preview",
+          "source": "previews",
+          "verified": "2026-11-09"
+        },
+        "chatPost": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "embed": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "revisions": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "collections": {
+          "value": "~Topics",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "stars": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "search": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "trash": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "analytics": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "mcp": {
+          "value": "~Community",
+          "source": "mcp",
+          "verified": "2026-11-09"
+        },
+        "agentSkill": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "envSync": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "cliApi": {
+          "value": "REST API, OpenAPI",
+          "source": "api",
+          "verified": "2026-11-09"
+        },
+        "rawLinks": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "git": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "hosted": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "selfHost": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "license": {
+          "value": "AGPL-3.0",
+          "source": "license",
+          "verified": "2026-11-24"
+        }
+      }
+    },
+    {
+      "id": "microbin",
+      "name": "MicroBin",
+      "url": "https://github.com/szabodanika/microbin",
+      "sources": {
+        "features": {
+          "title": "Features",
+          "url": "https://github.com/szabodanika/microbin#features"
+        },
+        "options": {
+          "title": "Privacy and password options",
+          "url": "https://github.com/szabodanika/microbin/blob/master/templates/index.html"
+        },
+        "defaults": {
+          "title": "Defaults for encryption and burn after reading",
+          "url": "https://github.com/szabodanika/microbin/blob/master/src/args.rs"
+        },
+        "license": {
+          "title": "License",
+          "url": "https://github.com/szabodanika/microbin/blob/master/LICENSE"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "multiFile": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "uploads": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "customLink": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "password": {
+          "value": "✓",
+          "source": "options",
+          "verified": "2026-11-09"
+        },
+        "expiry": {
+          "value": "✓",
+          "source": "options",
+          "verified": "2026-11-09"
+        },
+        "burn": {
+          "value": "✓",
+          "source": "defaults",
+          "verified": "2026-11-09"
+        },
+        "invite": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "keyWarning": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "encryption": {
+          "value": "~Optional mode",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "unfurl": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "chatPost": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "embed": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "revisions": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "collections": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "stars": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "search": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "trash": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "analytics": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "mcp": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "agentSkill": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "envSync": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "cliApi": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "rawLinks": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "git": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "hosted": {
+          "value": "–",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "selfHost": {
+          "value": "✓",
+          "source": "features",
+          "verified": "2026-11-09"
+        },
+        "license": {
+          "value": "BSD-3-Clause",
+          "source": "license",
+          "verified": "2026-11-24"
+        }
+      }
+    },
+    {
+      "id": "hastebin",
+      "name": "Hastebin",
+      "url": "https://www.toptal.com/developers/hastebin",
+      "sources": {
+        "docs": {
+          "title": "API documentation and retention",
+          "url": "https://www.toptal.com/developers/hastebin/documentation"
+        },
+        "fork": {
+          "title": "haste-server community fork",
+          "url": "https://github.com/jirutka/haste-server"
+        },
+        "license": {
+          "title": "License of the community fork",
+          "url": "https://github.com/jirutka/haste-server/blob/master/LICENSE"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "✓",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "multiFile": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "uploads": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "customLink": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "password": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "expiry": {
+          "value": "~7 or 30 days",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "burn": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "invite": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "keyWarning": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "encryption": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "unfurl": {
+          "value": "?",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "chatPost": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "embed": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "revisions": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "collections": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "stars": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "search": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "trash": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "analytics": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "mcp": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "agentSkill": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "envSync": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "cliApi": {
+          "value": "API",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "rawLinks": {
+          "value": "✓",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "git": {
+          "value": "–",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "hosted": {
+          "value": "✓",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "selfHost": {
+          "value": "~Community fork",
+          "source": "fork",
+          "verified": "2026-11-09"
+        },
+        "license": {
+          "value": "~MIT fork",
+          "source": "license",
+          "verified": "2026-11-24"
+        }
+      }
+    },
+    {
+      "id": "pastesio",
+      "name": "Pastes.io",
+      "url": "https://pastes.io",
+      "sources": {
+        "pricing": {
+          "title": "Plan comparison",
+          "url": "https://pastes.io/pricing"
+        },
+        "docs": {
+          "title": "API documentation",
+          "url": "https://pastes.io/docs"
+        },
+        "mcp": {
+          "title": "MCP server",
+          "url": "https://pastes.io/docs/mcp"
+        }
+      },
+      "facts": {
+        "anonymous": {
+          "value": "✓",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "multiFile": {
+          "value": "~One text plus files",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "uploads": {
+          "value": "✓",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "customLink": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "password": {
+          "value": "~Pro",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "expiry": {
+          "value": "~1 month on Free",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "burn": {
+          "value": "~Pro",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "invite": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "keyWarning": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "encryption": {
+          "value": "?",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "unfurl": {
+          "value": "?",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "chatPost": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "embed": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "revisions": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "collections": {
+          "value": "~Folders (Pro)",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "stars": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "search": {
+          "value": "~Titles on Free",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "trash": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "analytics": {
+          "value": "~View count",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "mcp": {
+          "value": "First-party",
+          "source": "mcp",
+          "verified": "2026-11-09"
+        },
+        "agentSkill": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "envSync": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "cliApi": {
+          "value": "CLI, API",
+          "source": "docs",
+          "verified": "2026-11-09"
+        },
+        "rawLinks": {
+          "value": "~Pro",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "git": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "hosted": {
+          "value": "✓",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "selfHost": {
+          "value": "–",
+          "source": "pricing",
+          "verified": "2026-11-09"
+        },
+        "license": {
+          "value": "~CLI only",
+          "source": "docs",
+          "verified": "2026-11-09"
+        }
+      }
+    }
+  ]
+}

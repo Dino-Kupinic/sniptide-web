@@ -17,6 +17,7 @@ import {
   PackageIcon,
   PaletteIcon,
   PlugIcon,
+  ScaleIcon,
   ServerIcon,
   ShieldCheckIcon,
   SquareTerminalIcon,
@@ -245,6 +246,17 @@ export const navMenus: NavMenu[] = [
             description: "See what changed in each version.",
             href: "/changelog",
             icon: TagIcon,
+          },
+        ],
+      },
+      {
+        label: "Compare",
+        items: [
+          {
+            label: "Compare Sniptide",
+            description: "When another tool fits better, with a source for every fact.",
+            href: "/compare",
+            icon: ScaleIcon,
           },
         ],
       },
