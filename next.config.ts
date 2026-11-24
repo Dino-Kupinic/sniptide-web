@@ -91,6 +91,10 @@ const nextConfig: NextConfig = {
         { source: "/templates/:name([a-z0-9-]+)\\.json", destination: "/templates/json/:name" },
         // Every template as JSON, which the app's dashboard lists (app/templates/json/route.ts).
         { source: "/templates.json", destination: "/templates/json" },
+        // A comparison page's Markdown twin and the public data file behind every comparison page
+        // (app/compare/md and app/compare/json).
+        { source: "/compare/competitors.json", destination: "/compare/json" },
+        { source: "/compare/:slug([a-z0-9-]+)\\.md", destination: "/compare/md/:slug" },
         {
           source: `${posthogProxyPath}/static/:path*`,
           destination: `${posthogAssetsHost(posthogHost)}/static/:path*`,

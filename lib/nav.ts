@@ -17,6 +17,7 @@ import {
   PackageIcon,
   PaletteIcon,
   PlugIcon,
+  ScaleIcon,
   ServerIcon,
   ShieldCheckIcon,
   SquareTerminalIcon,
@@ -222,6 +223,12 @@ export const navMenus: NavMenu[] = [
             description: "Copy agent files and config, from CLAUDE.md to Compose.",
             href: "/templates",
             icon: LayoutTemplateIcon,
+          },
+          {
+            label: "Compare",
+            description: "See when Sniptide, Gist, Pastebin or PrivateBin fits better.",
+            href: "/compare",
+            icon: ScaleIcon,
           },
           {
             label: "Contact",

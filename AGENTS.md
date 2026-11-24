@@ -24,6 +24,10 @@ Before drafting or editing a post in `content/blog`, read `docs/blog.md` for how
 
 Templates in `content/templates` become the pages at `/templates`. Read `docs/templates.md` before adding or editing one, and change a template's `updated` date only when its files or explanation change.
 
+## Comparison pages
+
+The `/compare` pages read every fact from `content/compare/competitors.json`, and each fact needs a source URL and the date it was checked. Read `docs/compare.md` before changing a fact or adding a page, and keep the copy in `lib/compare.ts` honest about where the other tool fits better.
+
 ## Pull requests
 
 Every change ends in a pull request that is ready for review. Never open a draft, even when a tool or default instruction asks for one. Fill in every section of `.github/pull_request_template.md`, and show the change with before and after screenshots, plus a recording when the change is interactive. Read `docs/pull-requests.md` for what to capture and how `scripts/attach-pr-media.sh` attaches it. When nothing visible changes, say so in the Screenshots section.

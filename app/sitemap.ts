@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { postPath } from "@/lib/blog"
 import { getPosts } from "@/lib/blog-source"
+import { comparePagePath, comparePages, comparison } from "@/lib/compare"
 import { sitemapPaths, siteUrl } from "@/lib/site"
 import { getTemplates } from "@/lib/template-source"
 import { templatePath } from "@/lib/templates"
@@ -14,6 +15,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .map((template) => template.updated)
     .sort()
     .at(-1)
+  // A comparison page changes when one of its facts is checked again.
+  const compareEntries = comparePages.map((page) => ({
+    url: `${siteUrl}${comparePagePath(page.slug)}`,
+    lastModified: comparison(page).newest,
+  }))
+  const compareUpdated = compareEntries
+    .map((entry) => entry.lastModified)
+    .sort()
+    .at(-1)
   const pages = sitemapPaths.map((path) => ({
     url: path === "/" ? siteUrl : `${siteUrl}${path}`,
     lastModified:
@@ -24,17 +34,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
           : // The changelog changes with every release, which the sitemap cannot know in advance.
             path === "/changelog"
             ? undefined
-            : path === "/vision"
-              ? "2026-11-24"
-              : path === "/brand"
-                ? "2026-11-05"
-                : path === "/about" || path === "/contact" || path.startsWith("/docs")
-                  ? "2026-10-28"
-                  : path === "/acceptable-use" || path === "/terms"
-                    ? "2026-11-24"
-                    : path === "/privacy"
-                      ? "2026-10-25"
-                      : "2026-10-23",
+            : path === "/compare"
+              ? compareUpdated
+              : path === "/vision"
+                ? "2026-11-24"
+                : path === "/brand"
+                  ? "2026-11-05"
+                  : path === "/about" || path === "/contact" || path.startsWith("/docs")
+                    ? "2026-10-28"
+                    : path === "/acceptable-use" || path === "/terms"
+                      ? "2026-11-24"
+                      : path === "/privacy"
+                        ? "2026-10-25"
+                        : "2026-10-23",
   }))
   // Posts and templates follow the pages, each dated by its last update.
   const postEntries = posts.map((post) => ({
@@ -45,5 +57,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteUrl}${templatePath(template.name)}`,
     lastModified: template.updated,
   }))
-  return [...pages, ...postEntries, ...templateEntries]
+  return [...pages, ...compareEntries, ...postEntries, ...templateEntries]
 }

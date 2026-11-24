@@ -53,7 +53,7 @@ IndexNow and the legal pages.
 - [Development](docs/development.md), [contributing](CONTRIBUTING.md) and [pull requests](docs/pull-requests.md)
 - [Deployment](docs/deployment.md)
 - [Blog](docs/blog.md) and the [blog style guide](docs/blog-style-guide.md)
-- [Changelog](docs/changelog.md) and [templates](docs/templates.md)
+- [Changelog](docs/changelog.md), [templates](docs/templates.md) and [comparison pages](docs/compare.md)
 - [Agents and search engines](docs/agents.md) and [analytics](docs/analytics.md)
 - [Landing page media](docs/landing.md) and [secret scanning](docs/secret-scanning.md)
 
