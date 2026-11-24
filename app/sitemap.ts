@@ -24,15 +24,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
           : // The changelog changes with every release, which the sitemap cannot know in advance.
             path === "/changelog"
             ? undefined
-            : path === "/brand" || path === "/vision"
-              ? "2026-11-05"
-              : path === "/about" || path === "/contact" || path.startsWith("/docs")
-                ? "2026-10-28"
-                : path === "/acceptable-use" || path === "/terms"
-                  ? "2026-11-24"
-                  : path === "/privacy"
-                    ? "2026-10-25"
-                    : "2026-10-23",
+            : path === "/vision"
+              ? "2026-11-24"
+              : path === "/brand"
+                ? "2026-11-05"
+                : path === "/about" || path === "/contact" || path.startsWith("/docs")
+                  ? "2026-10-28"
+                  : path === "/acceptable-use" || path === "/terms"
+                    ? "2026-11-24"
+                    : path === "/privacy"
+                      ? "2026-10-25"
+                      : "2026-10-23",
   }))
   // Posts and templates follow the pages, each dated by its last update.
   const postEntries = posts.map((post) => ({
