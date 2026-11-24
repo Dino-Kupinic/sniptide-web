@@ -1,9 +1,9 @@
 # Comparison pages
 
-The pages at `/compare` compare Sniptide with one other tool each: GitHub Gist, Pastebin and
-PrivateBin. `/compare` lists them as cards, each with Sniptide's mark, "vs" and the other tool's
-mark. The Resources menu has a Compare group below Brand and releases with one link per page, and
-the footer lists the same links.
+The pages at `/compare` compare Sniptide with one other tool each: GitHub Gist, Pastebin,
+PrivateBin, Opengist, MicroBin, Hastebin and Pastes.io. `/compare` lists them as cards, each with
+Sniptide's mark, "vs" and the other tool's mark. The Resources menu has a Compare group below Brand and releases with one
+link to `/compare`, and the footer lists the same link.
 
 ## Where the facts live
 
@@ -45,10 +45,10 @@ file, so nothing else needs a date change.
    doesn't back.
 3. Add the tool's mark to `ProductMark` in `components/compare/product-mark.tsx`, and record where
    the artwork comes from in `public/compare/README.md`. Use the tool's published mark without
-   changing its paths or colors.
-4. Add a link to the Compare group in `lib/nav.ts`.
-5. The page, its Markdown twin at `/compare/<slug>.md`, the index and the sitemap entry follow from
-   the entry.
+   changing its paths or colors. A file in `public/compare` goes in `fileMarks`. A tool without a
+   mark you can retrieve shows its initial, so leave it out rather than draw one.
+4. The page, its Markdown twin at `/compare/<slug>.md`, the index and the sitemap entry follow from
+   the entry. The navigation links only to `/compare`, so it needs no change.
 
 ## Principles
 

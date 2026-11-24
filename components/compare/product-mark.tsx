@@ -3,8 +3,9 @@ import { LogoMark } from "@/components/brand"
 import { GitHubMark } from "@/components/github-mark"
 
 // Each product's mark on a 56px tile, for the "Sniptide vs X" pairs on /compare. GitHub and
-// Pastebin publish one-color marks, so they take the text color; PrivateBin keeps its own colors.
-// public/compare/README.md lists where each mark comes from.
+// Pastebin publish one-color marks, so they take the text color. PrivateBin and MicroBin keep their
+// own colors, and Opengist's black mark inverts in dark mode. A product without a published mark
+// gets its initial. public/compare/README.md lists where each mark comes from.
 const tile =
   "flex size-14 shrink-0 items-center justify-center rounded-lg border bg-card md:size-16"
 
@@ -29,7 +30,13 @@ export function PrivateBinMark({ className }: { className?: string }) {
   )
 }
 
-export function ProductMark({ id }: { id: string }) {
+// Marks served from public/compare as files.
+const fileMarks: Record<string, { src: string; className?: string }> = {
+  opengist: { src: "/compare/opengist.svg", className: "dark:invert" },
+  microbin: { src: "/compare/microbin.png", className: "rounded-md" },
+}
+
+export function ProductMark({ id, name }: { id: string; name?: string }) {
   if (id === "sniptide") {
     return (
       <span className={tile}>
@@ -58,7 +65,28 @@ export function ProductMark({ id }: { id: string }) {
       </span>
     )
   }
-  return null
+  const file = fileMarks[id]
+  if (file) {
+    return (
+      <span className={tile}>
+        <Image
+          src={file.src}
+          alt=""
+          width={32}
+          height={32}
+          className={`size-7 md:size-8 ${file.className ?? ""}`}
+          unoptimized
+        />
+      </span>
+    )
+  }
+  return (
+    <span className={tile}>
+      <span aria-hidden="true" className="font-heading text-2xl leading-none font-bold">
+        {(name ?? id).charAt(0).toUpperCase()}
+      </span>
+    </span>
+  )
 }
 
 // Sniptide's mark, "vs" and the other product's mark, with the pair named for assistive
@@ -70,7 +98,7 @@ export function MarkPair({ competitor, name }: { competitor: string; name: strin
       <span aria-hidden="true" className="font-mono text-[13px] leading-5 text-muted-foreground">
         vs
       </span>
-      <ProductMark id={competitor} />
+      <ProductMark id={competitor} name={name} />
     </span>
   )
 }

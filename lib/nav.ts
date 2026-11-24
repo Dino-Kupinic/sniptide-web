@@ -17,6 +17,7 @@ import {
   PackageIcon,
   PaletteIcon,
   PlugIcon,
+  ScaleIcon,
   ServerIcon,
   ShieldCheckIcon,
   SquareTerminalIcon,
@@ -24,7 +25,6 @@ import {
   TelescopeIcon,
 } from "lucide-react"
 import type { ComponentType } from "react"
-import { PastebinMark, PrivateBinMark } from "@/components/compare/product-mark"
 import { GitHubMark } from "@/components/github-mark"
 import { documentation, mcpEndpoint } from "./agent-docs"
 import { docsPages, links } from "./links"
@@ -253,22 +253,10 @@ export const navMenus: NavMenu[] = [
         label: "Compare",
         items: [
           {
-            label: "Sniptide vs GitHub Gist",
-            description: "Git-backed snippets or sharing controls and agents.",
-            href: "/compare/github-gist",
-            icon: GitHubMark,
-          },
-          {
-            label: "Sniptide vs Pastebin",
-            description: "A quick public paste or a library you search.",
-            href: "/compare/pastebin",
-            icon: PastebinMark,
-          },
-          {
-            label: "Sniptide vs PrivateBin",
-            description: "Encryption for every paste or only when you need it.",
-            href: "/compare/privatebin",
-            icon: PrivateBinMark,
+            label: "Compare Sniptide",
+            description: "When another tool fits better, with a source for every fact.",
+            href: "/compare",
+            icon: ScaleIcon,
           },
         ],
       },

@@ -139,6 +139,105 @@ export const comparePages: ComparePage[] = [
     moving:
       "PrivateBin has no list of your pastes to export. Open each link you still need and copy its text into a new Sniptide paste.",
   },
+  {
+    slug: "opengist",
+    competitor: "opengist",
+    title: "Sniptide vs Opengist",
+    description:
+      "Sniptide and Opengist compared as self-hosted snippet tools, on Git, sharing controls and agent access, with a source for every fact and when Opengist fits.",
+    summary:
+      "Opengist is the better self-hosted choice when snippets should live in Git, with clone, push and revision history. Sniptide fits when a paste needs a password, burn after reading or invited people, or when your agents need a first-party MCP server on your own server.",
+    forThem:
+      "Opengist is for developers who think in Git and want a Gist of their own. Every snippet clones and pushes like a repository and keeps its revision history, and snippets carry topics, likes and forks. You sign in with GitHub, GitLab or Gitea, recent releases add expiry and a token REST API with an OpenAPI spec, and the community opengist-mcp server connects it to coding agents.",
+    forSniptide: `${forSniptideBase} Both run on your own server under AGPL-3.0. Sniptide adds passwords, burn after reading and invites per paste, warns before you share a key, and ships its own MCP server, which runs on your server too.`,
+    chooseThem: [
+      "You want to clone, pull and push snippets with Git. Sniptide pastes don't work over Git.",
+      "You want a self-hosted copy of the Gist workflow, with forks, likes and topics.",
+    ],
+    chooseSniptide: [
+      "A link needs a password or burn after reading. Opengist has neither.",
+      "You want to invite named people to view or edit a private paste.",
+      "Your agents should use a first-party MCP server and install a collection as an agent skill. Opengist's MCP server is a community project.",
+      "You want a hosted service as well as self-hosting. Opengist has no hosted service.",
+    ],
+    moving:
+      "Clone each Opengist snippet you still use with Git and copy its files into a new Sniptide paste. Sniptide has no Opengist importer, so this step is manual.",
+  },
+  {
+    slug: "microbin",
+    competitor: "microbin",
+    title: "Sniptide vs MicroBin",
+    description:
+      "Sniptide and MicroBin compared as self-hosted pastebins, on uploads, privacy, search and agent access, with a source for every fact and when MicroBin fits.",
+    summary:
+      "MicroBin is the better choice for the smallest self-hosted pastebin, with file uploads and pastes without an account. Sniptide fits when you'll need the code again, share it with named people, or want your coding agents to reach it.",
+    forThem:
+      "MicroBin is the lightest self-hosted option: one small app for text, file uploads and raw links. Visitors paste without an account and can set a password, an expiry or burn after reading. Its README lists a server-side and a client-side encryption mode, so check which one an instance uses. It is open source under BSD-3-Clause.",
+    forSniptide: `${forSniptideBase} It keeps pastes findable through collections, stars, search and revisions, and reaches agents through an MCP server and a CLI, hosted or on your own server.`,
+    chooseThem: [
+      "You want the smallest app to run and maintain, and nobody needs an account.",
+      "Visitors should paste text or upload files without signing up. Sniptide needs an account to share a paste and holds code and text only.",
+      "You prefer a permissive license. MicroBin uses BSD-3-Clause, and Sniptide uses AGPL-3.0.",
+    ],
+    chooseSniptide: [
+      "You'll need a paste again, through collections, stars, search or revisions. MicroBin has none of them.",
+      "You want to invite named people to a private paste, or give a paste a custom link.",
+      "Your coding agents should read and save snippets through an MCP server or a CLI. MicroBin has neither.",
+      "You want a hosted service as well as self-hosting. MicroBin has no hosted service.",
+    ],
+    moving:
+      "Sniptide has no MicroBin importer, so copy the raw text of each paste you still need into a new Sniptide paste.",
+  },
+  {
+    slug: "hastebin",
+    competitor: "hastebin",
+    title: "Sniptide vs Hastebin",
+    description:
+      "Sniptide and Hastebin compared on expiry, privacy, multi-file pastes, agents and self-hosting, with a source for every fact and when Hastebin fits better.",
+    summary:
+      "Hastebin is the quicker choice for a throwaway text link with no account and no options. Sniptide fits when a paste has to last longer than a month, stay private, or be found again.",
+    forThem:
+      "Hastebin is a blank page that turns text into a link, with no account and no options. Toptal runs it now. Pastes expire after 7 days, or 30 when the API is used with a token, and there are no passwords or private pastes, so the link is the secret. The original haste-server repository is no longer on GitHub, and self-hosting means a community fork whose last npm release dates from 2022.",
+    forSniptide: `${forSniptideBase} A paste holds up to 10 files with a password, expiry, burn after reading or invited people, and stays findable through collections, search and revisions.`,
+    chooseThem: [
+      "You want a link in seconds, without an account or a single setting.",
+      "The text only matters for a few days, so a paste that expires after 7 days is fine.",
+      "You already post from scripts through its API.",
+    ],
+    chooseSniptide: [
+      "The paste has to stay up for longer than 30 days.",
+      "It should be private, behind a password or shared with named people. Anyone who holds a Hastebin link can open it.",
+      "The code spans several files, or you'll need to find it again through collections, search and revisions.",
+      "Your coding agents should reach your snippets through an MCP server or a CLI.",
+      "You want to self-host. Hastebin's self-hosted version is a community fork whose last npm release dates from 2022.",
+    ],
+    moving:
+      "Hastebin deletes pastes after 7 or 30 days, so copy the text of any paste you still need into a new Sniptide paste before it expires.",
+  },
+  {
+    slug: "pastes-io",
+    competitor: "pastesio",
+    title: "Sniptide vs Pastes.io",
+    description:
+      "Sniptide and Pastes.io compared on screenshots, multi-file pastes, privacy, agents and self-hosting, with a source for every fact and when Pastes.io fits.",
+    summary:
+      "Pastes.io is the better pick when the problem is visual: a screenshot, a screen recording or a file, shared without an account. Sniptide fits when the code spans several files, has to be found again, or has to run on your own server.",
+    forThem:
+      "Pastes.io is for visual problems. It captures and annotates a screenshot or records your screen, attaches files and needs no account. It has a CLI, an API and a first-party MCP server. Passwords, burn after reading, raw links and longer expiry need the Pro plan, a paste holds one text body plus files, and it only runs as a hosted service.",
+    forSniptide: `${forSniptideBase} A paste holds up to 10 files with a password, expiry, burn after reading or invited people, and Sniptide's MCP server also runs on your own server.`,
+    chooseThem: [
+      "You need to share a screenshot, a screen recording or a file. Sniptide holds code and text only.",
+      "Nobody should need an account. Sniptide needs one to share a paste.",
+    ],
+    chooseSniptide: [
+      "The code is more than one file. A Pastes.io paste holds one text body.",
+      "You want to invite named people to view or edit a private paste.",
+      "You need to find code again through revisions, stars and search across file contents. Pastes.io's Free plan searches titles.",
+      "You want to run it yourself. Pastes.io is a hosted service only.",
+    ],
+    moving:
+      "Copy the text of each paste you still use into a new Sniptide paste. Sniptide has no Pastes.io importer, and screenshots and recordings stay on Pastes.io.",
+  },
 ]
 
 export function comparePage(slug: string) {
@@ -333,4 +432,4 @@ export function compareStructuredData(page: ComparePage) {
 }
 
 export const compareDescription =
-  "How Sniptide compares to GitHub Gist, Pastebin and PrivateBin, with a source and a check date for every fact and a plain answer on when each tool fits better."
+  "How Sniptide compares to Gist, Pastebin, PrivateBin, Opengist, MicroBin, Hastebin and Pastes.io, with a source for every fact and when each tool fits better."
