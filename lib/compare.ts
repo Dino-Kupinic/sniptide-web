@@ -109,6 +109,7 @@ export const comparePages: ComparePage[] = [
       "You want to invite named people, or encrypt a paste in your browser so the server can't read it.",
       "Your coding agents should read and save snippets through an MCP server. Pastebin has an API and no MCP server.",
       "You want to run it yourself. Pastebin is a hosted service and isn't open source.",
+      "You and the people you send links to shouldn't see ads. Pastebin removes them for Pro members, and Sniptide has none.",
     ],
     moving:
       "Copy the raw text of each paste you still use into a new Sniptide paste. Sniptide has no Pastebin importer, so this step is manual.",
@@ -234,6 +235,7 @@ export const comparePages: ComparePage[] = [
       "You want to invite named people to view or edit a private paste.",
       "You need to find code again through revisions, stars and search across file contents. Pastes.io's Free plan searches titles.",
       "You want to run it yourself. Pastes.io is a hosted service only.",
+      "Nobody should see ads. Pastes.io shows them on its Free plan, and Sniptide has none on any plan.",
     ],
     moving:
       "Copy the text of each paste you still use into a new Sniptide paste. Sniptide has no Pastes.io importer, and screenshots and recordings stay on Pastes.io.",

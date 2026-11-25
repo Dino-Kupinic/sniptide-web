@@ -470,7 +470,7 @@ const tabs: {
     label: "Share",
     icon: Share2Icon,
     title: "Share it with the right people.",
-    summary: "Pick who can see a paste, then send the link.",
+    summary: "Pick who can see a paste, then send a link that opens without ads.",
     features: [
       {
         icon: GlobeIcon,

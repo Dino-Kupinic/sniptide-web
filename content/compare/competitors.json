@@ -131,6 +131,11 @@
       "label": "Hosted service"
     },
     {
+      "id": "noAds",
+      "group": "Hosting",
+      "label": "No ads"
+    },
+    {
       "id": "selfHost",
       "group": "Hosting",
       "label": "Self-host"
@@ -194,6 +199,10 @@
         "license": {
           "title": "License",
           "url": "https://github.com/Dino-Kupinic/sniptide/blob/main/LICENSE"
+        },
+        "vision": {
+          "title": "Vision, on having no ads",
+          "url": "https://sniptide.com/vision"
         }
       },
       "facts": {
@@ -326,6 +335,11 @@
           "value": "✓",
           "source": "pastes",
           "verified": "2026-11-24"
+        },
+        "noAds": {
+          "value": "✓",
+          "source": "vision",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "One command",
@@ -488,6 +502,11 @@
           "source": "create",
           "verified": "2026-11-09"
         },
+        "noAds": {
+          "value": "?",
+          "source": "create",
+          "verified": "2026-11-25"
+        },
         "selfHost": {
           "value": "–",
           "source": "create",
@@ -648,6 +667,11 @@
           "value": "✓",
           "source": "form",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "~Pro only",
+          "source": "pro",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "–",
@@ -813,6 +837,11 @@
           "value": "~Third-party instances",
           "source": "features",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "✓",
+          "source": "license",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "✓",
@@ -991,6 +1020,11 @@
           "source": "features",
           "verified": "2026-11-09"
         },
+        "noAds": {
+          "value": "✓",
+          "source": "license",
+          "verified": "2026-11-25"
+        },
         "selfHost": {
           "value": "✓",
           "source": "features",
@@ -1156,6 +1190,11 @@
           "source": "features",
           "verified": "2026-11-09"
         },
+        "noAds": {
+          "value": "✓",
+          "source": "license",
+          "verified": "2026-11-25"
+        },
         "selfHost": {
           "value": "✓",
           "source": "features",
@@ -1317,6 +1356,11 @@
           "source": "docs",
           "verified": "2026-11-09"
         },
+        "noAds": {
+          "value": "?",
+          "source": "docs",
+          "verified": "2026-11-25"
+        },
         "selfHost": {
           "value": "~Community fork",
           "source": "fork",
@@ -1477,6 +1521,11 @@
           "value": "✓",
           "source": "pricing",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "~Pro only",
+          "source": "pricing",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "–",
