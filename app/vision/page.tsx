@@ -23,7 +23,7 @@ export default function Page() {
         tools on the internet, and most of them still look like they were built decades ago. They
         are covered in ads, they look sketchy enough that you hesitate before opening a link, and
         nobody seemed interested in improving them. I wanted a pastebin I would enjoy using, so I
-        started building one.
+        started building one. It has no ads, on sniptide.com or on your own server.
       </p>
 
       <h2>A modern pastebin that goes where you work</h2>

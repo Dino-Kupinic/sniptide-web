@@ -131,6 +131,11 @@
       "label": "Hosted service"
     },
     {
+      "id": "noAds",
+      "group": "Hosting",
+      "label": "No ads"
+    },
+    {
       "id": "selfHost",
       "group": "Hosting",
       "label": "Self-host"
@@ -194,6 +199,10 @@
         "license": {
           "title": "License",
           "url": "https://github.com/Dino-Kupinic/sniptide/blob/main/LICENSE"
+        },
+        "vision": {
+          "title": "Vision, on having no ads",
+          "url": "https://sniptide.com/vision"
         }
       },
       "facts": {
@@ -327,6 +336,11 @@
           "source": "pastes",
           "verified": "2026-11-24"
         },
+        "noAds": {
+          "value": "✓",
+          "source": "vision",
+          "verified": "2026-11-25"
+        },
         "selfHost": {
           "value": "One command",
           "source": "selfHosting",
@@ -355,6 +369,10 @@
         "mcp": {
           "title": "GitHub MCP server gist tools",
           "url": "https://github.com/github/github-mcp-server#tool-configuration"
+        },
+        "site": {
+          "title": "Gist, checked by hand for ads",
+          "url": "https://gist.github.com/"
         }
       },
       "facts": {
@@ -487,6 +505,11 @@
           "value": "✓",
           "source": "create",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "✓",
+          "source": "site",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "–",
@@ -648,6 +671,11 @@
           "value": "✓",
           "source": "form",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "~Pro only",
+          "source": "pro",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "–",
@@ -813,6 +841,11 @@
           "value": "~Third-party instances",
           "source": "features",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "✓",
+          "source": "license",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "✓",
@@ -991,6 +1024,11 @@
           "source": "features",
           "verified": "2026-11-09"
         },
+        "noAds": {
+          "value": "✓",
+          "source": "license",
+          "verified": "2026-11-25"
+        },
         "selfHost": {
           "value": "✓",
           "source": "features",
@@ -1156,6 +1194,11 @@
           "source": "features",
           "verified": "2026-11-09"
         },
+        "noAds": {
+          "value": "✓",
+          "source": "license",
+          "verified": "2026-11-25"
+        },
         "selfHost": {
           "value": "✓",
           "source": "features",
@@ -1184,6 +1227,10 @@
         "license": {
           "title": "License of the community fork",
           "url": "https://github.com/jirutka/haste-server/blob/master/LICENSE"
+        },
+        "site": {
+          "title": "Hastebin, checked by hand for ads",
+          "url": "https://www.toptal.com/developers/hastebin"
         }
       },
       "facts": {
@@ -1316,6 +1363,11 @@
           "value": "✓",
           "source": "docs",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "✓",
+          "source": "site",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "~Community fork",
@@ -1477,6 +1529,11 @@
           "value": "✓",
           "source": "pricing",
           "verified": "2026-11-09"
+        },
+        "noAds": {
+          "value": "~Pro only",
+          "source": "pricing",
+          "verified": "2026-11-25"
         },
         "selfHost": {
           "value": "–",
