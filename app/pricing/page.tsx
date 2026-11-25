@@ -1,6 +1,6 @@
 import { BanIcon, ChartColumnIcon, CheckIcon, CookieIcon } from "lucide-react"
-import type { ReactNode } from "react"
 import type { Metadata } from "next"
+import type { ReactNode } from "react"
 import { BlogShell } from "@/components/blog/blog-shell"
 import { primaryButton, secondaryButton } from "@/components/blog/buttons"
 import { LogoMark } from "@/components/brand"
