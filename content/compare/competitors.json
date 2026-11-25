@@ -369,6 +369,10 @@
         "mcp": {
           "title": "GitHub MCP server gist tools",
           "url": "https://github.com/github/github-mcp-server#tool-configuration"
+        },
+        "site": {
+          "title": "Gist, checked by hand for ads",
+          "url": "https://gist.github.com/"
         }
       },
       "facts": {
@@ -503,8 +507,8 @@
           "verified": "2026-11-09"
         },
         "noAds": {
-          "value": "?",
-          "source": "create",
+          "value": "✓",
+          "source": "site",
           "verified": "2026-11-25"
         },
         "selfHost": {
@@ -1223,6 +1227,10 @@
         "license": {
           "title": "License of the community fork",
           "url": "https://github.com/jirutka/haste-server/blob/master/LICENSE"
+        },
+        "site": {
+          "title": "Hastebin, checked by hand for ads",
+          "url": "https://www.toptal.com/developers/hastebin"
         }
       },
       "facts": {
@@ -1357,8 +1365,8 @@
           "verified": "2026-11-09"
         },
         "noAds": {
-          "value": "?",
-          "source": "docs",
+          "value": "✓",
+          "source": "site",
           "verified": "2026-11-25"
         },
         "selfHost": {
