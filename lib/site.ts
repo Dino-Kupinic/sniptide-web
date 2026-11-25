@@ -51,6 +51,7 @@ export const sitemapPaths = [
   "/changelog",
   "/compare",
   "/contact",
+  "/pricing",
   "/privacy",
   "/templates",
   "/terms",

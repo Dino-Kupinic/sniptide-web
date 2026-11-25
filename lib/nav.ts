@@ -23,6 +23,7 @@ import {
   SquareTerminalIcon,
   TagIcon,
   TelescopeIcon,
+  WalletIcon,
 } from "lucide-react"
 import type { ComponentType } from "react"
 import { GitHubMark } from "@/components/github-mark"
@@ -211,6 +212,12 @@ export const navMenus: NavMenu[] = [
             description: "Why Sniptide exists and where it is going.",
             href: "/vision",
             icon: TelescopeIcon,
+          },
+          {
+            label: "Pricing",
+            description: "Free on sniptide.com and on your own server.",
+            href: "/pricing",
+            icon: WalletIcon,
           },
           {
             label: "Blog",
