@@ -20,7 +20,9 @@ function firstSegments() {
 
 test("no page path can be taken by a generated paste slug or a custom link", () => {
   const segments = firstSegments()
-  expect(segments).toEqual(expect.arrayContaining(["about", "acceptable-use", "vision", "blog"]))
+  expect(segments).toEqual(
+    expect.arrayContaining(["about", "acceptable-use", "vision", "blog", "pricing"]),
+  )
   for (const segment of segments) {
     expect(generatedSlug.test(segment)).toBe(false)
     expect(segment.startsWith("@")).toBe(false)

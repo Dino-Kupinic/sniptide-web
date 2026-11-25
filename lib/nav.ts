@@ -23,6 +23,7 @@ import {
   SquareTerminalIcon,
   TagIcon,
   TelescopeIcon,
+  WalletIcon,
 } from "lucide-react"
 import type { ComponentType } from "react"
 import { GitHubMark } from "@/components/github-mark"
@@ -257,6 +258,12 @@ export const navMenus: NavMenu[] = [
             description: "When another tool fits better, with a source for every fact.",
             href: "/compare",
             icon: ScaleIcon,
+          },
+          {
+            label: "Pricing",
+            description: "Sniptide Cloud and self-hosting are both free.",
+            href: "/pricing",
+            icon: WalletIcon,
           },
         ],
       },
