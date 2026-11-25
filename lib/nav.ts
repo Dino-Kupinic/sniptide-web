@@ -214,12 +214,6 @@ export const navMenus: NavMenu[] = [
             icon: TelescopeIcon,
           },
           {
-            label: "Pricing",
-            description: "Free on sniptide.com and on your own server.",
-            href: "/pricing",
-            icon: WalletIcon,
-          },
-          {
             label: "Blog",
             description: "Product news and notes on building Sniptide.",
             href: "/blog",
@@ -264,6 +258,12 @@ export const navMenus: NavMenu[] = [
             description: "When another tool fits better, with a source for every fact.",
             href: "/compare",
             icon: ScaleIcon,
+          },
+          {
+            label: "Pricing",
+            description: "Sniptide Cloud and self-hosting are both free.",
+            href: "/pricing",
+            icon: WalletIcon,
           },
         ],
       },
