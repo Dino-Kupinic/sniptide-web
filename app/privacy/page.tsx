@@ -37,7 +37,8 @@ export default function Privacy() {
       <h2>What we process and why</h2>
       <p>
         We process only the data below, and we do not sell it, share it for advertising or build
-        profiles from it. We make no decisions about you by automated means alone.
+        profiles from it. Automated screening can hide a public or unlisted paste until a person
+        reviews it, as described under Reports and moderation. A person makes every final decision.
       </p>
 
       <h3>Visiting the website</h3>
@@ -232,6 +233,18 @@ export default function Privacy() {
         free of abuse (Art. 6(1)(f) GDPR). We cannot read an encrypted paste unless the person who
         reports it gives us the full link.
       </p>
+      <p>
+        We screen public and unlisted pastes automatically for child sexual abuse material,
+        pornography, gore, malware and spam. After you create, edit or share such a paste, its
+        title, description, file names and file contents go to OpenAI&apos;s moderation service, or
+        to Mistral&apos;s if OpenAI is unavailable, and the links in it go to Google Web Risk. Only
+        text and links are sent, never images, and no account details go with them. We never screen
+        private or encrypted pastes. A clear result changes nothing. A strong match hides the paste
+        until a person reviews it, and a weaker match goes to a person while the paste stays
+        visible. You can appeal any decision. We keep the categories and scores of each result, not
+        a copy of the paste. The legal basis is our legal obligation (Art. 6(1)(c) GDPR) and our
+        legitimate interest in keeping the service free of abuse (Art. 6(1)(f) GDPR).
+      </p>
 
       <h3>Abuse protection</h3>
       <p>
@@ -287,6 +300,11 @@ export default function Privacy() {
         <li>{emailProvider}, based in the United States, delivers the app&apos;s emails.</li>
         <li>Linear stores bug reports and feedback, and Anthropic answers support questions.</li>
         <li>
+          OpenAI, based in the United States, screens the text of public and unlisted pastes, and
+          Mistral, based in France, does so when OpenAI is unavailable.
+        </li>
+        <li>Google, based in the United States, checks the links in public and unlisted pastes.</li>
+        <li>
           GitHub or Google receive a request when you choose to sign in with them, and we receive
           your profile from them. Importing a gist makes our server fetch it from GitHub.
         </li>
@@ -294,7 +312,7 @@ export default function Privacy() {
       </ul>
       <p>
         These providers act as our processors under data processing agreements, except GitHub and
-        Google, which you choose to sign in with. Where a provider processes data in the United
+        Google when you choose to sign in with them. Where a provider processes data in the United
         States, the transfer relies on its certification under the EU-U.S. Data Privacy Framework or
         on the European Commission&apos;s standard contractual clauses.
       </p>

@@ -50,7 +50,7 @@ export const emailProvider = "Resend, Inc."
 // site sends them to the EU or the US.
 export const analyticsInEu = posthogHost.includes("//eu.")
 
-export const lastUpdated = "24 November 2026"
+export const lastUpdated = "26 November 2026"
 
 // The youngest age the terms allow.
 export const minimumAge = 16
