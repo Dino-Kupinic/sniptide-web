@@ -38,9 +38,12 @@ needs nothing else. If the chosen header is missing, no address is forwarded.
 
 Build-time settings: `NEXT_PUBLIC_APP_URL`, where buttons, redirects and the proxy point, defaults
 to `https://app.sniptide.com`.
-`SHARE_PROXY_SECRET`, `CLIENT_IP_HEADER` and `GITHUB_TOKEN` are read at runtime. `GITHUB_TOKEN` is
-optional and raises the GitHub rate limit for the changelog, described under
-[the changelog guide](changelog.md).
+`SHARE_PROXY_SECRET`, `CLIENT_IP_HEADER`, `GITHUB_TOKEN` and `STATUS_PAGE_URL` are read at runtime.
+`GITHUB_TOKEN` is optional and raises the GitHub rate limit for the changelog, described under
+[the changelog guide](changelog.md). `STATUS_PAGE_URL` is the public Better Stack status page,
+such as `https://status.sniptide.com`. The footer's status line then shows that page's overall
+state and links to it, as described in [the agents guide](agents.md). Leave it unset and the line
+checks the app's `/api/health` and links nowhere.
 
 ## Search engines and link previews
 
