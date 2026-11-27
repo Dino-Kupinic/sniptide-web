@@ -19,8 +19,10 @@ remain in the sitemap; redirected documentation pages do not. HTML declares one 
 the page metadata. Markdown responses declare their HTML equivalent in the HTTP `Link` header.
 `robots.txt` excludes Cloudflare’s email protection endpoint from crawling.
 
-`/api/status` reports whether the app's `/api/health` answers, cached for a minute, and the
-footer's status line reads it.
+`/api/status` reports the state the footer's status line shows, cached for a minute. When
+`STATUS_PAGE_URL` names the public Better Stack status page, it reads that page's
+`index.json` and the footer line links to the page. Without it, or when the page doesn't answer,
+it reports whether the app's `/api/health` answers.
 
 The server card follows the [experimental MCP Server Card schema](https://github.com/modelcontextprotocol/ext-server-card).
 Its required `$schema` URL currently returns 404, so validate against that repository's generated
